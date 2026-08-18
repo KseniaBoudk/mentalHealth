@@ -21,7 +21,14 @@ function render(){
     ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB)}</span>`
     : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`;
 
-  const body=S.tab==="laget"?viewLaget():S.tab==="utforska"?viewUtforska():S.tab==="regioner"?viewRegioner():S.tab==="karta"?viewKarta():viewMetod();
+  const body=S.tab==="laget"?viewLaget()
+    :S.tab==="over_tid"?viewOverTid()
+    :S.tab==="karta"?viewKarta()
+    :S.tab==="behov"?viewBehov()
+    :S.tab==="sjukskrivning"?viewSjukskrivning()
+    :S.tab==="sammanhang"?viewSammanhang()
+    :S.tab==="regioner"?viewRegioner()
+    :viewMetod();
 
   document.getElementById("app").innerHTML=`
     <header class="top"><div class="wrap">
@@ -35,7 +42,7 @@ function render(){
         </div>
       </div>
       <nav class="tabs">
-        ${["laget","utforska","regioner","metod","karta"].map(x=>`<button data-tab="${x}" class="${S.tab===x?"on":""}">${esc(t.tabs[x])}</button>`).join("")}
+        ${["laget","over_tid","karta","behov","sjukskrivning","sammanhang","metod","regioner"].map(x=>`<button data-tab="${x}" class="${S.tab===x?"on":""}">${esc(t.tabs[x])}</button>`).join("")}
         <span class="stamp tnum">${esc(t.stamp)}</span>
       </nav>
     </div></header>
@@ -82,6 +89,8 @@ function wire(){
   });
   const or=document.getElementById("b-openregion");
   if(or)or.onclick=()=>{S.tab="regioner";render();window.scrollTo({top:0,behavior:"instant"});};
+  const ob=document.getElementById("b-openbehov");
+  if(ob)ob.onclick=()=>{S.tab="behov";render();window.scrollTo({top:0,behavior:"instant"});};
   paintTrendArrows();
 }
 

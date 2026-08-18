@@ -58,8 +58,11 @@ js/charts.js
 
 js/views.js
     Builds each tab's HTML content using the charts and data above: "Läget"
-    (overview), "Utforska" (explore/filter), "Regioner" (per-region
-    detail), "Karta" (map), and "Metod" (methodology/sources table).
+    (overview), "Över tid" (explore/filter, formerly "Utforska"), "Karta"
+    (map), "Regioner" (per-region detail), "Metod" (methodology/sources
+    table), and three placeholder tabs — "Behov & vård", "Sjukskrivning",
+    "Sammanhang" — reserved for the observatory plan's need-vs-response,
+    sickness-absence and context sections, not yet built.
 
 js/shell.js
     Ties everything together: renders the page header/nav/footer around

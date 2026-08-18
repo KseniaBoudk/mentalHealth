@@ -14,6 +14,15 @@
 const srcLine=(k)=>`${esc(IND[k][S.lang==="sv"?"reg":"regEn"])} · ${IND[k].inst==="survey"?"FoHM":"Socialstyrelsen"}`;
 const srcStrip=(k,extra)=>`<div class="src"><b>${esc(t.notNum)}</b> ${esc(t.notNumB[k])}<br>${srcLine(k)} · <b>${esc(isRealActive(k)?t.realLbl:t.synthLbl)}</b>${isRealActive(k)&&t.realCaveat[k]?` · ${esc(t.realCaveat[k])}`:""}${extra?" · "+extra:""}</div>`;
 
+// Every indicator's IND[k].scale (100/1000/100000) already encodes its unit
+// — reused here rather than hand-listing a unit per indicator, so a new
+// indicator only ever needs to set `scale` once and every chart's axis
+// label picks it up automatically.
+const unitLabel=(k)=>{
+  const sc=IND[k].scale;
+  return sc===100?"%":sc===1000?(S.lang==="sv"?"per 1 000":"per 1,000"):(S.lang==="sv"?"per 100 000":"per 100,000");
+};
+
 function agePts(k,regionCode,year,sex,std){
   const pts=[];
   for(let i=0;i<AGES.length;i++){
@@ -51,18 +60,6 @@ function viewLaget(){
   const suM=fakeAgePts("suicide","SE",2024,"M"),suK=fakeAgePts("suicide","SE",2024,"K");
   const shPeak=shK.filter(Boolean).reduce((a,p)=>p[1]>a[1]?p:a);
   const suPeak=suM.filter(Boolean)[suM.filter(Boolean).length-1];
-
-  // fakeTotal, deliberately: this scatter's whole premise (distance from the
-  // regression line is "the treatment gap") only holds if both axes come
-  // from the same internally-correlated fabricated generator. See
-  // fakeTotal()'s docstring in data.js.
-  const gap=REGIONS.map(r=>{
-    const d=fakeTotal("distress",r[0],2024,"T",false),a=fakeTotal("antidep",r[0],2024,"T",false);
-    return {x:d.value,y:a.value,code:r[0],name:r[1]};});
-  const worst=(()=>{const n=gap.length,mx=gap.reduce((s,p)=>s+p.x,0)/n,my=gap.reduce((s,p)=>s+p.y,0)/n;
-    let sxy=0,sxx=0;gap.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
-    const b=sxy/sxx,a=my-b*mx;
-    return gap.slice().sort((p,q)=>(p.y-(a+b*p.x))-(q.y-(a+b*q.x)))[0];})();
   const oldMen=fakeCell("suicide","SE",2024,8,"M",false);
   const yw06=cell("antidep","SE",2006,1,"K",false),yw24=cell("antidep","SE",2024,1,"K",false);
   const growth=Math.round((yw24.value/yw06.value-1)*100);
@@ -83,14 +80,14 @@ function viewLaget(){
         ${lineChart(
           [{pts:shK,color:"var(--violet)",w:2.5,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
            {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men,labelAt:4}],
-          {aria:"Self-harm admissions by age and sex",xlabels:xl,zero:true,h:205})}
+          {aria:"Self-harm admissions by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("selfharm")})}
       </div>
       <div>
         <h4>${esc(t.suTitle)}</h4><div class="u">${srcLine("suicide")}</div>
         ${lineChart(
           [{pts:suM,color:"var(--oxblood)",w:2.6,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
            {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women,labelAt:4}],
-          {aria:"Suicide by age and sex",xlabels:xl,zero:true,h:205})}
+          {aria:"Suicide by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("suicide")})}
       </div>
     </div>
     <div class="src"><b>${S.lang==="sv"?"Syntetiska data.":"Synthetic data."}</b> ${S.lang==="sv"
@@ -98,29 +95,18 @@ function viewLaget(){
       :"Solid line women, dashed men. The point is the shape of the curves, not their shared level."}</div>
   </div>
 
-  <div class="figrow">
-    <div class="card">
-      <div class="card-h"><h3>${esc(t.gapTitle)}</h3><div class="u">${esc(t.gapUnit)}</div></div>
-      <div class="card-b">${scatter(gap,{aria:"Reported distress against treatment across 21 regions",w:620,h:380})}</div>
-      ${srcStrip("antidep",t.causalNote)}
-    </div>
-    <div class="pieces" style="grid-template-columns:1fr">
-      ${t.pieces.map((p,i)=>`
-        <div class="piece">
-          <div class="tag" style="color:${INST_COLOR[p.inst]}">${esc(p.tag)}</div>
-          <h4>${esc(p.h)}</h4><p>${esc(p.p)}</p>
-          <div class="num tnum" style="color:${INST_COLOR[p.inst]}">${
-            i===0?esc(worst.name):i===1?fmt(oldMen.value,1):"+"+growth+" %"}</div>
-          <div class="numl">${
-            i===0?(S.lang==="sv"?"störst gap 2024":"widest gap, 2024")
-            :i===1?(S.lang==="sv"?"per 100 000 · män 85+":"per 100 000 · men 85+")
-            :(S.lang==="sv"?"2006 → 2024 · kvinnor 15–24":"2006 → 2024 · women 15–24")}</div>
-        </div>`).join("")}
-    </div>
+  <div class="pieces" style="grid-template-columns:1fr 1fr;margin-top:20px">
+    ${t.pieces.map((p,i)=>`
+      <div class="piece">
+        <div class="tag" style="color:${INST_COLOR[p.inst]}">${esc(p.tag)}</div>
+        <h4>${esc(p.h)}</h4><p>${esc(p.p)}</p>
+        <div class="num tnum" style="color:${INST_COLOR[p.inst]}">${i===0?fmt(oldMen.value,1):"+"+growth+" %"}</div>
+        <div class="numl">${esc(p.numl)}</div>
+      </div>`).join("")}
   </div>`;
 }
 
-function viewUtforska(){
+function viewOverTid(){
   const k=S.ind,I=IND[k],col=INST_COLOR[I.inst];
   const years=validYears(k);
   if(!years.includes(S.year))S.year=years[years.length-1];
@@ -187,7 +173,7 @@ function viewUtforska(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.dotTitle)}</h3><div class="u">${esc(t.dotSub)}${esc(winNote)}</div></div>
       <div class="card-b">
-        ${shown.length?dotPlot(shown,{nat:nat?nat.value:null,color:col,aria:"All regions with confidence intervals"}):""}
+        ${shown.length?dotPlot(shown,{nat:nat?nat.value:null,color:col,aria:"All regions with confidence intervals",unit:unitLabel(k)}):""}
         ${suppressed.length?`<div class="suppress"><b>${esc(t.suppLbl)}</b> ${suppressed.map(esc).join(", ")}</div>`:""}
       </div>
       <div class="src">${t.spreadNote(fmt(spread,0),S.std?1:0)}</div>
@@ -197,13 +183,13 @@ function viewUtforska(){
         <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])} ${esc(t.ageSub)}</div></div>
         <div class="card-b">${lineChart(seriesAge,
           {band,aria:"Age curves for the selected region against the national band",
-           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes})}</div>
+           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k)})}</div>
       </div>
       <div class="card">
         <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u tnum">${years[0]}–${years[years.length-1]}</div></div>
         <div class="card-b">${lineChart([{pts:ts,color:col,w:2.4,dot:true}],
           {aria:"Time series for the selected region with national events marked",
-           marks,xlabels:[[years[0],String(years[0])],[Math.round((years[0]+years[years.length-1])/2),String(Math.round((years[0]+years[years.length-1])/2))],[years[years.length-1],String(years[years.length-1])]],h:185})}</div>
+           marks,xlabels:[[years[0],String(years[0])],[Math.round((years[0]+years[years.length-1])/2),String(Math.round((years[0]+years[years.length-1])/2))],[years[years.length-1],String(years[years.length-1])]],h:185,unit:unitLabel(k)})}</div>
       </div>
     </div>
   </div>
@@ -287,38 +273,49 @@ function viewRegioner(){
     </div>
   </div>
 
-  <div class="figrow" style="margin-top:20px">
-    <div class="card">
-      <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
-      <div class="card-b">${scatter(gap,{aria:"Region position on the treatment gap",w:620,h:350})}</div>
-      <div class="src"><b>${S.lang==="sv"?"Syntetiska data":"Synthetic data"}</b> · ${S.lang==="sv"
-        ?"Ringad region är den valda. Avståndet till linjen är behandlingsgapet."
-        :"The circled region is the selected one. Distance from the line is the treatment gap."} ${esc(t.causalNote)}</div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
+    <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350})}</div>
+    <div class="src"><b>${S.lang==="sv"?"Syntetiska data":"Synthetic data"}</b> · ${S.lang==="sv"
+      ?"Ringad region är den valda. Avståndet till linjen visar hur regionen förhåller sig till det genomsnittliga sambandet mellan behov och respons."
+      :"The circled region is the selected one. Distance from the line shows how the region compares with the average association between need and response."} ${esc(t.causalNote)}</div>
+    <button id="b-openbehov" class="mapopen">${esc(t.behovOpen)}</button>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(prior,latest))}</div></div>
+    <div class="card-b">
+      <!-- LABEL_X 220, AXIS_X 300, MAX_W 65: the worst-case leftward bar
+           reaches 300-65=235, a 15-unit margin clear of LABEL_X — checked
+           as an absolute bound (AXIS_X-MAX_W vs LABEL_X), not per-row, so it
+           holds regardless of any indicator's actual delta or multiplier.
+           The value number sits in its own fixed column at NUM_X=380 — past
+           AXIS_X+MAX_W (300+65=365), the furthest any bar can ever reach —
+           so it's clear of every bar's own path in both directions, not
+           just clear of the label the way the axis gap is. -->
+      <svg viewBox="0 0 620 170" role="img" aria-label="${`Change since ${prior} for four indicators; changes inside the interval are greyed`}">
+        <line x1="300" y1="14" x2="300" y2="142" stroke="var(--hair)" stroke-width="1"/>
+        ${changes.map((c,i)=>{
+          const y=32+i*30;
+          if(c.d==null){
+            return `<text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="11" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>
+              <text x="380" y="${y+3}" font-family="var(--mono)" font-size="9.5" fill="var(--ink-3)">${esc(fmt(null))}</text>`;
+          }
+          const w=Math.min(65,Math.abs(c.d)*(c.x==="suicide"?12:6)+6);
+          const x2=300+(c.d>0?w:-w);
+          const col=c.within?"var(--ink-3)":INST_COLOR[c.inst];
+          const op=c.within?".45":"1";
+          // Each row appends its own unit (%, per 1,000, per 100,000) right
+          // after the number — these four indicators aren't on comparable
+          // scales, so without it "+340,6" and "−2,9" read as if they were.
+          return `<line x1="300" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" stroke="${col}" stroke-width="2.6" opacity="${op}" stroke-linecap="round"/>
+            <text x="380" y="${y+3}" font-family="var(--mono)" font-size="10" fill="${col}" opacity="${op}">${c.d>0?"+":"−"}${fmt(Math.abs(c.d),1)}</text>
+            <text x="424" y="${y+3}" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(unitLabel(c.x))}</text>
+            ${c.within?`<text x="520" y="${y+3}" font-family="var(--sans)" font-size="9" fill="var(--ink-3)">${esc(t.withinCI)}</text>`:""}
+            <text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="11" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>`;
+        }).join("")}
+      </svg>
     </div>
-    <div class="card">
-      <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(prior,latest))}</div></div>
-      <div class="card-b">
-        <svg viewBox="0 0 380 170" role="img" aria-label="${`Change since ${prior} for four indicators; changes inside the interval are greyed`}">
-          <line x1="172" y1="14" x2="172" y2="142" stroke="var(--hair)" stroke-width="1"/>
-          ${changes.map((c,i)=>{
-            const y=32+i*30;
-            if(c.d==null){
-              return `<text x="162" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="9.5" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>
-                <text x="182" y="${y+3}" font-family="var(--mono)" font-size="9" fill="var(--ink-3)">${esc(fmt(null))}</text>`;
-            }
-            const w=Math.min(70,Math.abs(c.d)*(c.x==="suicide"?12:6)+6);
-            const x2=172+(c.d>0?w:-w);
-            const col=c.within?"var(--ink-3)":INST_COLOR[c.inst];
-            const op=c.within?".45":"1";
-            return `<text x="162" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="9.5" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>
-              <line x1="172" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" stroke="${col}" stroke-width="2.6" opacity="${op}" stroke-linecap="round"/>
-              <text x="${(x2+(c.d>0?6:-6)).toFixed(1)}" y="${y+3}" text-anchor="${c.d>0?"start":"end"}" font-family="var(--mono)" font-size="9" fill="${col}" opacity="${op}">${c.d>0?"+":"−"}${fmt(Math.abs(c.d),1)}</text>
-              ${c.within?`<text x="302" y="${y+3}" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(t.withinCI)}</text>`:""}`;
-          }).join("")}
-        </svg>
-      </div>
-      <div class="src">${t.chgNote(changes.filter(c=>c.within).length)}</div>
-    </div>
+    <div class="src">${t.chgNote(changes.filter(c=>c.within).length)}</div>
   </div>`;
 }
 
@@ -404,21 +401,21 @@ function viewKarta(){
 
   <div class="grid-ex">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3>${cmpK?"":`<div class="u">${esc(t.ind[k])} · ${I.window?esc(t.winLbl(yr)):yr}</div>`}</div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3>${cmpK?"":`<div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${I.window?esc(t.winLbl(yr)):yr}</div>`}</div>
       <div class="card-b">
         ${cmpK?`
         <div class="mapcmp">
           <div>
-            <div class="mapcmphead">${esc(t.ind[k])}</div>
+            <div class="mapcmphead">${esc(t.ind[k])} (${esc(unitLabel(k))})</div>
             ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[k]})}
-            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)}</b></span></div>
+            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span></div>
           </div>
           <div>
             <div class="mapcmphead"><select id="c-cmpind">
               ${Object.keys(IND).filter(x=>x!==k).map(x=>`<option value="${x}"${x===cmpK?" selected":""}>${esc(t.ind[x])}</option>`).join("")}
-            </select></div>
+            </select> (${esc(unitLabel(cmpK))})</div>
             ${chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]})}
-            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(cmpNat?cmpNat.value:null,1)}</b></span></div>
+            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(cmpNat?cmpNat.value:null,1)} ${esc(unitLabel(cmpK))}</b></span></div>
           </div>
         </div>`:`
         ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions, click a region to see its figures"})}
@@ -426,7 +423,7 @@ function viewKarta(){
           ${quintileBands(rows).ranges.map((rg,i)=>rg?`<span class="bandsw">
             <span class="bandchip" style="background:${col};opacity:${BAND_OP[i]}"></span>
             <span class="tnum">${fmt(rg.lo,1)}–${fmt(rg.hi,1)}</span></span>`:"").join("")}
-          <span style="margin-left:auto">${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)}</b></span>
+          <span style="margin-left:auto">${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span>
         </div>`}
       </div>
       <div class="src">${esc(t.mapNote(isRealActive(k)))} ${priorYr?esc(t.trendNote(priorYr,yr)):""} <b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
@@ -444,8 +441,8 @@ function viewKarta(){
         </div>
       </div>
       <div class="card">
-        <div class="card-h"><h3>${esc(t.histTitle)}</h3><div class="u">${esc(t.ind[k])}</div></div>
-        <div class="card-b">${histogram(rows,{color:col,aria:"How many regions fall into each value band"})}</div>
+        <div class="card-h"><h3>${esc(t.histTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))})</div></div>
+        <div class="card-b">${histogram(rows,{color:col,aria:"How many regions fall into each value band",unit:unitLabel(k)})}</div>
         <div class="src">${esc(t.histSub)}</div>
       </div>
     </div>
@@ -478,3 +475,54 @@ function viewMetod(){
     <tbody>${rows}</tbody>
   </table></div>`;
 }
+
+/* Shared shell for nav sections that are planned (see FILES.txt / the
+   observatory plan) but not yet built: real content still needs a new data
+   source (Försäkringskassan for sjukskrivning, SCB/Kolada for sammanhang) or
+   a structural move (behov's need-vs-response scatter currently lives inside
+   viewLaget/viewRegioner). Keeping the tab visible and honestly labelled
+   beats hiding the gap in the nav. */
+function viewComing(label){
+  return `
+  <div class="prose">
+    <h2>${esc(label)}</h2>
+    <div class="note"><div class="l">${esc(t.comingT)}</div><p>${esc(t.comingB)}</p></div>
+  </div>`;
+}
+function viewBehov(){
+  // fakeTotal, deliberately: this scatter's whole premise (distance from the
+  // regression line as need vs. response) only holds if both axes come
+  // from the same internally-correlated fabricated generator. See
+  // fakeTotal()'s docstring in data.js.
+  const gap=REGIONS.map(r=>{
+    const d=fakeTotal("distress",r[0],2024,"T",false),a=fakeTotal("antidep",r[0],2024,"T",false);
+    return {x:d.value,y:a.value,code:r[0],name:r[1]};});
+  const worst=(()=>{const n=gap.length,mx=gap.reduce((s,p)=>s+p.x,0)/n,my=gap.reduce((s,p)=>s+p.y,0)/n;
+    let sxy=0,sxx=0;gap.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
+    const b=sxy/sxx,a=my-b*mx;
+    return gap.slice().sort((p,q)=>(p.y-(a+b*p.x))-(q.y-(a+b*q.x)))[0];})();
+  const gp=t.gapPiece;
+
+  return `
+  <div class="hero">
+    <div class="kick">${esc(t.tabs.behov)}</div>
+    <p>${esc(t.behovLead)}</p>
+  </div>
+  <div class="figrow" style="margin-top:20px">
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.gapTitle)}</h3><div class="u">${esc(t.gapUnit)}</div></div>
+      <div class="card-b">${scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380})}</div>
+      ${srcStrip("antidep",t.causalNote)}
+    </div>
+    <div class="pieces" style="grid-template-columns:1fr">
+      <div class="piece">
+        <div class="tag" style="color:${INST_COLOR[gp.inst]}">${esc(gp.tag)}</div>
+        <h4>${esc(gp.h)}</h4><p>${esc(gp.p)}</p>
+        <div class="num tnum" style="color:${INST_COLOR[gp.inst]}">${esc(worst.name)}</div>
+        <div class="numl">${esc(gp.numl)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function viewSjukskrivning(){return viewComing(t.tabs.sjukskrivning);}
+function viewSammanhang(){return viewComing(t.tabs.sammanhang);}
