@@ -23,6 +23,7 @@ function dotPlot(rows, opts){
   axisTicks(x0,x1,4).forEach(v=>{
     s+=`<line x1="${X(v).toFixed(1)}" y1="${top-4}" x2="${X(v).toFixed(1)}" y2="${top+rows.length*rowH}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${X(v).toFixed(1)}" y="${H-16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  if(opts.unit)s+=`<text x="${R}" y="${top-6}" text-anchor="end" font-family="var(--sans)" font-size="8.5" fill="var(--ink-3)">${esc(opts.unit)}</text>`;
   if(opts.nat!=null){
     s+=`<line x1="${X(opts.nat).toFixed(1)}" y1="${top-8}" x2="${X(opts.nat).toFixed(1)}" y2="${top+rows.length*rowH}" stroke="${col}" stroke-width="1" stroke-dasharray="3 3" opacity=".65"/>`;
     s+=`<text x="${(X(opts.nat)+4).toFixed(1)}" y="${top-10}" font-family="var(--sans)" font-size="8.5" font-weight="700" fill="${col}">${esc(t.natLine)}</text>`;}
@@ -51,6 +52,7 @@ function lineChart(series,opts){
   axisTicks(y0,y1,3).forEach(v=>{
     s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  if(opts.unit)s+=`<text x="${L}" y="${Tp-6}" text-anchor="start" font-family="var(--sans)" font-size="8.5" fill="var(--ink-3)">${esc(opts.unit)}</text>`;
   if(opts.band&&opts.band.length){
     const up=opts.band.map(p=>`${X(p[0]).toFixed(1)},${Y(p[2]).toFixed(1)}`).join(" L");
     const dn=opts.band.slice().reverse().map(p=>`${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(" L");
@@ -104,7 +106,9 @@ function chorMap(rows,opts){
   const col=opts.color||"var(--violet)";
   const nat=opts.nat;
   const{idxByCode}=quintileBands(rows);
-  const paths=rows.map(r=>{
+  // Selected tile drawn last so its stroke paints on top of any neighbor's
+  // shared-edge stroke, instead of a random one covering half its outline.
+  const paths=[...rows].sort((a,b)=>(a.code===S.region)-(b.code===S.region)).map(r=>{
     const g=REGION_PATH[r.code];
     const op=BAND_OP[idxByCode[r.code]];
     const sel=r.code===S.region;
@@ -161,6 +165,7 @@ function histogram(rows,opts){
   });
   [0,nbins].forEach(i=>{
     s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*span/nbins,span<10?1:0)}</text>`;});
+  if(opts.unit)s+=`<text x="${R}" y="${Tp-4}" text-anchor="end" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(opts.unit)}</text>`;
   s+=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="var(--hair-soft)" stroke-width="1"/>`;
   return s+"</svg>";
 }

@@ -165,7 +165,7 @@ main{padding:32px 0 10px;animation:fade .28s ease-out}
 
 /* --- map --- */
 .mapsvg{max-width:280px;margin:2px auto 0}
-.tile{stroke:var(--surface);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:filter .1s}
+.tile{stroke:var(--surface);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:filter .1s;-webkit-tap-highlight-color:transparent;outline:none}
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
 .tile.on{stroke:var(--violet);stroke-width:2.2}
