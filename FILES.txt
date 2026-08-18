@@ -1,0 +1,126 @@
+Kurvan prototype — what each file does
+=======================================
+(Kurvan = a single-page Swedish mental-health data dashboard, no build step,
+opened directly as an HTML file. Written 2026-08-18.)
+
+TOP LEVEL
+---------
+kurvan.html
+    The page itself. Sets the title, loads kurvan.css, defines two empty
+    <div>s ("synth" and "app") that JavaScript fills in, then loads all the
+    js/ files in order (data -> language -> state -> charts -> views ->
+    shell). No <html>/<head>/<body> tags — it's a bare fragment.
+
+kurvan.css
+    All styling: colour tokens (light + dark theme), fonts, layout. Colour
+    is meaningful throughout the app — teal = survey data, violet =
+    register data, oxblood = mortality data.
+
+.gitignore
+    Tells git to ignore data/raw/ and data/processed/ (the pipeline's
+    intermediate files) and Python cache folders — only the final
+    js/real_mh_data.js output is committed.
+
+js/ — THE APP
+-------------
+js/real_mh_data.js
+    Generated data file (not hand-written). Holds the real, fetched
+    statistics — self-harm hospitalisation, suicide, psychiatric care, and
+    self-reported anxiety rates — pulled from Swedish government registers
+    by the pipeline/ scripts. If this file is empty, the app falls back to
+    fabricated (fake) numbers instead.
+
+js/data.js
+    The data engine. Defines the fabricated ("synthetic") data generator
+    that invents plausible-looking numbers for all 21 Swedish regions, ages,
+    and years — used as a fallback and for the two charts that must always
+    stay fabricated (their story depends on the fake generator's built-in
+    correlations). Also loads/indexes the real data from real_mh_data.js
+    and decides, per indicator/region/year/age/sex, whether to return a
+    real number, a fabricated number, or "no data". Contains the real map
+    of Sweden's county borders (as SVG path data) too.
+
+js/lang.js
+    All user-facing text, in Swedish and English, as one big lookup table
+    (headings, labels, captions, footnotes). Nothing else in the app
+    hard-codes displayed text.
+
+js/state.js
+    Tiny file holding the app's current state: which language, theme, tab,
+    indicator, age group, sex, year, region, and standardisation setting
+    are currently selected. Detects the browser's language on first load.
+
+js/charts.js
+    Draws all the charts as raw SVG (no charting library): a dot plot (one
+    row per region with confidence intervals), a line chart (values over
+    age or time), a choropleth map of Sweden's regions, and a scatter plot
+    with a regression line.
+
+js/views.js
+    Builds each tab's HTML content using the charts and data above: "Läget"
+    (overview), "Utforska" (explore/filter), "Regioner" (per-region
+    detail), "Karta" (map), and "Metod" (methodology/sources table).
+
+js/shell.js
+    Ties everything together: renders the page header/nav/footer around
+    whichever tab is active, and wires up all the buttons, dropdowns, and
+    map clicks so the app re-renders when the user changes something. This
+    is the script that actually starts the app.
+
+pipeline/ — DATA FETCHING (Python, run separately, not part of the live page)
+-------------------------------------------------------------------------
+pipeline/README.md
+    Explains the whole pipeline: which of Kurvan's five indicators now use
+    real government data (self-harm, suicide, psychiatric care, severe
+    anxiety) versus which is still fabricated (antidepressant dispensing,
+    because that source has no API), what each real dataset can and can't
+    show (age ranges, sexes, time windows), and how to run the fetchers.
+
+pipeline/requirements.txt
+    Python dependencies needed to run the fetch scripts (just the
+    `requests` HTTP library).
+
+pipeline/kommuner.csv
+    A reference table mapping Swedish municipality codes to names and
+    regions (used to translate API codes to readable names).
+
+pipeline/fetch_socialstyrelsen_mh.py
+    Downloads self-harm hospitalisation and suicide rates by region from
+    Socialstyrelsen's (the National Board of Health and Welfare) statistics
+    API, and saves the raw result to data/raw/socialstyrelsen_mh_raw.json.
+    Documents two "silent wrong answer" traps in that API.
+
+pipeline/fetch_socialstyrelsen_psych.py
+    Downloads specialist psychiatric care rates by region, age, and sex
+    from the same Socialstyrelsen API (a different dataset), saving to
+    data/raw/socialstyrelsen_psych_raw.json.
+
+pipeline/fetch_folkhalsodata_hlv.py
+    Downloads self-reported "severe anxiety, worry or dread" survey rates
+    by region from Folkhälsomyndigheten's (Public Health Agency) HLV
+    survey API, saving to data/raw/folkhalsodata_hlv_raw.json. Explains why
+    this category was chosen over the dashboard's original one (the
+    original stopped being published after 2018).
+
+pipeline/build_kurvan_data.py
+    Reads the processed JSON files in data/processed/ and writes them out
+    as js/real_mh_data.js — the single generated JavaScript file the live
+    page actually loads. This is the last step to run after the fetchers.
+
+data/ — FETCHED DATA
+---------------------
+data/raw/socialstyrelsen_mh_raw.json
+data/raw/socialstyrelsen_psych_raw.json
+data/raw/folkhalsodata_hlv_raw.json
+    The unprocessed API responses exactly as downloaded by each fetch
+    script, before being cleaned up.
+
+data/processed/socialstyrelsen_mh.json
+data/processed/socialstyrelsen_psych.json
+data/processed/folkhalsodata_hlv.json
+    The same data after being cleaned/reshaped into a simple common format
+    (region, year, age group, sex, value, confidence bounds) — this is what
+    build_kurvan_data.py reads to produce js/real_mh_data.js.
+
+.git/
+    Git's own internal folder (version history) — not part of the app.

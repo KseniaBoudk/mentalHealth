@@ -1,0 +1,291 @@
+code,name,region
+0114,Upplands Väsby,Stockholm
+0115,Vallentuna,Stockholm
+0117,Österåker,Stockholm
+0120,Värmdö,Stockholm
+0123,Järfälla,Stockholm
+0125,Ekerö,Stockholm
+0126,Huddinge,Stockholm
+0127,Botkyrka,Stockholm
+0128,Salem,Stockholm
+0136,Haninge,Stockholm
+0138,Tyresö,Stockholm
+0139,Upplands-Bro,Stockholm
+0140,Nykvarn,Stockholm
+0160,Täby,Stockholm
+0162,Danderyd,Stockholm
+0163,Sollentuna,Stockholm
+0180,Stockholm,Stockholm
+0181,Södertälje,Stockholm
+0182,Nacka,Stockholm
+0183,Sundbyberg,Stockholm
+0184,Solna,Stockholm
+0186,Lidingö,Stockholm
+0187,Vaxholm,Stockholm
+0188,Norrtälje,Stockholm
+0191,Sigtuna,Stockholm
+0192,Nynäshamn,Stockholm
+0305,Håbo,Uppsala
+0319,Älvkarleby,Uppsala
+0330,Knivsta,Uppsala
+0331,Heby,Uppsala
+0360,Tierp,Uppsala
+0380,Uppsala,Uppsala
+0381,Enköping,Uppsala
+0382,Östhammar,Uppsala
+0428,Vingåker,Södermanland
+0461,Gnesta,Södermanland
+0480,Nyköping,Södermanland
+0481,Oxelösund,Södermanland
+0482,Flen,Södermanland
+0483,Katrineholm,Södermanland
+0484,Eskilstuna,Södermanland
+0486,Strängnäs,Södermanland
+0488,Trosa,Södermanland
+0509,Ödeshög,Östergötland
+0512,Ydre,Östergötland
+0513,Kinda,Östergötland
+0560,Boxholm,Östergötland
+0561,Åtvidaberg,Östergötland
+0562,Finspång,Östergötland
+0563,Valdemarsvik,Östergötland
+0580,Linköping,Östergötland
+0581,Norrköping,Östergötland
+0582,Söderköping,Östergötland
+0583,Motala,Östergötland
+0584,Vadstena,Östergötland
+0586,Mjölby,Östergötland
+0604,Aneby,Jönköping
+0617,Gnosjö,Jönköping
+0642,Mullsjö,Jönköping
+0643,Habo,Jönköping
+0662,Gislaved,Jönköping
+0665,Vaggeryd,Jönköping
+0680,Jönköping,Jönköping
+0682,Nässjö,Jönköping
+0683,Värnamo,Jönköping
+0684,Sävsjö,Jönköping
+0685,Vetlanda,Jönköping
+0686,Eksjö,Jönköping
+0687,Tranås,Jönköping
+0760,Uppvidinge,Kronoberg
+0761,Lessebo,Kronoberg
+0763,Tingsryd,Kronoberg
+0764,Alvesta,Kronoberg
+0765,Älmhult,Kronoberg
+0767,Markaryd,Kronoberg
+0780,Växjö,Kronoberg
+0781,Ljungby,Kronoberg
+0821,Högsby,Kalmar
+0834,Torsås,Kalmar
+0840,Mörbylånga,Kalmar
+0860,Hultsfred,Kalmar
+0861,Mönsterås,Kalmar
+0862,Emmaboda,Kalmar
+0880,Kalmar,Kalmar
+0881,Nybro,Kalmar
+0882,Oskarshamn,Kalmar
+0883,Västervik,Kalmar
+0884,Vimmerby,Kalmar
+0885,Borgholm,Kalmar
+0980,Gotland,Gotland
+1060,Olofström,Blekinge
+1080,Karlskrona,Blekinge
+1081,Ronneby,Blekinge
+1082,Karlshamn,Blekinge
+1083,Sölvesborg,Blekinge
+1214,Svalöv,Skåne
+1230,Staffanstorp,Skåne
+1231,Burlöv,Skåne
+1233,Vellinge,Skåne
+1256,Östra Göinge,Skåne
+1257,Örkelljunga,Skåne
+1260,Bjuv,Skåne
+1261,Kävlinge,Skåne
+1262,Lomma,Skåne
+1263,Svedala,Skåne
+1264,Skurup,Skåne
+1265,Sjöbo,Skåne
+1266,Hörby,Skåne
+1267,Höör,Skåne
+1270,Tomelilla,Skåne
+1272,Bromölla,Skåne
+1273,Osby,Skåne
+1275,Perstorp,Skåne
+1276,Klippan,Skåne
+1277,Åstorp,Skåne
+1278,Båstad,Skåne
+1280,Malmö,Skåne
+1281,Lund,Skåne
+1282,Landskrona,Skåne
+1283,Helsingborg,Skåne
+1284,Höganäs,Skåne
+1285,Eslöv,Skåne
+1286,Ystad,Skåne
+1287,Trelleborg,Skåne
+1290,Kristianstad,Skåne
+1291,Simrishamn,Skåne
+1292,Ängelholm,Skåne
+1293,Hässleholm,Skåne
+1315,Hylte,Halland
+1380,Halmstad,Halland
+1381,Laholm,Halland
+1382,Falkenberg,Halland
+1383,Varberg,Halland
+1384,Kungsbacka,Halland
+1401,Härryda,Västra Götaland
+1402,Partille,Västra Götaland
+1407,Öckerö,Västra Götaland
+1415,Stenungsund,Västra Götaland
+1419,Tjörn,Västra Götaland
+1421,Orust,Västra Götaland
+1427,Sotenäs,Västra Götaland
+1430,Munkedal,Västra Götaland
+1435,Tanum,Västra Götaland
+1438,Dals-Ed,Västra Götaland
+1439,Färgelanda,Västra Götaland
+1440,Ale,Västra Götaland
+1441,Lerum,Västra Götaland
+1442,Vårgårda,Västra Götaland
+1443,Bollebygd,Västra Götaland
+1444,Grästorp,Västra Götaland
+1445,Essunga,Västra Götaland
+1446,Karlsborg,Västra Götaland
+1447,Gullspång,Västra Götaland
+1452,Tranemo,Västra Götaland
+1460,Bengtsfors,Västra Götaland
+1461,Mellerud,Västra Götaland
+1462,Lilla Edet,Västra Götaland
+1463,Mark,Västra Götaland
+1465,Svenljunga,Västra Götaland
+1466,Herrljunga,Västra Götaland
+1470,Vara,Västra Götaland
+1471,Götene,Västra Götaland
+1472,Tibro,Västra Götaland
+1473,Töreboda,Västra Götaland
+1480,Göteborg,Västra Götaland
+1481,Mölndal,Västra Götaland
+1482,Kungälv,Västra Götaland
+1484,Lysekil,Västra Götaland
+1485,Uddevalla,Västra Götaland
+1486,Strömstad,Västra Götaland
+1487,Vänersborg,Västra Götaland
+1488,Trollhättan,Västra Götaland
+1489,Alingsås,Västra Götaland
+1490,Borås,Västra Götaland
+1491,Ulricehamn,Västra Götaland
+1492,Åmål,Västra Götaland
+1493,Mariestad,Västra Götaland
+1494,Lidköping,Västra Götaland
+1495,Skara,Västra Götaland
+1496,Skövde,Västra Götaland
+1497,Hjo,Västra Götaland
+1498,Tidaholm,Västra Götaland
+1499,Falköping,Västra Götaland
+1715,Kil,Värmland
+1730,Eda,Värmland
+1737,Torsby,Värmland
+1760,Storfors,Värmland
+1761,Hammarö,Värmland
+1762,Munkfors,Värmland
+1763,Forshaga,Värmland
+1764,Grums,Värmland
+1765,Årjäng,Värmland
+1766,Sunne,Värmland
+1780,Karlstad,Värmland
+1781,Kristinehamn,Värmland
+1782,Filipstad,Värmland
+1783,Hagfors,Värmland
+1784,Arvika,Värmland
+1785,Säffle,Värmland
+1814,Lekeberg,Örebro
+1860,Laxå,Örebro
+1861,Hallsberg,Örebro
+1862,Degerfors,Örebro
+1863,Hällefors,Örebro
+1864,Ljusnarsberg,Örebro
+1880,Örebro,Örebro
+1881,Kumla,Örebro
+1882,Askersund,Örebro
+1883,Karlskoga,Örebro
+1884,Nora,Örebro
+1885,Lindesberg,Örebro
+1904,Skinnskatteberg,Västmanland
+1907,Surahammar,Västmanland
+1960,Kungsör,Västmanland
+1961,Hallstahammar,Västmanland
+1962,Norberg,Västmanland
+1980,Västerås,Västmanland
+1981,Sala,Västmanland
+1982,Fagersta,Västmanland
+1983,Köping,Västmanland
+1984,Arboga,Västmanland
+2021,Vansbro,Dalarna
+2023,Malung-Sälen,Dalarna
+2026,Gagnef,Dalarna
+2029,Leksand,Dalarna
+2031,Rättvik,Dalarna
+2034,Orsa,Dalarna
+2039,Älvdalen,Dalarna
+2061,Smedjebacken,Dalarna
+2062,Mora,Dalarna
+2080,Falun,Dalarna
+2081,Borlänge,Dalarna
+2082,Säter,Dalarna
+2083,Hedemora,Dalarna
+2084,Avesta,Dalarna
+2085,Ludvika,Dalarna
+2101,Ockelbo,Gävleborg
+2104,Hofors,Gävleborg
+2121,Ovanåker,Gävleborg
+2132,Nordanstig,Gävleborg
+2161,Ljusdal,Gävleborg
+2180,Gävle,Gävleborg
+2181,Sandviken,Gävleborg
+2182,Söderhamn,Gävleborg
+2183,Bollnäs,Gävleborg
+2184,Hudiksvall,Gävleborg
+2260,Ånge,Västernorrland
+2262,Timrå,Västernorrland
+2280,Härnösand,Västernorrland
+2281,Sundsvall,Västernorrland
+2282,Kramfors,Västernorrland
+2283,Sollefteå,Västernorrland
+2284,Örnsköldsvik,Västernorrland
+2303,Ragunda,Jämtland
+2305,Bräcke,Jämtland
+2309,Krokom,Jämtland
+2313,Strömsund,Jämtland
+2321,Åre,Jämtland
+2326,Berg,Jämtland
+2361,Härjedalen,Jämtland
+2380,Östersund,Jämtland
+2401,Nordmaling,Västerbotten
+2403,Bjurholm,Västerbotten
+2404,Vindeln,Västerbotten
+2409,Robertsfors,Västerbotten
+2417,Norsjö,Västerbotten
+2418,Malå,Västerbotten
+2421,Storuman,Västerbotten
+2422,Sorsele,Västerbotten
+2425,Dorotea,Västerbotten
+2460,Vännäs,Västerbotten
+2462,Vilhelmina,Västerbotten
+2463,Åsele,Västerbotten
+2480,Umeå,Västerbotten
+2481,Lycksele,Västerbotten
+2482,Skellefteå,Västerbotten
+2505,Arvidsjaur,Norrbotten
+2506,Arjeplog,Norrbotten
+2510,Jokkmokk,Norrbotten
+2513,Överkalix,Norrbotten
+2514,Kalix,Norrbotten
+2518,Övertorneå,Norrbotten
+2521,Pajala,Norrbotten
+2523,Gällivare,Norrbotten
+2560,Älvsbyn,Norrbotten
+2580,Luleå,Norrbotten
+2581,Piteå,Norrbotten
+2582,Boden,Norrbotten
+2583,Haparanda,Norrbotten
+2584,Kiruna,Norrbotten

@@ -1,0 +1,9 @@
+# Fetched data. Regenerable from Socialstyrelsen's public API (see
+# pipeline/README.md), and not needed for the prototype to run: js/real_mh_data.js
+# is the derived artifact the prototype actually reads, and that IS committed,
+# same convention as ../pipeline and ../frontend/public/data use.
+data/raw/
+data/processed/
+
+__pycache__/
+*.pyc

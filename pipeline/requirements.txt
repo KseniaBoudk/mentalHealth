@@ -1,0 +1,2 @@
+# Same as ../../pipeline/requirements.txt. One HTTP API, one HTTP client.
+requests>=2.32,<3

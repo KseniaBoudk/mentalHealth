@@ -1,0 +1,197 @@
+"use strict";
+
+/* =====================================================================
+   4. CHART PRIMITIVES
+   ===================================================================== */
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const fmt=(v,d)=>v==null||!isFinite(v)?"—":v.toFixed(d).replace(".",",");
+
+function axisTicks(min,max,n){
+  const raw=(max-min)/n, mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw)||10*mag;
+  const out=[];for(let v=Math.ceil(min/step)*step;v<=max+1e-9;v+=step)out.push(+v.toFixed(6));
+  return out;
+}
+
+function dotPlot(rows, opts){
+  const W=430,rowH=13,top=18,H=top+rows.length*rowH+34,L=118,R=W-16;
+  const col=opts.color||"var(--violet)";
+  const lo=Math.min(...rows.map(r=>r.lo)),hi=Math.max(...rows.map(r=>r.hi));
+  const pad=(hi-lo)*0.08||1,x0=Math.max(0,lo-pad),x1=hi+pad;
+  const X=v=>L+(v-x0)/(x1-x0)*(R-L);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  axisTicks(x0,x1,4).forEach(v=>{
+    s+=`<line x1="${X(v).toFixed(1)}" y1="${top-4}" x2="${X(v).toFixed(1)}" y2="${top+rows.length*rowH}" stroke="var(--hair-soft)" stroke-width="1"/>`;
+    s+=`<text x="${X(v).toFixed(1)}" y="${H-16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  if(opts.nat!=null){
+    s+=`<line x1="${X(opts.nat).toFixed(1)}" y1="${top-8}" x2="${X(opts.nat).toFixed(1)}" y2="${top+rows.length*rowH}" stroke="${col}" stroke-width="1" stroke-dasharray="3 3" opacity=".65"/>`;
+    s+=`<text x="${(X(opts.nat)+4).toFixed(1)}" y="${top-10}" font-family="var(--sans)" font-size="8.5" font-weight="700" fill="${col}">${esc(t.natLine)}</text>`;}
+  rows.forEach((r,i)=>{
+    const y=top+i*rowH+rowH/2, sel=r.code===S.region;
+    s+=`<text x="${L-8}" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="8.5" font-weight="${sel?700:400}" fill="${sel?col:"var(--ink-3)"}">${esc(r.name)}</text>`;
+    s+=`<g><title>${esc(r.name)}: ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})</title>`;
+    s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
+    s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
+  return s+"</svg>";
+}
+
+/* series: [{pts:[[x,y]|null,...], color, dash, w, dot, label, labelAt, anno}] — a
+   null point breaks the line (a real series break must not be joined). */
+function lineChart(series,opts){
+  const W=opts.w||420,H=opts.h||190,L=42,R=W-14,Tp=16,B=H-26;
+  const all=series.flatMap(se=>se.pts.filter(Boolean));
+  const xs=all.map(p=>p[0]),ys=all.map(p=>p[1]);
+  const bandY=opts.band?opts.band.flatMap(p=>[p[1],p[2]]):[];
+  const x0=opts.x0!=null?opts.x0:Math.min(...xs), x1=opts.x1!=null?opts.x1:Math.max(...xs);
+  let y0=Math.min(...ys,...bandY),y1=Math.max(...ys,...bandY);
+  if(opts.zero)y0=0;
+  const pad=(y1-y0)*0.14||1;y0=Math.max(0,y0-(opts.zero?0:pad));y1+=pad;
+  const X=v=>L+(v-x0)/((x1-x0)||1)*(R-L), Y=v=>B-(v-y0)/((y1-y0)||1)*(B-Tp);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  axisTicks(y0,y1,3).forEach(v=>{
+    s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
+    s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  if(opts.band&&opts.band.length){
+    const up=opts.band.map(p=>`${X(p[0]).toFixed(1)},${Y(p[2]).toFixed(1)}`).join(" L");
+    const dn=opts.band.slice().reverse().map(p=>`${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(" L");
+    s+=`<path d="M${up} L${dn} Z" fill="var(--band)"/>`;}
+  (opts.marks||[]).forEach(m=>{
+    s+=`<line x1="${X(m.x).toFixed(1)}" y1="${Tp-4}" x2="${X(m.x).toFixed(1)}" y2="${B}" stroke="var(--oxblood)" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>`;
+    s+=`<text x="${(X(m.x)+3).toFixed(1)}" y="${Tp+2}" font-family="var(--sans)" font-size="7.5" fill="var(--oxblood)">${esc(m.label)}</text>`;});
+  series.forEach(se=>{
+    let d="",pen=false;
+    se.pts.forEach(p=>{ if(!p){pen=false;return;} d+=`${pen?"L":"M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`; pen=true; });
+    s+=`<path d="${d}" fill="none" stroke="${se.color}" stroke-width="${se.w||2.3}" stroke-linecap="round" stroke-linejoin="round"${se.dash?` stroke-dasharray="${se.dash}"`:""}/>`;
+    const last=[...se.pts].reverse().find(Boolean);
+    if(se.dot&&last)s+=`<circle cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
+    if(se.label){const p=se.pts.filter(Boolean)[se.labelAt??(se.pts.filter(Boolean).length-1)];
+      if(p)s+=`<text x="${(X(p[0])-4).toFixed(1)}" y="${(Y(p[1])-7).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="9.5" font-weight="700" fill="${se.color}">${esc(se.label)}</text>`;}
+    if(se.anno){const p=se.anno.at;
+      s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${se.color}"/>`;
+      s+=`<text x="${(X(p[0])+se.anno.dx).toFixed(1)}" y="${(Y(p[1])+se.anno.dy).toFixed(1)}" text-anchor="${se.anno.dx<0?"end":"start"}" font-family="var(--sans)" font-size="9.5" font-weight="700" fill="${se.color}">${esc(se.anno.text)}</text>`;}
+  });
+  (opts.notes||[]).forEach(n=>{
+    s+=`<text x="${X(n.x).toFixed(1)}" y="${Y(n.y).toFixed(1)}" text-anchor="${n.anchor||"start"}" font-family="var(--sans)" font-size="8.5" font-style="italic" fill="var(--ink-3)">${esc(n.text)}</text>`;});
+  (opts.xlabels||[]).forEach(l=>{
+    s+=`<text x="${X(l[0]).toFixed(1)}" y="${H-9}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${esc(l[1])}</text>`;});
+  return s+"</svg>";
+}
+
+/* Groups rows into n roughly-equal-count bands by rank (quintiles by
+   default) rather than equal-width value slices — "how does this region's
+   standing compare to its peers' " reads more plainly as a rank than as a
+   raw value on a gradient. Shared by chorMap (fill) and viewKarta's legend
+   (swatches), so the two never disagree about where a band boundary falls. */
+const BAND_OP=[0.16,0.34,0.52,0.72,0.92];
+function quintileBands(rows,n){
+  n=n||BAND_OP.length;
+  const sorted=rows.slice().sort((a,b)=>a.value-b.value);
+  const size=sorted.length;
+  const bands=Array.from({length:n},()=>[]);
+  sorted.forEach((r,i)=>bands[Math.min(n-1,Math.floor(i/size*n))].push(r));
+  const idxByCode={};
+  bands.forEach((b,i)=>b.forEach(r=>idxByCode[r.code]=i));
+  const ranges=bands.map(b=>b.length?{lo:b[0].value,hi:b[b.length-1].value}:null);
+  return{idxByCode,ranges};
+}
+
+/* rows: [{code,name,value,lo,hi}] for all 21 regions, real county borders
+   from REGION_PATH (data.js). Fill opacity encodes the region's quintile
+   band, not its raw value — see quintileBands() — and the selected region
+   gets a heavier outline. Regions are real <path> elements, clickable and
+   focusable like the other controls. */
+function chorMap(rows,opts){
+  const col=opts.color||"var(--violet)";
+  const nat=opts.nat;
+  const{idxByCode}=quintileBands(rows);
+  const paths=rows.map(r=>{
+    const g=REGION_PATH[r.code];
+    const op=BAND_OP[idxByCode[r.code]];
+    const sel=r.code===S.region;
+    const vsNat=nat!=null?` · ${t.natLine} ${fmt(nat,1)}`:"";
+    const trendTxt=r.trend?` · ${r.trend.arrow}${r.trend.rel?` (${r.trend.rel==="with"?t.trendWith:t.trendAgainst})`:""}`:"";
+    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})${vsNat}${trendTxt}`;
+    // Significant moves (not "→") also get a data-trend/data-rel pair; wire()
+    // paints these as an actual glyph on the shape after the SVG is in the
+    // DOM, using getBBox() rather than stored centroids — the region paths
+    // carry no centroid data, and computing one from path geometry is not
+    // worth doing when the browser already knows each shape's bounding box.
+    const trendAttr=r.trend&&r.trend.arrow!=="→"
+      ?` data-trend="${r.trend.arrow}" data-rel="${r.trend.rel||"neutral"}"`:"";
+    // The glow on the selected tile is an SVG filter, not a CSS one: the
+    // viewBox is tiny (MAP_VIEWBOX is a handful of units across), so a CSS
+    // blur radius in px would be resolved against that local coordinate
+    // system and come out wildly wrong at this scale. stdDeviation on
+    // feGaussianBlur is already in the same local units as the path data.
+    return `<path class="tile${sel?" on":""}" data-region="${r.code}"${trendAttr} tabindex="0" role="button"
+      aria-label="${esc(title)}" d="${g.d}" fill="${col}" fill-opacity="${op}"${sel?' filter="url(#tileglow)"':""}><title>${esc(title)}</title></path>`;
+  }).join("");
+  return `<svg class="mapsvg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}">
+    <defs><filter id="tileglow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.09" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter></defs>${paths}</svg>`;
+}
+
+/* rows: [{value,...}] for the regions being shown (suppressed rows already
+   filtered out by the caller). Bins values into opts.bins equal-width bands
+   and draws a bar per band — "how many regions sit at this level", not a
+   ranking of which region. */
+function histogram(rows,opts){
+  const W=opts.w||300,H=opts.h||150,L=14,R=W-14,Tp=16,B=H-24;
+  const col=opts.color||"var(--violet)";
+  const vals=rows.map(r=>r.value);
+  const lo=Math.min(...vals),hi=Math.max(...vals),span=(hi-lo)||1;
+  const nbins=opts.bins||6;
+  const counts=new Array(nbins).fill(0);
+  vals.forEach(v=>{
+    let i=Math.floor((v-lo)/span*nbins);
+    if(i>=nbins)i=nbins-1; if(i<0)i=0;
+    counts[i]++;
+  });
+  const maxC=Math.max(...counts)||1;
+  const bw=(R-L)/nbins;
+  const X=i=>L+i*bw, Y=c=>B-c/maxC*(B-Tp);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  counts.forEach((c,i)=>{
+    const x=X(i),y=Y(c),h=B-y;
+    s+=`<g><title>${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}: ${c}</title>`;
+    s+=`<rect x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/></g>`;
+    if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
+  });
+  [0,nbins].forEach(i=>{
+    s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*span/nbins,span<10?1:0)}</text>`;});
+  s+=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="var(--hair-soft)" stroke-width="1"/>`;
+  return s+"</svg>";
+}
+
+function scatter(pts,opts){
+  const W=opts.w||560,H=opts.h||360,L=54,R=W-18,Tp=18,B=H-46;
+  const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+  const px=(Math.max(...xs)-Math.min(...xs))*.12,py=(Math.max(...ys)-Math.min(...ys))*.14;
+  const x0=Math.min(...xs)-px,x1=Math.max(...xs)+px,y0=Math.min(...ys)-py,y1=Math.max(...ys)+py;
+  const X=v=>L+(v-x0)/(x1-x0)*(R-L),Y=v=>B-(v-y0)/(y1-y0)*(B-Tp);
+  const n=pts.length,mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
+  let sxy=0,sxx=0;pts.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
+  const b=sxy/sxx,a=my-b*mx,fit=x=>a+b*x;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  axisTicks(y0,y1,4).forEach(v=>{
+    s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
+    s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,0)}</text>`;});
+  axisTicks(x0,x1,4).forEach(v=>{
+    s+=`<text x="${X(v).toFixed(1)}" y="${B+16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  s+=`<line x1="${X(x0).toFixed(1)}" y1="${Y(fit(x0)).toFixed(1)}" x2="${X(x1).toFixed(1)}" y2="${Y(fit(x1)).toFixed(1)}" stroke="var(--violet)" stroke-width="1.5" stroke-dasharray="6 4" opacity=".7"/>`;
+  s+=`<text x="${R}" y="${(Y(fit(x1))-8).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="9.5" font-weight="650" fill="var(--violet)">${esc(t.gapLine)}</text>`;
+  let below=null,above=null;
+  pts.forEach(p=>{p.res=p.y-fit(p.x);if(!below||p.res<below.res)below=p;if(!above||p.res>above.res)above=p;});
+  pts.forEach(p=>{
+    const hl=p===below||p===above||p.code===S.region;
+    s+=`<g><title>${esc(p.name)}</title><circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/></g>`;
+    if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":"var(--teal)"}" stroke-width="1.8"/>`;});
+  [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
+    s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
+    s+=`<text x="${(X(p.x)+(dir>0?-10:10)).toFixed(1)}" y="${(Y(p.y)+(dir>0?16:-12)).toFixed(1)}" text-anchor="${dir>0?"end":"start"}" font-family="var(--sans)" font-size="10" font-weight="700" fill="${col}">${esc(p.name)}</text>`;});
+  s+=`<text x="${((L+R)/2).toFixed(0)}" y="${H-8}" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--teal)">${esc(t.gapX)}</text>`;
+  s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(t.gapY)}</text>`;
+  return s+"</svg>";
+}
