@@ -14,7 +14,7 @@
 /* Real, region-grain rates for self-harm hospitalisation and suicide.
    Fetched by fetch_socialstyrelsen_mh.py. */
 const REAL_MH = {
- "generated_at": "2026-08-18T08:31:43+00:00",
+ "generated_at": "2026-08-19T08:46:22+00:00",
  "source": "Socialstyrelsen Statistikdatabasen (Patientregistret + Dödsorsaksregistret)",
  "rows": [
   {
@@ -25440,7 +25440,7 @@ const REAL_MH = {
    Kurvan's age bands and all three sexes, annual. Fetched by
    fetch_socialstyrelsen_psych.py. */
 const REAL_PSYCH_MH = {
- "generated_at": "2026-08-18T08:31:43+00:00",
+ "generated_at": "2026-08-19T08:46:22+00:00",
  "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, diagnoserislutenoppenvard, F00-F99)",
  "rows": [
   {
@@ -144252,7 +144252,7 @@ const REAL_PSYCH_MH = {
    script's docstring before assuming any other HLV category behaves the
    same way; several stopped being published years ago. */
 const REAL_HLV_MH = {
- "generated_at": "2026-08-18T08:31:43+00:00",
+ "generated_at": "2026-08-19T08:46:22+00:00",
  "source": "Folkhälsomyndigheten Folkhälsodata (Nationella folkhälsoenkäten / HLV, \"Svår ängslan, oro eller ångest\")",
  "rows": [
   {
@@ -156061,6 +156061,7921 @@ const REAL_HLV_MH = {
    "ci_lo": 3.3,
    "ci_hi": 7.9,
    "n": 376,
+   "sex": "M"
+  }
+ ]
+};
+
+/* Real, county-grain share (%) of ongoing sickness-benefit cases with a
+   stress-reaction (F43) diagnosis, all three sexes, annual (averaged from
+   quarterly), 2005-2019 only — this source does not extend into the 2020s.
+   No age breakdown. Fetched by fetch_forsakringskassan.py. */
+const REAL_FK_MH = {
+ "generated_at": "2026-08-19T08:46:22+00:00",
+ "source": "Försäkringskassan (share of ongoing sickness-benefit cases, diagnosis F43)",
+ "rows": [
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 10.61473396575,
+   "count": 93345,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.664123734,
+   "count": 70777,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.040157799875,
+   "count": 22568,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.20061745525,
+   "count": 19576,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 14.1855172715,
+   "count": 14830,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 8.486502990625,
+   "count": 4746,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 10.42923638575,
+   "count": 3173,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.52465763725,
+   "count": 2366,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 6.99369273995,
+   "count": 807,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.78584106075,
+   "count": 3384,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 15.515545462,
+   "count": 2657,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.780808892375,
+   "count": 727,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.31706185275,
+   "count": 4935,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 13.58207322875,
+   "count": 3786,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.3033647706250004,
+   "count": 1149,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.523475355975,
+   "count": 1898,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.37422153715,
+   "count": 1406,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 4.80828758875,
+   "count": 492,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 13.19909444675,
+   "count": 2184,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 15.53108364475,
+   "count": 1651,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.014976460675,
+   "count": 533,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 8.57116452295,
+   "count": 2075,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 10.45216057625,
+   "count": 1550,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 5.5918842858249995,
+   "count": 525,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.819602621825,
+   "count": 359,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.726763307475,
+   "count": 274,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 4.78823745855,
+   "count": 85,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.71318906425,
+   "count": 1903,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 13.7890739725,
+   "count": 1414,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 8.1608609328,
+   "count": 489,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.965713650825,
+   "count": 11011,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.84699411275,
+   "count": 8307,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 6.6960221818,
+   "count": 2704,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.31150719825,
+   "count": 2893,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 13.552770787250001,
+   "count": 2177,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.5279257747,
+   "count": 716,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 10.896880876500001,
+   "count": 15734,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.860207935,
+   "count": 11703,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.55160905205,
+   "count": 4031,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.87830850725,
+   "count": 3570,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 15.716795131,
+   "count": 2732,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 8.102613920725,
+   "count": 838,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.86465377575,
+   "count": 3483,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 14.144595955,
+   "count": 2674,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.7420051876,
+   "count": 809,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 10.583924322,
+   "count": 2826,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 12.58199515675,
+   "count": 2113,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.195923882475,
+   "count": 713,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.835980094825,
+   "count": 2400,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.78412019795,
+   "count": 1832,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 4.77364845195,
+   "count": 568,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.613140705525,
+   "count": 2641,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.6188821775,
+   "count": 2021,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 6.152357854775,
+   "count": 620,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.946038558649999,
+   "count": 3084,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.99379677075,
+   "count": 2390,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 6.265383874425,
+   "count": 694,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 11.44985507475,
+   "count": 2003,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 14.288364460250001,
+   "count": 1604,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 6.371668205725,
+   "count": 399,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 8.14945119135,
+   "count": 2344,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 9.702852951025001,
+   "count": 1790,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 5.371924129275,
+   "count": 554,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 5.774328942875,
+   "count": 1816,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 7.05928641885,
+   "count": 1452,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2005,
+   "value": 3.334925499325,
+   "count": 364,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.930823017,
+   "count": 87808,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.08893507225,
+   "count": 66603,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.201659890225,
+   "count": 21205,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 12.6479022055,
+   "count": 18313,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 14.753402198,
+   "count": 13960,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.678028640025,
+   "count": 4353,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.05956774995,
+   "count": 2820,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.989418867,
+   "count": 2069,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.9709621279750005,
+   "count": 751,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.4684508885,
+   "count": 3336,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 16.382548774500002,
+   "count": 2589,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.3325141112,
+   "count": 747,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.327280680025,
+   "count": 3983,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 12.453360296,
+   "count": 3050,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.63214971565,
+   "count": 933,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.784384883775,
+   "count": 1852,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 9.40010320725,
+   "count": 1331,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 5.410022798925,
+   "count": 521,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.7372118295,
+   "count": 2141,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 15.94587066125,
+   "count": 1598,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 9.763559084925,
+   "count": 543,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.55064639125,
+   "count": 1888,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.70589198675,
+   "count": 1456,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 5.088475808775,
+   "count": 432,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.295267965325,
+   "count": 269,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.995498650825,
+   "count": 207,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 3.6494944691,
+   "count": 62,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.02168428325,
+   "count": 1867,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 15.50167524475,
+   "count": 1401,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.778237657825,
+   "count": 466,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.71804920975,
+   "count": 11360,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 12.838679668000001,
+   "count": 8622,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.051531014,
+   "count": 2738,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.067784779,
+   "count": 2673,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.059048293250001,
+   "count": 1982,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.701776631275,
+   "count": 691,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.17827599,
+   "count": 14642,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.42807225575,
+   "count": 10986,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.434986070775,
+   "count": 3656,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.01119552825,
+   "count": 3422,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 15.910471867,
+   "count": 2605,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.233289085900001,
+   "count": 817,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 12.18038506475,
+   "count": 3137,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 14.9105861465,
+   "count": 2462,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.300349508,
+   "count": 675,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.35472032525,
+   "count": 2872,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 13.39001464075,
+   "count": 2123,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.9319723332,
+   "count": 749,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.4673922346,
+   "count": 2372,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.456138968,
+   "count": 1785,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 5.3599254349,
+   "count": 587,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 9.760850300975001,
+   "count": 2270,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.728211643,
+   "count": 1719,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.4095838579499995,
+   "count": 551,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 9.866343836525001,
+   "count": 2765,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 11.822951719,
+   "count": 2152,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.242303171725,
+   "count": 613,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 12.650838513,
+   "count": 2057,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 15.315263277,
+   "count": 1603,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 7.832976616725,
+   "count": 454,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 8.47238739835,
+   "count": 2244,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 10.05792599135,
+   "count": 1692,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 5.711985387025,
+   "count": 552,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 5.6094193443,
+   "count": 1463,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 6.8989780896749995,
+   "count": 1164,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2006,
+   "value": 3.248396525875,
+   "count": 299,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.7189665755,
+   "count": 74738,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.9402776585,
+   "count": 57139,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 6.883375428875,
+   "count": 17599,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.54115693975,
+   "count": 16619,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 14.757351871500001,
+   "count": 12854,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.2888566525,
+   "count": 3765,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.977785850450001,
+   "count": 2405,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.787355738999999,
+   "count": 1809,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.952177197375,
+   "count": 596,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.624846968,
+   "count": 2754,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 15.47658817025,
+   "count": 2172,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.48000906165,
+   "count": 582,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.792768785625,
+   "count": 2726,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.494570016125,
+   "count": 2045,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.91606105535,
+   "count": 681,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.025439514124999,
+   "count": 1745,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 9.86999515915,
+   "count": 1283,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.284590354875,
+   "count": 462,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 13.46303602575,
+   "count": 1781,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 16.1593006925,
+   "count": 1343,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.904686957275,
+   "count": 438,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 9.09640959135,
+   "count": 1645,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 11.67570962825,
+   "count": 1292,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.0281542819750005,
+   "count": 353,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.1543624659,
+   "count": 283,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 9.145906170275,
+   "count": 228,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 3.767960447,
+   "count": 55,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.245113636000001,
+   "count": 1414,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 14.81579171075,
+   "count": 1071,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.941883386125,
+   "count": 343,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.82298475425,
+   "count": 9682,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 13.102482821499999,
+   "count": 7438,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 6.86646564575,
+   "count": 2244,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 11.171871891750001,
+   "count": 2335,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 13.459604099,
+   "count": 1759,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.353567078725,
+   "count": 576,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 11.26103479375,
+   "count": 12754,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 13.5829310995,
+   "count": 9536,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.47727408035,
+   "count": 3218,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.420951932000001,
+   "count": 2897,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 15.351618340249999,
+   "count": 2220,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.64120537785,
+   "count": 677,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 11.735178541,
+   "count": 2785,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 14.108251912250001,
+   "count": 2170,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.363443954875001,
+   "count": 615,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.2638927552,
+   "count": 2101,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 12.1765594625,
+   "count": 1572,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.0016490769,
+   "count": 529,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 6.9678065982,
+   "count": 1644,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.606750148225,
+   "count": 1249,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 4.3497346993749995,
+   "count": 395,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.9274872072,
+   "count": 1639,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.743777563750001,
+   "count": 1226,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.942079708625,
+   "count": 413,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 9.66307260315,
+   "count": 2336,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 11.685881772,
+   "count": 1839,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.88714827235,
+   "count": 497,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 13.29448101625,
+   "count": 2001,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 16.08861002975,
+   "count": 1542,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.3860124489,
+   "count": 459,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 8.578743915175,
+   "count": 2004,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 10.506002929000001,
+   "count": 1539,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.339884218325,
+   "count": 465,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 5.604455934225,
+   "count": 1153,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 7.033846205025,
+   "count": 932,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2007,
+   "value": 3.0158718597000003,
+   "count": 221,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.4890775046,
+   "count": 53724,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.658227921,
+   "count": 41296,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.865637997525,
+   "count": 12428,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.191268222,
+   "count": 12898,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 13.38926689725,
+   "count": 10058,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.0788133241,
+   "count": 2840,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.826879033775,
+   "count": 1809,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.53430374405,
+   "count": 1350,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.128549694925,
+   "count": 459,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.54071976325,
+   "count": 1549,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.76867270025,
+   "count": 1205,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.74454418465,
+   "count": 344,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.136036967575,
+   "count": 1727,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 8.7213089785,
+   "count": 1306,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 4.555946324175,
+   "count": 421,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.569403445325,
+   "count": 1377,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.43681171115,
+   "count": 1016,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 4.858603512875,
+   "count": 361,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.939120379750001,
+   "count": 1387,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 14.60511143475,
+   "count": 1055,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.556451628625,
+   "count": 332,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 8.026140130925,
+   "count": 1180,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 10.381747224075,
+   "count": 915,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 4.51226222545,
+   "count": 265,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.077434826525,
+   "count": 235,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.122569146733333,
+   "count": 147,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 3.6252936794333332,
+   "count": 33,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.5603168465,
+   "count": 1052,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 14.68873395125,
+   "count": 829,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 6.45691979675,
+   "count": 223,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.684012192075,
+   "count": 6950,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.7757193935,
+   "count": 5295,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 6.174567601975,
+   "count": 1655,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 10.012538880175,
+   "count": 1704,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 12.601695718750001,
+   "count": 1317,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.8865960959,
+   "count": 387,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.853366116425,
+   "count": 9001,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 12.059929336,
+   "count": 6701,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 6.4285486117,
+   "count": 2300,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.521443075375,
+   "count": 1601,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 12.24261872075,
+   "count": 1250,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.3106252606,
+   "count": 351,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 10.66292386575,
+   "count": 2114,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 13.329364734,
+   "count": 1687,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.964756306975,
+   "count": 427,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.00037816485,
+   "count": 1428,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.050216034,
+   "count": 1071,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.784894172425,
+   "count": 357,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.66474106215,
+   "count": 947,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.1121452339,
+   "count": 734,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 3.3301849319,
+   "count": 213,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.608994403325,
+   "count": 1142,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 9.307224536075001,
+   "count": 859,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 4.9059719631,
+   "count": 283,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 8.801538738275,
+   "count": 1750,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 11.064688844,
+   "count": 1408,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 4.778214734425,
+   "count": 342,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 12.607007667,
+   "count": 1457,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 15.615714050000001,
+   "count": 1160,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 7.214050763275,
+   "count": 297,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 8.476182530700001,
+   "count": 1543,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 10.472876196,
+   "count": 1195,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.118106834175,
+   "count": 348,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 5.373019759775,
+   "count": 866,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 6.6101082702,
+   "count": 685,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2008,
+   "value": 3.1572457685,
+   "count": 181,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.28854201015,
+   "count": 38089,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.169891777625,
+   "count": 28756,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.28233638765,
+   "count": 9333,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.465267535525,
+   "count": 9340,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 11.408770552,
+   "count": 7151,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.0843820232,
+   "count": 2189,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.093346422325,
+   "count": 1341,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.464532179825,
+   "count": 959,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.047233502475,
+   "count": 382,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.0350244815,
+   "count": 1058,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.722448878175001,
+   "count": 784,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.378088448475,
+   "count": 274,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.075371257075,
+   "count": 1197,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.757623039575,
+   "count": 932,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 3.445308615825,
+   "count": 265,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.867248062775,
+   "count": 1308,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.732112491375,
+   "count": 957,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.1667300838750005,
+   "count": 351,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.30894409065,
+   "count": 920,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 11.03562415625,
+   "count": 677,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.482757755225,
+   "count": 243,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.49253754295,
+   "count": 776,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.1619229244,
+   "count": 577,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.074194181125,
+   "count": 199,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.823219400175,
+   "count": 176,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.072189942733333,
+   "count": 97,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.6394797100666665,
+   "count": 34,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 11.097252508499999,
+   "count": 832,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 13.8975877885,
+   "count": 638,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.67552493855,
+   "count": 194,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.740559265675,
+   "count": 4975,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.48425641275,
+   "count": 3682,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.93437775255,
+   "count": 1293,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.387063266,
+   "count": 1166,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.9531701774,
+   "count": 908,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.595989149725,
+   "count": 258,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.550096706849999,
+   "count": 6143,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.39948494055,
+   "count": 4520,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.723411463075,
+   "count": 1623,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.910555711374999,
+   "count": 934,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.09227606105,
+   "count": 721,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.5849070175,
+   "count": 213,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.9688608264,
+   "count": 1626,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 12.32951082225,
+   "count": 1257,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.037598758925,
+   "count": 369,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.385885386525,
+   "count": 957,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.250357583925,
+   "count": 732,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.463796336875,
+   "count": 225,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.630690233025,
+   "count": 796,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 6.8918601709,
+   "count": 594,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 3.66236927445,
+   "count": 202,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.1704078328,
+   "count": 898,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.084786169775,
+   "count": 676,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.3708567624,
+   "count": 222,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 7.243345922525,
+   "count": 1101,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.077604743375,
+   "count": 861,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.20680751055,
+   "count": 240,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 9.70805666555,
+   "count": 819,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 12.474799008,
+   "count": 662,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.0217575509,
+   "count": 157,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 8.223936474424999,
+   "count": 1155,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 10.48117949525,
+   "count": 902,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.656204050825,
+   "count": 253,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 4.609120831049999,
+   "count": 567,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 5.50750279825,
+   "count": 430,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2009,
+   "value": 3.054911915325,
+   "count": 137,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.79312368095,
+   "count": 31802,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.498266224049999,
+   "count": 23985,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.02723474515,
+   "count": 7817,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.679284686625,
+   "count": 7619,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 10.281981264599999,
+   "count": 5784,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.8210428429,
+   "count": 1835,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.5545411827999995,
+   "count": 1043,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.816570183375,
+   "count": 778,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.4505654383749995,
+   "count": 265,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.921243799525,
+   "count": 777,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.57072437455,
+   "count": 585,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.3683732419000005,
+   "count": 192,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.912179162975,
+   "count": 1004,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.533138731825,
+   "count": 777,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 3.4085338892,
+   "count": 227,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.2083188388,
+   "count": 1281,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 10.41603368475,
+   "count": 983,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.825904417775,
+   "count": 298,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.0728307471,
+   "count": 708,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.596280077925,
+   "count": 523,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.5722915492,
+   "count": 185,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.0135144809,
+   "count": 645,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.57114731645,
+   "count": 486,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 3.695849377025,
+   "count": 159,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.1603600993,
+   "count": 142,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.021718852325,
+   "count": 597,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 10.795638856075,
+   "count": 436,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.255895924975,
+   "count": 161,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.876991064575,
+   "count": 3861,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.523663645900001,
+   "count": 2885,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.210503157225,
+   "count": 976,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.859047090125,
+   "count": 875,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.279654304425,
+   "count": 629,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.7682989263749995,
+   "count": 246,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.754119835200001,
+   "count": 6085,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 10.47966234105,
+   "count": 4453,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.0448782708,
+   "count": 1632,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.33617539235,
+   "count": 742,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.961121040925,
+   "count": 567,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.623414800575,
+   "count": 175,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.96408732685,
+   "count": 1191,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 11.127068973124999,
+   "count": 928,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.31677871375,
+   "count": 263,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.2922967571,
+   "count": 820,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.141010046275,
+   "count": 619,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.490922201825,
+   "count": 201,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.978897055775,
+   "count": 746,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.6499510136249995,
+   "count": 574,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 3.4682211238000002,
+   "count": 172,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 6.5778168173000005,
+   "count": 749,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.5242452777,
+   "count": 576,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 3.73666320925,
+   "count": 173,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.31071746015,
+   "count": 899,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 8.9780006293,
+   "count": 692,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.517249537075,
+   "count": 207,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 9.014490277275,
+   "count": 614,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 11.3008288895,
+   "count": 486,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.110309955025,
+   "count": 128,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 7.7412982938,
+   "count": 950,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 10.032900828174999,
+   "count": 756,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.092208357725,
+   "count": 194,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 4.1438924252,
+   "count": 449,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 5.165947571375,
+   "count": 349,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2010,
+   "value": 2.459626249875,
+   "count": 100,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.8064083252,
+   "count": 41714,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.66617006325,
+   "count": 32046,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.582016973775,
+   "count": 9668,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.3790377458,
+   "count": 9258,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.09359507775,
+   "count": 7120,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.192205933675,
+   "count": 2138,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.91589409335,
+   "count": 1284,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.472598076875,
+   "count": 1007,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.147741901374999,
+   "count": 277,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 7.760250174525,
+   "count": 999,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.3441080855,
+   "count": 741,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.2196057121,
+   "count": 258,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.6463194702,
+   "count": 1290,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.0905238365,
+   "count": 985,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.2188323835,
+   "count": 305,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.261477233225001,
+   "count": 1646,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.58804102325,
+   "count": 1254,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.645127410624999,
+   "count": 392,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.052311939375,
+   "count": 1024,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.875032771499999,
+   "count": 762,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.952433479350001,
+   "count": 262,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 7.378976496225,
+   "count": 897,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.5451793785,
+   "count": 725,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 3.7636023448250002,
+   "count": 172,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.96536595425,
+   "count": 235,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.9019933555,
+   "count": 101,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.0323236265,
+   "count": 20,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.9580748266,
+   "count": 671,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.15350706625,
+   "count": 516,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.412980425075,
+   "count": 155,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.608064562900001,
+   "count": 4714,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.422438850375,
+   "count": 3596,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.51927140565,
+   "count": 1118,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 7.5038302186,
+   "count": 1077,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.317285723874999,
+   "count": 814,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.68177976565,
+   "count": 263,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.31296475555,
+   "count": 8733,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 12.320640701,
+   "count": 6563,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.913308203175,
+   "count": 2170,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.437453577375,
+   "count": 1054,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.577011148875,
+   "count": 841,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.689405685225,
+   "count": 213,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.31712919125,
+   "count": 1619,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 12.60715197975,
+   "count": 1270,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.206480797175,
+   "count": 349,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.41431246095,
+   "count": 1124,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.1158583211,
+   "count": 875,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.2888433432,
+   "count": 249,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.8409808482,
+   "count": 1012,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.754859827775,
+   "count": 819,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 3.54795729345,
+   "count": 193,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.43066168975,
+   "count": 857,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 7.9411571699,
+   "count": 646,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 4.0604235555,
+   "count": 211,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 8.942915371275,
+   "count": 1283,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 10.84058229275,
+   "count": 1004,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.479838522225,
+   "count": 279,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.152581043775,
+   "count": 940,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 13.606061204,
+   "count": 763,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.262480881675,
+   "count": 177,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 9.050610644775,
+   "count": 1363,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 11.06193111925,
+   "count": 1067,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.477588555975,
+   "count": 296,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 5.091157422425,
+   "count": 631,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 6.03709508925,
+   "count": 476,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2011,
+   "value": 3.4413838591749997,
+   "count": 155,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.32181448835,
+   "count": 54489,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.52297120475,
+   "count": 42404,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.3858653436,
+   "count": 12085,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.52067755675,
+   "count": 11631,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.4365219175,
+   "count": 8969,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.9277534402,
+   "count": 2662,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 7.4119206255000005,
+   "count": 1498,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.856215809250001,
+   "count": 1149,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 4.82833861645,
+   "count": 349,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 9.206117927874999,
+   "count": 1359,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.61645306975,
+   "count": 1090,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 5.0059078616,
+   "count": 269,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.898378204025,
+   "count": 1481,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.36564038095,
+   "count": 1136,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 4.3741698779750005,
+   "count": 345,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.247369336,
+   "count": 1979,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.926099014750001,
+   "count": 1537,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 5.956379746925,
+   "count": 442,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.366493800499999,
+   "count": 1356,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 14.41444658725,
+   "count": 1006,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.78119192535,
+   "count": 350,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.135128964575,
+   "count": 1385,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.19649765275,
+   "count": 1144,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 4.8244568005,
+   "count": 241,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.77689685925,
+   "count": 307,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.55576220275,
+   "count": 242,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.06486761155,
+   "count": 65,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.4493291392,
+   "count": 824,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.13191243625,
+   "count": 653,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 5.8733158834,
+   "count": 171,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.16299665885,
+   "count": 6159,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.0359123495,
+   "count": 4640,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.890910437025,
+   "count": 1519,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.79652227125,
+   "count": 1403,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.684813185,
+   "count": 1073,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 5.596666015275,
+   "count": 330,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 12.1853936855,
+   "count": 11863,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 14.71441892175,
+   "count": 9132,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 7.737407138225,
+   "count": 2731,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.347881782,
+   "count": 1627,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 14.092003620749999,
+   "count": 1295,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.4466190309249995,
+   "count": 332,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.902166853,
+   "count": 2101,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 14.6495763325,
+   "count": 1695,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.6752179279499995,
+   "count": 406,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 10.96239781375,
+   "count": 1614,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.27989342275,
+   "count": 1261,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.755419160325,
+   "count": 353,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.874285932675,
+   "count": 1412,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.573950318249999,
+   "count": 1197,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 3.868400206,
+   "count": 215,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 7.556571717724999,
+   "count": 1181,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 9.7713156168,
+   "count": 958,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 3.811439188525,
+   "count": 223,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 9.4779107172,
+   "count": 1428,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.51865193075,
+   "count": 1112,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 5.85293239685,
+   "count": 316,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.06646392625,
+   "count": 1229,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 16.25940840375,
+   "count": 998,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 7.075663496425,
+   "count": 231,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 11.01314123375,
+   "count": 1754,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 13.1815373405,
+   "count": 1387,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.79280203005,
+   "count": 367,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 6.569670747,
+   "count": 887,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 8.20567117825,
+   "count": 722,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2012,
+   "value": 3.5005508990000003,
+   "count": 165,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.03508009375,
+   "count": 69690,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.6275696555,
+   "count": 54793,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.286159850225,
+   "count": 14897,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.9013888055,
+   "count": 14377,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.179233897,
+   "count": 11216,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.58253266045,
+   "count": 3161,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 8.808494485525,
+   "count": 1870,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 10.776740877175,
+   "count": 1485,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 5.169631523025,
+   "count": 385,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.100920210750001,
+   "count": 1923,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.68422392125,
+   "count": 1534,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.3600276023,
+   "count": 389,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 8.1699687909,
+   "count": 1905,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 10.039728216875,
+   "count": 1485,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 4.92781026,
+   "count": 420,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.180621307000001,
+   "count": 2352,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.130540669750001,
+   "count": 1875,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.144897263325,
+   "count": 477,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.321836751,
+   "count": 1663,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 16.38421626125,
+   "count": 1231,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 10.54371144175,
+   "count": 432,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.419830514000001,
+   "count": 1842,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 15.69053005675,
+   "count": 1483,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.668433422325,
+   "count": 359,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.7165682532,
+   "count": 371,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 15.113070754999999,
+   "count": 308,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 5.552205756475,
+   "count": 63,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.328503561249999,
+   "count": 935,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.940512490749999,
+   "count": 723,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.91125102455,
+   "count": 212,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.67985501025,
+   "count": 7723,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.956195834999999,
+   "count": 5974,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.5047241418,
+   "count": 1749,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 11.270244877,
+   "count": 2004,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.02739576025,
+   "count": 1595,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.380326294175,
+   "count": 409,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 14.37096311875,
+   "count": 15603,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 17.13818176725,
+   "count": 12044,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 9.29213826895,
+   "count": 3559,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.95900541925,
+   "count": 2125,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 16.07793442925,
+   "count": 1707,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.22701809635,
+   "count": 418,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.5472826485,
+   "count": 2548,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 16.7572136545,
+   "count": 2050,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.573293797975,
+   "count": 498,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.380348831500001,
+   "count": 1952,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 15.29175043575,
+   "count": 1554,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.1022573620500005,
+   "count": 398,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 10.6479059864,
+   "count": 1913,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.495679891,
+   "count": 1578,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 5.332720809875,
+   "count": 335,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 9.5083033157,
+   "count": 1624,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.2842550975,
+   "count": 1316,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 4.841178068,
+   "count": 308,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 12.022487909999999,
+   "count": 1942,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 15.158410367,
+   "count": 1587,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 6.250473277375001,
+   "count": 355,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.3745603225,
+   "count": 1363,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 15.984166081,
+   "count": 1069,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 8.39806813885,
+   "count": 294,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 13.672530737,
+   "count": 2421,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 16.686422821249998,
+   "count": 1934,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 7.9666257377,
+   "count": 487,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 8.292419231475,
+   "count": 1221,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 10.87004916975,
+   "count": 1036,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2013,
+   "value": 3.547741899025,
+   "count": 185,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 13.72071922725,
+   "count": 90866,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.658334918,
+   "count": 72052,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.1888811358,
+   "count": 18814,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.78172188325,
+   "count": 17500,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.13109145775,
+   "count": 13687,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.20105886575,
+   "count": 3813,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 10.8977346515,
+   "count": 2586,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 13.475030968,
+   "count": 2098,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 5.9770472087,
+   "count": 488,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.58728539925,
+   "count": 2498,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.480426396,
+   "count": 2004,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.16412453565,
+   "count": 494,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 9.560236007324999,
+   "count": 2471,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 11.704048672999999,
+   "count": 1910,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 5.890037857425,
+   "count": 561,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 13.58971322425,
+   "count": 3206,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.979743073,
+   "count": 2553,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.622406082475,
+   "count": 653,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.118989384749998,
+   "count": 2074,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 19.6647730095,
+   "count": 1634,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 9.653834750125,
+   "count": 440,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.84886585425,
+   "count": 2381,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 18.855437010000003,
+   "count": 1921,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.863555779,
+   "count": 460,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 11.59564701075,
+   "count": 401,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.76068730225,
+   "count": 331,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 5.746679412475,
+   "count": 70,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.66742489125,
+   "count": 1174,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.87247732175,
+   "count": 886,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.70668398045,
+   "count": 288,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 13.373603154000001,
+   "count": 10182,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.1703128235,
+   "count": 8055,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.083579546025,
+   "count": 2127,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.76049390075,
+   "count": 2623,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.73366982225,
+   "count": 2085,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.3693545424,
+   "count": 538,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.52855495175,
+   "count": 20875,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 19.90289914875,
+   "count": 16416,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 10.18173231175,
+   "count": 4459,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.908107618,
+   "count": 2821,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 18.28861585825,
+   "count": 2258,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.5556664408,
+   "count": 563,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.66399998475,
+   "count": 3411,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 19.5533490415,
+   "count": 2800,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.205504574875,
+   "count": 611,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 13.39627719575,
+   "count": 2451,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 16.65859605175,
+   "count": 1987,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.2863336938,
+   "count": 464,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.82653566025,
+   "count": 2644,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.58685588725,
+   "count": 2098,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 7.61589308875,
+   "count": 546,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 11.95711405325,
+   "count": 2346,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 15.23841601875,
+   "count": 1928,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 5.989969271075,
+   "count": 418,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.59371381425,
+   "count": 2826,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 17.771864928750002,
+   "count": 2287,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.287374660400001,
+   "count": 539,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.1953120595,
+   "count": 1587,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 17.00095655775,
+   "count": 1253,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 8.77095771515,
+   "count": 334,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 14.93826400975,
+   "count": 3097,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 17.9425701825,
+   "count": 2462,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 9.0523059165,
+   "count": 635,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 10.012790754274999,
+   "count": 1702,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 12.46094741275,
+   "count": 1394,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2014,
+   "value": 5.30149098345,
+   "count": 308,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.399501558249998,
+   "count": 121673,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 19.677367222999997,
+   "count": 96149,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.075706769875,
+   "count": 25524,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 14.460118023,
+   "count": 22110,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.93596443975,
+   "count": 17273,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 9.50053343415,
+   "count": 4837,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 13.59791899475,
+   "count": 3620,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.62209068625,
+   "count": 2902,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 7.8334649526,
+   "count": 718,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 15.838107336250001,
+   "count": 3526,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 19.225214271749998,
+   "count": 2823,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 9.27799808345,
+   "count": 703,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.65142330625,
+   "count": 2964,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 13.040391159750001,
+   "count": 2337,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 6.3298281498249995,
+   "count": 627,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.686474676750002,
+   "count": 4431,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 20.730579138,
+   "count": 3528,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 9.467781372200001,
+   "count": 903,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.78513960875,
+   "count": 2727,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 22.431434280250002,
+   "count": 2115,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 12.02708824175,
+   "count": 612,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.92762251725,
+   "count": 3047,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 21.129025693,
+   "count": 2416,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 9.602569124224999,
+   "count": 631,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 13.22503573975,
+   "count": 513,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.048376356,
+   "count": 421,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 7.325337153475,
+   "count": 92,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 15.2328589345,
+   "count": 1557,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 17.96725248925,
+   "count": 1200,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.0832838006,
+   "count": 357,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.595500486749998,
+   "count": 14323,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 19.87419445125,
+   "count": 11294,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.273181001074999,
+   "count": 3029,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 16.67950240875,
+   "count": 3611,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 20.17132127375,
+   "count": 2862,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.035427213624999,
+   "count": 749,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 19.221376593000002,
+   "count": 27312,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 23.023295577749998,
+   "count": 21502,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 11.928398421,
+   "count": 5810,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.19785231525,
+   "count": 3796,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 22.0255187265,
+   "count": 3024,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.829464235375,
+   "count": 772,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.0668972515,
+   "count": 4522,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 22.236973856,
+   "count": 3692,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 9.846336720125,
+   "count": 830,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 15.345594198,
+   "count": 3243,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.895372478749998,
+   "count": 2598,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 8.740374537000001,
+   "count": 645,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.194265744,
+   "count": 4133,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 21.67441035325,
+   "count": 3227,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 11.568346077000001,
+   "count": 906,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 14.982620910000001,
+   "count": 3291,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.40014787075,
+   "count": 2639,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 8.549737020424999,
+   "count": 652,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 17.36106325725,
+   "count": 3932,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 20.683822123,
+   "count": 3129,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.676241453500001,
+   "count": 803,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 17.392907861,
+   "count": 2123,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 20.777078579250002,
+   "count": 1686,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 10.675895337,
+   "count": 437,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 18.7421472275,
+   "count": 4483,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 22.31478437425,
+   "count": 3567,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 11.542167597,
+   "count": 916,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 12.961748219,
+   "count": 2387,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 15.42550105075,
+   "count": 1904,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2015,
+   "value": 7.954960058749999,
+   "count": 483,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 18.50384964575,
+   "count": 143642,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 22.16591783625,
+   "count": 114064,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.302669949,
+   "count": 29578,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 16.685693995,
+   "count": 26256,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 19.65656698625,
+   "count": 20723,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 10.6538899865,
+   "count": 5533,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 16.10138486575,
+   "count": 4473,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 19.201838072500003,
+   "count": 3562,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 9.873489087174999,
+   "count": 911,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 18.61156503775,
+   "count": 4477,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 22.69042233725,
+   "count": 3629,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 10.522886089,
+   "count": 848,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.564775206250001,
+   "count": 3292,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 14.11080838075,
+   "count": 2590,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 6.944131013175,
+   "count": 702,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 18.744882329750002,
+   "count": 5303,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 23.075781317,
+   "count": 4221,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 10.822286489,
+   "count": 1082,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.39017977225,
+   "count": 3209,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 25.51058362,
+   "count": 2529,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 13.36189433125,
+   "count": 680,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.0193549545,
+   "count": 3794,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 25.1872592605,
+   "count": 3072,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 10.68831903075,
+   "count": 722,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.789405953,
+   "count": 692,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.84280133125,
+   "count": 565,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 9.75194059305,
+   "count": 127,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 18.16463597775,
+   "count": 2014,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.889121632749998,
+   "count": 1550,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 12.660106697,
+   "count": 464,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 18.2328121635,
+   "count": 16366,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.770304755,
+   "count": 12961,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.26407595775,
+   "count": 3405,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.729707849249998,
+   "count": 3893,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.24288574875,
+   "count": 3053,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.07477883975,
+   "count": 840,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.925637565000002,
+   "count": 31619,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 24.87919473025,
+   "count": 24760,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 13.2980423675,
+   "count": 6859,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.727633675,
+   "count": 4815,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 26.216131713750002,
+   "count": 3867,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 12.79643022075,
+   "count": 948,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.564012685999998,
+   "count": 5521,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 25.01093806525,
+   "count": 4524,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.37876759225,
+   "count": 997,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.36644971675,
+   "count": 3986,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.440127045,
+   "count": 3243,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 9.49917864805,
+   "count": 743,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.89787847825,
+   "count": 4817,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 25.02416295725,
+   "count": 3838,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 12.688491193,
+   "count": 979,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.465635189,
+   "count": 4039,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.4419393325,
+   "count": 3290,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 9.6311117674,
+   "count": 749,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 20.1488058615,
+   "count": 5074,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 24.2628943805,
+   "count": 4105,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.7316348595,
+   "count": 969,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.88018823875,
+   "count": 2018,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.103261486,
+   "count": 1598,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 11.30093885525,
+   "count": 420,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 21.04054100775,
+   "count": 5453,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 25.139206745499997,
+   "count": 4352,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 12.79832189175,
+   "count": 1101,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 14.05484145725,
+   "count": 2515,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 17.0452782425,
+   "count": 2026,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2016,
+   "value": 8.13883189685,
+   "count": 489,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.777636491499997,
+   "count": 141908,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 23.75366616225,
+   "count": 113026,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.9510548365,
+   "count": 28882,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 18.7704711325,
+   "count": 27369,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 22.32087412975,
+   "count": 21965,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.40077027925,
+   "count": 5404,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 17.416184121,
+   "count": 4642,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 21.06601786925,
+   "count": 3738,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 10.146553006475001,
+   "count": 904,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 20.58758555275,
+   "count": 4723,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 25.147479662000002,
+   "count": 3857,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.38913104575,
+   "count": 866,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 12.715610506,
+   "count": 3388,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 15.1157905145,
+   "count": 2619,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 8.25824313655,
+   "count": 769,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.798139313500002,
+   "count": 5379,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 24.5032082505,
+   "count": 4306,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.17995902275,
+   "count": 1073,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 23.14468362275,
+   "count": 3291,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 27.48811163825,
+   "count": 2611,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 14.3823429685,
+   "count": 680,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 20.852906238750002,
+   "count": 3779,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 26.31472802925,
+   "count": 3091,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 10.789891933749999,
+   "count": 688,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 20.0291044765,
+   "count": 709,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 24.6222462665,
+   "count": 581,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 10.8524962654,
+   "count": 128,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 20.90361809325,
+   "count": 2232,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 24.66508018,
+   "count": 1761,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 13.3188564925,
+   "count": 471,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.240151027499998,
+   "count": 16336,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 22.83811517725,
+   "count": 12940,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 12.025343848750001,
+   "count": 3396,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.809127641499998,
+   "count": 4137,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 23.820358347750002,
+   "count": 3241,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 12.30886714625,
+   "count": 896,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 22.40818258775,
+   "count": 32032,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 26.7244277285,
+   "count": 25133,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 14.109706779749999,
+   "count": 6899,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 24.0680978415,
+   "count": 4868,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 29.46611244525,
+   "count": 3952,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 13.445405868,
+   "count": 916,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 21.000136383999997,
+   "count": 4898,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 25.04234527475,
+   "count": 3900,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 12.8813447645,
+   "count": 998,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 18.69033264375,
+   "count": 3809,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 22.4786032095,
+   "count": 3036,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.22513516075,
+   "count": 773,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 21.6723167535,
+   "count": 4597,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 25.8439668355,
+   "count": 3641,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 13.4319997395,
+   "count": 956,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 17.8470423085,
+   "count": 3852,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 21.95440795475,
+   "count": 3153,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 9.6777167135,
+   "count": 699,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.3346947945,
+   "count": 3933,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 23.706804733,
+   "count": 3164,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.007263506600001,
+   "count": 769,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 17.84687679025,
+   "count": 1560,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 22.10358922825,
+   "count": 1256,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 9.92397406085,
+   "count": 304,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 19.78773919375,
+   "count": 4333,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 23.86597906775,
+   "count": 3446,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 11.900590716,
+   "count": 887,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 13.294959916,
+   "count": 2032,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 16.3017925775,
+   "count": 1631,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2017,
+   "value": 7.612484729375,
+   "count": 401,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.799518368,
+   "count": 137738,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 23.91032008125,
+   "count": 109707,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.8352984265,
+   "count": 28031,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.462056003249998,
+   "count": 27955,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 23.1893382675,
+   "count": 22301,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.910676921,
+   "count": 5654,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 18.91669697425,
+   "count": 5111,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 22.920770339,
+   "count": 4114,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 10.99464180825,
+   "count": 997,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 20.905704663,
+   "count": 4793,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 25.69077568025,
+   "count": 3889,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.6017204895,
+   "count": 904,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 13.7127830945,
+   "count": 3931,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 16.735947939749998,
+   "count": 3139,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 7.99118690995,
+   "count": 792,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 20.4979314705,
+   "count": 5689,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 25.009180942249998,
+   "count": 4487,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.24641030725,
+   "count": 1202,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 25.28013322675,
+   "count": 3426,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 29.7511787705,
+   "count": 2709,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 16.12323951875,
+   "count": 717,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.2749962995,
+   "count": 3402,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 24.18149414775,
+   "count": 2781,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 10.0989790359,
+   "count": 621,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 20.0914675275,
+   "count": 706,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 24.0680229585,
+   "count": 564,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.12422173825,
+   "count": 142,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 20.06152148725,
+   "count": 1922,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 24.5606080945,
+   "count": 1556,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.29319780225,
+   "count": 366,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.22299976075,
+   "count": 16292,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 23.031775496,
+   "count": 12943,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.72421674925,
+   "count": 3349,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 20.90815907525,
+   "count": 4358,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 25.371927754250002,
+   "count": 3454,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.5025173765,
+   "count": 904,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 21.521066367499998,
+   "count": 29334,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 25.7120759255,
+   "count": 22940,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 13.58148520225,
+   "count": 6394,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 23.974564006999998,
+   "count": 4800,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 29.7721091495,
+   "count": 3968,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.418712489,
+   "count": 832,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.907519686,
+   "count": 4246,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 24.497817890500002,
+   "count": 3424,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.178061417,
+   "count": 822,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 19.67949761525,
+   "count": 3597,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 23.9923580725,
+   "count": 2877,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.4447342995,
+   "count": 720,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 21.512625975,
+   "count": 4533,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 26.1120533815,
+   "count": 3644,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.49496692225,
+   "count": 889,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 18.478072838750002,
+   "count": 4063,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 22.75666251525,
+   "count": 3291,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 10.2557173825,
+   "count": 772,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 17.854376042,
+   "count": 2934,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 21.93811831025,
+   "count": 2316,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 10.518418322999999,
+   "count": 618,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 17.88453812275,
+   "count": 1300,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 22.12440586625,
+   "count": 1031,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 10.278839404275,
+   "count": 269,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 18.84601065875,
+   "count": 3727,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 22.9119520195,
+   "count": 2968,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 11.12208794575,
+   "count": 759,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 12.20921604275,
+   "count": 1605,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 15.116651411,
+   "count": 1300,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2018,
+   "value": 6.69026425245,
+   "count": 305,
+   "sex": "M"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 20.1317990675,
+   "count": 135741,
+   "sex": "T"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 24.384476356249998,
+   "count": 107757,
+   "sex": "K"
+  },
+  {
+   "county_code": "00",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.04533194675,
+   "count": 27984,
+   "sex": "M"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 21.34623076575,
+   "count": 30633,
+   "sex": "T"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 25.58621842875,
+   "count": 24419,
+   "sex": "K"
+  },
+  {
+   "county_code": "01",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.9301284285,
+   "count": 6214,
+   "sex": "M"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 20.27669161975,
+   "count": 5245,
+   "sex": "T"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 24.045728856,
+   "count": 4151,
+   "sex": "K"
+  },
+  {
+   "county_code": "03",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.72116082925,
+   "count": 1094,
+   "sex": "M"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 21.22341375425,
+   "count": 4646,
+   "sex": "T"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 25.90092548575,
+   "count": 3707,
+   "sex": "K"
+  },
+  {
+   "county_code": "04",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.39069348325,
+   "count": 939,
+   "sex": "M"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 15.133336670750001,
+   "count": 4401,
+   "sex": "T"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 18.1833610145,
+   "count": 3481,
+   "sex": "K"
+  },
+  {
+   "county_code": "05",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 9.2487483863,
+   "count": 920,
+   "sex": "M"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 21.23323050525,
+   "count": 5676,
+   "sex": "T"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 25.9029051735,
+   "count": 4478,
+   "sex": "K"
+  },
+  {
+   "county_code": "06",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.6859746745,
+   "count": 1198,
+   "sex": "M"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 24.5744484105,
+   "count": 3153,
+   "sex": "T"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 29.302831074,
+   "count": 2487,
+   "sex": "K"
+  },
+  {
+   "county_code": "07",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 15.351210232,
+   "count": 666,
+   "sex": "M"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 20.087873874,
+   "count": 3539,
+   "sex": "T"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 25.115382935,
+   "count": 2863,
+   "sex": "K"
+  },
+  {
+   "county_code": "08",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 10.866024328325,
+   "count": 676,
+   "sex": "M"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.64468955925,
+   "count": 901,
+   "sex": "T"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 28.5716630865,
+   "count": 717,
+   "sex": "K"
+  },
+  {
+   "county_code": "09",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 14.13386680525,
+   "count": 184,
+   "sex": "M"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 19.624946294,
+   "count": 1760,
+   "sex": "T"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.91241453525,
+   "count": 1397,
+   "sex": "K"
+  },
+  {
+   "county_code": "10",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 11.61656048325,
+   "count": 363,
+   "sex": "M"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 19.01427023525,
+   "count": 15880,
+   "sex": "T"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 22.848162113,
+   "count": 12556,
+   "sex": "K"
+  },
+  {
+   "county_code": "12",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 11.6370451185,
+   "count": 3324,
+   "sex": "M"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 20.258717837,
+   "count": 4020,
+   "sex": "T"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 24.5662771245,
+   "count": 3162,
+   "sex": "K"
+  },
+  {
+   "county_code": "13",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.308314128749998,
+   "count": 858,
+   "sex": "M"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 21.27620786475,
+   "count": 28058,
+   "sex": "T"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 25.6390576595,
+   "count": 22014,
+   "sex": "K"
+  },
+  {
+   "county_code": "14",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 13.136725597249999,
+   "count": 6044,
+   "sex": "M"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.1766163785,
+   "count": 4419,
+   "sex": "T"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 28.43563347675,
+   "count": 3588,
+   "sex": "K"
+  },
+  {
+   "county_code": "17",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.890828243,
+   "count": 831,
+   "sex": "M"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 17.88983474225,
+   "count": 3389,
+   "sex": "T"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 22.51670293075,
+   "count": 2745,
+   "sex": "K"
+  },
+  {
+   "county_code": "18",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 9.5415181747,
+   "count": 644,
+   "sex": "M"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 19.450449605,
+   "count": 3095,
+   "sex": "T"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.61261132625,
+   "count": 2425,
+   "sex": "K"
+  },
+  {
+   "county_code": "19",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 11.88270452175,
+   "count": 670,
+   "sex": "M"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 19.4769742205,
+   "count": 3788,
+   "sex": "T"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.46328882975,
+   "count": 2967,
+   "sex": "K"
+  },
+  {
+   "county_code": "20",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.065634907,
+   "count": 821,
+   "sex": "M"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 18.659301134,
+   "count": 4013,
+   "sex": "T"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.366075322249998,
+   "count": 3271,
+   "sex": "K"
+  },
+  {
+   "county_code": "21",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 9.888405865125,
+   "count": 742,
+   "sex": "M"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 17.777812808,
+   "count": 2741,
+   "sex": "T"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 22.27350764975,
+   "count": 2202,
+   "sex": "K"
+  },
+  {
+   "county_code": "22",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 9.7431850751,
+   "count": 539,
+   "sex": "M"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 16.6379460425,
+   "count": 1028,
+   "sex": "T"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 20.783782813,
+   "count": 799,
+   "sex": "K"
+  },
+  {
+   "county_code": "23",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 9.8069525271,
+   "count": 229,
+   "sex": "M"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 19.23916216775,
+   "count": 3799,
+   "sex": "T"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 23.7352545205,
+   "count": 3082,
+   "sex": "K"
+  },
+  {
+   "county_code": "24",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 10.6097937935,
+   "count": 717,
+   "sex": "M"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 12.40068204175,
+   "count": 1540,
+   "sex": "T"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 15.24658309875,
+   "count": 1233,
+   "sex": "K"
+  },
+  {
+   "county_code": "25",
+   "indicator": "sjukfranvaro_f43_pct",
+   "year": 2019,
+   "value": 7.087536184925,
+   "count": 307,
    "sex": "M"
   }
  ]

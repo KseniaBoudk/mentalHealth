@@ -25,6 +25,16 @@ This folder pulls real numbers for **four of those five**:
 Only **antidepressants dispensed** has no fetcher here. Read on for why, and
 for why `distress` isn't named what you might expect from the code.
 
+A sixth script, `fetch_forsakringskassan.py`, is unrelated to those five —
+it backs a new indicator, `sjukfranvaro` (share of ongoing sickness-benefit
+cases with a stress-reaction/F43 diagnosis), not a retrofit of an existing
+one. Different agency, different API technology (an EntryScape "rowstore"
+REST/JSON dataset, not PxWeb), and a real but dated coverage window: county
+grain, all three sexes, annual (averaged from the source's quarterly rows),
+but **2005–2019 only** — this source does not extend into the 2020s. No age
+breakdown. See that script's own docstring for the verified field names and
+dataset id.
+
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
 That was Kurvan's original label, matching HLV's own category "Nedsatt
@@ -107,6 +117,7 @@ pip install -r requirements.txt
 python fetch_socialstyrelsen_mh.py     # self-harm + suicide, ~2 minutes
 python fetch_socialstyrelsen_psych.py  # psychiatric care, ~1 minute, ~40 requests
 python fetch_folkhalsodata_hlv.py      # severe anxiety, ~15 seconds, 1 request
+python fetch_forsakringskassan.py      # sickness absence (F43), ~10 seconds, paginated
 python build_kurvan_data.py            # writes ../js/real_mh_data.js
 ```
 

@@ -43,8 +43,15 @@ function lineChart(series,opts){
   const all=series.flatMap(se=>se.pts.filter(Boolean));
   const xs=all.map(p=>p[0]),ys=all.map(p=>p[1]);
   const bandY=opts.band?opts.band.flatMap(p=>[p[1],p[2]]):[];
-  const x0=opts.x0!=null?opts.x0:Math.min(...xs), x1=opts.x1!=null?opts.x1:Math.max(...xs);
-  let y0=Math.min(...ys,...bandY),y1=Math.max(...ys,...bandY);
+  // Every point can legitimately be null — e.g. a region/year where the
+  // real source suppresses every value for small counts — leaving xs/ys
+  // empty. Math.min()/max() of nothing is +/-Infinity, which propagated
+  // into every coordinate as NaN (an invalid SVG attribute, silently
+  // dropped by the browser) instead of just rendering an empty chart.
+  const x0=opts.x0!=null?opts.x0:(xs.length?Math.min(...xs):0);
+  const x1=opts.x1!=null?opts.x1:(xs.length?Math.max(...xs):1);
+  let y0=ys.length||bandY.length?Math.min(...ys,...bandY):0;
+  let y1=ys.length||bandY.length?Math.max(...ys,...bandY):1;
   if(opts.zero)y0=0;
   const pad=(y1-y0)*0.14||1;y0=Math.max(0,y0-(opts.zero?0:pad));y1+=pad;
   const X=v=>L+(v-x0)/((x1-x0)||1)*(R-L), Y=v=>B-(v-y0)/((y1-y0)||1)*(B-Tp);
@@ -135,8 +142,12 @@ function chorMap(rows,opts){
     // blur radius in px would be resolved against that local coordinate
     // system and come out wildly wrong at this scale. stdDeviation on
     // feGaussianBlur is already in the same local units as the path data.
-    return `<path class="tile${sel?" on":""}" data-region="${r.code}"${trendAttr} tabindex="0" role="button"
-      aria-label="${esc(title)}" d="${g.d}" fill="${col}" fill-opacity="${op}"${sel?' filter="url(#tileglow)"':""}><title>${esc(title)}</title></path>`;
+    // data-tip, not a <title> child: a native SVG <title> triggers the
+    // browser's own unstyled OS tooltip, which is what this is replacing.
+    // aria-label alone (already present) is enough for the accessible name,
+    // so dropping <title> loses nothing for screen readers.
+    return `<path class="tile${sel?" on":""}" data-region="${r.code}" data-tip="${esc(title)}"${trendAttr} tabindex="0" role="button"
+      aria-label="${esc(title)}" d="${g.d}" fill="${col}" fill-opacity="${op}"${sel?` filter="url(#tileglow)" style="stroke:${col}"`:""}></path>`;
   }).join("");
   return `<svg class="mapsvg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}">
     <defs><filter id="tileglow" x="-60%" y="-60%" width="220%" height="220%">
