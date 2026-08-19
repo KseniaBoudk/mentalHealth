@@ -50,6 +50,15 @@ function fakeAgePts(k,regionCode,year,sex,std){
 const legendStrip=()=>`<div class="legend">${t.legend.map(([k,b,r])=>
   `<span class="li"><span class="dot" style="background:${INST_COLOR[k==="survey"?"survey":k==="reg"?"reg":"mort"]}"></span><span><b>${esc(b)}</b> ${esc(r)}</span></span>`).join("")}</div>`;
 
+// Key for the need/response scatter's three ring colours — reused by both
+// viewBehov and viewRegioner, since both draw the same scatter() and both
+// share the below/above/selected-region ambiguity it disambiguates.
+const scatterKey=()=>`<div class="legend" style="padding:10px 0 4px">
+  <span class="li"><span class="dot" style="background:var(--oxblood)"></span><span>${esc(t.scatterBelowKey)}</span></span>
+  <span class="li"><span class="dot" style="background:var(--teal)"></span><span>${esc(t.scatterAboveKey)}</span></span>
+  <span class="li"><span class="dot" style="background:var(--ink)"></span><span>${esc(t.mapPicked)}</span></span>
+</div>`;
+
 function viewLaget(){
   const xl=[[1,"15"],[3,"35"],[5,"55"],[8,"85+"]];
   // fakeAgePts/fakeCell throughout this chart, deliberately: it contrasts
@@ -120,7 +129,13 @@ function viewOverTid(){
   const suppressed=rowsAll.filter(r=>r.supp).map(r=>r.name);
   const nat=S.age===-1?total(k,"SE",yr,S.sex,S.std):cell(k,"SE",yr,S.age,S.sex,S.std);
 
-  const R=RBY[S.region];
+  // "SE" (Sweden) is a selectable pseudo-region here, not a RBY entry —
+  // cell()/total() already treat it as the national aggregate everywhere
+  // (map reference line, dot plot, etc.), so only the display name needs a
+  // stand-in; t.natLine keeps it correctly localised rather than NAT[1],
+  // which is hardcoded Swedish regardless of language.
+  const R=S.region==="SE"?["SE",t.natLine]:RBY[S.region];
+  const isNat=S.region==="SE";
   const band=[];const natT=[];
   for(let i=0;i<AGES.length;i++){
     const c=cell(k,"SE",yr,i,"T",S.std);
@@ -160,6 +175,7 @@ function viewOverTid(){
       <option value="M"${S.sex==="M"?" selected":""}${!sexAvailable(k,"M")?" disabled":""}>${esc(t.sexM)}</option>
       <option value="K"${S.sex==="K"?" selected":""}${!sexAvailable(k,"K")?" disabled":""}>${esc(t.sexK)}</option></select></div>
     <div class="f"><label>${esc(t.lblReg)}</label><select id="c-reg">
+      <option value="SE"${isNat?" selected":""}>${esc(t.natLine)}</option>
       ${REGIONS.map(r=>`<option value="${r[0]}"${r[0]===S.region?" selected":""}>${esc(r[1])}</option>`).join("")}</select></div>
     <div class="f"><label>${esc(t.lblYear)}</label><select id="c-year">
       ${years.slice().reverse().map(y=>`<option value="${y}"${y===yr?" selected":""}>${I.window?`${y-2}–${y+2}`:y}</option>`).join("")}</select></div>
@@ -180,10 +196,11 @@ function viewOverTid(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])} ${esc(t.ageSub)}</div></div>
+        <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])}${isNat?"":" "+esc(t.ageSub)}</div></div>
         <div class="card-b">${lineChart(seriesAge,
-          {band,aria:"Age curves for the selected region against the national band",
-           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k)})}</div>
+          {band:isNat?[]:band,aria:isNat?"Age curve for Sweden as a whole":"Age curves for the selected region against the national band",
+           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k)})}
+          ${isRealActive(k)&&t.realCaveat[k]?`<div class="suppress"><b>${esc(t.realLbl)}</b> ${esc(t.realCaveat[k])}</div>`:""}</div>
       </div>
       <div class="card">
         <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u tnum">${years[0]}–${years[years.length-1]}</div></div>
@@ -276,6 +293,7 @@ function viewRegioner(){
   <div class="card" style="margin-top:20px">
     <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
     <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350})}</div>
+    ${scatterKey()}
     <div class="src"><b>${S.lang==="sv"?"Syntetiska data":"Synthetic data"}</b> · ${S.lang==="sv"
       ?"Ringad region är den valda. Avståndet till linjen visar hur regionen förhåller sig till det genomsnittliga sambandet mellan behov och respons."
       :"The circled region is the selected one. Distance from the line shows how the region compares with the average association between need and response."} ${esc(t.causalNote)}</div>
@@ -376,8 +394,8 @@ function viewKarta(){
   const stat=(key,label,color)=>`
     <div class="rstat i-${key==="distress"?"survey":key==="antidep"?"reg":"mort"}">
       <div class="rk" style="color:${color}"><span class="dot" style="background:${color}"></span>${esc(label)}</div>
-      <div class="rv tnum">${fmt(mine[key].value,1)}${key==="distress"?" %":""}</div>
-      <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine[key].lo,1)}–${fmt(mine[key].hi,1)}</div>
+      <div class="rv tnum">${fmt(mine[key].value,1)}</div>
+      <div class="rci tnum">${esc(unitLabel(key))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine[key].lo,1)}–${fmt(mine[key].hi,1)}</div>
     </div>`;
 
   return `
@@ -442,7 +460,7 @@ function viewKarta(){
       </div>
       <div class="card">
         <div class="card-h"><h3>${esc(t.histTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))})</div></div>
-        <div class="card-b">${histogram(rows,{color:col,aria:"How many regions fall into each value band",unit:unitLabel(k)})}</div>
+        <div class="card-b">${histogram(rows,{color:col,aria:"How many regions fall into each value band",unit:unitLabel(k),countLabel:t.histCount})}</div>
         <div class="src">${esc(t.histSub)}</div>
       </div>
     </div>
@@ -512,6 +530,7 @@ function viewBehov(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.gapTitle)}</h3><div class="u">${esc(t.gapUnit)}</div></div>
       <div class="card-b">${scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380})}</div>
+      ${scatterKey()}
       ${srcStrip("antidep",t.causalNote)}
     </div>
     <div class="pieces" style="grid-template-columns:1fr">

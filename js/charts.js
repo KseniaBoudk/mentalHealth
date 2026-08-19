@@ -64,6 +64,14 @@ function lineChart(series,opts){
     let d="",pen=false;
     se.pts.forEach(p=>{ if(!p){pen=false;return;} d+=`${pen?"L":"M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`; pen=true; });
     s+=`<path d="${d}" fill="none" stroke="${se.color}" stroke-width="${se.w||2.3}" stroke-linecap="round" stroke-linejoin="round"${se.dash?` stroke-dasharray="${se.dash}"`:""}/>`;
+    const valid=se.pts.filter(Boolean);
+    // A single-point series produces only an SVG "moveto" with no "lineto"
+    // after it — the path above renders nothing at all. Real data that's
+    // only published for one age band (e.g. suicide's single real age
+    // group) hits exactly this case, so draw a dot unconditionally rather
+    // than relying on the opt-in `se.dot` (which only ever marks the last
+    // point of a genuine multi-point line).
+    if(valid.length===1)s+=`<circle cx="${X(valid[0][0]).toFixed(1)}" cy="${Y(valid[0][1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
     const last=[...se.pts].reverse().find(Boolean);
     if(se.dot&&last)s+=`<circle cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
     if(se.label){const p=se.pts.filter(Boolean)[se.labelAt??(se.pts.filter(Boolean).length-1)];
@@ -142,7 +150,10 @@ function chorMap(rows,opts){
    and draws a bar per band — "how many regions sit at this level", not a
    ranking of which region. */
 function histogram(rows,opts){
-  const W=opts.w||300,H=opts.h||150,L=14,R=W-14,Tp=16,B=H-24;
+  // L=24, not 14: no y-axis tick numbers here, but a rotated countLabel
+  // still needs its own lane clear of the bars — scatter()/lineChart()
+  // reserve far more (54/42) because they also fit tick numbers in there.
+  const W=opts.w||300,H=opts.h||150,L=24,R=W-14,Tp=16,B=H-24;
   const col=opts.color||"var(--violet)";
   const vals=rows.map(r=>r.value);
   const lo=Math.min(...vals),hi=Math.max(...vals),span=(hi-lo)||1;
@@ -163,9 +174,17 @@ function histogram(rows,opts){
     s+=`<rect x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/></g>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });
+  // Unit suffixed directly onto the two boundary numbers (6,2 / 9,6 %)
+  // rather than floating in a corner — ties it to the exact values it
+  // describes instead of relying on the reader to connect the two.
   [0,nbins].forEach(i=>{
-    s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*span/nbins,span<10?1:0)}</text>`;});
-  if(opts.unit)s+=`<text x="${R}" y="${Tp-4}" text-anchor="end" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(opts.unit)}</text>`;
+    s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*span/nbins,span<10?1:0)}${opts.unit&&i===nbins?" "+esc(opts.unit):""}</text>`;});
+  // Bar-top numbers are counts of regions, not values — labelled here since
+  // that's not otherwise obvious from the chart alone.
+  if(opts.countLabel){
+    const cy=((Tp+B)/2).toFixed(1);
+    s+=`<text x="10" y="${cy}" transform="rotate(-90 10 ${cy})" text-anchor="middle" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(opts.countLabel)}</text>`;
+  }
   s+=`<line x1="${L}" y1="${B}" x2="${R}" y2="${B}" stroke="var(--hair-soft)" stroke-width="1"/>`;
   return s+"</svg>";
 }
@@ -189,13 +208,22 @@ function scatter(pts,opts){
   s+=`<text x="${R}" y="${(Y(fit(x1))-8).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="9.5" font-weight="650" fill="var(--violet)">${esc(t.gapLine)}</text>`;
   let below=null,above=null;
   pts.forEach(p=>{p.res=p.y-fit(p.x);if(!below||p.res<below.res)below=p;if(!above||p.res>above.res)above=p;});
+  // Selected region gets its own ring colour/label ONLY when it isn't
+  // already below/above — those two mean "statistical extreme"; this ring
+  // means "the region you're currently viewing", a different concept that
+  // used to share teal with `above` and get no label of its own.
+  const sel = pts.find(p=>p.code===S.region && p!==below && p!==above);
   pts.forEach(p=>{
-    const hl=p===below||p===above||p.code===S.region;
+    const hl=p===below||p===above||p===sel;
     s+=`<g><title>${esc(p.name)}</title><circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/></g>`;
-    if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":"var(--teal)"}" stroke-width="1.8"/>`;});
+    if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
     s+=`<text x="${(X(p.x)+(dir>0?-10:10)).toFixed(1)}" y="${(Y(p.y)+(dir>0?16:-12)).toFixed(1)}" text-anchor="${dir>0?"end":"start"}" font-family="var(--sans)" font-size="10" font-weight="700" fill="${col}">${esc(p.name)}</text>`;});
+  if(sel){
+    const dy=sel.res<0?16:-12;
+    s+=`<text x="${X(sel.x).toFixed(1)}" y="${(Y(sel.y)+dy).toFixed(1)}" text-anchor="middle" font-family="var(--sans)" font-size="10" font-weight="700" fill="var(--ink)">${esc(sel.name)}</text>`;
+  }
   s+=`<text x="${((L+R)/2).toFixed(0)}" y="${H-8}" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--teal)">${esc(t.gapX)}</text>`;
   s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(t.gapY)}</text>`;
   return s+"</svg>";
