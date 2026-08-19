@@ -52,7 +52,7 @@ sv:{
   ageTitle:"Genom livet",ageSub:"mot rikets band",
   timeTitle:"Över tid",
   natLine:"Riket",
-  winLbl:y=>`fönster ${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end
+  winLbl:y=>`${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end. No "fönster"/"window" prefix — the dash range already reads as a period, and the Over time tab's own year dropdown shows the same range unprefixed.
   suppLbl:"Undertryckt, färre än 10 fall per fönster:",
   surveyEnd:"enkäten slutar vid 84",
   breakLbl:"nytt mått",
@@ -72,6 +72,7 @@ sv:{
   vsPeers:"Liknande regioner",notDiff:"Skillnaden går inte att skilja från noll.",
   higher:"Högre än liknande regioner.",lower:"Lägre än liknande regioner.",
   gapPos:"Regionens läge: behov mot vårdrespons",gapPosU:"avvikelse från genomsnittligt samband · 2024",
+  scatterBelowKey:"Störst avstånd under sambandet",scatterAboveKey:"Störst avstånd över sambandet",
   behovLead:"Rapporterat behov jämfört med registrerad vårdrespons, region för region.",
   behovOpen:"Öppna Behov & vård →",
   changed:"Vad har rört sig",changedU:(a,b)=>`${a} → ${b} · förändring med intervall`,
@@ -106,6 +107,7 @@ sv:{
   cmpToggle:"⇄ Jämför två kartor",
   histTitle:"Fördelning mellan regioner",
   histSub:"Antal regioner per nivåband. Visar spridningen, inte vilken region som är vilken.",
+  histCount:"antal regioner",
   helpA:"Självmordslinjen 90101",helpB:"öppet dygnet runt, alla dagar",helpC:"1177 för vårdrådgivning",
   footA:"Utkast. Byggd på den öppna dataarkitektur som utvecklats för Svenska barnhälsoobservatoriet. Ett fristående projekt, inte knutet till barnhalsovard.se.",
   footB:"Varje siffra på den här sidan är genererad för att visa en design. Ingen är en mätning och ingen ska citeras. Källhänvisningarna beskriver var de riktiga serierna finns.",
@@ -158,7 +160,7 @@ en:{
   ageTitle:"Across the life course",ageSub:"against the national band",
   timeTitle:"Over time",
   natLine:"Sweden",
-  winLbl:y=>`window ${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end
+  winLbl:y=>`${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end. No "fönster"/"window" prefix — the dash range already reads as a period, and the Over time tab's own year dropdown shows the same range unprefixed.
   suppLbl:"Withheld, fewer than 10 cases per window:",
   surveyEnd:"the survey stops at 84",
   breakLbl:"measure revised",
@@ -178,6 +180,7 @@ en:{
   vsPeers:"Peers",notDiff:"Difference not distinguishable from zero.",
   higher:"Higher than peers.",lower:"Lower than peers.",
   gapPos:"Where the region sits: need vs. response",gapPosU:"residual from the average association · 2024",
+  scatterBelowKey:"Furthest below the average association",scatterAboveKey:"Furthest above the average association",
   behovLead:"Reported need compared with recorded healthcare response, region by region.",
   behovOpen:"Open Need & care →",
   changed:"What moved",changedU:(a,b)=>`${a} → ${b} · change with intervals`,
@@ -212,6 +215,7 @@ en:{
   cmpToggle:"⇄ Compare two maps",
   histTitle:"Distribution across regions",
   histSub:"Number of regions per value band. Shows the spread, not which region is which.",
+  histCount:"number of regions",
   helpA:"Självmordslinjen 90101",helpB:"open around the clock, every day",helpC:"1177 for care advice",
   footA:"Draft. Built on the open-data observatory architecture developed for the Swedish Child Health Observatory. A separate project, not affiliated with barnhalsovard.se.",
   footB:"Every figure on this page is generated to show a design. None is a measurement, and none should be quoted. The source references describe where the real series live.",
