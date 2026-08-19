@@ -112,6 +112,7 @@ function wire(){
   bind("c-year",v=>S.year=+v);
   bind("c-mapind",pickInd);
   bind("c-cmpind",v=>S.cmpInd=v);
+  bind("c-ctxind",v=>S.ctxInd=v);
   const ct=document.getElementById("c-cmptoggle");
   if(ct)ct.onclick=()=>{S.cmpOn=!S.cmpOn;render();};
   const stepYear=d=>{

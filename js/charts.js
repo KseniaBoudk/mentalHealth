@@ -129,7 +129,13 @@ function chorMap(rows,opts){
     const sel=r.code===S.region;
     const vsNat=nat!=null?` · ${t.natLine} ${fmt(nat,1)}`:"";
     const trendTxt=r.trend?` · ${r.trend.arrow}${r.trend.rel?` (${r.trend.rel==="with"?t.trendWith:t.trendAgainst})`:""}`:"";
-    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})${vsNat}${trendTxt}`;
+    // Omit the range when lo===hi — a real confidence interval always
+    // has some width; lo===hi means the caller has no uncertainty figure
+    // for this value at all (context indicators: one yearly number, not a
+    // survey estimate) rather than a genuinely zero-width interval, so
+    // showing "(225,5–225,5)" would just repeat the same number.
+    const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
+    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)}${rangeTxt}${vsNat}${trendTxt}`;
     // Significant moves (not "→") also get a data-trend/data-rel pair; wire()
     // paints these as an actual glyph on the shape after the SVG is in the
     // DOM, using getBBox() rather than stored centroids — the region paths

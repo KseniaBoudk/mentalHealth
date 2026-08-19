@@ -51,6 +51,32 @@ function fakeAgePts(k,regionCode,year,sex,std){
 const legendStrip=()=>`<div class="legend">${t.legend.map(([k,b,r])=>
   `<span class="li"><span class="dot" style="background:${INST_COLOR[k==="survey"?"survey":k==="reg"?"reg":"mort"]}"></span><span><b>${esc(b)}</b> ${esc(r)}</span></span>`).join("")}</div>`;
 
+// Five swatches, shared by every chorMap() card — matches the map's own
+// fill exactly (chorMap() shades each tile by BAND_OP[quintile rank], a
+// fixed 5-step opacity ladder, not a continuous value->shade function; an
+// earlier continuous-gradient version of this legend looked nicer but
+// implied a precision the map's actual shading doesn't have). Each swatch
+// pairs a plain value-tier word (legendTiers) with its real number range
+// and unit — not just bare numbers, and not "top/bottom X%" ranking
+// language either (the plan's own rule against rank-based legend bands —
+// these describe where a VALUE sits, not a ranking of regions).
+const mapLegend=(rows,color,unit,nat)=>{
+  const{ranges}=quintileBands(rows);
+  return `<div class="tier-legend">
+    <div class="tier-rows">
+      ${ranges.map((rg,i)=>rg?`<div class="tier-row">
+        <span class="tier-chip" style="background:${color};opacity:${BAND_OP[i]}"></span>
+        <span class="tier-label">${esc(t.legendTiers[i])}</span>
+        <span class="tier-range tnum">${fmt(rg.lo,1)}–${fmt(rg.hi,1)} ${esc(unit)}</span>
+      </div>`:"").join("")}
+    </div>
+    <div class="gradient-note">
+      <span>${esc(t.legendRankNote)}</span>
+      ${nat!=null?`<span>${esc(t.natLine)} <b class="tnum">${fmt(nat,1)} ${esc(unit)}</b></span>`:""}
+    </div>
+  </div>`;
+};
+
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
 // share the below/above/selected-region ambiguity it disambiguates.
@@ -430,23 +456,18 @@ function viewKarta(){
           <div>
             <div class="mapcmphead">${esc(t.ind[k])} (${esc(unitLabel(k))})</div>
             ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[k]})}
-            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span></div>
+            ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
           </div>
           <div>
             <div class="mapcmphead"><select id="c-cmpind">
               ${Object.keys(IND).filter(x=>x!==k).map(x=>`<option value="${x}"${x===cmpK?" selected":""}>${esc(t.ind[x])}</option>`).join("")}
             </select> (${esc(unitLabel(cmpK))})</div>
             ${chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]})}
-            <div class="mapscale sm"><span>${esc(t.natLine)} <b class="tnum">${fmt(cmpNat?cmpNat.value:null,1)} ${esc(unitLabel(cmpK))}</b></span></div>
+            ${mapLegend(cmpRows,cmpCol,unitLabel(cmpK),cmpNat?cmpNat.value:null)}
           </div>
         </div>`:`
         ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions, click a region to see its figures"})}
-        <div class="mapscale">
-          ${quintileBands(rows).ranges.map((rg,i)=>rg?`<span class="bandsw">
-            <span class="bandchip" style="background:${col};opacity:${BAND_OP[i]}"></span>
-            <span class="tnum">${fmt(rg.lo,1)}–${fmt(rg.hi,1)}</span></span>`:"").join("")}
-          <span style="margin-left:auto">${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span>
-        </div>`}
+        ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}`}
       </div>
       <div class="src">${esc(t.mapNote(isRealActive(k)))} ${priorYr?esc(t.trendNote(priorYr,yr)):""} <b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
     </div>
@@ -579,12 +600,7 @@ function viewSjukskrivning(){
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
       <div class="card-b">
         ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"})}
-        <div class="mapscale">
-          ${quintileBands(rows).ranges.map((rg,i)=>rg?`<span class="bandsw">
-            <span class="bandchip" style="background:${col};opacity:${BAND_OP[i]}"></span>
-            <span class="tnum">${fmt(rg.lo,1)}–${fmt(rg.hi,1)}</span></span>`:"").join("")}
-          <span style="margin-left:auto">${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span>
-        </div>
+        ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
       </div>
       <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
     </div>
@@ -604,4 +620,48 @@ function viewSjukskrivning(){
     </div>
   </div>`;
 }
-function viewSammanhang(){return viewComing();}
+function viewSammanhang(){
+  if(!CONTEXT.active)return viewComing();
+  const k=S.ctxInd;
+  const unit=CONTEXT_META[k].scale==="pct"?"%":"per km²";
+  const rows=REGIONS.map(r=>{
+    const c=contextCell(k,r[0]);
+    return c&&{code:r[0],name:r[1],value:c.value,lo:c.value,hi:c.value,n:c.n_kommuner};
+  }).filter(Boolean);
+  const col="var(--ink-2)";
+  const R=RBY[S.region];
+  const mine=contextCell(k,S.region);
+
+  return `
+  <div class="hero">
+    <p>${esc(t.ctxLead)}</p>
+  </div>
+  <div class="ctrl">
+    <div class="f"><label>${esc(t.lblInd)}</label><select id="c-ctxind">
+      ${Object.keys(t.ctxInd).map(x=>`<option value="${x}"${x===k?" selected":""}>${esc(t.ctxInd[x])}</option>`).join("")}</select></div>
+  </div>
+  <div class="grid-ex">
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · 2023</div></div>
+      <div class="card-b">
+        ${chorMap(rows,{color:col,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"})}
+        ${mapLegend(rows,col,unit,null)}
+      </div>
+      <div class="src">${esc(t.ctxCaveat)} ${esc(t.causalNote)}</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-b">
+          <div class="rstats" style="grid-template-columns:1fr">
+            <div class="rstat" style="border-top-color:${col}">
+              <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ctxInd[k])}</div>
+              <div class="rv tnum">${fmt(mine?mine.value:null,1)}</div>
+              <div class="rci tnum">${esc(unit)} · 2023</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
