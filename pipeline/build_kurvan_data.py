@@ -63,6 +63,16 @@ SOURCES = [
                 "   quarterly), 2005-2019 only — this source does not extend into the 2020s.\n"
                 "   No age breakdown. Fetched by fetch_forsakringskassan.py.",
     },
+    {
+        "var": "REAL_CONTEXT_MH",
+        "file": "kolada_context.json",
+        "source": "Kolada (population density; share of residents 25-64 with low education)",
+        "note": "Real, region-grain context indicators, not mental-health measures — one\n"
+                "   demographic (population density), one socioeconomic (low-education share),\n"
+                "   2023 only. Region figures are an UNWEIGHTED mean of that region's\n"
+                "   municipalities, not population-weighted — a real simplification, not\n"
+                "   hidden (see n_kommuner per row). Fetched by fetch_kolada_context.py.",
+    },
 ]
 
 

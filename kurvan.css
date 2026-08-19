@@ -213,6 +213,19 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .mapscale .bar{width:64px;height:7px;border-radius:2px}
 .bandsw{display:flex;align-items:center;gap:4px}
 .bandchip{width:11px;height:11px;border-radius:2px}
+
+/* Five-tier map legend, matching chorMap()'s own 5-step fill exactly —
+   each row is a plain word ("Lowest"..."Highest") plus its real number
+   range, not bare numbers alone. Swatches sized up from the old 11x11px
+   chips (too close in shade to tell apart at that size) with a border so
+   adjacent mid-tones stay visually distinct. */
+.tier-legend{margin-top:14px}
+.tier-rows{display:flex;flex-direction:column;gap:6px}
+.tier-row{display:flex;align-items:center;gap:9px;font-size:11px}
+.tier-chip{width:18px;height:18px;border-radius:3px;flex:none;border:1px solid var(--hair)}
+.tier-label{color:var(--ink-2);font-weight:650;width:4.2em;flex:none}
+.tier-range{color:var(--ink-3)}
+.gradient-note{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:9.5px;color:var(--ink-3)}
 .trendarrow{font-size:.34px;font-weight:800;text-anchor:middle;dominant-baseline:central;
   paint-order:stroke;stroke:var(--surface);stroke-width:.08px;stroke-linejoin:round;pointer-events:none}
 .trendarrow.with{fill:var(--teal)}

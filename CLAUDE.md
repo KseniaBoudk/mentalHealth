@@ -31,11 +31,13 @@ js/real_mh_data.js → js/data.js → js/lang.js → js/state.js → js/charts.j
 ## Tabs
 
 `laget`, `over_tid`, `karta`, `behov`, `sjukskrivning`, `sammanhang`, `metod`,
-`regioner`. `sammanhang` (context) is still a placeholder "under
-construction" page, reserved for the observatory plan's socioeconomic-context
-section — everything else is built, including `sjukskrivning` (sickness
-absence: Försäkringskassan F43 data, real 2005–2019, amber `fk` instrument
-colour, its own `viewSjukskrivning()`).
+`regioner` — all built now. `sjukskrivning` (sickness absence:
+Försäkringskassan F43 data, real 2005–2019, amber `fk` instrument colour)
+and `sammanhang` (context: Kolada population density + low-education
+share, region grain, 2023, unweighted municipality means — deliberately
+not shaped like `IND`/`REAL_*`, see `CONTEXT`/`CONTEXT_META` in
+`js/data.js`) both have their own dedicated view functions outside the
+`IND`-driven generic tabs.
 
 ## Data pipeline
 

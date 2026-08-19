@@ -14,7 +14,7 @@
 /* Real, region-grain rates for self-harm hospitalisation and suicide.
    Fetched by fetch_socialstyrelsen_mh.py. */
 const REAL_MH = {
- "generated_at": "2026-08-19T08:46:22+00:00",
+ "generated_at": "2026-08-19T13:20:57+00:00",
  "source": "Socialstyrelsen Statistikdatabasen (Patientregistret + Dödsorsaksregistret)",
  "rows": [
   {
@@ -25440,7 +25440,7 @@ const REAL_MH = {
    Kurvan's age bands and all three sexes, annual. Fetched by
    fetch_socialstyrelsen_psych.py. */
 const REAL_PSYCH_MH = {
- "generated_at": "2026-08-19T08:46:22+00:00",
+ "generated_at": "2026-08-19T13:20:57+00:00",
  "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, diagnoserislutenoppenvard, F00-F99)",
  "rows": [
   {
@@ -144252,7 +144252,7 @@ const REAL_PSYCH_MH = {
    script's docstring before assuming any other HLV category behaves the
    same way; several stopped being published years ago. */
 const REAL_HLV_MH = {
- "generated_at": "2026-08-19T08:46:22+00:00",
+ "generated_at": "2026-08-19T13:20:57+00:00",
  "source": "Folkhälsomyndigheten Folkhälsodata (Nationella folkhälsoenkäten / HLV, \"Svår ängslan, oro eller ångest\")",
  "rows": [
   {
@@ -156071,7 +156071,7 @@ const REAL_HLV_MH = {
    quarterly), 2005-2019 only — this source does not extend into the 2020s.
    No age breakdown. Fetched by fetch_forsakringskassan.py. */
 const REAL_FK_MH = {
- "generated_at": "2026-08-19T08:46:22+00:00",
+ "generated_at": "2026-08-19T13:20:57+00:00",
  "source": "Försäkringskassan (share of ongoing sickness-benefit cases, diagnosis F43)",
  "rows": [
   {
@@ -163977,6 +163977,312 @@ const REAL_FK_MH = {
    "value": 7.087536184925,
    "count": 307,
    "sex": "M"
+  }
+ ]
+};
+
+/* Real, region-grain context indicators, not mental-health measures — one
+   demographic (population density), one socioeconomic (low-education share),
+   2023 only. Region figures are an UNWEIGHTED mean of that region's
+   municipalities, not population-weighted — a real simplification, not
+   hidden (see n_kommuner per row). Fetched by fetch_kolada_context.py. */
+const REAL_CONTEXT_MH = {
+ "generated_at": "2026-08-19T13:20:57+00:00",
+ "source": "Kolada (population density; share of residents 25-64 with low education)",
+ "rows": [
+  {
+   "county_code": "01",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 1120.3903954642308,
+   "n_kommuner": 26
+  },
+  {
+   "county_code": "03",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 58.894640368750004,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "04",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 79.23153738444445,
+   "n_kommuner": 9
+  },
+  {
+   "county_code": "05",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 35.107764354615384,
+   "n_kommuner": 13
+  },
+  {
+   "county_code": "06",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 32.49969355,
+   "n_kommuner": 13
+  },
+  {
+   "county_code": "07",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 21.844886975,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "08",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 21.774952929999998,
+   "n_kommuner": 12
+  },
+  {
+   "county_code": "09",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 19.47046362,
+   "n_kommuner": 1
+  },
+  {
+   "county_code": "10",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 58.441475262,
+   "n_kommuner": 5
+  },
+  {
+   "county_code": "12",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 225.4910296418182,
+   "n_kommuner": 33
+  },
+  {
+   "county_code": "13",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 67.94892715833333,
+   "n_kommuner": 6
+  },
+  {
+   "county_code": "14",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 109.51593216734693,
+   "n_kommuner": 49
+  },
+  {
+   "county_code": "17",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 37.294246689375,
+   "n_kommuner": 16
+  },
+  {
+   "county_code": "18",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 35.93243092583334,
+   "n_kommuner": 12
+  },
+  {
+   "county_code": "19",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 51.092726627999994,
+   "n_kommuner": 10
+  },
+  {
+   "county_code": "20",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 18.272454160666666,
+   "n_kommuner": 15
+  },
+  {
+   "county_code": "21",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 19.52827869,
+   "n_kommuner": 10
+  },
+  {
+   "county_code": "22",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 14.61796087142857,
+   "n_kommuner": 7
+  },
+  {
+   "county_code": "23",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 5.08652436375,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "24",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 7.354349515333333,
+   "n_kommuner": 15
+  },
+  {
+   "county_code": "25",
+   "indicator": "pop_density",
+   "year": 2023,
+   "value": 6.378941712142857,
+   "n_kommuner": 14
+  },
+  {
+   "county_code": "01",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 9.183563538461538,
+   "n_kommuner": 26
+  },
+  {
+   "county_code": "03",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 11.028148875,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "04",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 13.308178777777778,
+   "n_kommuner": 9
+  },
+  {
+   "county_code": "05",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 11.100072,
+   "n_kommuner": 13
+  },
+  {
+   "county_code": "06",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.759755692307692,
+   "n_kommuner": 13
+  },
+  {
+   "county_code": "07",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.799937875,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "08",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.366868083333335,
+   "n_kommuner": 12
+  },
+  {
+   "county_code": "09",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 9.834868,
+   "n_kommuner": 1
+  },
+  {
+   "county_code": "10",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 10.374844999999999,
+   "n_kommuner": 5
+  },
+  {
+   "county_code": "12",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 11.078702393939393,
+   "n_kommuner": 33
+  },
+  {
+   "county_code": "13",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 10.514562833333333,
+   "n_kommuner": 6
+  },
+  {
+   "county_code": "14",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 11.237886489795917,
+   "n_kommuner": 49
+  },
+  {
+   "county_code": "17",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 10.752541875,
+   "n_kommuner": 16
+  },
+  {
+   "county_code": "18",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.400541916666667,
+   "n_kommuner": 12
+  },
+  {
+   "county_code": "19",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.879665499999998,
+   "n_kommuner": 10
+  },
+  {
+   "county_code": "20",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 11.418027,
+   "n_kommuner": 15
+  },
+  {
+   "county_code": "21",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 12.3457351,
+   "n_kommuner": 10
+  },
+  {
+   "county_code": "22",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 10.522722285714286,
+   "n_kommuner": 7
+  },
+  {
+   "county_code": "23",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 9.488305875,
+   "n_kommuner": 8
+  },
+  {
+   "county_code": "24",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 9.3937058,
+   "n_kommuner": 15
+  },
+  {
+   "county_code": "25",
+   "indicator": "education_low_pct",
+   "year": 2023,
+   "value": 9.198813928571427,
+   "n_kommuner": 14
   }
  ]
 };

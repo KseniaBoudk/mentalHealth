@@ -344,6 +344,36 @@ function realTotalFK(regionCode, year, sex) {
 // No age dimension in the source table — always null once real, same as distress/HLV.
 function realCellFK() { return REAL_FK.active ? null : undefined; }
 
+/* =====================================================================
+   1f. CONTEXT — demographic/socioeconomic layers for the Sammanhang tab,
+   from js/real_mh_data.js's REAL_CONTEXT_MH (fetch_kolada_context.py,
+   Kolada). Deliberately NOT shaped like IND/REAL_*: these are not mental-
+   health indicators (no age/sex breakdown, no synthetic fallback — a
+   context layer with no data just doesn't show a region, same honesty
+   rule as everywhere else, not a fabricated stand-in). Region values are
+   an unweighted mean of that region's municipalities — see CONTEXT_META's
+   caveat text, shown wherever a value from here is displayed.
+   ===================================================================== */
+const CONTEXT_META = {
+  pop_density: { scale: "km2" },        // people per km²
+  education_low_pct: { scale: "pct" },  // %, residents 25-64 with low education
+};
+const CONTEXT = (() => {
+  const rows = (typeof REAL_CONTEXT_MH !== "undefined" && Array.isArray(REAL_CONTEXT_MH.rows)) ? REAL_CONTEXT_MH.rows : [];
+  const active = rows.length > 0;
+  const idx = {};   // idx[indicator][county] = {value, n_kommuner, year}
+  for (const row of rows) {
+    const byInd = idx[row.indicator] || (idx[row.indicator] = {});
+    byInd[row.county_code] = { value: row.value, n_kommuner: row.n_kommuner, year: row.year };
+  }
+  return { active, idx, generatedAt: active ? REAL_CONTEXT_MH.generated_at : null };
+})();
+function contextCell(indicator, regionCode) {
+  if (!CONTEXT.active) return undefined;
+  const row = CONTEXT.idx[indicator] && CONTEXT.idx[indicator][regionCode];
+  return row || null;
+}
+
 const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [], sjukfranvaro: [] };
 function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;

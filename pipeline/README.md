@@ -25,6 +25,12 @@ This folder pulls real numbers for **four of those five**:
 Only **antidepressants dispensed** has no fetcher here. Read on for why, and
 for why `distress` isn't named what you might expect from the code.
 
+A seventh script, `fetch_kolada_context.py`, backs the Context tab's two
+demographic/socioeconomic layers (population density, low-education
+share) — Kolada, region grain, 2023, unweighted mean of each region's
+municipalities (via `kommuner.csv`). Not mental-health indicators, so not
+part of the `IND` shape the other six use.
+
 A sixth script, `fetch_forsakringskassan.py`, is unrelated to those five —
 it backs a new indicator, `sjukfranvaro` (share of ongoing sickness-benefit
 cases with a stress-reaction/F43 diagnosis), not a retrofit of an existing
@@ -118,6 +124,7 @@ python fetch_socialstyrelsen_mh.py     # self-harm + suicide, ~2 minutes
 python fetch_socialstyrelsen_psych.py  # psychiatric care, ~1 minute, ~40 requests
 python fetch_folkhalsodata_hlv.py      # severe anxiety, ~15 seconds, 1 request
 python fetch_forsakringskassan.py      # sickness absence (F43), ~10 seconds, paginated
+python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
 python build_kurvan_data.py            # writes ../js/real_mh_data.js
 ```
 
