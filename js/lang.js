@@ -20,7 +20,8 @@ sv:{
     selfharm:"Verkliga siffror gäller endast 12–17 år, totalt kön, femårsfönster.",
     suicide:"Verkliga siffror gäller endast 15–19 år, totalt kön, femårsfönster.",
     psych:"Alla F00–F99-diagnoser samlat, årsvis, alla åldrar och kön — men bara specialistvård.",
-    distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018."
+    distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
+    sjukfranvaro:"Verkliga siffror gäller 2005–2019 (källan slutar där, täcker inte 2020-talet). Ingen åldersuppdelning."
   },
   realNoteL:"Vad som faktiskt är verkligt här",
   realNoteOn:"Svår ängslan/oro (FoHM), psykiatrisk specialistvård, slutenvårdad för självskada och avliden i suicid (Socialstyrelsen) är nu verklig, öppen statistik, hämtad av prototype/pipeline/. Bara uthämtade antidepressiva saknar hämtskript i det här projektet och förblir genererad — se märkningen vid varje diagram.",
@@ -44,7 +45,8 @@ sv:{
     {tag:"Livsloppet",inst:"mort",h:"De äldsta männen",p:"Suicidtalet bland män 85+ är landets högsta. Enkäten slutar vid 84, så gruppen syns inte i något mått på självrapporterad ohälsa.",numl:"per 100 000 · män 85+"},
     {tag:"Förskrivning",inst:"reg",h:"Unga kvinnor, 20 år av ökning",p:"Uthämtade antidepressiva bland kvinnor 15–24 sedan registret startade 2006.",numl:"2006 → 2024 · kvinnor 15–24"}
   ],
-  ind:{distress:"Svår ängslan, oro eller ångest",antidep:"Uthämtade antidepressiva",psych:"Psykiatrisk specialistvård",selfharm:"Slutenvårdad för självskada",suicide:"Avlidna i suicid"},
+  ind:{distress:"Svår ängslan, oro eller ångest",antidep:"Uthämtade antidepressiva",psych:"Psykiatrisk specialistvård",selfharm:"Slutenvårdad för självskada",suicide:"Avlidna i suicid",sjukfranvaro:"Sjukskrivning, stressreaktion (F43)"},
+  fkLead:"Andel pågående sjukfall med diagnosen stressreaktion (F43) — ett mått på samhällelig/funktionell påverkan, inte ett direkt mått på psykisk ohälsa och inte en kostnadsberäkning.",
   lblInd:"Indikator",lblAge:"Åldersgrupp",lblSex:"Kön",lblYear:"År",lblReg:"Region",
   allAges:"Alla åldrar",sexT:"Totalt",sexM:"Män",sexK:"Kvinnor",
   crude:"Ojusterat",std:"Åldersstandardiserat",
@@ -64,7 +66,8 @@ sv:{
     psych:"Räknar endast specialistvård. Det mesta av vanlig depression sköts i primärvården och syns inte här alls.",
     selfharm:"Räknar vårdtillfällen, inte personer. Y10–Y34 redovisas tillsammans med X60–X84 eftersom kodning av avsikt driver mellan regioner.",
     suicide:"Femårsfönster. Antal under 10 per fönster redovisas inte; talet publiceras ändå.",
-    distress:"Självrapporterat, 16–84 år. Redovisas i fyraårsfönster (två sammanslagna enkätomgångar) för regional tillförlitlighet; ingen åldersuppdelning finns i regiontabellen."
+    distress:"Självrapporterat, 16–84 år. Redovisas i fyraårsfönster (två sammanslagna enkätomgångar) för regional tillförlitlighet; ingen åldersuppdelning finns i regiontabellen.",
+    sjukfranvaro:"Andel av pågående sjukfall, inte andel av befolkningen. Räknar sjukfall, inte personer med psykisk ohälsa i stort — och mäter inte behandling eller diagnos i vården."
   },
   dl:"Ladda ner serien",
   peers:"Jämförs med liknande regioner (ålderstruktur och inkomst):",
@@ -85,11 +88,12 @@ sv:{
     antidep:["Region","Registret startade juli 2005; helår från 2006. Uthämtning, inte diagnos."],
     psych:["Region","Endast specialistvård (SVOV-definitionen från 2008). Primärvård ingår inte."],
     selfharm:["Region","Från 2008. Vårdtillfällen, inte personer. Y10–Y34 följer med."],
-    suicide:["Region, 5-årsfönster","Från 1997 nationellt; fönster från 2001. Antal <10 undertrycks."]
+    suicide:["Region, 5-årsfönster","Från 1997 nationellt; fönster från 2001. Antal <10 undertrycks."],
+    sjukfranvaro:["Region","Från 2005, men källan slutar 2019 — täcker inte 2020-talet. Andel av pågående sjukfall med diagnos F43, inte en befolkningsandel."]
   },
   mProse:{
     a:"Tre instrument, inte ett",
-    b:"Enkäten frågar människor direkt, registren räknar dem som nått vården, dödsorsaksregistret missar ingen. Instrumenten är blinda på olika ställen, och det är därför avståndet mellan dem betyder något. Ett konkret exempel: enkäten slutar vid 84 års ålder, och landets högsta suicidtal ligger bland män 85 och äldre. Gruppen med störst risk är osynlig i varje mått på självrapporterad ohälsa.",
+    b:"Enkäten frågar människor direkt, registren räknar dem som nått vården, dödsorsaksregistret missar ingen. Instrumenten är blinda på olika ställen, och det är därför avståndet mellan dem betyder något. Ett konkret exempel: enkäten slutar vid 84 års ålder, och landets högsta suicidtal ligger bland män 85 och äldre. Gruppen med störst risk är osynlig i varje mått på självrapporterad ohälsa. Sjukskrivning läggs till som ett fjärde, annorlunda instrument: ett mått på samhällelig påverkan, inte på psykisk ohälsa i sig.",
     c:"Åldersstandardisering",
     d:"Regionernas åldersstruktur skiljer sig kraftigt. Ett ojusterat tal för något åldersberoende är till stor del en karta över åldersstruktur. Båda versionerna publiceras, med reglaget synligt.",
     e:"Osäkerhet och små tal",
@@ -128,7 +132,8 @@ en:{
     selfharm:"Real figures cover ages 12–17 only, total sex, five-year windows.",
     suicide:"Real figures cover ages 15–19 only, total sex, five-year windows.",
     psych:"All F00–F99 diagnoses pooled, annual, every age and sex — specialist care only.",
-    distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018."
+    distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
+    sjukfranvaro:"Real figures cover 2005–2019 only (the source stops there, doesn't extend into the 2020s). No age breakdown."
   },
   realNoteL:"What's actually real here",
   realNoteOn:"Severe anxiety/worry (FoHM), specialist psychiatric care, hospitalised for self-harm, and died by suicide (Socialstyrelsen) now run on real, open data, fetched by prototype/pipeline/. Only antidepressants dispensed has no fetcher anywhere in this project and stays generated — see the label on every chart.",
@@ -152,7 +157,8 @@ en:{
     {tag:"Life course",inst:"mort",h:"The oldest men",p:"Suicide among men 85+ is the country's highest rate. The survey stops at 84, so the group appears in no measure of self-reported health.",numl:"per 100,000 · men 85+"},
     {tag:"Prescribing",inst:"reg",h:"Young women, 20 years of increase",p:"Antidepressants dispensed to women 15–24 since the register began in 2006.",numl:"2006 → 2024 · women 15–24"}
   ],
-  ind:{distress:"Severe anxiety, worry or dread",antidep:"Antidepressants dispensed",psych:"Specialist psychiatric care",selfharm:"Hospitalised for self-harm",suicide:"Died by suicide"},
+  ind:{distress:"Severe anxiety, worry or dread",antidep:"Antidepressants dispensed",psych:"Specialist psychiatric care",selfharm:"Hospitalised for self-harm",suicide:"Died by suicide",sjukfranvaro:"Sickness absence, stress reaction (F43)"},
+  fkLead:"Share of ongoing sickness-benefit cases with a stress-reaction (F43) diagnosis — a societal/functional impact measure, not a direct measure of mental health and not a cost estimate.",
   lblInd:"Indicator",lblAge:"Age band",lblSex:"Sex",lblYear:"Year",lblReg:"Region",
   allAges:"All ages",sexT:"Total",sexM:"Men",sexK:"Women",
   crude:"Crude",std:"Age-standardised",
@@ -172,7 +178,8 @@ en:{
     psych:"Counts specialist care only. Most ordinary depression is managed in primary care and does not appear here at all.",
     selfharm:"Counts admissions, not people. Y10–Y34 is carried alongside X60–X84 because coding of intent drifts between regions.",
     suicide:"Five-year windows. Counts below 10 per window are withheld; the rate is still published.",
-    distress:"Self-reported, ages 16–84. Published in four-year windows (two survey waves pooled for regional reliability); the region table has no age breakdown at all."
+    distress:"Self-reported, ages 16–84. Published in four-year windows (two survey waves pooled for regional reliability); the region table has no age breakdown at all.",
+    sjukfranvaro:"Share of ongoing sickness-benefit cases, not a share of the population. Counts sick-leave cases, not people with poor mental health in general — and doesn't measure treatment or diagnosis in healthcare."
   },
   dl:"Download this series",
   peers:"Compared with peer regions (age structure and income):",
@@ -193,11 +200,12 @@ en:{
     antidep:["Region","Register began July 2005; full years from 2006. Dispensing, not diagnosis."],
     psych:["Region","Specialist care only (SVOV definition from 2008). Primary care not included."],
     selfharm:["Region","From 2008. Admissions, not people. Y10–Y34 carried alongside."],
-    suicide:["Region, 5-year windows","From 1997 nationally; windows from 2001. Counts <10 withheld."]
+    suicide:["Region, 5-year windows","From 1997 nationally; windows from 2001. Counts <10 withheld."],
+    sjukfranvaro:["Region","From 2005, but the source stops in 2019 — doesn't extend into the 2020s. Share of ongoing sickness-benefit cases with diagnosis F43, not a share of the population."]
   },
   mProse:{
     a:"Three instruments, not one",
-    b:"The survey asks people directly, the registers count those who reached care, the death register misses nobody. The instruments are blind in different places, which is why the distance between them means something. One concrete example: the survey stops at age 84, and the country's highest suicide rate sits among men 85 and older. The group at greatest risk is invisible to every measure of self-reported health.",
+    b:"The survey asks people directly, the registers count those who reached care, the death register misses nobody. The instruments are blind in different places, which is why the distance between them means something. One concrete example: the survey stops at age 84, and the country's highest suicide rate sits among men 85 and older. The group at greatest risk is invisible to every measure of self-reported health. Sickness absence is added as a fourth, different instrument: a measure of societal impact, not of mental health itself.",
     c:"Age standardisation",
     d:"Regional age structures differ a great deal. A crude figure for anything age-related is largely a map of age structure. Both versions are published, with the toggle visible.",
     e:"Uncertainty and small counts",

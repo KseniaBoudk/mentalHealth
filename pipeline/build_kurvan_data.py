@@ -54,6 +54,15 @@ SOURCES = [
                 "   script's docstring before assuming any other HLV category behaves the\n"
                 "   same way; several stopped being published years ago.",
     },
+    {
+        "var": "REAL_FK_MH",
+        "file": "forsakringskassan_f43.json",
+        "source": "Försäkringskassan (share of ongoing sickness-benefit cases, diagnosis F43)",
+        "note": "Real, county-grain share (%) of ongoing sickness-benefit cases with a\n"
+                "   stress-reaction (F43) diagnosis, all three sexes, annual (averaged from\n"
+                "   quarterly), 2005-2019 only — this source does not extend into the 2020s.\n"
+                "   No age breakdown. Fetched by fetch_forsakringskassan.py.",
+    },
 ]
 
 

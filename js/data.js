@@ -131,9 +131,25 @@ const IND = {
     kMul:[.66,.56,.50,.46,.44,.42,.38,.30,.24],
     needW:0.30, supplyW:-0.16, drift:-0.004, noise:0.05,
     reg:"Dödsorsaksregistret (X60–X84)", regEn:"Cause of death register (X60–X84)"
+  },
+  sjukfranvaro: {
+    // "fk" (Försäkringskassan) is its own instrument, not "reg": this is a
+    // functional/societal-impact measure (share of sick-leave CASES, not a
+    // healthcare register or a population rate) — conflating it with the
+    // register colour would misrepresent what it counts. See IND docstring.
+    inst:"fk", start:2005, real:true,
+    scale:100, dec:1,
+    // Fabricated fallback only (no real per-age curve exists — see
+    // REAL_FK below); nulled at both ends like distress's, since sickness
+    // *benefit* cases concentrate in working ages.
+    age:[null,14,17,20,22,21,18,14,null],
+    mMul:[null,.60,.60,.60,.60,.60,.60,.60,null],
+    kMul:[null,1.21,1.21,1.21,1.21,1.21,1.21,1.21,null],
+    needW:0.25, supplyW:0.0, drift:0.018, noise:0.07,
+    reg:"Försäkringskassan (diagnos F43)", regEn:"Försäkringskassan (diagnosis F43)"
   }
 };
-const INST_COLOR = { survey:"var(--teal)", reg:"var(--violet)", mort:"var(--oxblood)" };
+const INST_COLOR = { survey:"var(--teal)", reg:"var(--violet)", mort:"var(--oxblood)", fk:"var(--amber)" };
 const SUPPRESS_BELOW = 10;
 
 /* =====================================================================
@@ -298,7 +314,37 @@ const REAL_HLV = (() => {
    have no real restriction — the register covers every band; `distress`
    maps to an empty array because its real source has NO age dimension at
    all (see REAL_HLV above), so "All ages" is the only real option. */
-const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [] };
+/* =====================================================================
+   1e. REAL DATA — share of ongoing sickness-benefit cases with a stress-
+   reaction (F43) diagnosis, from js/real_mh_data.js's REAL_FK_MH
+   (fetch_forsakringskassan.py). County grain (plus a national row), all
+   three sexes, annual (averaged from quarterly), 2005-2019 ONLY — this
+   source does not extend into the 2020s, unlike every other real
+   indicator here. No age dimension, same situation as REAL_HLV.
+   ===================================================================== */
+const REAL_FK = (() => {
+  const rows = (typeof REAL_FK_MH !== "undefined" && Array.isArray(REAL_FK_MH.rows)) ? REAL_FK_MH.rows : [];
+  const active = rows.length > 0;
+  const idx = {};   // idx[county][sex][year] = {value,count}
+  for (const row of rows) {
+    const byCounty = idx[row.county_code] || (idx[row.county_code] = {});
+    const bySex = byCounty[row.sex] || (byCounty[row.sex] = {});
+    bySex[row.year] = { value: row.value, count: row.count };
+  }
+  const years = new Set(rows.map(r => r.year));
+  return { active, idx, years: [...years].sort((a, b) => a - b),
+           generatedAt: active ? REAL_FK_MH.generated_at : null };
+})();
+function realTotalFK(regionCode, year, sex) {
+  if (!REAL_FK.active) return undefined;
+  const county = regionCode === "SE" ? "00" : regionCode;
+  const row = REAL_FK.idx[county] && REAL_FK.idx[county][sex] && REAL_FK.idx[county][sex][year];
+  return row ? realRowToCell(row) : null;
+}
+// No age dimension in the source table — always null once real, same as distress/HLV.
+function realCellFK() { return REAL_FK.active ? null : undefined; }
+
+const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [], sjukfranvaro: [] };
 function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;
   return IND[k].age[ageIdx] != null;
@@ -314,6 +360,7 @@ function isRealActive(k) {
   if (!IND[k].real) return false;
   if (k === "psych") return REAL_PSYCH.active;
   if (k === "distress") return REAL_HLV.active;
+  if (k === "sjukfranvaro") return REAL_FK.active;
   return REAL.active;
 }
 
@@ -382,6 +429,7 @@ function realCellHLV() { return REAL_HLV.active ? null : undefined; }
 function validYears(k){
   if (k === "psych" && REAL_PSYCH.active) return REAL_PSYCH.years;
   if (k === "distress" && REAL_HLV.active) return REAL_HLV.years;
+  if (k === "sjukfranvaro" && REAL_FK.active) return REAL_FK.years;
   if (IND[k].real && REAL.active) {
     const nat = REAL.idx[k]["00"];
     const years = new Set();
@@ -463,6 +511,9 @@ function cell(k, regionCode, year, ageIdx, sex, standardised){
   } else if (k === "distress") {
     const r = realCellHLV();   // always null once active: no real age dimension
     if (r !== undefined) return r;
+  } else if (k === "sjukfranvaro") {
+    const r = realCellFK();    // always null once active: no real age dimension
+    if (r !== undefined) return r;
   } else if (IND[k].real) {
     const r = realCell(k, regionCode, year, ageIdx, sex);
     if (r !== undefined) return r;   // real data loaded: real result wins, even if null
@@ -477,6 +528,9 @@ function total(k, regionCode, year, sex, standardised){
     if (r !== undefined) return r;   // real data loaded: use the register's own "0-85+" figure
   } else if (k === "distress") {
     const r = realTotalHLV(regionCode, year, sex);
+    if (r !== undefined) return r;
+  } else if (k === "sjukfranvaro") {
+    const r = realTotalFK(regionCode, year, sex);
     if (r !== undefined) return r;
   } else if (IND[k].real && REAL.active) {
     const cells=[];

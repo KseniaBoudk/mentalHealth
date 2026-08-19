@@ -1,14 +1,16 @@
 /* =====================================================================
    TOKENS. Light complete on bare :root; dark redefines tokens only, twice.
    Colour is semantic and pervasive: teal = the survey instrument,
-   violet = the registers, oxblood = mortality. Sex is solid vs dashed,
-   never a second colour system.
+   violet = the registers, oxblood = mortality, amber = functional/societal
+   impact (sickness absence — not a healthcare register, not survey,
+   deliberately its own colour rather than overloading violet). Sex is
+   solid vs dashed, never a second colour system.
    ===================================================================== */
 :root {
   --paper:#F5F1E8; --surface:#FCFAF4; --surface-2:#EFEADF;
   --ink:#191510; --ink-2:#443C34; --ink-3:#6E645A;
   --hair:rgba(30,22,14,.13); --hair-soft:rgba(30,22,14,.06);
-  --violet:#4C3A8C; --teal:#1A6068; --oxblood:#7B3A46;
+  --violet:#4C3A8C; --teal:#1A6068; --oxblood:#7B3A46; --amber:#9C6B1E;
   --violet-soft:rgba(76,58,140,.10); --warn:rgba(123,58,70,.08);
   --band:rgba(76,58,140,.12);
   --shadow:0 1px 3px rgba(30,22,14,.05),0 10px 30px rgba(30,22,14,.06);
@@ -18,7 +20,7 @@
     --paper:#141119; --surface:#1C1823; --surface-2:#262130;
     --ink:#EDE8E0; --ink-2:#C0B8AE; --ink-3:#8C8279;
     --hair:rgba(237,232,224,.16); --hair-soft:rgba(237,232,224,.07);
-    --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97;
+    --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97; --amber:#D9A441;
     --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);
     --band:rgba(169,146,245,.15);
     --shadow:0 1px 3px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.36);
@@ -28,7 +30,7 @@
   --paper:#141119; --surface:#1C1823; --surface-2:#262130;
   --ink:#EDE8E0; --ink-2:#C0B8AE; --ink-3:#8C8279;
   --hair:rgba(237,232,224,.16); --hair-soft:rgba(237,232,224,.07);
-  --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97;
+  --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97; --amber:#D9A441;
   --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);
   --band:rgba(169,146,245,.15);
   --shadow:0 1px 3px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.36);
@@ -65,14 +67,40 @@ header.top{background:var(--surface);border-bottom:1px solid var(--hair);border-
 .tools{margin-left:auto;display:flex;gap:14px;align-items:center}
 .tools button{background:none;border:0;border-bottom:1px solid var(--hair);font-size:10.5px;color:var(--ink-3);cursor:pointer;padding:2px 0}
 .tools button:hover,.tools button:focus-visible{color:var(--violet);border-bottom-color:var(--violet)}
-nav.tabs{display:flex;align-items:center;gap:22px;margin-top:16px;flex-wrap:wrap}
-nav.tabs button{background:none;border:0;border-bottom:2px solid transparent;font-size:12.5px;color:var(--ink-3);cursor:pointer;padding:0 0 11px}
-nav.tabs button.on{color:var(--ink);font-weight:650;border-bottom-color:var(--violet)}
-nav.tabs button:hover{color:var(--ink-2)}
-.stamp{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);padding-bottom:11px}
+.stamp{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:14px}
 
-main{padding:32px 0 10px;animation:fade .28s ease-out}
+main{padding:32px 0 10px}
+main.tabenter{animation:fade .28s ease-out}
 @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* --- one-page layout: sticky contents sidebar + all sections in flow ---
+   Replaces the old per-tab nav.tabs switcher: every section renders at
+   once, and this is just an in-page table of contents (plain #anchor
+   links — the browser's own scroll does the "click to jump" part, no JS
+   required for that bit). scroll-behavior:smooth + each section's own
+   scroll-margin-top (below) are what make the jump land past the sticky
+   banner instead of under it. */
+html{scroll-behavior:smooth}
+.layout{display:flex;align-items:flex-start;gap:36px}
+/* --banner-h: the sticky #synth banner's real measured height (shell.js) —
+   it can wrap to more than one line depending on content/viewport width,
+   so a guessed fixed offset would drift wrong. Without this, the sidebar's
+   sticky top math ignores the banner and it ends up drawn over the top
+   links (higher z-index), hiding them once scrolled. */
+.sidebar{position:sticky;top:calc(var(--banner-h,60px) + 20px);flex:none;width:172px;display:flex;flex-direction:column;gap:1px}
+.sidebar a{font-size:12px;color:var(--ink-3);text-decoration:none;padding:7px 10px;border-radius:3px;border-left:2px solid transparent}
+.sidebar a:hover{color:var(--ink-2);background:var(--surface-2)}
+.sidebar a.active{color:var(--ink);font-weight:650;border-left-color:var(--violet);background:var(--surface-2)}
+.content{min-width:0;flex:1}
+.section-h{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.015em;margin:0 0 16px}
+section[id^="sec-"]{scroll-margin-top:56px}
+section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-top:1px solid var(--hair)}
+@media (max-width:900px){
+  .layout{flex-direction:column;gap:18px}
+  .sidebar{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px}
+  .sidebar a{border-left:0;border-bottom:2px solid transparent}
+  .sidebar a.active{border-left:0;border-bottom-color:var(--violet)}
+}
 
 /* --- instrument legend --- */
 .legend{
@@ -169,6 +197,18 @@ main{padding:32px 0 10px;animation:fade .28s ease-out}
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
 .tile.on{stroke:var(--violet);stroke-width:2.2}
+/* Custom hover card, replacing the browser's native SVG-title tooltip —
+   light grey (var(--surface-2), the app's own secondary-surface tone, not
+   a generic grey that would clash with the warm palette), same sans font
+   as everything else. Fixed-positioned and JS-driven (shell.js), so it
+   isn't clipped by any card's overflow the way an absolutely-positioned
+   one nested inside the map card would be. */
+#tiletip{
+  position:fixed;z-index:200;pointer-events:none;display:none;
+  background:var(--surface-2);color:var(--ink);border:1px solid var(--hair);
+  border-radius:4px;padding:7px 10px;font-family:var(--sans);font-size:11.5px;
+  line-height:1.5;box-shadow:var(--shadow);max-width:240px;
+}
 .mapscale{display:flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:9.5px;color:var(--ink-3);flex-wrap:wrap}
 .mapscale .bar{width:64px;height:7px;border-radius:2px}
 .bandsw{display:flex;align-items:center;gap:4px}

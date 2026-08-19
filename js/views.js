@@ -11,7 +11,8 @@
    fetcher. */
 // The survey (distress) is FoHM's, not Socialstyrelsen's — real now, so this
 // citation has to be accurate, not just plausible-looking.
-const srcLine=(k)=>`${esc(IND[k][S.lang==="sv"?"reg":"regEn"])} · ${IND[k].inst==="survey"?"FoHM":"Socialstyrelsen"}`;
+const INST_NAME={survey:"FoHM",reg:"Socialstyrelsen",mort:"Socialstyrelsen",fk:"Försäkringskassan"};
+const srcLine=(k)=>`${esc(IND[k][S.lang==="sv"?"reg":"regEn"])} · ${INST_NAME[IND[k].inst]}`;
 const srcStrip=(k,extra)=>`<div class="src"><b>${esc(t.notNum)}</b> ${esc(t.notNumB[k])}<br>${srcLine(k)} · <b>${esc(isRealActive(k)?t.realLbl:t.synthLbl)}</b>${isRealActive(k)&&t.realCaveat[k]?` · ${esc(t.realCaveat[k])}`:""}${extra?" · "+extra:""}</div>`;
 
 // Every indicator's IND[k].scale (100/1000/100000) already encodes its unit
@@ -500,10 +501,11 @@ function viewMetod(){
    a structural move (behov's need-vs-response scatter currently lives inside
    viewLaget/viewRegioner). Keeping the tab visible and honestly labelled
    beats hiding the gap in the nav. */
-function viewComing(label){
+// No heading of its own — the shell now wraps every section in a heading
+// that already matches the tab name (see shell.js's render()).
+function viewComing(){
   return `
   <div class="prose">
-    <h2>${esc(label)}</h2>
     <div class="note"><div class="l">${esc(t.comingT)}</div><p>${esc(t.comingB)}</p></div>
   </div>`;
 }
@@ -523,7 +525,6 @@ function viewBehov(){
 
   return `
   <div class="hero">
-    <div class="kick">${esc(t.tabs.behov)}</div>
     <p>${esc(t.behovLead)}</p>
   </div>
   <div class="figrow" style="margin-top:20px">
@@ -543,5 +544,61 @@ function viewBehov(){
     </div>
   </div>`;
 }
-function viewSjukskrivning(){return viewComing(t.tabs.sjukskrivning);}
-function viewSammanhang(){return viewComing(t.tabs.sammanhang);}
+function viewSjukskrivning(){
+  const k="sjukfranvaro", col=INST_COLOR.fk;
+  const years=validYears(k);
+  const latest=years[years.length-1];
+  const nat=total(k,"SE",latest,"T",false);
+  const ts=sex=>years.map(y=>{const c=total(k,"SE",y,sex,false); return c&&!c.suppressed?[y,c.value]:null;});
+  // Same shape as viewKarta's single (non-compare) map branch, trimmed down
+  // to this one indicator — no year slider or trend arrows, just the
+  // latest year, since this page is about one indicator, not a picker.
+  const rows=REGIONS.map(r=>{const c=total(k,r[0],latest,"T",false); return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi};}).filter(Boolean);
+  const R=RBY[S.region];
+  const mine=total(k,S.region,latest,"T",false);
+
+  return `
+  <div class="hero">
+    <p>${esc(t.fkLead)}</p>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
+    <div class="card-b">${lineChart(
+      [{pts:ts("K"),color:col,w:2.4,label:t.women,labelAt:0},
+       {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men,labelAt:0}],
+      {aria:"Sickness absence trend, women and men",
+       xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+       h:200,unit:unitLabel(k)})}</div>
+    ${srcStrip(k)}
+  </div>
+  <div class="grid-ex" style="margin-top:20px">
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
+      <div class="card-b">
+        ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"})}
+        <div class="mapscale">
+          ${quintileBands(rows).ranges.map((rg,i)=>rg?`<span class="bandsw">
+            <span class="bandchip" style="background:${col};opacity:${BAND_OP[i]}"></span>
+            <span class="tnum">${fmt(rg.lo,1)}–${fmt(rg.hi,1)}</span></span>`:"").join("")}
+          <span style="margin-left:auto">${esc(t.natLine)} <b class="tnum">${fmt(nat?nat.value:null,1)} ${esc(unitLabel(k))}</b></span>
+        </div>
+      </div>
+      <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-b">
+          <div class="rstats" style="grid-template-columns:1fr">
+            <div class="rstat" style="border-top-color:${col}">
+              <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ind[k])}</div>
+              <div class="rv tnum">${fmt(mine?mine.value:null,1)}</div>
+              <div class="rci tnum">${esc(unitLabel(k))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine?mine.lo:null,1)}–${fmt(mine?mine.hi:null,1)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function viewSammanhang(){return viewComing();}

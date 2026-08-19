@@ -31,20 +31,22 @@ js/real_mh_data.js → js/data.js → js/lang.js → js/state.js → js/charts.j
 ## Tabs
 
 `laget`, `over_tid`, `karta`, `behov`, `sjukskrivning`, `sammanhang`, `metod`,
-`regioner`. The last three of `behov` (need & care), `sjukskrivning`
-(sickness absence) and `sammanhang` (context) are placeholder "under
-construction" pages — reserved for sections of the observatory plan not yet
-built.
+`regioner`. `sammanhang` (context) is still a placeholder "under
+construction" page, reserved for the observatory plan's socioeconomic-context
+section — everything else is built, including `sjukskrivning` (sickness
+absence: Försäkringskassan F43 data, real 2005–2019, amber `fk` instrument
+colour, its own `viewSjukskrivning()`).
 
 ## Data pipeline
 
 `pipeline/` (Python, run offline, not part of the live page) fetches real
-government data — Socialstyrelsen (psychiatric care, self-harm, suicide) and
-Folkhälsomyndigheten (survey anxiety/worry) — into `data/processed/*.json`.
-`pipeline/build_kurvan_data.py` compiles that into `js/real_mh_data.js`.
-Antidepressant dispensing has no fetcher yet and stays synthetic. See
-`pipeline/README.md` for per-indicator caveats (age ranges, sex coverage,
-time windows).
+government data — Socialstyrelsen (psychiatric care, self-harm, suicide),
+Folkhälsomyndigheten (survey anxiety/worry), and Försäkringskassan (F43
+sickness absence, an EntryScape REST/JSON API, not PxWeb like the others) —
+into `data/processed/*.json`. `pipeline/build_kurvan_data.py` compiles that
+into `js/real_mh_data.js`. Antidepressant dispensing has no fetcher yet and
+stays synthetic. See `pipeline/README.md` for per-indicator caveats (age
+ranges, sex coverage, time windows).
 
 ## Interpretation rules
 
