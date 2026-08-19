@@ -58,15 +58,15 @@ button{font:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
 
 /* --- masthead --- */
-header.top{background:var(--surface);border-bottom:1px solid var(--hair);border-top:3px solid var(--violet)}
+header.top{background:var(--surface);border-bottom:3px solid var(--ink);border-top:3px solid var(--violet)}
 .mast{display:flex;align-items:flex-end;gap:18px;padding:22px 0 0;flex-wrap:wrap}
 .brand{display:flex;align-items:flex-start;gap:13px}
 .mark{width:44px;height:34px;flex:none;margin-top:2px}
 .word{font-family:var(--serif);font-size:35px;font-weight:600;line-height:1;letter-spacing:-.03em}
 .sub{font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);margin-top:7px;font-weight:650}
-.tools{margin-left:auto;display:flex;gap:14px;align-items:center}
-.tools button{background:none;border:0;border-bottom:1px solid var(--hair);font-size:10.5px;color:var(--ink-3);cursor:pointer;padding:2px 0}
-.tools button:hover,.tools button:focus-visible{color:var(--violet);border-bottom-color:var(--violet)}
+.tools{margin-left:auto;display:flex;gap:10px;align-items:center}
+.tools button{background:none;border:1.5px solid var(--ink);border-radius:999px;font-size:10.5px;font-weight:650;color:var(--ink);cursor:pointer;padding:6px 16px}
+.tools button:hover,.tools button:focus-visible{background:var(--ink);color:var(--paper)}
 .stamp{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:14px}
 
 main{padding:32px 0 10px}
@@ -87,19 +87,19 @@ html{scroll-behavior:smooth}
    so a guessed fixed offset would drift wrong. Without this, the sidebar's
    sticky top math ignores the banner and it ends up drawn over the top
    links (higher z-index), hiding them once scrolled. */
-.sidebar{position:sticky;top:calc(var(--banner-h,60px) + 20px);flex:none;width:172px;display:flex;flex-direction:column;gap:1px}
-.sidebar a{font-size:12px;color:var(--ink-3);text-decoration:none;padding:7px 10px;border-radius:3px;border-left:2px solid transparent}
-.sidebar a:hover{color:var(--ink-2);background:var(--surface-2)}
-.sidebar a.active{color:var(--ink);font-weight:650;border-left-color:var(--violet);background:var(--surface-2)}
+.sidebar{position:sticky;top:calc(var(--banner-h,60px) + 20px);flex:none;width:172px;display:flex;flex-direction:column;gap:1px;padding-right:22px;border-right:3px solid var(--ink)}
+.sidebar a{font-size:12px;color:var(--ink-3);text-decoration:none;padding:7px 0}
+.sidebar a:hover{color:var(--ink-2)}
+.sidebar a.active{color:var(--ink);font-weight:700}
+.sidebar a.active::before{content:"— "}
 .content{min-width:0;flex:1}
 .section-h{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.015em;margin:0 0 16px}
 section[id^="sec-"]{scroll-margin-top:56px}
-section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-top:1px solid var(--hair)}
+section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-top:3px solid var(--ink)}
 @media (max-width:900px){
   .layout{flex-direction:column;gap:18px}
-  .sidebar{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:6px}
-  .sidebar a{border-left:0;border-bottom:2px solid transparent}
-  .sidebar a.active{border-left:0;border-bottom-color:var(--violet)}
+  .sidebar{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:14px;padding-right:0;border-right:0;border-bottom:3px solid var(--ink);padding-bottom:14px}
+  .sidebar a.active::before{content:none}
 }
 
 /* --- instrument legend --- */
@@ -123,7 +123,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 /* --- läget --- */
 .hero{max-width:72ch}
 .kick{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);font-weight:700}
-.hero h1{font-family:var(--serif);font-size:clamp(28px,4.6vw,47px);line-height:1.05;margin:12px 0 0;letter-spacing:-.028em;font-weight:600;text-wrap:balance}
+.hero h1{font-family:var(--serif);font-size:clamp(30px,5.4vw,56px);line-height:.99;margin:14px 0 0;letter-spacing:-.035em;font-weight:600;text-wrap:balance}
 .hero p{font-size:16.5px;color:var(--ink-2);margin:16px 0 0;line-height:1.58}
 .inner2{display:grid;grid-template-columns:1fr 1fr;gap:0}
 .inner2>div{padding:16px 18px 10px}
@@ -146,19 +146,19 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .f select{background:none;border:0;font:inherit;font-size:12.5px;font-weight:650;color:var(--ink);cursor:pointer;padding:0;max-width:240px}
 .f select:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 .f select:disabled{color:var(--ink-3);cursor:not-allowed}
-.seg{margin-left:auto;display:flex;border:1px solid var(--violet);border-radius:3px;overflow:hidden}
+.seg{margin-left:auto;display:flex;border:1.5px solid var(--violet);border-radius:999px;overflow:hidden}
 .seg button{background:none;border:0;font-size:11px;font-weight:650;color:var(--violet);padding:7px 12px;cursor:pointer}
 .seg button.on{background:var(--violet);color:var(--surface)}
 .seg button:disabled{color:var(--ink-3);cursor:not-allowed}
 .seg button.on:disabled{background:var(--hair);color:var(--ink-3)}
 .slidewrap{display:flex;align-items:center;gap:8px}
 .slidewrap .yval{font-size:12.5px;font-weight:650;min-width:3.6em;text-align:center}
-.ystep{background:none;border:1px solid var(--hair);border-radius:3px;color:var(--violet);
-  font-size:14px;font-weight:700;line-height:1;padding:3px 8px;cursor:pointer}
+.ystep{background:none;border:1.5px solid var(--hair);border-radius:999px;color:var(--violet);
+  font-size:14px;font-weight:700;line-height:1;padding:5px 10px;cursor:pointer}
 .ystep:hover:not(:disabled){background:var(--surface-2)}
 .ystep:disabled{color:var(--ink-3);cursor:not-allowed;opacity:.5}
-.cmpbtn{margin-left:auto;align-self:center;background:none;border:1px solid var(--hair);border-radius:3px;
-  color:var(--ink-2);font-size:11px;font-weight:650;padding:8px 12px;cursor:pointer}
+.cmpbtn{margin-left:auto;align-self:center;background:none;border:1.5px solid var(--hair);border-radius:999px;
+  color:var(--ink-2);font-size:11px;font-weight:650;padding:8px 14px;cursor:pointer}
 .cmpbtn.on{background:var(--violet);border-color:var(--violet);color:var(--surface)}
 .mapcmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mapcmphead{text-align:center;font-size:11.5px;font-weight:700;margin-bottom:2px}
@@ -218,7 +218,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .trendarrow.with{fill:var(--teal)}
 .trendarrow.against{fill:var(--oxblood)}
 .trendarrow.neutral{fill:var(--ink-2)}
-.mapopen{margin-top:16px;width:100%;background:none;border:1px solid var(--violet);color:var(--violet);border-radius:3px;padding:9px 14px;font-size:12px;font-weight:650;cursor:pointer}
+.mapopen{margin-top:16px;width:100%;background:none;border:1.5px solid var(--violet);color:var(--violet);border-radius:999px;padding:10px 14px;font-size:12px;font-weight:650;cursor:pointer}
 .mapopen:hover{background:var(--violet-soft)}
 
 /* --- method --- */

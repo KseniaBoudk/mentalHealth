@@ -54,7 +54,10 @@ const legendStrip=()=>`<div class="legend">${t.legend.map(([k,b,r])=>
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
 // share the below/above/selected-region ambiguity it disambiguates.
-const scatterKey=()=>`<div class="legend" style="padding:10px 0 4px">
+// padding:18px matches .card-b's own horizontal padding — this sits
+// outside .card-b (as a sibling, so it can span the full card width),
+// so without it the dots start flush against the card's edge.
+const scatterKey=()=>`<div class="legend" style="padding:10px 18px 4px">
   <span class="li"><span class="dot" style="background:var(--oxblood)"></span><span>${esc(t.scatterBelowKey)}</span></span>
   <span class="li"><span class="dot" style="background:var(--teal)"></span><span>${esc(t.scatterAboveKey)}</span></span>
   <span class="li"><span class="dot" style="background:var(--ink)"></span><span>${esc(t.mapPicked)}</span></span>
