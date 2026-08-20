@@ -139,7 +139,11 @@ function chorMap(rows,opts){
     // survey estimate) rather than a genuinely zero-width interval, so
     // showing "(225,5–225,5)" would just repeat the same number.
     const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
-    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)}${rangeTxt}${vsNat}${trendTxt}`;
+    // Unit once, right after the region's own value+range — same rule as
+    // dotPlot's tip: one unit describes the whole reading, not every number
+    // in it, so it isn't repeated again on the "· Sweden ..." reference.
+    const unitTxt=opts.unit?` ${opts.unit}`:"";
+    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)}${rangeTxt}${unitTxt}${vsNat}${trendTxt}`;
     // Significant moves (not "→") also get a data-trend/data-rel pair; wire()
     // paints these as an actual glyph on the shape after the SVG is in the
     // DOM, using getBBox() rather than stored centroids — the region paths
@@ -193,7 +197,7 @@ function histogram(rows,opts){
     const x=X(i),y=Y(c),h=B-y;
     // data-tip, not <title> — same swap as chorMap/dotPlot, for the same
     // shared #tiletip card instead of the unstyled OS tooltip.
-    const tip=`${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}: ${c}`;
+    const tip=`${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}${opts.unit?` ${opts.unit}`:""}: ${c}`;
     s+=`<rect data-tip="${esc(tip)}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });

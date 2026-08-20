@@ -476,18 +476,18 @@ function viewKarta(){
         <div class="mapcmp">
           <div>
             <div class="mapcmphead">${esc(t.ind[k])} (${esc(unitLabel(k))})</div>
-            ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[k]})}
+            ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for "+t.ind[k]})}
             ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
           </div>
           <div>
             <div class="mapcmphead"><select id="c-cmpind">
               ${Object.keys(IND).filter(x=>x!==k).map(x=>`<option value="${x}"${x===cmpK?" selected":""}>${esc(t.ind[x])}</option>`).join("")}
             </select> (${esc(unitLabel(cmpK))})</div>
-            ${chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]})}
+            ${chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,unit:unitLabel(cmpK),aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]})}
             ${mapLegend(cmpRows,cmpCol,unitLabel(cmpK),cmpNat?cmpNat.value:null)}
           </div>
         </div>`:`
-        ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions, click a region to see its figures"})}
+        ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions, click a region to see its figures"})}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}`}
       </div>
       <div class="src">${esc(t.mapNote(isRealActive(k)))} ${priorYr?esc(t.trendNote(priorYr,yr)):""} <b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
@@ -621,7 +621,7 @@ function viewSjukskrivning(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
       <div class="card-b">
-        ${chorMap(rows,{color:col,nat:nat?nat.value:null,aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"})}
+        ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"})}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
       </div>
       <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
@@ -666,7 +666,7 @@ function viewSammanhang(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · 2023</div></div>
       <div class="card-b">
-        ${chorMap(rows,{color:col,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"})}
+        ${chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"})}
         ${mapLegend(rows,col,unit,null)}
       </div>
       <div class="src">${esc(t.ctxCaveat)} ${esc(t.causalNote)}</div>
