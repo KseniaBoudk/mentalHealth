@@ -104,7 +104,10 @@ html{scroll-behavior:smooth}
 .sidebar a.active::before{content:"— "}
 .content{min-width:0;flex:1}
 .section-h{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.015em;margin:0 0 16px}
-section[id^="sec-"]{scroll-margin-top:56px}
+/* Reuses --banner-h (shell.js's measureBanner(), same property .sidebar's
+   own sticky top consumes above) instead of a guessed fixed offset — a
+   guess drifts wrong whenever #synth wraps to a different line count. */
+section[id^="sec-"]{scroll-margin-top:calc(var(--banner-h,60px) + 12px)}
 section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-top:3px solid var(--ink)}
 @media (max-width:900px){
   .layout{flex-direction:column;gap:18px}

@@ -30,8 +30,12 @@ function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
   document.documentElement.lang=S.lang;
-  document.getElementById("synth").innerHTML = REAL.active
-    ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB)}</span>`
+  // rs (views.js) walks IND/isRealActive() itself, so this banner counts
+  // and names indicators the same way viewMetod()'s table does — it can't
+  // fall behind the data the way a hand-typed "four of five" already did.
+  const rs=realSummary();
+  document.getElementById("synth").innerHTML = rs.n>0
+    ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN))}</span>`
     : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`;
 
   // Every section gets the same landmark heading (its sidebar label) above
@@ -65,7 +69,7 @@ function render(){
         <div class="help"><span><b>${esc(t.helpA)}</b></span><span>${esc(t.helpB)}</span><span><b>${esc(t.helpC)}</b></span></div>
       </div>
     </div></main>
-    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(REAL.active?t.footBPartial:t.footB)}</p></div></footer>`;
+    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(rs.n>0?t.footBPartial(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.footB)}</p></div></footer>`;
   firstRender=false;
   wire();
 }
@@ -131,18 +135,49 @@ function wire(){
   // every state change doesn't destroy and recreate it.
   let tip=document.getElementById("tiletip");
   if(!tip){tip=document.createElement("div");tip.id="tiletip";document.body.appendChild(tip);}
-  const showTip=(text,x,y)=>{tip.textContent=text;tip.style.left=(x+14)+"px";tip.style.top=(y+14)+"px";tip.style.display="block";};
+  // Clamped to the viewport: near the right/bottom edge, the default
+  // cursor-relative offset would otherwise push the card partly off
+  // screen. Flip to the other side of the cursor first, then clamp — a
+  // card wider/taller than the remaining space still ends up fully inside
+  // the viewport margin instead of just less-wrong.
+  const showTip=(text,x,y)=>{
+    tip.textContent=text;tip.style.display="block";
+    const m=10,vw=innerWidth,vh=innerHeight,tw=tip.offsetWidth,th=tip.offsetHeight;
+    let left=x+14,top=y+14;
+    if(left+tw>vw-m)left=x-14-tw;
+    if(top+th>vh-m)top=y-14-th;
+    tip.style.left=Math.max(m,Math.min(left,vw-tw-m))+"px";
+    tip.style.top=Math.max(m,Math.min(top,vh-th-m))+"px";
+  };
   const hideTip=()=>{tip.style.display="none";};
+  // .tile is the map's regions — clickable/keyboard-selectable, unlike the
+  // dot-plot rows, histogram bars and scatter points below, which only ever
+  // show info. hideTip() first: render() rebuilds #app (including this very
+  // tile) without ever firing this tile's mouseleave, so without this the
+  // card from the tile under a still-stationary cursor was left stuck on
+  // screen until the mouse next moved.
   document.querySelectorAll(".tile").forEach(b=>{
-    const pick=()=>{S.region=b.dataset.region;render();};
+    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
+  });
+  // Every mark that carries data-tip gets the same hover card — map tiles
+  // (data-tip set alongside the click handling above), dot-plot rows,
+  // histogram bars and scatter points (charts.js) all use it, so one loop
+  // wires all four chart types instead of repeating this per chart type.
+  document.querySelectorAll("[data-tip]").forEach(b=>{
     b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmouseleave=hideTip;
-    // Keyboard focus gets the same card, positioned off the tile itself
-    // since focus (unlike a mouse) carries no cursor coordinates.
-    b.onfocus=()=>{const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);};
+    // Keyboard focus gets the same card, positioned off the mark itself
+    // since focus (unlike a mouse) carries no cursor coordinates. Gated on
+    // :focus-visible (same heuristic .tile:focus-visible's outline already
+    // uses, kurvan.css) so a mouse click on a .tile — which also moves
+    // focus, but has already positioned the card at the cursor via
+    // onmouseenter/onmousemove above — doesn't yank it down to the mark's
+    // bottom edge right after. Dot-plot/histogram/scatter marks carry no
+    // tabindex, so onfocus/onblur are simply inert for them.
+    b.onfocus=()=>{if(b.matches(":focus-visible")){const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);}};
     b.onblur=hideTip;
   });
   // Used to switch tabs; every section already exists on the page now

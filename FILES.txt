@@ -60,10 +60,10 @@ js/views.js
     Builds each tab's HTML content using the charts and data above: "Läget"
     (overview), "Över tid" (explore/filter, formerly "Utforska"), "Karta"
     (map), "Regioner" (per-region detail), "Metod" (methodology/sources
-    table), "Behov & vård" (need vs. healthcare response) and
-    "Sjukskrivning" (sickness absence, Försäkringskassan F43 data). One
-    placeholder tab remains — "Sammanhang" — reserved for the observatory
-    plan's context/socioeconomic section, not yet built.
+    table), "Behov & vård" (need vs. healthcare response), "Sjukskrivning"
+    (sickness absence, Försäkringskassan F43 data) and "Sammanhang"
+    (population density and low-education share alongside the mental-health
+    measures, Kolada). All eight sections are built now.
 
 js/shell.js
     Ties everything together: renders the page header/nav/footer around
@@ -74,11 +74,15 @@ js/shell.js
 pipeline/ — DATA FETCHING (Python, run separately, not part of the live page)
 -------------------------------------------------------------------------
 pipeline/README.md
-    Explains the whole pipeline: which of Kurvan's five indicators now use
+    Explains the whole pipeline: which of Kurvan's six indicators now use
     real government data (self-harm, suicide, psychiatric care, severe
-    anxiety) versus which is still fabricated (antidepressant dispensing,
-    because that source has no API), what each real dataset can and can't
-    show (age ranges, sexes, time windows), and how to run the fetchers.
+    anxiety, sickness absence) versus which is still fabricated
+    (antidepressant dispensing, because that source has no queryable API),
+    what each real dataset can and can't show (age ranges, sexes, time
+    windows), how the Kolada context layers (population density,
+    low-education share — not one of the six indicators, backs the
+    Sammanhang tab instead) are fetched separately, and how to run every
+    fetcher.
 
 pipeline/requirements.txt
     Python dependencies needed to run the fetch scripts (just the
@@ -106,6 +110,24 @@ pipeline/fetch_folkhalsodata_hlv.py
     this category was chosen over the dashboard's original one (the
     original stopped being published after 2018).
 
+pipeline/fetch_forsakringskassan.py
+    Downloads the share of ongoing sickness-benefit cases with a
+    stress-reaction (F43) diagnosis, by county, from Försäkringskassan's
+    (the Social Insurance Agency) EntryScape "rowstore" API — a different
+    agency and a simpler REST/JSON technology than the three
+    Socialstyrelsen/FoHM PxWeb fetchers above. Backs the sjukfranvaro
+    indicator; real but only 2005–2019 (the source doesn't extend into the
+    2020s). Saves straight to data/processed/forsakringskassan_f43.json,
+    no separate raw step.
+
+pipeline/fetch_kolada_context.py
+    Downloads population density and low-education share by municipality
+    from Kolada (Sweden's municipal/regional KPI database), aggregated up
+    to Kurvan's 21 regions as an unweighted mean via kommuner.csv. Backs
+    the Sammanhang tab's two context layers — not one of Kurvan's six
+    mental-health indicators. Saves straight to
+    data/processed/kolada_context.json, no separate raw step.
+
 pipeline/build_kurvan_data.py
     Reads the processed JSON files in data/processed/ and writes them out
     as js/real_mh_data.js — the single generated JavaScript file the live
@@ -125,6 +147,12 @@ data/processed/folkhalsodata_hlv.json
     The same data after being cleaned/reshaped into a simple common format
     (region, year, age group, sex, value, confidence bounds) — this is what
     build_kurvan_data.py reads to produce js/real_mh_data.js.
+
+data/processed/forsakringskassan_f43.json
+data/processed/kolada_context.json
+    Written directly by their fetchers (no separate data/raw/ step, unlike
+    the three above) — sickness absence and the two Sammanhang context
+    layers respectively. Also read by build_kurvan_data.py.
 
 .git/
     Git's own internal folder (version history) — not part of the app.
