@@ -4,7 +4,7 @@
    4. CHART PRIMITIVES
    ===================================================================== */
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const fmt=(v,d)=>v==null||!isFinite(v)?"—":v.toFixed(d).replace(".",",");
+const fmt=(v,d)=>v==null||!isFinite(v)?"—":S.lang==="sv"?v.toFixed(d).replace(".",","):v.toFixed(d);
 
 function axisTicks(min,max,n){
   const raw=(max-min)/n, mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
