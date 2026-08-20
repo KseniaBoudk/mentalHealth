@@ -111,6 +111,18 @@ const mapZoomWrap=(svgHtml,id)=>`<div class="mapzoom" data-mapid="${esc(id)}">
   </div>
 </div>`;
 
+// National K(women)/M(men) trend for one indicator across all its valid
+// years — originally viewSjukskrivning's own closure, hoisted here once
+// viewKon() needed the identical shape three more times. null, not a
+// missing point dropped, for a suppressed year (real windows sometimes
+// suppress small counts) — lineChart() already treats null as a genuine
+// series break, never silently joins across one.
+const sexTimeSeries=(k,std)=>{
+  const years=validYears(k);
+  const ts=sex=>years.map(y=>{const c=total(k,"SE",y,sex,std); return c&&!c.suppressed?[y,c.value]:null;});
+  return{years,ts};
+};
+
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
 // share the below/above/selected-region ambiguity it disambiguates.
@@ -609,10 +621,9 @@ function viewBehov(){
 }
 function viewSjukskrivning(){
   const k="sjukfranvaro", col=INST_COLOR.fk;
-  const years=validYears(k);
+  const{years,ts}=sexTimeSeries(k,false);
   const latest=years[years.length-1];
   const nat=total(k,"SE",latest,"T",false);
-  const ts=sex=>years.map(y=>{const c=total(k,"SE",y,sex,false); return c&&!c.suppressed?[y,c.value]:null;});
   // Same shape as viewKarta's single (non-compare) map branch, trimmed down
   // to this one indicator — no year slider or trend arrows, just the
   // latest year, since this page is about one indicator, not a picker.
@@ -627,8 +638,8 @@ function viewSjukskrivning(){
   <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
     <div class="card-b">${lineChart(
-      [{pts:ts("K"),color:col,w:2.4,label:t.women,labelAt:0},
-       {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men,labelAt:0}],
+      [{pts:ts("K"),color:col,w:2.4,label:t.women},
+       {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
       {aria:"Sickness absence trend, women and men",
        xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
        h:200,unit:unitLabel(k)})}</div>
@@ -658,6 +669,50 @@ function viewSjukskrivning(){
       </div>
     </div>
   </div>`;
+}
+// distress/psych/sjukfranvaro are the only three whose real sources publish
+// a genuine sex breakdown (REAL_SEX_ONLY_TOTAL, data.js) — selfharm/suicide
+// are deliberately absent here, not forgotten; t.konCaveat says why.
+function viewKon(){
+  const inds=["distress","psych","sjukfranvaro"];
+  const cards=inds.map(k=>{
+    const col=INST_COLOR[IND[k].inst];
+    const{years,ts}=sexTimeSeries(k,false);
+    const latest=years[years.length-1];
+    const natK=total(k,"SE",latest,"K",false), natM=total(k,"SE",latest,"M",false);
+    return `
+    <div class="card mt-fig">
+      <div class="card-h"><h3>${esc(t.ind[k])}</h3><div class="u">${esc(t.natLine)} · ${esc(unitLabel(k))}</div></div>
+      <div class="card-b">
+        ${lineChart(
+          [{pts:ts("K"),color:col,w:2.4,label:t.women},
+           {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
+          {aria:t.ind[k]+", women and men over time",
+           xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+           h:180,unit:unitLabel(k)})}
+        <div class="rstats" style="grid-template-columns:1fr 1fr;margin-top:14px">
+          <div class="rstat" style="border-top-color:${col}">
+            <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.women)}</div>
+            <div class="rv tnum">${fmt(natK?natK.value:null,1,unitLabel(k))}</div>
+            <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(natK?natK.lo:null,1)}–${fmt(natK?natK.hi:null,1)}</div>
+          </div>
+          <div class="rstat" style="border-top-color:${col}">
+            <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.men)}</div>
+            <div class="rv tnum">${fmt(natM?natM.value:null,1,unitLabel(k))}</div>
+            <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(natM?natM.lo:null,1)}–${fmt(natM?natM.hi:null,1)}</div>
+          </div>
+        </div>
+      </div>
+      ${srcStrip(k)}
+    </div>`;
+  }).join("");
+
+  return `
+  <div class="hero">
+    <p>${esc(t.konLead)}</p>
+  </div>
+  ${cards}
+  <div class="note mt-fig"><p>${esc(t.konCaveat)}</p></div>`;
 }
 function viewSammanhang(){
   if(!CONTEXT.active)return viewComing();

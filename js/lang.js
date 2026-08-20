@@ -7,7 +7,7 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Kön",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
@@ -56,6 +56,8 @@ sv:{
   ],
   ind:{distress:"Svår ängslan, oro eller ångest",antidep:"Uthämtade antidepressiva",psych:"Psykiatrisk specialistvård",selfharm:"Slutenvårdad för självskada",suicide:"Avlidna i suicid",sjukfranvaro:"Sjukskrivning, stressreaktion (F43)"},
   fkLead:"Andel pågående sjukfall med diagnosen stressreaktion (F43) — ett mått på samhällelig/funktionell påverkan, inte ett direkt mått på psykisk ohälsa och inte en kostnadsberäkning.",
+  konLead:"Svår ängslan/oro, psykiatrisk specialistvård och sjukskrivning publiceras alla uppdelat på kön i sina källor — här jämförs kvinnor och män över tid för respektive mått, rikssiffror.",
+  konCaveat:"Slutenvårdad för självskada och avliden i suicid saknas här: de källorna publicerar bara totalt kön, ingen verklig uppdelning på kvinnor/män finns att visa.",
   lblInd:"Indikator",lblAge:"Åldersgrupp",lblSex:"Kön",lblYear:"År",lblReg:"Region",
   allAges:"Alla åldrar",sexT:"Totalt",sexM:"Män",sexK:"Kvinnor",
   crude:"Ojusterat",std:"Åldersstandardiserat",
@@ -129,7 +131,7 @@ sv:{
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",sammanhang:"Context",metod:"Method",regioner:"Regions"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Sex",sammanhang:"Context",metod:"Method",regioner:"Regions"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
@@ -180,6 +182,8 @@ en:{
   ],
   ind:{distress:"Severe anxiety, worry or dread",antidep:"Antidepressants dispensed",psych:"Specialist psychiatric care",selfharm:"Hospitalised for self-harm",suicide:"Died by suicide",sjukfranvaro:"Sickness absence, stress reaction (F43)"},
   fkLead:"Share of ongoing sickness-benefit cases with a stress-reaction (F43) diagnosis — a societal/functional impact measure, not a direct measure of mental health and not a cost estimate.",
+  konLead:"Severe anxiety/worry, specialist psychiatric care and sickness absence are all published broken down by sex in their sources — this compares women and men over time for each measure, national figures.",
+  konCaveat:"Hospitalised for self-harm and died by suicide aren't here: those sources only publish total sex, no real breakdown by women/men exists to show.",
   lblInd:"Indicator",lblAge:"Age band",lblSex:"Sex",lblYear:"Year",lblReg:"Region",
   allAges:"All ages",sexT:"Total",sexM:"Men",sexK:"Women",
   crude:"Crude",std:"Age-standardised",

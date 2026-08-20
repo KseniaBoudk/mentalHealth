@@ -13,12 +13,12 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
   <path d="M2,31 L14,26 L26,24 L42,22" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" opacity=".75"/>
 </svg>`;
 
-// All eight sections render every time, in this order — the sidebar's
+// All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","sammanhang","metod","regioner"];
+const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","sammanhang","metod","regioner"];
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
-  sjukskrivning:viewSjukskrivning,sammanhang:viewSammanhang,metod:viewMetod,regioner:viewRegioner};
+  sjukskrivning:viewSjukskrivning,kon:viewKon,sammanhang:viewSammanhang,metod:viewMetod,regioner:viewRegioner};
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
