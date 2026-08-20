@@ -14,6 +14,7 @@
   --violet-soft:rgba(76,58,140,.10); --warn:rgba(123,58,70,.08);
   --band:rgba(76,58,140,.12);
   --shadow:0 1px 3px rgba(30,22,14,.05),0 10px 30px rgba(30,22,14,.06);
+  --synth-text:#fff;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -24,6 +25,7 @@
     --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);
     --band:rgba(169,146,245,.15);
     --shadow:0 1px 3px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.36);
+    --synth-text:var(--paper);
   }
 }
 :root[data-theme="dark"]{
@@ -34,6 +36,7 @@
   --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);
   --band:rgba(169,146,245,.15);
   --shadow:0 1px 3px rgba(0,0,0,.4),0 10px 32px rgba(0,0,0,.36);
+  --synth-text:var(--paper);
 }
 :root{
   --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
@@ -48,7 +51,7 @@ button{font:inherit}
 
 /* --- the banner that never goes away --- */
 #synth{
-  position:sticky;top:0;z-index:100;background:var(--oxblood);color:#fff;
+  position:sticky;top:0;z-index:100;background:var(--oxblood);color:var(--synth-text);
   padding:7px 20px;font-size:11.5px;letter-spacing:.03em;
   display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
 }
