@@ -48,31 +48,53 @@
   --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:var(--fs-6);line-height:1.6;-webkit-font-smoothing:antialiased}
+/* 16px literal, not a --fs-* token: the design-token sweep mapped this to
+   the nearest step (--fs-6, 12.5px) instead of an exact one, silently
+   shrinking the page's base reading size (and everything that inherits it
+   via button{font:inherit} below) by 22%. No existing step equals 16px, so
+   restoring the original value here rather than adding a token nothing
+   else needs yet. */
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .tnum{font-variant-numeric:tabular-nums}
 svg{display:block;width:100%;height:auto}
 button{font:inherit}
 
 /* --- the banner that never goes away --- */
+/* padding/gap restored to their pre-token values below: the token sweep
+   rounded these to the *nearest* --sp-* step instead of an exact one
+   (7px->--sp-2's 4px, 14px->--sp-4's 12px — no step matches either exactly,
+   so left as literals), and the horizontal padding was 20px, which *does*
+   match --sp-6 exactly — the sweep used --sp-7 (24px) instead, not just a
+   rounding but a wrong-token pick. */
 #synth{
   position:sticky;top:0;z-index:100;background:var(--oxblood);color:var(--synth-text);
-  padding:var(--sp-2) var(--sp-7);font-size:var(--fs-5);letter-spacing:.03em;
-  display:flex;gap:var(--sp-4);align-items:baseline;flex-wrap:wrap;
+  padding:7px var(--sp-6);font-size:var(--fs-5);letter-spacing:.03em;
+  display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
 }
 #synth b{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:var(--fs-4)}
 #synth span{opacity:.92}
 
-.wrap{max-width:1180px;margin:0 auto;padding:0 var(--sp-7)}
+/* 22px literal — no exact --sp-* step (nearest are 20/24), same rounding
+   issue as #synth above. */
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
 
 /* --- masthead --- */
+/* gap/padding-top/margin-top/gap below are all literals for the same
+   reason: 18px, 22px, 13px, 7px and 10px have no exact --sp-* match, and
+   tokenizing them to the nearest step silently tightened the whole
+   masthead. .mark's height (34px, the logo's real aspect ratio paired
+   with its 44px width) has no --sp-* match either and isn't a general
+   spacing value worth adding to the shared scale just for one asset. The
+   two paddings that *do* have an exact match (16px, the second number in
+   each pair) stay tokenized. */
 header.top{background:var(--surface);border-bottom:3px solid var(--ink);border-top:3px solid var(--violet)}
-.mast{display:flex;align-items:flex-end;gap:var(--sp-6);padding:var(--sp-7) 0 0;flex-wrap:wrap}
-.brand{display:flex;align-items:flex-start;gap:var(--sp-4)}
-.mark{width:var(--sp-9);height:var(--sp-7);flex:none;margin-top:var(--sp-1)}
+.mast{display:flex;align-items:flex-end;gap:18px;padding:22px 0 0;flex-wrap:wrap}
+.brand{display:flex;align-items:flex-start;gap:13px}
+.mark{width:var(--sp-9);height:34px;flex:none;margin-top:var(--sp-1)}
 .word{font-family:var(--serif);font-size:var(--fs-8);font-weight:600;line-height:1;letter-spacing:-.03em}
-.sub{font-size:var(--fs-1);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);margin-top:var(--sp-2);font-weight:650}
-.tools{margin-left:auto;display:flex;gap:var(--sp-3);align-items:center}
-.tools button{background:none;border:1.5px solid var(--ink);border-radius:999px;font-size:var(--fs-4);font-weight:650;color:var(--ink);cursor:pointer;padding:var(--sp-2) var(--sp-5)}
+.sub{font-size:var(--fs-1);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);margin-top:7px;font-weight:650}
+.tools{margin-left:auto;display:flex;gap:10px;align-items:center}
+.tools button{background:none;border:1.5px solid var(--ink);border-radius:999px;font-size:var(--fs-4);font-weight:650;color:var(--ink);cursor:pointer;padding:6px var(--sp-5)}
 .tools button:hover,.tools button:focus-visible{background:var(--ink);color:var(--paper)}
 .stamp{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:14px}
 
