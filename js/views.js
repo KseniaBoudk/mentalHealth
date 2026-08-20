@@ -123,6 +123,17 @@ const sexTimeSeries=(k,std)=>{
   return{years,ts};
 };
 
+// National age-group trend for one indicator across all its valid years —
+// the age analogue of sexTimeSeries above, feeding viewAlder. Sex "T"
+// throughout: this compares age groups, not sexes. ageGroupTotal (data.js)
+// already returns null for a group with nothing published in that year,
+// same series-break convention as sexTimeSeries.
+const ageGroupTimeSeries=(k,std)=>{
+  const years=validYears(k);
+  const ts=g=>years.map(y=>{const c=ageGroupTotal(k,"SE",y,g.idxs,"T",std); return c?[y,c.value]:null;});
+  return{years,ts};
+};
+
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
 // share the below/above/selected-region ambiguity it disambiguates.
@@ -713,6 +724,45 @@ function viewKon(){
   </div>
   ${cards}
   <div class="note mt-fig"><p>${esc(t.konCaveat)}</p></div>`;
+}
+
+// Age-group comparison — psych only. Unlike viewKon (three indicators, two
+// lines each), only psych has real age data spanning the whole lifespan
+// (see AGE_GROUPS's comment in data.js), so this is one card, three lines.
+// One colour (psych's own instrument colour), three dash patterns — extends
+// the app's existing "sex is solid vs dashed, never a second colour system"
+// rule to this second categorical dimension rather than introducing a
+// competing 3-colour palette.
+function viewAlder(){
+  const k="psych", col=INST_COLOR[IND[k].inst];
+  const{years,ts}=ageGroupTimeSeries(k,false);
+  const latest=years[years.length-1];
+  const dashes=[null,"5 3","2 3"];
+  const groupLabel={child:t.ageChild,adult:t.ageAdult,elderly:t.ageElderly};
+  const totals=AGE_GROUPS.map(g=>({g,c:ageGroupTotal(k,"SE",latest,g.idxs,"T",false)}));
+
+  return `
+  <div class="hero"><p>${esc(t.alderLead)}</p></div>
+  <div class="card mt-fig">
+    <div class="card-h"><h3>${esc(t.ind[k])}</h3><div class="u">${esc(t.natLine)} · ${esc(unitLabel(k))}</div></div>
+    <div class="card-b">
+      ${lineChart(
+        AGE_GROUPS.map((g,i)=>({pts:ts(g),color:col,dash:dashes[i],w:i===0?2.4:1.9,label:groupLabel[g.key]})),
+        {aria:t.ind[k]+", children, adults and elderly over time",
+         xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+         h:180,unit:unitLabel(k)})}
+      <div class="rstats" style="grid-template-columns:1fr 1fr 1fr;margin-top:14px">
+        ${totals.map(({g,c})=>`
+        <div class="rstat" style="border-top-color:${col}">
+          <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(groupLabel[g.key])}</div>
+          <div class="rv tnum">${fmt(c?c.value:null,1,unitLabel(k))}</div>
+          <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(c?c.lo:null,1)}–${fmt(c?c.hi:null,1)}</div>
+        </div>`).join("")}
+      </div>
+    </div>
+    ${srcStrip(k)}
+  </div>
+  <div class="note mt-fig"><p>${esc(t.alderCaveat)}</p></div>`;
 }
 function viewSammanhang(){
   if(!CONTEXT.active)return viewComing();
