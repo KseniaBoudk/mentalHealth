@@ -30,7 +30,11 @@ function dotPlot(rows, opts){
   rows.forEach((r,i)=>{
     const y=top+i*rowH+rowH/2, sel=r.code===S.region;
     s+=`<text x="${L-8}" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="8.5" font-weight="${sel?700:400}" fill="${sel?col:"var(--ink-3)"}">${esc(r.name)}</text>`;
-    s+=`<g><title>${esc(r.name)}: ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})</title>`;
+    // data-tip, not <title> — see chorMap's comment on the same swap: a
+    // native SVG <title> is the unstyled OS tooltip this replaces with the
+    // shared #tiletip card (wire(), shell.js).
+    const tip=`${r.name}: ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})`;
+    s+=`<g data-tip="${esc(tip)}">`;
     s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
     s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
   return s+"</svg>";
@@ -187,8 +191,10 @@ function histogram(rows,opts){
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   counts.forEach((c,i)=>{
     const x=X(i),y=Y(c),h=B-y;
-    s+=`<g><title>${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}: ${c}</title>`;
-    s+=`<rect x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/></g>`;
+    // data-tip, not <title> — same swap as chorMap/dotPlot, for the same
+    // shared #tiletip card instead of the unstyled OS tooltip.
+    const tip=`${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}: ${c}`;
+    s+=`<rect data-tip="${esc(tip)}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });
   // Unit suffixed directly onto the two boundary numbers (6,2 / 9,6 %)
@@ -232,7 +238,8 @@ function scatter(pts,opts){
   const sel = pts.find(p=>p.code===S.region && p!==below && p!==above);
   pts.forEach(p=>{
     const hl=p===below||p===above||p===sel;
-    s+=`<g><title>${esc(p.name)}</title><circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/></g>`;
+    // data-tip, not <title> — same swap as chorMap/dotPlot/histogram.
+    s+=`<circle data-tip="${esc(p.name)}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
     if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
