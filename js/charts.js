@@ -78,6 +78,12 @@ function lineChart(series,opts){
   (opts.marks||[]).forEach(m=>{
     s+=`<line x1="${X(m.x).toFixed(1)}" y1="${Tp-4}" x2="${X(m.x).toFixed(1)}" y2="${B}" stroke="var(--oxblood)" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>`;
     s+=`<text x="${(X(m.x)+3).toFixed(1)}" y="${Tp+2}" font-family="var(--sans)" font-size="7.5" fill="var(--oxblood)">${esc(m.label)}</text>`;});
+  // opts.xFmt formats a point's x-value for its hover tip below — default
+  // is the literal x (a calendar year, the common case). Callers whose x is
+  // an AGES band index rather than a year (viewLaget's/viewOverTid's age
+  // curves) pass xFmt:i=>AGES[i] so the tip reads a real band ("35-44"),
+  // not a bare index.
+  const xLabel=opts.xFmt||String;
   series.forEach(se=>{
     let d="",pen=false;
     se.pts.forEach(p=>{ if(!p){pen=false;return;} d+=`${pen?"L":"M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`; pen=true; });
@@ -97,6 +103,17 @@ function lineChart(series,opts){
     if(se.anno){const p=se.anno.at;
       s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${se.color}"/>`;
       s+=`<text x="${(X(p[0])+se.anno.dx).toFixed(1)}" y="${(Y(p[1])+se.anno.dy).toFixed(1)}" text-anchor="${se.anno.dx<0?"end":"start"}" font-family="var(--sans)" font-size="10.5" font-weight="700" fill="${se.color}">${esc(se.anno.text)}</text>`;}
+    // Hover targets, one per real point — reuses the same data-tip/#tiletip
+    // card every other mark type (map tiles, dot-plot rows, histogram bars,
+    // scatter points) already shows, wired generically in shell.js's
+    // wire(). Invisible at rest (.pt-hit, kurvan.css) and revealed on
+    // hover, so the chart looks unchanged when nothing's being pointed at;
+    // sits on top of any already-visible marker above (single-point/last-
+    // point/anno dot) too — an exact-duplicate tip there is harmless.
+    valid.forEach(p=>{
+      const tip=`${se.label?se.label+", ":""}${xLabel(p[0])}: ${fmt(p[1],p[1]%1?1:0,opts.unit)}`;
+      s+=`<circle class="pt-hit" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}"/>`;
+    });
   });
   (opts.notes||[]).forEach(n=>{
     s+=`<text x="${X(n.x).toFixed(1)}" y="${Y(n.y).toFixed(1)}" text-anchor="${n.anchor||"start"}" font-family="var(--sans)" font-size="8.5" font-style="italic" fill="var(--ink-3)">${esc(n.text)}</text>`;});
