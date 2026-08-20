@@ -203,14 +203,22 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .rpeers b{color:var(--ink-2);font-weight:650}
 
 /* --- map --- */
-.mapsvg{max-width:280px;margin:2px auto 0;transform-origin:center center;transition:transform .15s ease-out}
-/* Zoom scales .mapsvg via transform (shell.js), which doesn't grow the box
-   it sits in — overflow:hidden here clips the zoomed-in overflow instead of
-   pushing the rest of the card layout around. There's no pan, only zoom
-   toward the fixed center, so this is the deliberate simple version: it
-   crops evenly at the edges rather than letting the reader scroll to see
-   the cropped part. */
+.mapsvg{max-width:280px;margin:2px auto 0;transform-origin:center center;transition:transform .15s ease-out;touch-action:none}
+/* Zoom+pan scale/translate .mapsvg via transform (shell.js), which doesn't
+   grow the box it sits in — overflow:hidden here clips whatever's panned
+   past the map's own edge instead of pushing the rest of the card layout
+   around (shell.js clamps pan to the map's own geometry, so this should
+   only ever crop right at that edge, not mid-map). touch-action:none above
+   stops touch browsers from claiming a drag as their own page-scroll/pinch
+   gesture before the pointer handlers get it. */
 .mapzoom{position:relative;overflow:hidden}
+/* pannable: zoomed past 1x, so dragging is actually live (shell.js only
+   wires pointer handling there) — cursor hints it's draggable.
+   dragging: mid-gesture, cursor only — shell.js separately sets
+   transition:none directly on the element for the actual no-lag-while-
+   following-the-pointer behaviour; this class doesn't touch that. */
+.mapsvg.pannable{cursor:grab}
+.mapsvg.dragging{cursor:grabbing}
 .mapzoombtns{position:absolute;top:var(--sp-3,8px);right:var(--sp-3,8px);display:flex;flex-direction:column;gap:var(--sp-1,2px);z-index:10}
 .mapzoombtn{
   width:26px;height:26px;padding:0;border-radius:50%;border:1.5px solid var(--ink);

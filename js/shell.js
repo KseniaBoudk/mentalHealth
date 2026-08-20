@@ -26,15 +26,22 @@ const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBe
 // A CSS animation on a bare selector would replay on every one of those;
 // this flag limits the fade-in to the actual first paint.
 let firstRender=true;
-// Zoom level per map slot (keyed by the id mapZoomWrap() gives each map,
-// views.js), 1 = unzoomed. Lives here rather than in S since it's pure
-// presentation, not app state — a language toggle or filter change
-// shouldn't reset how far in you'd zoomed. Declared at module scope (not
-// inside wire()) so it survives every render()'s DOM rebuild; wire()
-// reapplies it to whatever fresh .mapsvg nodes render() just created,
-// the same way measureBanner() reapplies --banner-h every call.
-const mapZoom={};
+// Zoom+pan per map slot ({z,x,y}, keyed by the id mapZoomWrap() gives each
+// map, views.js) — z=1,x=0,y=0 is unzoomed/centred. Lives here rather than
+// in S since it's pure presentation, not app state — a language toggle or
+// filter change shouldn't reset how far in you'd zoomed or panned.
+// Declared at module scope (not inside wire()) so it survives every
+// render()'s DOM rebuild; wire() reapplies it to whatever fresh .mapsvg
+// nodes render() just created, the same way measureBanner() reapplies
+// --banner-h every call.
+const mapView={};
 const ZOOM_MIN=1,ZOOM_MAX=3,ZOOM_STEP=0.5;
+// Set the moment a drag actually moves the map (not just a click-hold), so
+// the tile click handler below can tell "clicked a region" apart from "let
+// go after panning" and skip the region-select it would otherwise fire —
+// without this, releasing a pan over a different region than it started on
+// would silently select that region.
+let dragMoved=false;
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -166,7 +173,10 @@ function wire(){
   // card from the tile under a still-stationary cursor was left stuck on
   // screen until the mouse next moved.
   document.querySelectorAll(".tile").forEach(b=>{
-    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
+    // dragMoved: a pan gesture (wireMapZoomPan()) ending over this tile
+    // isn't a click on it — skip the region-select once and reset, so the
+    // next genuine click behaves normally.
+    const pick=()=>{if(dragMoved){dragMoved=false;return;}hideTip();S.region=b.dataset.region;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
   });
@@ -196,34 +206,106 @@ function wire(){
   if(or)or.onclick=()=>document.getElementById("sec-regioner").scrollIntoView({behavior:"smooth"});
   const ob=document.getElementById("b-openbehov");
   if(ob)ob.onclick=()=>document.getElementById("sec-behov").scrollIntoView({behavior:"smooth"});
-  wireMapZoom();
+  wireMapZoomPan();
   paintTrendArrows();
 }
 
-// CSS transform:scale() on the vector <svg> itself, not a raster zoom — the
-// map stays crisp at any level. No pan: zoom stays centred and .mapzoom's
-// overflow:hidden (kurvan.css) just crops evenly at the edges, the
-// deliberately simple version of "+/- in the corner of every map" rather
-// than a full drag-to-pan viewer.
-function wireMapZoom(){
-  const applyZoom=(el,z)=>{
+// CSS transform:scale()+translate() on the vector <svg> itself, not a
+// raster zoom — the map stays crisp at any level. translate() goes outside
+// scale() so a drag's pixel delta moves the already-scaled map by that same
+// number of screen pixels, independent of the zoom level.
+function wireMapZoomPan(){
+  const get=id=>mapView[id]||(mapView[id]={z:1,x:0,y:0});
+  // .mapsvg's live rect already reflects its own current scale (or 1, on a
+  // brand-new node with no transform yet) — dividing that back out gives
+  // the natural, unzoomed size without needing a separately cached value
+  // that could go stale on window resize.
+  const naturalSize=svg=>{
+    const m=/scale\(([\d.]+)\)/.exec(svg.style.transform);
+    const z=m?+m[1]:1, r=svg.getBoundingClientRect();
+    return{w:r.width/z,h:r.height/z};
+  };
+  // Clamped to the map's own geometry, not the surrounding card: at zoom z
+  // the scaled map is naturalSize*z, so it extends naturalSize*(z-1)/2
+  // beyond its natural edge on each side — panning further than that would
+  // reveal empty space past the map's own border. This is also why pan
+  // naturally snaps back to (0,0) as z returns to 1 (max pan there is 0),
+  // with no separate "reset pan on zoom out" step needed.
+  const clampPan=(w,h,z,x,y)=>{
+    const maxX=w*(z-1)/2,maxY=h*(z-1)/2;
+    return{x:Math.max(-maxX,Math.min(maxX,x)),y:Math.max(-maxY,Math.min(maxY,y))};
+  };
+  const applyView=(el,v)=>{
     const svg=el.querySelector(".mapsvg");
-    if(svg)svg.style.transform=z===1?"":`scale(${z})`;
+    if(!svg)return;
+    svg.style.transform=(v.z===1&&!v.x&&!v.y)?"":`translate(${v.x}px,${v.y}px) scale(${v.z})`;
+    svg.classList.toggle("pannable",v.z>1);
     el.querySelectorAll(".mapzoombtn").forEach(btn=>{
       const dir=+btn.dataset.dir;
-      btn.disabled=dir>0?z>=ZOOM_MAX-1e-9:z<=ZOOM_MIN+1e-9;
+      btn.disabled=dir>0?v.z>=ZOOM_MAX-1e-9:v.z<=ZOOM_MIN+1e-9;
     });
   };
-  // Reapply each map's remembered level to this render()'s fresh nodes —
-  // a brand-new .mapsvg has no memory of a level set before the rebuild.
-  document.querySelectorAll(".mapzoom").forEach(el=>applyZoom(el,mapZoom[el.dataset.mapid]||1));
+  // Reapply each map's remembered zoom+pan to this render()'s fresh nodes —
+  // a brand-new .mapsvg has no memory of a view set before the rebuild.
+  document.querySelectorAll(".mapzoom").forEach(el=>applyView(el,get(el.dataset.mapid)));
   document.querySelectorAll(".mapzoombtn").forEach(btn=>{
     btn.onclick=()=>{
       const id=btn.dataset.mapid;
-      const next=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,+((mapZoom[id]||1)+(+btn.dataset.dir)*ZOOM_STEP).toFixed(2)));
-      mapZoom[id]=next;
-      applyZoom(document.querySelector(`.mapzoom[data-mapid="${id}"]`),next);
+      const el=document.querySelector(`.mapzoom[data-mapid="${id}"]`);
+      const svg=el&&el.querySelector(".mapsvg");
+      if(!svg)return;
+      const v=get(id),{w,h}=naturalSize(svg);
+      const z=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,+(v.z+(+btn.dataset.dir)*ZOOM_STEP).toFixed(2)));
+      mapView[id]={z,...clampPan(w,h,z,v.x,v.y)};
+      applyView(el,mapView[id]);
     };
+  });
+  // Drag-to-pan: pointerdown/move/up on .mapsvg itself (bubbles up from any
+  // .tile child, so one handler covers the whole map) — gated on z>1, so
+  // there's nothing to pan at 1x and click-to-select is untouched there.
+  document.querySelectorAll(".mapzoom").forEach(el=>{
+    const id=el.dataset.mapid,svg=el.querySelector(".mapsvg");
+    if(!svg)return;
+    let dragging=false,startX=0,startY=0,startPan={x:0,y:0},natW=0,natH=0,pointerId=null;
+    svg.onpointerdown=e=>{
+      const v=get(id);
+      if(v.z<=1)return;
+      dragging=true;dragMoved=false;pointerId=e.pointerId;
+      startX=e.clientX;startY=e.clientY;startPan={x:v.x,y:v.y};
+      ({w:natW,h:natH}=naturalSize(svg));
+      // No setPointerCapture()/dragging class/transition:none here yet —
+      // deferred to the first real move below. Capturing eagerly, even for
+      // a plain click that never moves, retargets the browser's synthesized
+      // "click" event to the capturing element (this <svg>) instead of the
+      // .tile actually under the pointer — confirmed live: a zero-movement
+      // click fired its "click" on svg.mapsvg, never reaching the tile's
+      // onclick, so region-select silently stopped working at any zoom
+      // above 1x. Deferring capture until movement is confirmed leaves a
+      // plain click's native event handling completely untouched.
+    };
+    svg.onpointermove=e=>{
+      if(!dragging)return;
+      const dx=e.clientX-startX,dy=e.clientY-startY;
+      // 4px threshold: a held-still click shouldn't register as a drag.
+      if(!dragMoved&&Math.hypot(dx,dy)>4){
+        dragMoved=true;
+        svg.setPointerCapture(pointerId);
+        svg.classList.add("dragging");
+        svg.style.transition="none";
+      }
+      if(!dragMoved)return;
+      const v=get(id);
+      mapView[id]={z:v.z,...clampPan(natW,natH,v.z,startPan.x+dx,startPan.y+dy)};
+      applyView(el,mapView[id]);
+    };
+    const endDrag=()=>{
+      if(!dragging)return;
+      dragging=false;
+      svg.classList.remove("dragging");
+      svg.style.transition="";
+    };
+    svg.onpointerup=endDrag;
+    svg.onpointercancel=endDrag;
   });
 }
 
