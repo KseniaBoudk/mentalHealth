@@ -17,8 +17,13 @@
   --synth-text:#fff;
   --sp-1:2px; --sp-2:4px; --sp-3:8px; --sp-4:12px; --sp-5:16px;
   --sp-6:20px; --sp-7:24px; --sp-8:32px; --sp-9:44px; --sp-10:56px;
-  --fs-1:8.5px; --fs-2:9.5px; --fs-3:10px; --fs-4:10.5px; --fs-5:11.5px;
-  --fs-6:12.5px; --fs-7:26px; --fs-8:35px;
+  /* Type scale nudged up a step (Michael's visual-theme-changes branch) —
+     a deliberate size-up, not a drift: contrast with the literal 16px/34px
+     left on body/.mark below, which are the *original* pre-tokenization
+     values restored after an accidental nearest-token rounding, not a
+     redesign. */
+  --fs-1:9.5px; --fs-2:10.5px; --fs-3:11px; --fs-4:11.5px; --fs-5:12.5px;
+  --fs-6:14px; --fs-7:28px; --fs-8:38px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -77,6 +82,15 @@ button{font:inherit}
 /* 22px literal — no exact --sp-* step (nearest are 20/24), same rounding
    issue as #synth above. */
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+/* Wider content column + a further type-scale bump on genuinely large
+   screens (Michael's visual-theme-changes branch) — the 1180px wrap and
+   base --fs-* scale above are tuned for a laptop-width window; without
+   this, a big desktop monitor just gets more empty margin instead of a
+   page that actually uses the space. */
+@media (min-width:1440px){
+  .wrap{max-width:1400px}
+  :root{--fs-6:14px; --fs-7:28px; --fs-8:40px}
+}
 
 /* --- masthead --- */
 /* gap/padding-top/margin-top/gap below are all literals for the same
@@ -225,7 +239,11 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .rpeers b{color:var(--ink-2);font-weight:650}
 
 /* --- map --- */
-.mapsvg{max-width:280px;margin:2px auto 0;transform-origin:center center;transition:transform .15s ease-out;touch-action:none}
+/* 400px cap, not 280px — Michael's visual-theme-changes branch widened the
+   map itself (his own .map-container/.map-zoom-group classes, not used
+   here — this is the same sizing intent applied to our existing .mapsvg/
+   .mapzoom instead, so it works with our zoom+pan system rather than his). */
+.mapsvg{max-width:400px;margin:2px auto 0;transform-origin:center center;transition:transform .15s ease-out;touch-action:none}
 /* Zoom+pan scale/translate .mapsvg via transform (shell.js), which doesn't
    grow the box it sits in — overflow:hidden here clips whatever's panned
    past the map's own edge instead of pushing the rest of the card layout
