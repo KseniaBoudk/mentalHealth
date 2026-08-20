@@ -63,6 +63,9 @@ button{font:inherit}
 #synth span{opacity:.92}
 
 .wrap{max-width:1180px;margin:0 auto;padding:0 var(--sp-7)}
+@media (min-width:1440px){
+  .wrap{max-width:1400px}
+}
 
 /* --- masthead --- */
 header.top{background:var(--surface);border-bottom:3px solid var(--ink);border-top:3px solid var(--violet)}
@@ -107,6 +110,13 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
   .layout{flex-direction:column;gap:18px}
   .sidebar{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:14px;padding-right:0;border-right:0;border-bottom:3px solid var(--ink);padding-bottom:14px}
   .sidebar a.active::before{content:none}
+}
+@media (min-width:1440px){
+  :root{
+    --fs-6:14px;
+    --fs-7:28px;
+    --fs-8:40px;
+  }
 }
 
 /* --- instrument legend --- */
