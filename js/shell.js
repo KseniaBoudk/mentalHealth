@@ -150,23 +150,33 @@ function wire(){
     tip.style.top=Math.max(m,Math.min(top,vh-th-m))+"px";
   };
   const hideTip=()=>{tip.style.display="none";};
+  // .tile is the map's regions — clickable/keyboard-selectable, unlike the
+  // dot-plot rows, histogram bars and scatter points below, which only ever
+  // show info. hideTip() first: render() rebuilds #app (including this very
+  // tile) without ever firing this tile's mouseleave, so without this the
+  // card from the tile under a still-stationary cursor was left stuck on
+  // screen until the mouse next moved.
   document.querySelectorAll(".tile").forEach(b=>{
-    // hideTip() first: render() below rebuilds #app (including this very
-    // tile) without ever firing this tile's mouseleave, so without this
-    // the card from the tile under a still-stationary cursor was left
-    // stuck on screen until the mouse next moved.
     const pick=()=>{hideTip();S.region=b.dataset.region;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
+  });
+  // Every mark that carries data-tip gets the same hover card — map tiles
+  // (data-tip set alongside the click handling above), dot-plot rows,
+  // histogram bars and scatter points (charts.js) all use it, so one loop
+  // wires all four chart types instead of repeating this per chart type.
+  document.querySelectorAll("[data-tip]").forEach(b=>{
     b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmouseleave=hideTip;
-    // Keyboard focus gets the same card, positioned off the tile itself
+    // Keyboard focus gets the same card, positioned off the mark itself
     // since focus (unlike a mouse) carries no cursor coordinates. Gated on
     // :focus-visible (same heuristic .tile:focus-visible's outline already
-    // uses, kurvan.css) so a mouse click — which also moves focus, but has
-    // already positioned the card at the cursor via onmouseenter/onmousemove
-    // above — doesn't yank it down to the tile's bottom edge right after.
+    // uses, kurvan.css) so a mouse click on a .tile — which also moves
+    // focus, but has already positioned the card at the cursor via
+    // onmouseenter/onmousemove above — doesn't yank it down to the mark's
+    // bottom edge right after. Dot-plot/histogram/scatter marks carry no
+    // tabindex, so onfocus/onblur are simply inert for them.
     b.onfocus=()=>{if(b.matches(":focus-visible")){const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);}};
     b.onblur=hideTip;
   });
