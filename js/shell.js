@@ -162,8 +162,12 @@ function wire(){
     b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmouseleave=hideTip;
     // Keyboard focus gets the same card, positioned off the tile itself
-    // since focus (unlike a mouse) carries no cursor coordinates.
-    b.onfocus=()=>{const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);};
+    // since focus (unlike a mouse) carries no cursor coordinates. Gated on
+    // :focus-visible (same heuristic .tile:focus-visible's outline already
+    // uses, kurvan.css) so a mouse click — which also moves focus, but has
+    // already positioned the card at the cursor via onmouseenter/onmousemove
+    // above — doesn't yank it down to the tile's bottom edge right after.
+    b.onfocus=()=>{if(b.matches(":focus-visible")){const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);}};
     b.onblur=hideTip;
   });
   // Used to switch tabs; every section already exists on the page now
