@@ -134,7 +134,7 @@ function viewLaget(){
       :"Solid line women, dashed men. The point is the shape of the curves, not their shared level."}</div>
   </div>
 
-  <div class="pieces" style="grid-template-columns:1fr 1fr;margin-top:20px">
+  <div class="pieces mt-fig" style="grid-template-columns:1fr 1fr">
     ${t.pieces.map((p,i)=>`
       <div class="piece">
         <div class="tag" style="color:${INST_COLOR[p.inst]}">${esc(p.tag)}</div>
@@ -240,7 +240,7 @@ function viewOverTid(){
       </div>
     </div>
   </div>
-  <div class="card" style="margin-top:20px">${srcStrip(k,
+  <div class="card mt-fig">${srcStrip(k,
     `<b>${esc(t.dl)}</b> · 21 ${S.lang==="sv"?"regioner":"regions"} × ${validYears(k).length} ${S.lang==="sv"?"år":"years"} × ${S.lang==="sv"?"ålder × kön":"age × sex"} · CSV`)}</div>`;
 }
 
@@ -320,7 +320,7 @@ function viewRegioner(){
     </div>
   </div>
 
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
     <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350})}</div>
     ${scatterKey()}
@@ -329,7 +329,7 @@ function viewRegioner(){
       :"The circled region is the selected one. Distance from the line shows how the region compares with the average association between need and response."} ${esc(t.causalNote)}</div>
     <button id="b-openbehov" class="mapopen">${esc(t.behovOpen)}</button>
   </div>
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(prior,latest))}</div></div>
     <div class="card-b">
       <!-- LABEL_X 220, AXIS_X 300, MAX_W 65: the worst-case leftward bar
@@ -585,7 +585,7 @@ function viewSjukskrivning(){
   <div class="hero">
     <p>${esc(t.fkLead)}</p>
   </div>
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
     <div class="card-b">${lineChart(
       [{pts:ts("K"),color:col,w:2.4,label:t.women,labelAt:0},
@@ -595,7 +595,7 @@ function viewSjukskrivning(){
        h:200,unit:unitLabel(k)})}</div>
     ${srcStrip(k)}
   </div>
-  <div class="grid-ex" style="margin-top:20px">
+  <div class="grid-ex mt-fig">
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
       <div class="card-b">
