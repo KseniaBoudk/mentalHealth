@@ -98,6 +98,23 @@ const mapLegend=(rows,color,unit,nat)=>{
   </div>`;
 };
 
+// Wraps a chorMap() SVG with +/- zoom buttons pinned to its corner. Zoom is
+// pure presentation (how much of the already-real geography you're looking
+// at, not a data or selection change), so it deliberately lives outside S
+// and is wired directly in shell.js rather than going through render(). id
+// must be unique per map slot on the page and STABLE across renders (not
+// regenerated per render call) — shell.js keeps zoom level in a plain
+// object keyed by this id, and reapplies it to the freshly-rendered map
+// after every render() a click/filter/toggle triggers elsewhere, the same
+// way measureBanner() reapplies --banner-h on every wire().
+const mapZoomWrap=(svgHtml,id)=>`<div class="mapzoom" data-mapid="${esc(id)}">
+  ${svgHtml}
+  <div class="mapzoombtns">
+    <button type="button" class="mapzoombtn" data-mapid="${esc(id)}" data-dir="1" aria-label="${esc(t.zoomIn)}">+</button>
+    <button type="button" class="mapzoombtn" data-mapid="${esc(id)}" data-dir="-1" aria-label="${esc(t.zoomOut)}">−</button>
+  </div>
+</div>`;
+
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
 // share the below/above/selected-region ambiguity it disambiguates.
@@ -476,18 +493,18 @@ function viewKarta(){
         <div class="mapcmp">
           <div>
             <div class="mapcmphead">${esc(t.ind[k])} (${esc(unitLabel(k))})</div>
-            ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for "+t.ind[k]})}
+            ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for "+t.ind[k]}),"karta-cmp-a")}
             ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
           </div>
           <div>
             <div class="mapcmphead"><select id="c-cmpind">
               ${Object.keys(IND).filter(x=>x!==k).map(x=>`<option value="${x}"${x===cmpK?" selected":""}>${esc(t.ind[x])}</option>`).join("")}
             </select> (${esc(unitLabel(cmpK))})</div>
-            ${chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,unit:unitLabel(cmpK),aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]})}
+            ${mapZoomWrap(chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,unit:unitLabel(cmpK),aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]}),"karta-cmp-b")}
             ${mapLegend(cmpRows,cmpCol,unitLabel(cmpK),cmpNat?cmpNat.value:null)}
           </div>
         </div>`:`
-        ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions, click a region to see its figures"})}
+        ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions, click a region to see its figures"}),"karta")}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}`}
       </div>
       <div class="src">${esc(t.mapNote(isRealActive(k)))} ${priorYr?esc(t.trendNote(priorYr,yr)):""} <b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
@@ -621,7 +638,7 @@ function viewSjukskrivning(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
       <div class="card-b">
-        ${chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"})}
+        ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"}),"sjukskrivning")}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
       </div>
       <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
@@ -666,7 +683,7 @@ function viewSammanhang(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · 2023</div></div>
       <div class="card-b">
-        ${chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"})}
+        ${mapZoomWrap(chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"}),"sammanhang")}
         ${mapLegend(rows,col,unit,null)}
       </div>
       <div class="src">${esc(t.ctxCaveat)} ${esc(t.causalNote)}</div>

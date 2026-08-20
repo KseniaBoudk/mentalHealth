@@ -26,6 +26,15 @@ const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBe
 // A CSS animation on a bare selector would replay on every one of those;
 // this flag limits the fade-in to the actual first paint.
 let firstRender=true;
+// Zoom level per map slot (keyed by the id mapZoomWrap() gives each map,
+// views.js), 1 = unzoomed. Lives here rather than in S since it's pure
+// presentation, not app state — a language toggle or filter change
+// shouldn't reset how far in you'd zoomed. Declared at module scope (not
+// inside wire()) so it survives every render()'s DOM rebuild; wire()
+// reapplies it to whatever fresh .mapsvg nodes render() just created,
+// the same way measureBanner() reapplies --banner-h every call.
+const mapZoom={};
+const ZOOM_MIN=1,ZOOM_MAX=3,ZOOM_STEP=0.5;
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -187,7 +196,35 @@ function wire(){
   if(or)or.onclick=()=>document.getElementById("sec-regioner").scrollIntoView({behavior:"smooth"});
   const ob=document.getElementById("b-openbehov");
   if(ob)ob.onclick=()=>document.getElementById("sec-behov").scrollIntoView({behavior:"smooth"});
+  wireMapZoom();
   paintTrendArrows();
+}
+
+// CSS transform:scale() on the vector <svg> itself, not a raster zoom — the
+// map stays crisp at any level. No pan: zoom stays centred and .mapzoom's
+// overflow:hidden (kurvan.css) just crops evenly at the edges, the
+// deliberately simple version of "+/- in the corner of every map" rather
+// than a full drag-to-pan viewer.
+function wireMapZoom(){
+  const applyZoom=(el,z)=>{
+    const svg=el.querySelector(".mapsvg");
+    if(svg)svg.style.transform=z===1?"":`scale(${z})`;
+    el.querySelectorAll(".mapzoombtn").forEach(btn=>{
+      const dir=+btn.dataset.dir;
+      btn.disabled=dir>0?z>=ZOOM_MAX-1e-9:z<=ZOOM_MIN+1e-9;
+    });
+  };
+  // Reapply each map's remembered level to this render()'s fresh nodes —
+  // a brand-new .mapsvg has no memory of a level set before the rebuild.
+  document.querySelectorAll(".mapzoom").forEach(el=>applyZoom(el,mapZoom[el.dataset.mapid]||1));
+  document.querySelectorAll(".mapzoombtn").forEach(btn=>{
+    btn.onclick=()=>{
+      const id=btn.dataset.mapid;
+      const next=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,+((mapZoom[id]||1)+(+btn.dataset.dir)*ZOOM_STEP).toFixed(2)));
+      mapZoom[id]=next;
+      applyZoom(document.querySelector(`.mapzoom[data-mapid="${id}"]`),next);
+    };
+  });
 }
 
 /* Draws the trend glyph chorMap() flagged via data-trend/data-rel onto each
