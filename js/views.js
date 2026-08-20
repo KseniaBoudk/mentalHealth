@@ -24,6 +24,27 @@ const unitLabel=(k)=>{
   return sc===100?"%":sc===1000?(S.lang==="sv"?"per 1 000":"per 1,000"):(S.lang==="sv"?"per 100 000":"per 100,000");
 };
 
+// The banner, footer, and Metod tab's "what's actually real" note all used
+// to hand-count "four of five" and hand-list which indicators — the same
+// sentence typed three times, none of them updated when sjukfranvaro went
+// real. isRealActive(k) is already the single accurate source (viewMetod's
+// table reads it); this walks IND once and hands back everything those
+// three copy slots need, so none of them can drift from the code again.
+const realSummary=()=>{
+  const keys=Object.keys(IND);
+  const real=keys.filter(isRealActive), synth=keys.filter(k=>!isRealActive(k));
+  const conj=S.lang==="sv"?"och":"and";
+  const join=list=>list.length<=1?list.join(""):list.slice(0,-1).join(", ")+` ${conj} `+list[list.length-1];
+  // t.ind[k] is Title Case for the Metod table's own column; lowercase the
+  // leading letter only when folding a name into a running sentence here.
+  const lead=s=>s.charAt(0).toLowerCase()+s.slice(1);
+  return {
+    n:real.length, total:keys.length,
+    realNames:join(real.map(k=>`${lead(t.ind[k])} (${INST_NAME[IND[k].inst]})`)),
+    synthNames:join(synth.map(k=>lead(t.ind[k]))), synthN:synth.length
+  };
+};
+
 function agePts(k,regionCode,year,sex,std){
   const pts=[];
   for(let i=0;i<AGES.length;i++){
@@ -494,6 +515,7 @@ function viewKarta(){
 
 function viewMetod(){
   const P=t.mProse;
+  const rs=realSummary();
   const rows=Object.keys(IND).map(x=>{
     const I=IND[x],[grain,limit]=t.mRows[x];
     const real=isRealActive(x);
@@ -511,7 +533,7 @@ function viewMetod(){
     <h3>${esc(P.c)}</h3><p>${esc(P.d)}</p>
     <h3>${esc(P.e)}</h3><p>${esc(P.f)}</p>
     <div class="note"><div class="l">${esc(P.g)}</div><p>${esc(P.h)}</p></div>
-    <div class="note"><div class="l">${esc(t.realNoteL)}</div><p>${esc(REAL.active?t.realNoteOn:t.realNoteOff)}</p></div>
+    <div class="note"><div class="l">${esc(t.realNoteL)}</div><p>${esc(rs.n>0?t.realNoteOn(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.realNoteOff)}</p></div>
   </div>
   <div class="mwrap"><table class="m">
     <thead><tr><th>${esc(t.mIndicator)}</th><th>${esc(t.mSource)}</th><th>${esc(t.mFrom)}</th><th>${esc(t.mGrain)}</th><th>${esc(t.mLimit)}</th></tr></thead>

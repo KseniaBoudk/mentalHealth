@@ -30,8 +30,12 @@ function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
   document.documentElement.lang=S.lang;
-  document.getElementById("synth").innerHTML = REAL.active
-    ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB)}</span>`
+  // rs (views.js) walks IND/isRealActive() itself, so this banner counts
+  // and names indicators the same way viewMetod()'s table does — it can't
+  // fall behind the data the way a hand-typed "four of five" already did.
+  const rs=realSummary();
+  document.getElementById("synth").innerHTML = rs.n>0
+    ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN))}</span>`
     : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`;
 
   // Every section gets the same landmark heading (its sidebar label) above
@@ -65,7 +69,7 @@ function render(){
         <div class="help"><span><b>${esc(t.helpA)}</b></span><span>${esc(t.helpB)}</span><span><b>${esc(t.helpC)}</b></span></div>
       </div>
     </div></main>
-    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(REAL.active?t.footBPartial:t.footB)}</p></div></footer>`;
+    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(rs.n>0?t.footBPartial(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.footB)}</p></div></footer>`;
   firstRender=false;
   wire();
 }
