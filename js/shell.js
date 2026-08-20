@@ -166,9 +166,8 @@ function wire(){
   // histogram bars and scatter points (charts.js) all use it, so one loop
   // wires all four chart types instead of repeating this per chart type.
   document.querySelectorAll("[data-tip]").forEach(b=>{
-    const tipText=b.dataset.tip;
-    b.onmouseenter=e=>showTip(tipText,e.clientX,e.clientY);
-    b.onmousemove=e=>showTip(tipText,e.clientX,e.clientY);
+    b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
+    b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmouseleave=hideTip;
     // Keyboard focus gets the same card, positioned off the mark itself
     // since focus (unlike a mouse) carries no cursor coordinates. Gated on
