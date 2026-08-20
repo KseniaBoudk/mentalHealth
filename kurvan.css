@@ -213,7 +213,8 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .rpeers b{color:var(--ink-2);font-weight:650}
 
 /* --- map --- */
-.mapsvg{max-width:280px;margin:2px auto 0}
+.map-container{width:100%;max-width:400px;margin:0 auto}
+.mapsvg{width:100%;height:auto;margin:2px auto 0}
 .tile{stroke:var(--surface);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:filter .1s;-webkit-tap-highlight-color:transparent;outline:none}
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}

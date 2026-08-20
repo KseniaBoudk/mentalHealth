@@ -139,7 +139,8 @@ function chorMap(rows,opts){
     // survey estimate) rather than a genuinely zero-width interval, so
     // showing "(225,5–225,5)" would just repeat the same number.
     const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
-    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)}${rangeTxt}${vsNat}${trendTxt}`;
+    const unit=opts.unit?` ${opts.unit}`:"";
+    const title=`${r.name} (${g.abbr}): ${fmt(r.value,1)}${unit}${rangeTxt}${vsNat}${trendTxt}`;
     // Significant moves (not "→") also get a data-trend/data-rel pair; wire()
     // paints these as an actual glyph on the shape after the SVG is in the
     // DOM, using getBBox() rather than stored centroids — the region paths
@@ -159,11 +160,15 @@ function chorMap(rows,opts){
     return `<path class="tile${sel?" on":""}" data-region="${r.code}" data-tip="${esc(title)}"${trendAttr} tabindex="0" role="button"
       aria-label="${esc(title)}" d="${g.d}" fill="${col}" fill-opacity="${op}"${sel?` filter="url(#tileglow)" style="stroke:${col}"`:""}></path>`;
   }).join("");
-  return `<svg class="mapsvg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}">
-    <defs><filter id="tileglow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="0.09" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter></defs>${paths}</svg>`;
+  return `<div class="map-container" style="overflow:hidden; cursor:grab; position:relative; z-index:10;">
+    <svg class="mapsvg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}" style="width:100%; height:auto;">
+      <defs><filter id="tileglow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0.09" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter></defs>
+      <g class="map-zoom-group">${paths}</g>
+    </svg>
+  </div>`;
 }
 
 /* rows: [{value,...}] for the regions being shown (suppressed rows already

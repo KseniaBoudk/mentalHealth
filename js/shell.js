@@ -166,8 +166,9 @@ function wire(){
   // histogram bars and scatter points (charts.js) all use it, so one loop
   // wires all four chart types instead of repeating this per chart type.
   document.querySelectorAll("[data-tip]").forEach(b=>{
-    b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
-    b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
+    const tipText=b.dataset.tip;
+    b.onmouseenter=e=>showTip(tipText,e.clientX,e.clientY);
+    b.onmousemove=e=>showTip(tipText,e.clientX,e.clientY);
     b.onmouseleave=hideTip;
     // Keyboard focus gets the same card, positioned off the mark itself
     // since focus (unlike a mouse) carries no cursor coordinates. Gated on
@@ -179,6 +180,37 @@ function wire(){
     // tabindex, so onfocus/onblur are simply inert for them.
     b.onfocus=()=>{if(b.matches(":focus-visible")){const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);}};
     b.onblur=hideTip;
+  });
+
+  // Zoom/Drag for maps
+  document.querySelectorAll(".map-container").forEach(container=>{
+    const g=container.querySelector(".map-zoom-group");
+    let scale=1,posX=0,posY=0,isDragging=false,lastX,lastY;
+    const updateTransform=()=>{
+      const transform=`translate(${posX},${posY}) scale(${scale})`;
+      g.setAttribute("transform",transform);
+      container.querySelectorAll(".trendarrow").forEach(a=>a.setAttribute("transform",transform));
+    };
+    container.onwheel=e=>{
+      e.preventDefault();
+      const delta=e.deltaY>0?0.9:1.1;
+      scale=Math.min(Math.max(scale*delta,1),5);
+      updateTransform();
+    };
+    container.onmousedown=e=>{isDragging=true;lastX=e.clientX;lastY=e.clientY;};
+    container.onmousemove=e=>{
+      if(!isDragging)return;
+      const dx=(e.clientX-lastX)*0.5,dy=(e.clientY-lastY)*0.5;
+      posX+=dx;posY+=dy;
+      // Boundary constraints
+      const rect=g.getBoundingClientRect();
+      const cont=container.getBoundingClientRect();
+      posX=Math.min(Math.max(posX,cont.width-rect.width*scale),0);
+      posY=Math.min(Math.max(posY,cont.height-rect.height*scale),0);
+      updateTransform();
+      lastX=e.clientX;lastY=e.clientY;
+    };
+    container.onmouseup=container.onmouseleave=()=>isDragging=false;
   });
   // Used to switch tabs; every section already exists on the page now
   // (already showing the current S.region — that was set by the map click
