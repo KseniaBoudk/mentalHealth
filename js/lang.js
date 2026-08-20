@@ -7,7 +7,7 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
@@ -134,7 +134,7 @@ sv:{
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Age",sammanhang:"Context",metod:"Method",regioner:"Regions"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",metod:"Method",regioner:"Regions"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
