@@ -303,6 +303,17 @@ function wireMapZoomPan(){
       dragging=false;
       svg.classList.remove("dragging");
       svg.style.transition="";
+      // A real drag's own terminating click never reaches a tile anyway —
+      // pointer capture (engaged above once movement was confirmed)
+      // retargets it to this <svg>, which has no onclick — so dragMoved
+      // has nothing left to guard by the time we get here. Reset it now
+      // rather than leaving it stuck true: it was previously only ever
+      // cleared by pick()'s own dragMoved check, which this drag's click
+      // never triggers, so an unrelated later click (on this map once
+      // zoomed back to 1x, where onpointerdown no longer resets it, or on
+      // any other map — dragMoved is one flag shared by all of them) was
+      // silently swallowed instead of selecting a region.
+      dragMoved=false;
     };
     svg.onpointerup=endDrag;
     svg.onpointercancel=endDrag;
