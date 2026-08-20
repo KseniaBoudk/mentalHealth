@@ -19,7 +19,9 @@ sv:{
   stamp:"Data t.o.m. 2024 · uppdaterad aug 2026",
   synthT:"Syntetiska data", synthB:"Alla siffror på den här sidan är genererade. Panelen innehåller ingen verklig statistik.",
   synthPartialT:"Mestadels verkliga data",
-  synthPartialB:"Fyra av fem indikatorer bygger nu på verklig, öppen statistik: svår ängslan/oro (FoHM), psykiatrisk specialistvård, slutenvårdad för självskada och avliden i suicid (Socialstyrelsen). Bara uthämtade antidepressiva är fortfarande genererad — se märkningen vid varje diagram.",
+  // Computed from IND/isRealActive() via realSummary() (views.js), not
+  // hand-counted — see synthPartialB's English twin for why.
+  synthPartialB:(n,total,realNames,synthNames,synthN)=>`${n} av ${total} indikatorer bygger nu på verklig, öppen statistik: ${realNames}. Bara ${synthNames} är fortfarande genererad${synthN>1?"e":""} — se märkningen vid varje diagram.`,
   realLbl:"verkliga data", synthLbl:"syntetiska data",
   realCaveat:{
     selfharm:"Verkliga siffror gäller endast 12–17 år, totalt kön, femårsfönster.",
@@ -29,7 +31,9 @@ sv:{
     sjukfranvaro:"Verkliga siffror gäller 2005–2019 (källan slutar där, täcker inte 2020-talet). Ingen åldersuppdelning."
   },
   realNoteL:"Vad som faktiskt är verkligt här",
-  realNoteOn:"Svår ängslan/oro (FoHM), psykiatrisk specialistvård, slutenvårdad för självskada och avliden i suicid (Socialstyrelsen) är nu verklig, öppen statistik, hämtad av prototype/pipeline/. Bara uthämtade antidepressiva saknar hämtskript i det här projektet och förblir genererad — se märkningen vid varje diagram.",
+  // realNames leads the sentence here (unlike synthPartialB/footBPartial,
+  // where it follows a colon) — capitalise just its first letter back up.
+  realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} är nu verklig, öppen statistik, hämtad av prototype/pipeline/. Bara ${synthNames} saknar hämtskript i det här projektet och förblir genererad${synthN>1?"e":""} — se märkningen vid varje diagram.`,
   realNoteOff:"Ingen indikator är verklig data ännu på den här sidan. prototype/pipeline/ kan hämta verkliga siffror för svår ängslan/oro, psykiatrisk specialistvård, självskada och suicid; kör fetcherna och sedan build_kurvan_data.py för att aktivera dem.",
   legend:[["survey","Enkäten","frågar människor direkt"],["reg","Registren","räknar dem som nått vården"],["mort","Dödsorsaksregistret","missar ingen"]],
   kick:"Veckans bild",
@@ -120,7 +124,7 @@ sv:{
   helpA:"Självmordslinjen 90101",helpB:"öppet dygnet runt, alla dagar",helpC:"1177 för vårdrådgivning",
   footA:"Utkast. Byggd på den öppna dataarkitektur som utvecklats för Svenska barnhälsoobservatoriet. Ett fristående projekt, inte knutet till barnhalsovard.se.",
   footB:"Varje siffra på den här sidan är genererad för att visa en design. Ingen är en mätning och ingen ska citeras. Källhänvisningarna beskriver var de riktiga serierna finns.",
-  footBPartial:"Fyra av fem indikatorer — svår ängslan/oro, psykiatrisk specialistvård, slutenvårdad för självskada och avliden i suicid — bygger nu på verklig, öppen statistik och kan citeras med respektive källhänvisning. Bara uthämtade antidepressiva är fortfarande genererad för att visa en design; den siffran är inte en mätning."
+  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} av ${total} indikatorer — ${realNames} — bygger nu på verklig, öppen statistik och kan citeras med respektive källhänvisning. Bara ${synthNames} är fortfarande genererad${synthN>1?"e":""} för att visa en design; den siffran är inte en mätning.`
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
@@ -136,7 +140,11 @@ en:{
   stamp:"Data to 2024 · updated Aug 2026",
   synthT:"Synthetic data", synthB:"Every figure on this page is generated. It contains no real statistics.",
   synthPartialT:"Mostly real data",
-  synthPartialB:"Four of five indicators now draw on real, open statistics: severe anxiety/worry (FoHM), specialist psychiatric care, hospitalised for self-harm, and died by suicide (Socialstyrelsen). Only antidepressants dispensed is still generated — see the label on every chart.",
+  // n/total/realNames/synthNames/synthN come from realSummary() (views.js),
+  // computed from IND + isRealActive() on every render — so this sentence
+  // can't quietly go stale the way a hand-typed "four of five" already did
+  // once (it omitted sjukfranvaro after that indicator went real).
+  synthPartialB:(n,total,realNames,synthNames,synthN)=>`${n} of ${total} indicators now draw on real, open statistics: ${realNames}. Only ${synthNames} ${synthN>1?"are":"is"} still generated — see the label on every chart.`,
   realLbl:"real data", synthLbl:"synthetic data",
   realCaveat:{
     selfharm:"Real figures cover ages 12–17 only, total sex, five-year windows.",
@@ -146,7 +154,9 @@ en:{
     sjukfranvaro:"Real figures cover 2005–2019 only (the source stops there, doesn't extend into the 2020s). No age breakdown."
   },
   realNoteL:"What's actually real here",
-  realNoteOn:"Severe anxiety/worry (FoHM), specialist psychiatric care, hospitalised for self-harm, and died by suicide (Socialstyrelsen) now run on real, open data, fetched by prototype/pipeline/. Only antidepressants dispensed has no fetcher anywhere in this project and stays generated — see the label on every chart.",
+  // realNames leads the sentence here (unlike synthPartialB/footBPartial,
+  // where it follows a colon) — capitalise just its first letter back up.
+  realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} now run on real, open data, fetched by prototype/pipeline/. Only ${synthNames} ${synthN>1?"have":"has"} no fetcher anywhere in this project and stay${synthN>1?"":"s"} generated — see the label on every chart.`,
   realNoteOff:"No indicator on this page is real data yet. prototype/pipeline/ can fetch real figures for severe anxiety/worry, specialist psychiatric care, self-harm and suicide; run the fetchers, then build_kurvan_data.py, to switch them on.",
   legend:[["survey","The survey","asks people directly"],["reg","The registers","count those who reached care"],["mort","The death register","misses nobody"]],
   kick:"This week's exhibit",
@@ -237,5 +247,5 @@ en:{
   helpA:"Självmordslinjen 90101",helpB:"open around the clock, every day",helpC:"1177 for care advice",
   footA:"Draft. Built on the open-data observatory architecture developed for the Swedish Child Health Observatory. A separate project, not affiliated with barnhalsovard.se.",
   footB:"Every figure on this page is generated to show a design. None is a measurement, and none should be quoted. The source references describe where the real series live.",
-  footBPartial:"Four of five indicators — severe anxiety/worry, specialist psychiatric care, hospitalised for self-harm, and died by suicide — now draw on real, open statistics and can be cited with their respective sources. Only antidepressants dispensed is still generated to show a design; that figure is not a measurement."
+  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} of ${total} indicators — ${realNames} — now draw on real, open statistics and can be cited with their respective sources. Only ${synthNames} ${synthN>1?"are":"is"} still generated to show a design; that figure is not a measurement.`
 }};

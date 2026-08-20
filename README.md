@@ -23,15 +23,16 @@ subset of the fuller plan described in the project's design document (see
 | Regioner (Regions) | Built |
 | Metod (Method) | Built |
 | Behov & vård (Need & care) | Built |
-| Sjukskrivning (Sickness absence) | Placeholder — needs a Försäkringskassan data source |
-| Sammanhang (Context) | Placeholder — needs an SCB/Kolada data source |
+| Sjukskrivning (Sickness absence) | Built |
+| Sammanhang (Context) | Built |
 
 ## Data
 
-Four of five indicators run on real, open Swedish government data —
+Five of six indicators run on real, open Swedish government data —
 self-reported severe anxiety/worry (Folkhälsomyndigheten), specialist
 psychiatric care, hospitalisation for self-harm, and death by suicide
-(Socialstyrelsen) — fetched by the scripts in [`pipeline/`](pipeline/) and
+(Socialstyrelsen), and sickness absence with a stress-reaction diagnosis
+(Försäkringskassan) — fetched by the scripts in [`pipeline/`](pipeline/) and
 compiled into `js/real_mh_data.js`. Antidepressant dispensing has no
 queryable API available and stays on a clearly-labelled synthetic generator.
 See [`pipeline/README.md`](pipeline/README.md) for exactly what "real" means
@@ -57,6 +58,8 @@ pip install -r requirements.txt
 python fetch_socialstyrelsen_mh.py
 python fetch_socialstyrelsen_psych.py
 python fetch_folkhalsodata_hlv.py
+python fetch_forsakringskassan.py
+python fetch_kolada_context.py
 python build_kurvan_data.py
 ```
 

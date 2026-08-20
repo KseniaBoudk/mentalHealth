@@ -60,10 +60,10 @@ js/views.js
     Builds each tab's HTML content using the charts and data above: "Läget"
     (overview), "Över tid" (explore/filter, formerly "Utforska"), "Karta"
     (map), "Regioner" (per-region detail), "Metod" (methodology/sources
-    table), "Behov & vård" (need vs. healthcare response) and
-    "Sjukskrivning" (sickness absence, Försäkringskassan F43 data). One
-    placeholder tab remains — "Sammanhang" — reserved for the observatory
-    plan's context/socioeconomic section, not yet built.
+    table), "Behov & vård" (need vs. healthcare response), "Sjukskrivning"
+    (sickness absence, Försäkringskassan F43 data) and "Sammanhang"
+    (population density and low-education share alongside the mental-health
+    measures, Kolada). All eight sections are built now.
 
 js/shell.js
     Ties everything together: renders the page header/nav/footer around
