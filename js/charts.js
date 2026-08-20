@@ -16,7 +16,10 @@ function axisTicks(min,max,n){
 function dotPlot(rows, opts){
   const W=430,rowH=13,top=18,H=top+rows.length*rowH+34,L=118,R=W-16;
   const col=opts.color||"var(--violet)";
-  const lo=Math.min(...rows.map(r=>r.lo)),hi=Math.max(...rows.map(r=>r.hi));
+  // rows.length guard matches lineChart's own (see its comment above) — an
+  // empty rows array would otherwise put Math.min/max(...[]) 's
+  // +/-Infinity straight into every coordinate below.
+  const lo=rows.length?Math.min(...rows.map(r=>r.lo)):0,hi=rows.length?Math.max(...rows.map(r=>r.hi)):1;
   const pad=(hi-lo)*0.08||1,x0=Math.max(0,lo-pad),x1=hi+pad;
   const X=v=>L+(v-x0)/(x1-x0)*(R-L);
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
@@ -33,7 +36,11 @@ function dotPlot(rows, opts){
     // data-tip, not <title> — see chorMap's comment on the same swap: a
     // native SVG <title> is the unstyled OS tooltip this replaces with the
     // shared #tiletip card (wire(), shell.js).
-    const tip=`${r.name}: ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})${opts.unit?` ${opts.unit}`:""}`;
+    // rangeTxt: same lo===hi guard as chorMap's — a real CI always has some
+    // width, so lo===hi means no uncertainty figure exists for this row at
+    // all rather than a genuinely zero-width interval.
+    const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
+    const tip=`${r.name}: ${fmt(r.value,1)}${rangeTxt}${opts.unit?` ${opts.unit}`:""}`;
     s+=`<g data-tip="${esc(tip)}">`;
     s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
     s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
@@ -181,11 +188,17 @@ function histogram(rows,opts){
   const W=opts.w||300,H=opts.h||150,L=24,R=W-14,Tp=16,B=H-24;
   const col=opts.color||"var(--violet)";
   const vals=rows.map(r=>r.value);
-  const lo=Math.min(...vals),hi=Math.max(...vals),span=(hi-lo)||1;
+  // realSpan is what gets displayed (boundary labels, tooltips) — genuinely
+  // 0 when every region reports the same value, which is real information
+  // ("no spread"), not an error. binSpan is only for the /0 guard in the
+  // bin-index math below; forcing it to 1 there doesn't affect the display
+  // math, since lo+i*0/nbins is lo for every i regardless of what the
+  // divisor was.
+  const lo=Math.min(...vals),hi=Math.max(...vals),realSpan=hi-lo,binSpan=realSpan||1;
   const nbins=opts.bins||6;
   const counts=new Array(nbins).fill(0);
   vals.forEach(v=>{
-    let i=Math.floor((v-lo)/span*nbins);
+    let i=Math.floor((v-lo)/binSpan*nbins);
     if(i>=nbins)i=nbins-1; if(i<0)i=0;
     counts[i]++;
   });
@@ -197,7 +210,7 @@ function histogram(rows,opts){
     const x=X(i),y=Y(c),h=B-y;
     // data-tip, not <title> — same swap as chorMap/dotPlot, for the same
     // shared #tiletip card instead of the unstyled OS tooltip.
-    const tip=`${fmt(lo+i*span/nbins,1)}–${fmt(lo+(i+1)*span/nbins,1)}${opts.unit?` ${opts.unit}`:""}: ${c}`;
+    const tip=`${fmt(lo+i*realSpan/nbins,1)}–${fmt(lo+(i+1)*realSpan/nbins,1)}${opts.unit?` ${opts.unit}`:""}: ${c}`;
     s+=`<rect data-tip="${esc(tip)}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });
@@ -205,7 +218,7 @@ function histogram(rows,opts){
   // rather than floating in a corner — ties it to the exact values it
   // describes instead of relying on the reader to connect the two.
   [0,nbins].forEach(i=>{
-    s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*span/nbins,span<10?1:0)}${opts.unit&&i===nbins?" "+esc(opts.unit):""}</text>`;});
+    s+=`<text x="${X(i).toFixed(1)}" y="${(B+13).toFixed(1)}" text-anchor="${i===0?"start":"end"}" font-family="var(--mono)" font-size="8" fill="var(--ink-3)">${fmt(lo+i*realSpan/nbins,realSpan<10?1:0)}${opts.unit&&i===nbins?" "+esc(opts.unit):""}</text>`;});
   // Bar-top numbers are counts of regions, not values — labelled here since
   // that's not otherwise obvious from the chart alone.
   if(opts.countLabel){
@@ -218,6 +231,10 @@ function histogram(rows,opts){
 
 function scatter(pts,opts){
   const W=opts.w||560,H=opts.h||360,L=54,R=W-18,Tp=18,B=H-46;
+  // Regression-fit math (below) is meaningless on zero points and xs.reduce
+  // with no initial value throws outright on an empty array — same
+  // defensive spirit as lineChart's own empty-series guard above.
+  if(!pts.length)return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}"></svg>`;
   const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
   const px=(Math.max(...xs)-Math.min(...xs))*.12,py=(Math.max(...ys)-Math.min(...ys))*.14;
   const x0=Math.min(...xs)-px,x1=Math.max(...xs)+px,y0=Math.min(...ys)-py,y1=Math.max(...ys)+py;
@@ -228,7 +245,7 @@ function scatter(pts,opts){
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   axisTicks(y0,y1,4).forEach(v=>{
     s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
-    s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,0)}</text>`;});
+    s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
   axisTicks(x0,x1,4).forEach(v=>{
     s+=`<text x="${X(v).toFixed(1)}" y="${B+16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
   s+=`<line x1="${X(x0).toFixed(1)}" y1="${Y(fit(x0)).toFixed(1)}" x2="${X(x1).toFixed(1)}" y2="${Y(fit(x1)).toFixed(1)}" stroke="var(--violet)" stroke-width="1.5" stroke-dasharray="6 4" opacity=".7"/>`;
