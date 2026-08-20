@@ -155,7 +155,7 @@ function viewLaget(){
       :"Solid line women, dashed men. The point is the shape of the curves, not their shared level."}</div>
   </div>
 
-  <div class="pieces" style="grid-template-columns:1fr 1fr;margin-top:20px">
+  <div class="pieces mt-fig" style="grid-template-columns:1fr 1fr">
     ${t.pieces.map((p,i)=>`
       <div class="piece">
         <div class="tag" style="color:${INST_COLOR[p.inst]}">${esc(p.tag)}</div>
@@ -261,7 +261,7 @@ function viewOverTid(){
       </div>
     </div>
   </div>
-  <div class="card" style="margin-top:20px">${srcStrip(k,
+  <div class="card mt-fig">${srcStrip(k,
     `<b>${esc(t.dl)}</b> · 21 ${S.lang==="sv"?"regioner":"regions"} × ${validYears(k).length} ${S.lang==="sv"?"år":"years"} × ${S.lang==="sv"?"ålder × kön":"age × sex"} · CSV`)}</div>`;
 }
 
@@ -323,25 +323,25 @@ function viewRegioner(){
   <div class="rstats">
     <div class="rstat i-survey">
       <div class="rk" style="color:var(--teal)"><span class="dot" style="background:var(--teal)"></span>${esc(t.rDistress)}</div>
-      <div class="rv tnum">${fmt(mine.distress.value,1)} %</div>
+      <div class="rv tnum">${fmt(mine.distress.value,1,"%")}</div>
       <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.distress.lo,1)}–${fmt(mine.distress.hi,1)} · 16–84</div>
       <div class="rvs">${cmp("distress")}</div>
     </div>
     <div class="rstat i-reg">
       <div class="rk" style="color:var(--violet)"><span class="dot" style="background:var(--violet)"></span>${esc(t.rTreated)}</div>
-      <div class="rv tnum">${fmt(mine.antidep.value,1)}</div>
+      <div class="rv tnum">${fmt(mine.antidep.value,1,unitLabel("antidep"))}</div>
       <div class="rci tnum">${S.lang==="sv"?"per 1 000":"per 1,000"} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.antidep.lo,1)}–${fmt(mine.antidep.hi,1)}</div>
       <div class="rvs">${cmp("antidep")}</div>
     </div>
     <div class="rstat i-mort">
       <div class="rk" style="color:var(--oxblood)"><span class="dot" style="background:var(--oxblood)"></span>${esc(t.rSuicide)}</div>
-      <div class="rv tnum">${fmt(mine.suicide.value,1)}</div>
+      <div class="rv tnum">${fmt(mine.suicide.value,1,unitLabel("suicide"))}</div>
       <div class="rci tnum">${S.lang==="sv"?"per 100 000":"per 100,000"} · ${esc(t.winLbl(latest))}</div>
       <div class="rvs">${cmp("suicide")}</div>
     </div>
   </div>
 
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
     <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350})}</div>
     ${scatterKey()}
@@ -350,7 +350,7 @@ function viewRegioner(){
       :"The circled region is the selected one. Distance from the line shows how the region compares with the average association between need and response."} ${esc(t.causalNote)}</div>
     <button id="b-openbehov" class="mapopen">${esc(t.behovOpen)}</button>
   </div>
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(prior,latest))}</div></div>
     <div class="card-b">
       <!-- LABEL_X 220, AXIS_X 300, MAX_W 65: the worst-case leftward bar
@@ -445,7 +445,7 @@ function viewKarta(){
   const stat=(key,label,color)=>`
     <div class="rstat i-${key==="distress"?"survey":key==="antidep"?"reg":"mort"}">
       <div class="rk" style="color:${color}"><span class="dot" style="background:${color}"></span>${esc(label)}</div>
-      <div class="rv tnum">${fmt(mine[key].value,1)}</div>
+      <div class="rv tnum">${fmt(mine[key].value,1,unitLabel(key))}</div>
       <div class="rci tnum">${esc(unitLabel(key))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine[key].lo,1)}–${fmt(mine[key].hi,1)}</div>
     </div>`;
 
@@ -607,7 +607,7 @@ function viewSjukskrivning(){
   <div class="hero">
     <p>${esc(t.fkLead)}</p>
   </div>
-  <div class="card" style="margin-top:20px">
+  <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
     <div class="card-b">${lineChart(
       [{pts:ts("K"),color:col,w:2.4,label:t.women,labelAt:0},
@@ -617,7 +617,7 @@ function viewSjukskrivning(){
        h:200,unit:unitLabel(k)})}</div>
     ${srcStrip(k)}
   </div>
-  <div class="grid-ex" style="margin-top:20px">
+  <div class="grid-ex mt-fig">
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
       <div class="card-b">
@@ -633,7 +633,7 @@ function viewSjukskrivning(){
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ind[k])}</div>
-              <div class="rv tnum">${fmt(mine?mine.value:null,1)}</div>
+              <div class="rv tnum">${fmt(mine?mine.value:null,1,unitLabel(k))}</div>
               <div class="rci tnum">${esc(unitLabel(k))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine?mine.lo:null,1)}–${fmt(mine?mine.hi:null,1)}</div>
             </div>
           </div>
@@ -678,7 +678,7 @@ function viewSammanhang(){
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ctxInd[k])}</div>
-              <div class="rv tnum">${fmt(mine?mine.value:null,1)}</div>
+              <div class="rv tnum">${fmt(mine?mine.value:null,1,unit)}</div>
               <div class="rci tnum">${esc(unit)} · 2023</div>
             </div>
           </div>

@@ -4,7 +4,7 @@
    4. CHART PRIMITIVES
    ===================================================================== */
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const fmt=(v,d)=>v==null||!isFinite(v)?"—":v.toFixed(d).replace(".",",");
+const fmt=(v,d,u)=>v==null||!isFinite(v)?"—":(S.lang==="sv"?v.toFixed(d).replace(".",","):v.toFixed(d))+(u?` ${u}`:"");
 
 function axisTicks(min,max,n){
   const raw=(max-min)/n, mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
@@ -33,7 +33,7 @@ function dotPlot(rows, opts){
     // data-tip, not <title> — see chorMap's comment on the same swap: a
     // native SVG <title> is the unstyled OS tooltip this replaces with the
     // shared #tiletip card (wire(), shell.js).
-    const tip=`${r.name}: ${fmt(r.value,1)} (${fmt(r.lo,1)}–${fmt(r.hi,1)})`;
+    const tip=`${r.name}: ${fmt(r.value,1,opts.unit)} (${fmt(r.lo,1,opts.unit)}–${fmt(r.hi,1,opts.unit)})`;
     s+=`<g data-tip="${esc(tip)}">`;
     s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
     s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
