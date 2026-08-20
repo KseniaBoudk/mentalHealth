@@ -8,7 +8,7 @@
    ===================================================================== */
 :root {
   --paper:#F5F1E8; --surface:#FCFAF4; --surface-2:#EFEADF;
-  --ink:#191510; --ink-2:#443C34; --ink-3:#6E645A;
+  --ink:#191510; --ink-2:#332D27; --ink-3:#5C534A;
   --hair:rgba(30,22,14,.13); --hair-soft:rgba(30,22,14,.06);
   --violet:#4C3A8C; --teal:#1A6068; --oxblood:#7B3A46; --amber:#9C6B1E;
   --violet-soft:rgba(76,58,140,.10); --warn:rgba(123,58,70,.08);
@@ -17,13 +17,13 @@
   --synth-text:#fff;
   --sp-1:2px; --sp-2:4px; --sp-3:8px; --sp-4:12px; --sp-5:16px;
   --sp-6:20px; --sp-7:24px; --sp-8:32px; --sp-9:44px; --sp-10:56px;
-  --fs-1:8.5px; --fs-2:9.5px; --fs-3:10px; --fs-4:10.5px; --fs-5:11.5px;
-  --fs-6:12.5px; --fs-7:26px; --fs-8:35px;
+  --fs-1:9.5px; --fs-2:10.5px; --fs-3:11px; --fs-4:11.5px; --fs-5:12.5px;
+  --fs-6:14px; --fs-7:28px; --fs-8:38px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#141119; --surface:#1C1823; --surface-2:#262130;
-    --ink:#EDE8E0; --ink-2:#C0B8AE; --ink-3:#8C8279;
+    --ink:#EDE8E0; --ink-2:#D1C9C0; --ink-3:#A39A90;
     --hair:rgba(237,232,224,.16); --hair-soft:rgba(237,232,224,.07);
     --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97; --amber:#D9A441;
     --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);
@@ -34,7 +34,7 @@
 }
 :root[data-theme="dark"]{
   --paper:#141119; --surface:#1C1823; --surface-2:#262130;
-  --ink:#EDE8E0; --ink-2:#C0B8AE; --ink-3:#8C8279;
+  --ink:#EDE8E0; --ink-2:#D1C9C0; --ink-3:#A39A90;
   --hair:rgba(237,232,224,.16); --hair-soft:rgba(237,232,224,.07);
   --violet:#A992F5; --teal:#5FC6CE; --oxblood:#D98A97; --amber:#D9A441;
   --violet-soft:rgba(169,146,245,.14); --warn:rgba(217,138,151,.12);

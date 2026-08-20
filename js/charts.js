@@ -82,10 +82,10 @@ function lineChart(series,opts){
     const last=[...se.pts].reverse().find(Boolean);
     if(se.dot&&last)s+=`<circle cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
     if(se.label){const p=se.pts.filter(Boolean)[se.labelAt??(se.pts.filter(Boolean).length-1)];
-      if(p)s+=`<text x="${(X(p[0])-4).toFixed(1)}" y="${(Y(p[1])-7).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="9.5" font-weight="700" fill="${se.color}">${esc(se.label)}</text>`;}
+      if(p)s+=`<text x="${(X(p[0])-4).toFixed(1)}" y="${(Y(p[1])-10).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="10.5" font-weight="700" fill="${se.color}">${esc(se.label)}</text>`;}
     if(se.anno){const p=se.anno.at;
       s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${se.color}"/>`;
-      s+=`<text x="${(X(p[0])+se.anno.dx).toFixed(1)}" y="${(Y(p[1])+se.anno.dy).toFixed(1)}" text-anchor="${se.anno.dx<0?"end":"start"}" font-family="var(--sans)" font-size="9.5" font-weight="700" fill="${se.color}">${esc(se.anno.text)}</text>`;}
+      s+=`<text x="${(X(p[0])+se.anno.dx).toFixed(1)}" y="${(Y(p[1])+se.anno.dy).toFixed(1)}" text-anchor="${se.anno.dx<0?"end":"start"}" font-family="var(--sans)" font-size="10.5" font-weight="700" fill="${se.color}">${esc(se.anno.text)}</text>`;}
   });
   (opts.notes||[]).forEach(n=>{
     s+=`<text x="${X(n.x).toFixed(1)}" y="${Y(n.y).toFixed(1)}" text-anchor="${n.anchor||"start"}" font-family="var(--sans)" font-size="8.5" font-style="italic" fill="var(--ink-3)">${esc(n.text)}</text>`;});
@@ -236,10 +236,10 @@ function scatter(pts,opts){
     if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
-    s+=`<text x="${(X(p.x)+(dir>0?-10:10)).toFixed(1)}" y="${(Y(p.y)+(dir>0?16:-12)).toFixed(1)}" text-anchor="${dir>0?"end":"start"}" font-family="var(--sans)" font-size="10" font-weight="700" fill="${col}">${esc(p.name)}</text>`;});
+    s+=`<text x="${(X(p.x)+(dir>0?-12:12)).toFixed(1)}" y="${(Y(p.y)+(dir>0?24:-20)).toFixed(1)}" text-anchor="${dir>0?"end":"start"}" font-family="var(--sans)" font-size="11" font-weight="700" fill="${col}">${esc(p.name)}</text>`;});
   if(sel){
-    const dy=sel.res<0?16:-12;
-    s+=`<text x="${X(sel.x).toFixed(1)}" y="${(Y(sel.y)+dy).toFixed(1)}" text-anchor="middle" font-family="var(--sans)" font-size="10" font-weight="700" fill="var(--ink)">${esc(sel.name)}</text>`;
+    const dy=sel.res<0?24:-20;
+    s+=`<text x="${X(sel.x).toFixed(1)}" y="${(Y(sel.y)+dy).toFixed(1)}" text-anchor="middle" font-family="var(--sans)" font-size="11" font-weight="700" fill="var(--ink)">${esc(sel.name)}</text>`;
   }
   s+=`<text x="${((L+R)/2).toFixed(0)}" y="${H-8}" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--teal)">${esc(t.gapX)}</text>`;
   s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(t.gapY)}</text>`;
