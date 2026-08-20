@@ -276,6 +276,13 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
 .tile.on{stroke:var(--violet);stroke-width:2.2}
+/* lineChart()'s per-point hover targets (charts.js) — invisible at rest so
+   the chart looks unchanged, revealed on hover/focus so the cursor can find
+   them. A dedicated class, not a generic [data-tip] rule, so it can't touch
+   dotPlot/scatter's own data-tip elements (those live on a wrapping <g>,
+   not a <circle>, but keeping this scoped avoids any ambiguity either way). */
+.pt-hit{opacity:0;transition:opacity .12s ease}
+.pt-hit:hover,.pt-hit:focus-visible{opacity:1}
 /* Custom hover card, replacing the browser's native SVG-title tooltip —
    light grey (var(--surface-2), the app's own secondary-surface tone, not
    a generic grey that would clash with the warm palette), same sans font

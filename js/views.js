@@ -176,14 +176,14 @@ function viewLaget(){
         ${lineChart(
           [{pts:shK,color:"var(--violet)",w:2.5,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
            {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men,labelAt:4}],
-          {aria:"Self-harm admissions by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("selfharm")})}
+          {aria:"Self-harm admissions by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("selfharm"),xFmt:i=>AGES[i]})}
       </div>
       <div>
         <h4>${esc(t.suTitle)}</h4><div class="u">${srcLine("suicide")}</div>
         ${lineChart(
           [{pts:suM,color:"var(--oxblood)",w:2.6,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
            {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women,labelAt:4}],
-          {aria:"Suicide by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("suicide")})}
+          {aria:"Suicide by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("suicide"),xFmt:i=>AGES[i]})}
       </div>
     </div>
     <div class="src"><b>${S.lang==="sv"?"Syntetiska data.":"Synthetic data."}</b> ${S.lang==="sv"
@@ -290,7 +290,7 @@ function viewOverTid(){
         <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])}${isNat?"":" "+esc(t.ageSub)}</div></div>
         <div class="card-b">${lineChart(seriesAge,
           {band:isNat?[]:band,aria:isNat?"Age curve for Sweden as a whole":"Age curves for the selected region against the national band",
-           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k)})}
+           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k),xFmt:i=>AGES[i]})}
           ${isRealActive(k)&&t.realCaveat[k]?`<div class="suppress"><b>${esc(t.realLbl)}</b> ${esc(t.realCaveat[k])}</div>`:""}</div>
       </div>
       <div class="card">
