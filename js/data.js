@@ -379,6 +379,19 @@ function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;
   return IND[k].age[ageIdx] != null;
 }
+
+// Three-band regrouping of AGES for the age-comparison tab (viewAlder). 65
+// lands exactly on an AGES boundary (65-74 starts cleanly), but 18 does not
+// -- AGES[1] ("15-24") mixes 15-17-year-olds in with 18-24-year-olds, so
+// "adult" here really means 15-64, not a clean 18-64 (see viewAlder's
+// caveat note, which says so). Only psych currently has real data across
+// every AGES band (REAL_AGE_LIMIT above has no entry for it), so this is
+// the only indicator that can honestly use all three groups today.
+const AGE_GROUPS = [
+  { key: "child",   idxs: [0] },         // 0-14
+  { key: "adult",   idxs: [1,2,3,4,5] }, // 15-64
+  { key: "elderly", idxs: [6,7,8] },     // 65-74, 75-84, 85+
+];
 // Indicators whose real source only ever publishes sex "T" (total). Absent
 // from this map (psych, distress) means the real source publishes M/K/T all three.
 const REAL_SEX_ONLY_TOTAL = { selfharm: true, suicide: true };
@@ -581,6 +594,30 @@ function total(k, regionCode, year, sex, standardised){
     return null;   // real data loaded, but genuinely nothing for this region/year/sex
   }
   return fakeTotal(k, regionCode, year, sex, standardised);
+}
+
+/** Combines cell()'s per-age-band figures across a subset of AGES indices
+    (an AGE_GROUPS entry's idxs) into one reading — used by viewAlder's
+    age-group comparison. Deliberately mirrors the unweighted-mean-of-
+    present-bands shape total() already uses for its own multi-age real
+    fallback (the IND[k].real && REAL.active branch above), just
+    parameterized on which indices to include instead of always all nine.
+    Goes through cell(), not realCell() directly, so it stays real-
+    preferred/synthetic-fallback-aware for any indicator, not just psych. */
+function ageGroupTotal(k, regionCode, year, ageIdxs, sex, standardised){
+  const cells=[];
+  for(const i of ageIdxs){
+    const c=cell(k,regionCode,year,i,sex,standardised);
+    if(c && !c.suppressed) cells.push(c);
+  }
+  if(!cells.length) return null;
+  const value=cells.reduce((s,c)=>s+c.value,0)/cells.length;
+  const count=cells.every(c=>c.count!=null)?cells.reduce((s,c)=>s+c.count,0):null;
+  const se=(count!=null&&count>0)?value/Math.sqrt(count):null;
+  return {value,count,
+    lo:se!=null?Math.max(0,value-1.96*se):value,
+    hi:se!=null?value+1.96*se:value,
+    suppressed:false};
 }
 
 /** Total, always fabricated — the population-weighted mean of fakeCell()

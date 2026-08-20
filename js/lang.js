@@ -7,7 +7,7 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
@@ -58,6 +58,9 @@ sv:{
   fkLead:"Andel pågående sjukfall med diagnosen stressreaktion (F43) — ett mått på samhällelig/funktionell påverkan, inte ett direkt mått på psykisk ohälsa och inte en kostnadsberäkning.",
   konLead:"Svår ängslan/oro, psykiatrisk specialistvård och sjukskrivning publiceras alla uppdelat på kön i sina källor — här jämförs kvinnor och män över tid för respektive mått, rikssiffror.",
   konCaveat:"Slutenvårdad för självskada och avliden i suicid saknas här: de källorna publicerar bara totalt kön, ingen verklig uppdelning på kvinnor/män finns att visa.",
+  alderLead:"Psykiatrisk specialistvård är det enda måttet som publiceras uppdelat på ålder genom hela livet i sin källa — här jämförs barn, vuxna och äldre över tid, rikssiffror.",
+  alderCaveat:"Åldersgrupperna följer registrets egna åldersband, inte en exakt gräns vid 18 år: \"vuxna\" här är 15–64 år och innehåller alltså även 15–17-åringar tillsammans med de vuxna. De andra måtten saknas här: deras källor har ingen åldersuppdelning alls, eller täcker bara tonår (12–19 år) och inget för vuxna eller äldre.",
+  ageChild:"Barn (0–14)",ageAdult:"Vuxna (15–64)",ageElderly:"Äldre (65+)",
   lblInd:"Indikator",lblAge:"Åldersgrupp",lblSex:"Kön",lblYear:"År",lblReg:"Region",
   allAges:"Alla åldrar",sexT:"Totalt",sexM:"Män",sexK:"Kvinnor",
   crude:"Ojusterat",std:"Åldersstandardiserat",
@@ -131,7 +134,7 @@ sv:{
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",sammanhang:"Context",metod:"Method",regioner:"Regions"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Age",sammanhang:"Context",metod:"Method",regioner:"Regions"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
@@ -184,6 +187,9 @@ en:{
   fkLead:"Share of ongoing sickness-benefit cases with a stress-reaction (F43) diagnosis — a societal/functional impact measure, not a direct measure of mental health and not a cost estimate.",
   konLead:"Severe anxiety/worry, specialist psychiatric care and sickness absence are all published broken down by sex in their sources — this compares women and men over time for each measure, national figures.",
   konCaveat:"Hospitalised for self-harm and died by suicide aren't here: those sources only publish total sex, no real breakdown by women/men exists to show.",
+  alderLead:"Specialist psychiatric care is the only measure published broken down by age across the whole lifespan in its source — this compares children, adults and elderly over time, national figures.",
+  alderCaveat:"The age groups follow the register's own age bands, not an exact cut at 18: \"adults\" here means 15–64, which includes 15–17-year-olds alongside adults. The other measures aren't here: their sources either have no age breakdown at all, or cover only the teenage years (ages 12–19) and nothing for adults or elderly.",
+  ageChild:"Children (0–14)",ageAdult:"Adults (15–64)",ageElderly:"Elderly (65+)",
   lblInd:"Indicator",lblAge:"Age band",lblSex:"Sex",lblYear:"Year",lblReg:"Region",
   allAges:"All ages",sexT:"Total",sexM:"Men",sexK:"Women",
   crude:"Crude",std:"Age-standardised",
