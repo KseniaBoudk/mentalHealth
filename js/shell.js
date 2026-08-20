@@ -135,10 +135,27 @@ function wire(){
   // every state change doesn't destroy and recreate it.
   let tip=document.getElementById("tiletip");
   if(!tip){tip=document.createElement("div");tip.id="tiletip";document.body.appendChild(tip);}
-  const showTip=(text,x,y)=>{tip.textContent=text;tip.style.left=(x+14)+"px";tip.style.top=(y+14)+"px";tip.style.display="block";};
+  // Clamped to the viewport: near the right/bottom edge, the default
+  // cursor-relative offset would otherwise push the card partly off
+  // screen. Flip to the other side of the cursor first, then clamp — a
+  // card wider/taller than the remaining space still ends up fully inside
+  // the viewport margin instead of just less-wrong.
+  const showTip=(text,x,y)=>{
+    tip.textContent=text;tip.style.display="block";
+    const m=10,vw=innerWidth,vh=innerHeight,tw=tip.offsetWidth,th=tip.offsetHeight;
+    let left=x+14,top=y+14;
+    if(left+tw>vw-m)left=x-14-tw;
+    if(top+th>vh-m)top=y-14-th;
+    tip.style.left=Math.max(m,Math.min(left,vw-tw-m))+"px";
+    tip.style.top=Math.max(m,Math.min(top,vh-th-m))+"px";
+  };
   const hideTip=()=>{tip.style.display="none";};
   document.querySelectorAll(".tile").forEach(b=>{
-    const pick=()=>{S.region=b.dataset.region;render();};
+    // hideTip() first: render() below rebuilds #app (including this very
+    // tile) without ever firing this tile's mouseleave, so without this
+    // the card from the tile under a still-stationary cursor was left
+    // stuck on screen until the mouse next moved.
+    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
     b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
