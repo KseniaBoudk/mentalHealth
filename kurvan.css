@@ -241,16 +241,19 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
    following-the-pointer behaviour; this class doesn't touch that. */
 .mapsvg.pannable{cursor:grab}
 .mapsvg.dragging{cursor:grabbing}
-.mapzoombtns{position:absolute;top:var(--sp-3,8px);right:var(--sp-3,8px);display:flex;flex-direction:column;gap:var(--sp-1,2px);z-index:10}
+/* No var() fallbacks here — unlike --banner-h (below), --sp-*/--fs-* are
+   always defined on bare :root, so a fallback could never actually fire. */
+.mapzoombtns{position:absolute;top:var(--sp-3);right:var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-1);z-index:10}
 .mapzoombtn{
   width:26px;height:26px;padding:0;border-radius:50%;border:1.5px solid var(--ink);
-  background:var(--surface);color:var(--ink);font-size:var(--fs-6,12.5px);font-weight:700;
+  background:var(--surface);color:var(--ink);font-size:var(--fs-6);font-weight:700;
   line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
   box-shadow:var(--shadow);
 }
 .mapzoombtn:hover:not(:disabled){background:var(--ink);color:var(--paper)}
 .mapzoombtn:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
-.mapzoombtn:disabled{opacity:.35;cursor:not-allowed}
+/* opacity matches .ystep:disabled — same "disabled at a numeric limit" role */
+.mapzoombtn:disabled{opacity:.5;cursor:not-allowed}
 .tile{stroke:var(--surface);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:filter .1s;-webkit-tap-highlight-color:transparent;outline:none}
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}

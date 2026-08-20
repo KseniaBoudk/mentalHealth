@@ -45,29 +45,25 @@ const realSummary=()=>{
   };
 };
 
-function agePts(k,regionCode,year,sex,std){
+// Shared by agePts/fakeAgePts below — identical shaping logic, differing
+// only in which cell-getter feeds it. Trims trailing AND leading nulls (a
+// real series break must stay a break, so only the outer run of "no data
+// published for this age band at all" gets cut, not gaps in the middle).
+function agePtsWith(getCell,k,regionCode,year,sex,std){
   const pts=[];
   for(let i=0;i<AGES.length;i++){
-    const c=cell(k,regionCode,year,i,sex,std);
+    const c=getCell(k,regionCode,year,i,sex,std);
     pts.push(c?[i,c.value]:null);
   }
   while(pts.length&&!pts[pts.length-1])pts.pop();
   let i0=0;while(i0<pts.length&&!pts[i0])i0++;
-  return pts.slice(i0).map((p,j)=>p?[p[0],p[1]]:null);
+  return pts.slice(i0);
 }
+const agePts=(k,regionCode,year,sex,std)=>agePtsWith(cell,k,regionCode,year,sex,std);
 /* Forces the fabricated generator even for indicators REAL can now answer.
    Used only by viewLaget's life-course exhibit — see fakeCell()'s docstring
    in data.js for why that one chart can never honestly go real. */
-function fakeAgePts(k,regionCode,year,sex,std){
-  const pts=[];
-  for(let i=0;i<AGES.length;i++){
-    const c=fakeCell(k,regionCode,year,i,sex,std);
-    pts.push(c?[i,c.value]:null);
-  }
-  while(pts.length&&!pts[pts.length-1])pts.pop();
-  let i0=0;while(i0<pts.length&&!pts[i0])i0++;
-  return pts.slice(i0).map((p,j)=>p?[p[0],p[1]]:null);
-}
+const fakeAgePts=(k,regionCode,year,sex,std)=>agePtsWith(fakeCell,k,regionCode,year,sex,std);
 
 const legendStrip=()=>`<div class="legend">${t.legend.map(([k,b,r])=>
   `<span class="li"><span class="dot" style="background:${INST_COLOR[k==="survey"?"survey":k==="reg"?"reg":"mort"]}"></span><span><b>${esc(b)}</b> ${esc(r)}</span></span>`).join("")}</div>`;
@@ -177,7 +173,7 @@ function viewLaget(){
       <div class="piece">
         <div class="tag" style="color:${INST_COLOR[p.inst]}">${esc(p.tag)}</div>
         <h4>${esc(p.h)}</h4><p>${esc(p.p)}</p>
-        <div class="num tnum" style="color:${INST_COLOR[p.inst]}">${i===0?fmt(oldMen.value,1):"+"+growth+" %"}</div>
+        <div class="num tnum" style="color:${INST_COLOR[p.inst]}">${i===0?fmt(oldMen.value,1):(growth>0?"+":"−")+Math.abs(growth)+" %"}</div>
         <div class="numl">${esc(p.numl)}</div>
       </div>`).join("")}
   </div>`;
@@ -228,7 +224,11 @@ function viewOverTid(){
   if(I.breakAt)marks.push({x:I.breakAt-1,label:t.breakLbl});
   if(I.start<=2019)marks.push({x:2020,label:t.pandemicLbl});
 
-  const spread=shown.length>1&&nat?Math.round((shown[0].value-shown[shown.length-1].value)/nat.value*100):0;
+  // null, not 0, when it isn't computable (fewer than 2 regions shown, or
+  // the national total is itself suppressed/absent for this year) — a real
+  // 0% spread is a genuine (if boring) reading, and shouldn't look the same
+  // as "nothing to compare here".
+  const spread=shown.length>1&&nat?Math.round((shown[0].value-shown[shown.length-1].value)/nat.value*100):null;
   const winNote=I.window?` · ${t.winLbl(yr)}`:"";
 
   return `
@@ -260,7 +260,7 @@ function viewOverTid(){
         ${shown.length?dotPlot(shown,{nat:nat?nat.value:null,color:col,aria:"All regions with confidence intervals",unit:unitLabel(k)}):""}
         ${suppressed.length?`<div class="suppress"><b>${esc(t.suppLbl)}</b> ${suppressed.map(esc).join(", ")}</div>`:""}
       </div>
-      <div class="src">${t.spreadNote(fmt(spread,0),S.std?1:0)}</div>
+      <div class="src">${spread!=null?t.spreadNote(fmt(spread,0),S.std?1:0):""}</div>
     </div>
     <div class="stack">
       <div class="card">
@@ -340,20 +340,20 @@ function viewRegioner(){
   <div class="rstats">
     <div class="rstat i-survey">
       <div class="rk" style="color:var(--teal)"><span class="dot" style="background:var(--teal)"></span>${esc(t.rDistress)}</div>
-      <div class="rv tnum">${fmt(mine.distress.value,1,"%")}</div>
-      <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.distress.lo,1)}–${fmt(mine.distress.hi,1)} · 16–84</div>
+      <div class="rv tnum">${fmt(mine.distress.value,1,unitLabel("distress"))}</div>
+      <div class="rci tnum">${esc(unitLabel("distress"))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.distress.lo,1)}–${fmt(mine.distress.hi,1)} · 16–84</div>
       <div class="rvs">${cmp("distress")}</div>
     </div>
     <div class="rstat i-reg">
       <div class="rk" style="color:var(--violet)"><span class="dot" style="background:var(--violet)"></span>${esc(t.rTreated)}</div>
       <div class="rv tnum">${fmt(mine.antidep.value,1,unitLabel("antidep"))}</div>
-      <div class="rci tnum">${S.lang==="sv"?"per 1 000":"per 1,000"} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.antidep.lo,1)}–${fmt(mine.antidep.hi,1)}</div>
+      <div class="rci tnum">${esc(unitLabel("antidep"))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.antidep.lo,1)}–${fmt(mine.antidep.hi,1)}</div>
       <div class="rvs">${cmp("antidep")}</div>
     </div>
     <div class="rstat i-mort">
       <div class="rk" style="color:var(--oxblood)"><span class="dot" style="background:var(--oxblood)"></span>${esc(t.rSuicide)}</div>
       <div class="rv tnum">${fmt(mine.suicide.value,1,unitLabel("suicide"))}</div>
-      <div class="rci tnum">${S.lang==="sv"?"per 100 000":"per 100,000"} · ${esc(t.winLbl(latest))}</div>
+      <div class="rci tnum">${esc(unitLabel("suicide"))} · ${esc(t.winLbl(latest))}</div>
       <div class="rvs">${cmp("suicide")}</div>
     </div>
   </div>
@@ -493,14 +493,14 @@ function viewKarta(){
         <div class="mapcmp">
           <div>
             <div class="mapcmphead">${esc(t.ind[k])} (${esc(unitLabel(k))})</div>
-            ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for "+t.ind[k]}),"karta-cmp-a")}
+            ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for "+t.ind[k]+", click a region to see its figures"}),"karta-cmp-a")}
             ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
           </div>
           <div>
             <div class="mapcmphead"><select id="c-cmpind">
               ${Object.keys(IND).filter(x=>x!==k).map(x=>`<option value="${x}"${x===cmpK?" selected":""}>${esc(t.ind[x])}</option>`).join("")}
             </select> (${esc(unitLabel(cmpK))})</div>
-            ${mapZoomWrap(chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,unit:unitLabel(cmpK),aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]}),"karta-cmp-b")}
+            ${mapZoomWrap(chorMap(cmpRows,{color:cmpCol,nat:cmpNat?cmpNat.value:null,unit:unitLabel(cmpK),aria:"Map of Sweden's 21 regions for "+t.ind[cmpK]+", click a region to see its figures"}),"karta-cmp-b")}
             ${mapLegend(cmpRows,cmpCol,unitLabel(cmpK),cmpNat?cmpNat.value:null)}
           </div>
         </div>`:`
@@ -683,7 +683,7 @@ function viewSammanhang(){
     <div class="card">
       <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · 2023</div></div>
       <div class="card-b">
-        ${mapZoomWrap(chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figure"}),"sammanhang")}
+        ${mapZoomWrap(chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figures"}),"sammanhang")}
         ${mapLegend(rows,col,unit,null)}
       </div>
       <div class="src">${esc(t.ctxCaveat)} ${esc(t.causalNote)}</div>

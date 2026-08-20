@@ -157,7 +157,7 @@ en:{
   realNoteL:"What's actually real here",
   // realNames leads the sentence here (unlike synthPartialB/footBPartial,
   // where it follows a colon) — capitalise just its first letter back up.
-  realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} now run on real, open data, fetched by prototype/pipeline/. Only ${synthNames} ${synthN>1?"have":"has"} no fetcher anywhere in this project and stay${synthN>1?"":"s"} generated — see the label on every chart.`,
+  realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} now ${n>1?"run":"runs"} on real, open data, fetched by prototype/pipeline/. Only ${synthNames} ${synthN>1?"have":"has"} no fetcher anywhere in this project and stay${synthN>1?"":"s"} generated — see the label on every chart.`,
   realNoteOff:"No indicator on this page is real data yet. prototype/pipeline/ can fetch real figures for severe anxiety/worry, specialist psychiatric care, self-harm and suicide; run the fetchers, then build_kurvan_data.py, to switch them on.",
   legend:[["survey","The survey","asks people directly"],["reg","The registers","count those who reached care"],["mort","The death register","misses nobody"]],
   kick:"This week's exhibit",

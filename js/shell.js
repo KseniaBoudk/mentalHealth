@@ -216,13 +216,14 @@ function wire(){
 // number of screen pixels, independent of the zoom level.
 function wireMapZoomPan(){
   const get=id=>mapView[id]||(mapView[id]={z:1,x:0,y:0});
-  // .mapsvg's live rect already reflects its own current scale (or 1, on a
-  // brand-new node with no transform yet) — dividing that back out gives
-  // the natural, unzoomed size without needing a separately cached value
-  // that could go stale on window resize.
-  const naturalSize=svg=>{
-    const m=/scale\(([\d.]+)\)/.exec(svg.style.transform);
-    const z=m?+m[1]:1, r=svg.getBoundingClientRect();
+  // .mapsvg's live rect already reflects its own current scale — dividing
+  // that back out gives the natural, unzoomed size without needing a
+  // separately cached value that could go stale on window resize. z comes
+  // from the caller (mapView, not re-derived from the transform string
+  // that was itself only just written from that same z — regex-parsing it
+  // back out is a needless, fragile round-trip through CSS text).
+  const naturalSize=(svg,z)=>{
+    const r=svg.getBoundingClientRect();
     return{w:r.width/z,h:r.height/z};
   };
   // Clamped to the map's own geometry, not the surrounding card: at zoom z
@@ -254,7 +255,7 @@ function wireMapZoomPan(){
       const el=document.querySelector(`.mapzoom[data-mapid="${id}"]`);
       const svg=el&&el.querySelector(".mapsvg");
       if(!svg)return;
-      const v=get(id),{w,h}=naturalSize(svg);
+      const v=get(id),{w,h}=naturalSize(svg,v.z);
       const z=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,+(v.z+(+btn.dataset.dir)*ZOOM_STEP).toFixed(2)));
       mapView[id]={z,...clampPan(w,h,z,v.x,v.y)};
       applyView(el,mapView[id]);
@@ -272,7 +273,7 @@ function wireMapZoomPan(){
       if(v.z<=1)return;
       dragging=true;dragMoved=false;pointerId=e.pointerId;
       startX=e.clientX;startY=e.clientY;startPan={x:v.x,y:v.y};
-      ({w:natW,h:natH}=naturalSize(svg));
+      ({w:natW,h:natH}=naturalSize(svg,v.z));
       // No setPointerCapture()/dragging class/transition:none here yet —
       // deferred to the first real move below. Capturing eagerly, even for
       // a plain click that never moves, retargets the browser's synthesized
