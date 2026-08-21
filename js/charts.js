@@ -75,9 +75,22 @@ function lineChart(series,opts){
     const up=opts.band.map(p=>`${X(p[0]).toFixed(1)},${Y(p[2]).toFixed(1)}`).join(" L");
     const dn=opts.band.slice().reverse().map(p=>`${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(" L");
     s+=`<path d="M${up} L${dn} Z" fill="var(--band)"/>`;}
-  (opts.marks||[]).forEach(m=>{
-    s+=`<line x1="${X(m.x).toFixed(1)}" y1="${Tp-4}" x2="${X(m.x).toFixed(1)}" y2="${B}" stroke="var(--oxblood)" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>`;
-    s+=`<text x="${(X(m.x)+3).toFixed(1)}" y="${Tp+2}" font-family="var(--sans)" font-size="7.5" fill="var(--oxblood)">${esc(m.label)}</text>`;});
+  // Labels sit near the BOTTOM of the plot, not the top: series labels
+  // (se.label below) anchor at the last point, which in an upward-trending
+  // series — the common case here — is near the top-right, exactly where a
+  // mark near the end of the range would otherwise print underneath it.
+  // y also alternates per mark (mi%2) so two events close together on the
+  // x-axis (e.g. 2018 and 2020, both often inside the same chart's range)
+  // don't print their labels on top of EACH OTHER either. m.color/m.anchor
+  // (data.js's EVENTS, passed through by eventMarks() in views.js) let two
+  // such close events diverge further still — a different colour, and a
+  // label anchored to the opposite side of its line — rather than relying
+  // on the y-stagger alone to tell them apart.
+  (opts.marks||[]).forEach((m,mi)=>{
+    const col=m.color||"var(--oxblood)", end=m.anchor==="end";
+    const lx=X(m.x);
+    s+=`<line x1="${lx.toFixed(1)}" y1="${Tp-4}" x2="${lx.toFixed(1)}" y2="${B}" stroke="${col}" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>`;
+    s+=`<text x="${(end?lx-3:lx+3).toFixed(1)}" y="${B-5-(mi%2)*10}" text-anchor="${end?"end":"start"}" font-family="var(--sans)" font-size="7.5" fill="${col}">${esc(m.label)}</text>`;});
   // opts.xFmt formats a point's x-value for its hover tip below — default
   // is the literal x (a calendar year, the common case). Callers whose x is
   // an AGES band index rather than a year (viewLaget's/viewOverTid's age
@@ -276,8 +289,18 @@ function scatter(pts,opts){
   const sel = pts.find(p=>p.code===S.region && p!==below && p!==above);
   pts.forEach(p=>{
     const hl=p===below||p===above||p===sel;
-    // data-tip, not <title> — same swap as chorMap/dotPlot/histogram.
-    s+=`<circle data-tip="${esc(p.name)}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
+    // data-tip, not <title> — same swap as chorMap/dotPlot/histogram. tabindex
+    // (new: was missing here, same as dotPlot/histogram's marks) makes it a
+    // real tab stop — wire()'s generic [data-tip] loop (shell.js) already
+    // handles focus/blur for any tabindex'd data-tip mark, this was just
+    // never opted into the tab order before. .spt's focus ring is in
+    // kurvan.css, next to .tile's.
+    // Tip shows both axes' actual values, not just the point's name — same
+    // "label: value unit" shape lineChart()'s own pt-hit tooltips use.
+    // opts.xName/yName/xUnit/yUnit are optional so a caller that hasn't been
+    // updated still gets the old name-only tip instead of "undefined".
+    const tip=opts.xName?`${p.name}, ${opts.xName}: ${fmt(p.x,1,opts.xUnit)} · ${opts.yName}: ${fmt(p.y,1,opts.yUnit)}`:p.name;
+    s+=`<circle class="spt" tabindex="0" data-tip="${esc(tip)}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
     if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
@@ -286,7 +309,11 @@ function scatter(pts,opts){
     const dy=sel.res<0?24:-20;
     s+=`<text x="${X(sel.x).toFixed(1)}" y="${(Y(sel.y)+dy).toFixed(1)}" text-anchor="middle" font-family="var(--sans)" font-size="11" font-weight="700" fill="var(--ink)">${esc(sel.name)}</text>`;
   }
-  s+=`<text x="${((L+R)/2).toFixed(0)}" y="${H-8}" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--teal)">${esc(t.gapX)}</text>`;
-  s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(t.gapY)}</text>`;
+  // xLabel/yLabel: default to t.gapX/t.gapY (the original need-vs-response
+  // pairing this function was written for) so viewBehov/viewRegioner's
+  // existing calls don't need to change; a caller plotting a different pair
+  // of axes (e.g. the disagreement scatter, viewBehov) passes its own.
+  s+=`<text x="${((L+R)/2).toFixed(0)}" y="${H-8}" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--teal)">${esc(opts.xLabel||t.gapX)}</text>`;
+  s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(opts.yLabel||t.gapY)}</text>`;
   return s+"</svg>";
 }

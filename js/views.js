@@ -117,9 +117,15 @@ const mapZoomWrap=(svgHtml,id)=>`<div class="mapzoom" data-mapid="${esc(id)}">
 // missing point dropped, for a suppressed year (real windows sometimes
 // suppress small counts) — lineChart() already treats null as a genuine
 // series break, never silently joins across one.
-const sexTimeSeries=(k,std)=>{
+// ageIdx (optional): omitted (the original/every existing call's shape)
+// means the all-ages total() series this was always built for; passed,
+// it uses cell() at that one AGES band instead — e.g. the youth panel
+// (viewKon) wanting psych at "15-24" specifically rather than all ages.
+const sexTimeSeries=(k,std,ageIdx)=>{
   const years=validYears(k);
-  const ts=sex=>years.map(y=>{const c=total(k,"SE",y,sex,std); return c&&!c.suppressed?[y,c.value]:null;});
+  const ts=sex=>years.map(y=>{
+    const c=ageIdx==null?total(k,"SE",y,sex,std):cell(k,"SE",y,ageIdx,sex,std);
+    return c&&!c.suppressed?[y,c.value]:null;});
   return{years,ts};
 };
 
@@ -133,6 +139,19 @@ const ageGroupTimeSeries=(k,std)=>{
   const ts=g=>years.map(y=>{const c=ageGroupTotal(k,"SE",y,g.idxs,"T",std); return c?[y,c.value]:null;});
   return{years,ts};
 };
+
+// Vertical event markers (EVENTS, data.js) for one indicator's calendar-year
+// time series — only events that actually apply to this indicator (no `ind`
+// on the event, or `ind===k`) AND fall inside `years`' own range, so a chart
+// never draws a marker past its own visible x-axis (e.g. sjukfranvaro's real
+// data stops in 2019, before the pandemic marker, and correctly shows none).
+// Feeds lineChart()'s existing opts.marks (charts.js) directly.
+function eventMarks(k,years){
+  if(!years.length)return[];
+  const lo=years[0],hi=years[years.length-1];
+  return EVENTS.filter(e=>(!e.ind||e.ind===k)&&e.year>=lo&&e.year<=hi)
+    .map(e=>({x:e.year,label:t[e.labelKey],color:e.color,anchor:e.anchor}));
+}
 
 // Key for the need/response scatter's three ring colours — reused by both
 // viewBehov and viewRegioner, since both draw the same scatter() and both
@@ -243,9 +262,8 @@ function viewOverTid(){
     if(!c||c.suppressed){ts.push(null);return;}
     if(I.breakAt&&y>=I.breakAt&&ts.length&&ts[ts.length-1]&&ts[ts.length-1][0]<I.breakAt)ts.push(null);
     ts.push([y,c.value]);});
-  const marks=[];
+  const marks=eventMarks(k,years);
   if(I.breakAt)marks.push({x:I.breakAt-1,label:t.breakLbl});
-  if(I.start<=2019)marks.push({x:2020,label:t.pandemicLbl});
 
   // null, not 0, when it isn't computable (fewer than 2 regions shown, or
   // the national total is itself suppressed/absent for this year) — a real
@@ -383,7 +401,8 @@ function viewRegioner(){
 
   <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
-    <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350})}</div>
+    <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350,
+      xName:t.ind.distress,yName:t.ind.antidep,xUnit:unitLabel("distress"),yUnit:unitLabel("antidep")})}</div>
     ${scatterKey()}
     <div class="src"><b>${S.lang==="sv"?"Syntetiska data":"Synthetic data"}</b> · ${S.lang==="sv"
       ?"Ringad region är den valda. Avståndet till linjen visar hur regionen förhåller sig till det genomsnittliga sambandet mellan behov och respons."
@@ -609,6 +628,27 @@ function viewBehov(){
     return gap.slice().sort((p,q)=>(p.y-(a+b*p.x))-(q.y-(a+b*q.x)))[0];})();
   const gp=t.gapPiece;
 
+  // Disagreement scatter: reported distress against care contact, per
+  // county — a second, independent pairing from the need/response one
+  // above. Real whenever both sources are loaded, but never a real value on
+  // one axis against a fabricated one on the other (see fakeTotal()'s
+  // docstring): when only one of the two is real so far, BOTH axes fall
+  // back to the fabricated generator together, consistently, and the chip
+  // below says so — this must never silently blend the two.
+  const distressYears=validYears("distress");
+  const bothReal=isRealActive("distress")&&isRealActive("psych");
+  const dgYear=bothReal?distressYears[distressYears.length-1]:2024;
+  const getVal=bothReal?total:fakeTotal;
+  const disagree=REGIONS.map(r=>{
+    const dx=getVal("distress",r[0],dgYear,"T",false), dy=getVal("psych",r[0],dgYear,"T",false);
+    return (dx&&dy)?{x:dx.value,y:dy.value,code:r[0],name:r[1]}:null;
+  }).filter(Boolean);
+  // srcLine(k) already appends "· INST_NAME", not just the register name —
+  // reused as-is (same shape srcStrip uses) rather than hand-building a
+  // parenthetical, which would double up distress's own "(FoHM)" (see
+  // IND.distress.reg) into "(FoHM) (FoHM)".
+  const srcBoth=`${srcLine("distress")} · ${srcLine("psych")}`;
+
   return `
   <div class="hero">
     <p>${esc(t.behovLead)}</p>
@@ -616,7 +656,8 @@ function viewBehov(){
   <div class="figrow" style="margin-top:20px">
     <div class="card">
       <div class="card-h"><h3>${esc(t.gapTitle)}</h3><div class="u">${esc(t.gapUnit)}</div></div>
-      <div class="card-b">${scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380})}</div>
+      <div class="card-b">${scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380,
+        xName:t.ind.distress,yName:t.ind.antidep,xUnit:unitLabel("distress"),yUnit:unitLabel("antidep")})}</div>
       ${scatterKey()}
       ${srcStrip("antidep",t.causalNote)}
     </div>
@@ -628,6 +669,24 @@ function viewBehov(){
         <div class="numl">${esc(gp.numl)}</div>
       </div>
     </div>
+  </div>
+  <div class="card mt-fig">
+    <div class="card-h">
+      <h3>${esc(t.disagreeTitle)}</h3>
+      <div class="u">${esc(t.disagreeUnit(dgYear))}</div>
+      <span class="modechip ${bothReal?"real":"synth"}">${esc(bothReal?t.realLbl:t.synthLbl)}</span>
+    </div>
+    <!-- w:900,h:420, wider than the 620x380 the other scatter()s use: this
+         card is full-width (no .pieces sidebar next to it, unlike the
+         need/response scatter above), so on a wide screen the SVG's CSS
+         width:100% stretches a 620-wide design a lot further than its
+         column-width siblings do, magnifying every fixed font-size/point
+         radius along with it. A wider intrinsic viewBox keeps those fixed
+         sizes closer to their rendered size instead. -->
+    <div class="card-b">${scatter(disagree,{aria:"Reported distress against care contact across 21 regions",w:900,h:420,yLabel:t.disagreeY,
+      xName:t.ind.distress,yName:t.ind.psych,xUnit:unitLabel("distress"),yUnit:unitLabel("psych")})}</div>
+    ${scatterKey()}
+    <div class="src">${esc(t.disagreeCaveat)} ${esc(t.causalNote)}<br>${srcBoth}</div>
   </div>`;
 }
 function viewSjukskrivning(){
@@ -653,7 +712,7 @@ function viewSjukskrivning(){
        {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
       {aria:"Sickness absence trend, women and men",
        xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
-       h:200,unit:unitLabel(k)})}</div>
+       marks:eventMarks(k,years),h:200,unit:unitLabel(k)})}</div>
     ${srcStrip(k)}
   </div>
   <div class="grid-ex mt-fig">
@@ -700,7 +759,7 @@ function viewKon(){
            {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
           {aria:t.ind[k]+", women and men over time",
            xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
-           h:180,unit:unitLabel(k)})}
+           marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
         <div class="rstats" style="grid-template-columns:1fr 1fr;margin-top:14px">
           <div class="rstat" style="border-top-color:${col}">
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.women)}</div>
@@ -718,12 +777,53 @@ function viewKon(){
     </div>`;
   }).join("");
 
+  // Youth panel: care contact (psych) at age 15-24, by sex, as small
+  // multiples — one column per sex (.inner2, the same two-column pattern
+  // viewLaget uses for its twin self-harm/suicide card), not the
+  // overlaid-women/men-in-one-chart convention the three cards above use.
+  // distress has no real age breakdown at all (REAL_HLV, data.js) so it
+  // can never get the same 15-24 treatment — shown per sex as its
+  // existing all-ages figure only, explicitly captioned, never plotted as
+  // if it matched the psych line above it.
+  const AGE_1524=1; // AGES[1] === "15-24"
+  const pcol=INST_COLOR.reg, dcol=INST_COLOR.survey;
+  const{years:pyears,ts:pts}=sexTimeSeries("psych",false,AGE_1524);
+  const platest=pyears[pyears.length-1];
+  const{years:dyears}=sexTimeSeries("distress",false);
+  const dlatest=dyears[dyears.length-1];
+  const youthCol=(sex,label)=>{
+    const pNow=cell("psych","SE",platest,AGE_1524,sex,false);
+    const dNow=total("distress","SE",dlatest,sex,false);
+    return `
+      <div>
+        <h4>${esc(label)}</h4><div class="u">${esc(t.ind.psych)} · 15–24</div>
+        ${lineChart([{pts:pts(sex),color:pcol,w:2.2,dot:true}],
+          {aria:t.ind.psych+" ages 15-24, "+label,
+           xlabels:[[pyears[0],String(pyears[0])],[pyears[pyears.length-1],String(pyears[pyears.length-1])]],
+           marks:eventMarks("psych",pyears),h:150,unit:unitLabel("psych")})}
+        <div class="rv tnum" style="font-size:19px;margin-top:6px;color:${pcol}">${fmt(pNow?pNow.value:null,1,unitLabel("psych"))}</div>
+        <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(pNow?pNow.lo:null,1)}–${fmt(pNow?pNow.hi:null,1)}</div>
+        <div class="suppress">
+          <b style="color:${dcol}">${esc(t.ind.distress)} (${esc(t.allAges)})</b>
+          ${fmt(dNow?dNow.value:null,1,unitLabel("distress"))} · <b>${esc(isRealActive("distress")?t.realLbl:t.synthLbl)}</b> — ${esc(t.youthDistressCtx)}
+        </div>
+      </div>`;
+  };
+
   return `
   <div class="hero">
     <p>${esc(t.konLead)}</p>
   </div>
   ${cards}
-  <div class="note mt-fig"><p>${esc(t.konCaveat)}</p></div>`;
+  <div class="note mt-fig"><p>${esc(t.konCaveat)}</p></div>
+  <div class="card mt-fig">
+    <div class="card-h"><h3>${esc(t.youthTitle)}</h3><div class="u">${esc(t.youthUnit)}</div></div>
+    <div class="inner2">
+      ${youthCol("K",t.sexK)}
+      ${youthCol("M",t.sexM)}
+    </div>
+    ${srcStrip("psych")}
+  </div>`;
 }
 
 // Age-group comparison — psych only. Unlike viewKon (three indicators, two
@@ -750,7 +850,7 @@ function viewAlder(){
         AGE_GROUPS.map((g,i)=>({pts:ts(g),color:col,dash:dashes[i],w:i===0?2.4:1.9,label:groupLabel[g.key]})),
         {aria:t.ind[k]+", children, adults and elderly over time",
          xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
-         h:180,unit:unitLabel(k)})}
+         marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
       <div class="rstats" style="grid-template-columns:1fr 1fr 1fr;margin-top:14px">
         ${totals.map(({g,c})=>`
         <div class="rstat" style="border-top-color:${col}">

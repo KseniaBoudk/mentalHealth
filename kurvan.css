@@ -130,8 +130,8 @@ html{scroll-behavior:smooth}
    so a guessed fixed offset would drift wrong. Without this, the sidebar's
    sticky top math ignores the banner and it ends up drawn over the top
    links (higher z-index), hiding them once scrolled. */
-.sidebar{position:sticky;top:calc(var(--banner-h,60px) + 20px);flex:none;width:172px;display:flex;flex-direction:column;gap:1px;padding-right:22px;border-right:3px solid var(--ink)}
-.sidebar a{font-size:12px;color:var(--ink-3);text-decoration:none;padding:7px 0}
+.sidebar{position:sticky;top:calc(var(--banner-h,60px) + 20px);flex:none;width:216px;display:flex;flex-direction:column;gap:1px;padding-right:22px;border-right:3px solid var(--ink)}
+.sidebar a{font-size:14px;color:var(--ink-3);text-decoration:none;padding:9px 0}
 .sidebar a:hover{color:var(--ink-2)}
 .sidebar a.active{color:var(--ink);font-weight:700}
 .sidebar a.active::before{content:"— "}
@@ -193,6 +193,15 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .f select{background:none;border:0;font:inherit;font-size:12.5px;font-weight:650;color:var(--ink);cursor:pointer;padding:0;max-width:240px}
 .f select:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 .f select:disabled{color:var(--ink-3);cursor:not-allowed}
+/* The closed box above inherits the theme fine (color:var(--ink) does the
+   work), but the OPEN option list is native OS/browser chrome that ignores
+   most select styling — only background-color/color set directly on
+   <option> gets through (Chromium honours it; other engines partially).
+   Without this the popup used system colours regardless of theme, landing
+   as a near-white list with low-contrast text in dark mode. Unscoped (not
+   `.f select option`) so it also covers .mapcmphead's compare-mode select. */
+select option{background:var(--surface);color:var(--ink)}
+select option:disabled{color:var(--ink-3)}
 .seg{margin-left:auto;display:flex;border:1.5px solid var(--violet);border-radius:999px;overflow:hidden}
 .seg button{background:none;border:0;font-size:11px;font-weight:650;color:var(--violet);padding:7px 12px;cursor:pointer}
 .seg button.on{background:var(--violet);color:var(--surface)}
@@ -283,6 +292,10 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
    not a <circle>, but keeping this scoped avoids any ambiguity either way). */
 .pt-hit{opacity:0;transition:opacity .12s ease}
 .pt-hit:hover,.pt-hit:focus-visible{opacity:1}
+/* scatter()'s points (charts.js) — same outline treatment as .tile, just
+   scoped to its own class since these circles carry no other class. */
+.spt{outline:none}
+.spt:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 /* Custom hover card, replacing the browser's native SVG-title tooltip —
    light grey (var(--surface-2), the app's own secondary-surface tone, not
    a generic grey that would clash with the warm palette), same sans font

@@ -1,0 +1,56 @@
+<meta charset="utf-8">
+<title>Kurvan — overview sketch: accordion</title>
+
+<link rel="stylesheet" href="../kurvan.css">
+<link rel="stylesheet" href="overview.css">
+
+<div id="app"></div>
+
+<script src="../js/real_mh_data.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/lang.js"></script>
+<script src="../js/state.js"></script>
+<script src="../js/charts.js"></script>
+<script src="../js/views.js"></script>
+<script src="shared.js"></script>
+<script>
+"use strict";
+// Structure C: five stacked rows, native <details>/<summary> (free keyboard
+// support and no exclusivity — any number can be open at once, so two or
+// three can be compared side by side by expanding them together). Reads
+// top-to-bottom like the app's existing scroll pattern, but collapsed by
+// default past the first row instead of always showing all five charts at
+// full size.
+function render(){
+  const data = buildOverviewData();
+  const app = document.getElementById("app");
+  app.className = "wrap";
+  app.style.padding = "32px 22px 60px";
+
+  const rows = data.map((d, i) => `
+    <details class="ov-acc" style="--acc-col:${d.color}"${i === 0 ? " open" : ""}>
+      <summary>
+        <span class="dot" style="background:${d.color};width:9px;height:9px;border-radius:50%;flex:none"></span>
+        <h4>${esc(d.name)}</h4>
+        <span class="modechip ${d.real ? "real" : "synth"}">${esc(d.real ? t.realLbl : t.synthLbl)}</span>
+        <span class="ov-val tnum" style="color:${d.color}">${fmt(d.latest ? d.latest.value : null, 1)}
+          ${d.dir ? `<span class="dir-glyph ${d.dir}">${DIR_GLYPH[d.dir]}</span>` : ""}</span>
+      </summary>
+      <div class="ov-acc-body">
+        ${lineChart([{ pts: d.pts, color: d.color, w: 2.3, dot: true }],
+          { aria: d.name + " over time, national", h: 140, unit: d.unit })}
+        <div class="ov-unit" style="margin-top:6px">${esc(d.unit)} · ${d.latestYear ?? "—"}</div>
+        <div class="ov-note-sm">${esc(t.notNum)} ${esc(d.note)}</div>
+        <div class="src" style="margin-top:10px;border-top:1px solid var(--hair-soft);padding-top:8px">${d.source}</div>
+      </div>
+    </details>`).join("");
+
+  app.innerHTML = `
+    <div class="hero">
+      <div class="kick">${esc(ovT.title)} — collapsible rows</div>
+      <p style="max-width:62ch;color:var(--ink-2);font-size:14.5px;margin-top:10px;line-height:1.55">${esc(ovT.lede)}</p>
+    </div>
+    <div class="mt-fig">${rows}</div>`;
+}
+render();
+</script>

@@ -49,6 +49,13 @@ sv:{
   gapY:"uthämtade antidepressiva, per 1 000 (register)",
   gapLine:"genomsnittligt samband mellan behov och respons",
   causalNote:"Ett samband är inte en orsak. Regioner skiljer sig åt av många skäl som den här grafen inte visar.",
+  disagreeTitle:"Rapporterad ångest mot vårdkontakt",
+  disagreeUnit:y=>`21 regioner · alla åldrar · ${y}`,
+  // gapX (above) already is the distress/survey axis — reused as-is for this
+  // scatter's x-axis, since it's the exact same measure. Only the y-axis
+  // (care contact, not antidepressants) needs its own label.
+  disagreeY:"i psykiatrisk specialistvård, per 100 000 (register)",
+  disagreeCaveat:"Två oberoende mått på samma breda problem: självrapporterad ångest (enkät) och registrerad kontakt med specialistpsykiatrin (register). Ett samband säger inte varför de skiljer sig åt i en viss region — det kan bero på att vården inte nås, inte söks, eller att datan är ofullständig.",
   gapPiece:{tag:"Behov och respons",inst:"reg",h:"Störst avstånd mellan behov och respons",p:"Regionen med störst skillnad mellan rapporterat behov och registrerad vårdrespons, 2024.",numl:"störst avstånd 2024"},
   pieces:[
     {tag:"Livsloppet",inst:"mort",h:"De äldsta männen",p:"Suicidtalet bland män 85+ är landets högsta. Enkäten slutar vid 84, så gruppen syns inte i något mått på självrapporterad ohälsa.",numl:"per 100 000 · män 85+"},
@@ -58,6 +65,9 @@ sv:{
   fkLead:"Andel pågående sjukfall med diagnosen stressreaktion (F43) — ett mått på samhällelig/funktionell påverkan, inte ett direkt mått på psykisk ohälsa och inte en kostnadsberäkning.",
   konLead:"Svår ängslan/oro, psykiatrisk specialistvård och sjukskrivning publiceras alla uppdelat på kön i sina källor — här jämförs kvinnor och män över tid för respektive mått, rikssiffror.",
   konCaveat:"Slutenvårdad för självskada och avliden i suicid saknas här: de källorna publicerar bara totalt kön, ingen verklig uppdelning på kvinnor/män finns att visa.",
+  youthTitle:"Unga: vårdkontakt, 15–24 år",
+  youthUnit:"15–24 år · riket · uppdelat på kön",
+  youthDistressCtx:"Ingen åldersuppdelning finns i källan — inte en 15–24-siffra.",
   alderLead:"Psykiatrisk specialistvård är det enda måttet som publiceras uppdelat på ålder genom hela livet i sin källa — här jämförs barn, vuxna och äldre över tid, rikssiffror.",
   alderCaveat:"Åldersgrupperna följer registrets egna åldersband, inte en exakt gräns vid 18 år: \"vuxna\" här är 15–64 år och innehåller alltså även 15–17-åringar tillsammans med de vuxna. De andra måtten saknas här: deras källor har ingen åldersuppdelning alls, eller täcker bara tonår (12–19 år) och inget för vuxna eller äldre.",
   ageChild:"Barn (0–14)",ageAdult:"Vuxna (15–64)",ageElderly:"Äldre (65+)",
@@ -72,7 +82,8 @@ sv:{
   suppLbl:"Undertryckt, färre än 10 fall per fönster:",
   surveyEnd:"enkäten slutar vid 84",
   breakLbl:"nytt mått",
-  pandemicLbl:"pandemi",
+  eventPandemic:"pandemi",
+  eventHlvBreak:"HLV-mätningen ändrad",
   spreadNote:(s,mode)=>`Spridningen mellan högsta och lägsta region är <b>${s} %</b> av rikets nivå. ${mode?"Byt till ojusterat och se hur mycket ålderstrukturen lägger till.":"Byt till åldersstandardiserat och se hur mycket som är ålderstruktur."}`,
   notNum:"Vad talet inte är.",
   notNumB:{
@@ -178,6 +189,13 @@ en:{
   gapY:"antidepressants dispensed, per 1,000 (register)",
   gapLine:"average association between need and response",
   causalNote:"A relationship is not a cause. Regions differ for many reasons this chart does not show.",
+  disagreeTitle:"Reported distress against care contact",
+  disagreeUnit:y=>`21 regions · all ages · ${y}`,
+  // gapX (above) already is the distress/survey axis — reused as-is for this
+  // scatter's x-axis, since it's the exact same measure. Only the y-axis
+  // (care contact, not antidepressants) needs its own label.
+  disagreeY:"in specialist psychiatric care, per 100,000 (register)",
+  disagreeCaveat:"Two independent measures of the same broad problem: self-reported anxiety (survey) and recorded contact with specialist psychiatric care (register). A relationship doesn't say why they diverge for a given region — that could mean care isn't being reached, isn't being sought, or that the data itself is incomplete.",
   gapPiece:{tag:"Need and response",inst:"reg",h:"Widest distance between need and response",p:"The region with the largest distance between reported need and recorded care response, 2024.",numl:"widest distance, 2024"},
   pieces:[
     {tag:"Life course",inst:"mort",h:"The oldest men",p:"Suicide among men 85+ is the country's highest rate. The survey stops at 84, so the group appears in no measure of self-reported health.",numl:"per 100,000 · men 85+"},
@@ -187,6 +205,9 @@ en:{
   fkLead:"Share of ongoing sickness-benefit cases with a stress-reaction (F43) diagnosis — a societal/functional impact measure, not a direct measure of mental health and not a cost estimate.",
   konLead:"Severe anxiety/worry, specialist psychiatric care and sickness absence are all published broken down by sex in their sources — this compares women and men over time for each measure, national figures.",
   konCaveat:"Hospitalised for self-harm and died by suicide aren't here: those sources only publish total sex, no real breakdown by women/men exists to show.",
+  youthTitle:"Youth: care contact, ages 15-24",
+  youthUnit:"ages 15-24 · national · by sex",
+  youthDistressCtx:"The source has no age breakdown — not a 15-24 figure.",
   alderLead:"Specialist psychiatric care is the only measure published broken down by age across the whole lifespan in its source — this compares children, adults and elderly over time, national figures.",
   alderCaveat:"The age groups follow the register's own age bands, not an exact cut at 18: \"adults\" here means 15–64, which includes 15–17-year-olds alongside adults. The other measures aren't here: their sources either have no age breakdown at all, or cover only the teenage years (ages 12–19) and nothing for adults or elderly.",
   ageChild:"Children (0–14)",ageAdult:"Adults (15–64)",ageElderly:"Elderly (65+)",
@@ -201,7 +222,8 @@ en:{
   suppLbl:"Withheld, fewer than 10 cases per window:",
   surveyEnd:"the survey stops at 84",
   breakLbl:"measure revised",
-  pandemicLbl:"pandemic",
+  eventPandemic:"pandemic",
+  eventHlvBreak:"HLV measure revised",
   spreadNote:(s,mode)=>`The spread between the highest and lowest region is <b>${s}%</b> of the national level. ${mode?"Switch to crude and see how much age structure adds.":"Switch to age-standardised and see how much of it is age structure."}`,
   notNum:"What this number is not.",
   notNumB:{
