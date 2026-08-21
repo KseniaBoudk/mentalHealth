@@ -276,7 +276,7 @@ select option:disabled{color:var(--ink-3)}
    following-the-pointer behaviour; this class doesn't touch that. */
 .mapsvg.pannable{cursor:grab}
 .mapsvg.dragging{cursor:grabbing}
-/* No var() fallbacks here — unlike --banner-h (below), --sp-*/--fs-* are
+/* No var() fallbacks here — unlike --banner-h (below), --sp-* / --fs-* are
    always defined on bare :root, so a fallback could never actually fire. */
 .mapzoombtns{position:absolute;top:var(--sp-3);right:var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-1);z-index:10}
 .mapzoombtn{
@@ -340,6 +340,84 @@ select option:disabled{color:var(--ink-3)}
 .trendarrow.neutral{fill:var(--ink-2)}
 .mapopen{margin-top:16px;width:100%;background:none;border:1.5px solid var(--violet);color:var(--violet);border-radius:999px;padding:10px 14px;font-size:12px;font-weight:650;cursor:pointer}
 .mapopen:hover{background:var(--violet-soft)}
+
+/* --- chart full-screen (shell.js's wireFullscreen()) ---
+   .fswrap wraps just the svg (not its card, not its heading) so .fsbtn's
+   plain top/left below always lands at the CHART's own corner on the
+   NORMAL page — no dependency on measuring anything at wire()-time, which
+   a heading above the svg (an .inner2 column) or the map's own zoom/pan
+   transform (on .mapsvg itself, not this wrapper) could otherwise throw
+   off. This button does NOT travel into full-screen (removed there,
+   shell.js) — #chartFsClose below is a separate, fixed control instead,
+   since a chart's own corner can end up far from the actual top-left of
+   the screen once it's centered in a much wider/taller overlay (a
+   portrait map on a wide monitor, e.g.). */
+.fswrap{position:relative}
+.fsbtn{
+  position:absolute;top:6px;left:6px;z-index:5;
+  width:26px;height:26px;padding:0;border-radius:50%;border:1.5px solid var(--ink);
+  background:var(--surface);color:var(--ink);font-size:13px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);opacity:.6;transition:opacity .12s ease;
+}
+.fsbtn:hover,.fsbtn:focus-visible{opacity:1;background:var(--ink);color:var(--paper)}
+.fsbtn:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
+
+/* The dedicated full-screen overlay: title bar + a big centered chart
+   area + a click-readout strip, entirely our own layout regardless of
+   which of the three DOM shapes the chart came from (see
+   wireFullscreen()'s title lookup). Hidden by default; shown (and
+   requestFullscreen()'d) only on an expand click. */
+#chartFs{display:none;position:fixed;inset:0;z-index:1000;flex-direction:column;background:var(--surface)}
+#chartFs.on{display:flex}
+/* #chartFsClose sits IN the header row (normal flow, not position:absolute
+   on the chart) — always at the actual top-left corner of the screen,
+   right where the title is, regardless of how big/small/centered the
+   chart underneath happens to be. */
+#chartFsHead{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--hair);flex:none}
+#chartFsHead h3{margin:0;font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:-.01em}
+.fsbtn-head{
+  flex:none;width:30px;height:30px;padding:0;border-radius:50%;border:1.5px solid var(--ink);
+  background:var(--surface);color:var(--ink);font-size:13px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+}
+.fsbtn-head:hover,.fsbtn-head:focus-visible{background:var(--ink);color:var(--paper)}
+.fsbtn-head:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
+#chartFsBody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
+/* Charts are already width:100%;height:auto (svg{}, above) — sized
+   against #chartFsBody instead of the bare viewport so the title bar and
+   readout strip always have room. The map gets its own rule: Sweden's
+   outline is tall and narrow (MAP_VIEWBOX, data.js), so width-based
+   sizing would either overflow vertically or leave it tiny — sizing by
+   height fits it properly instead, the same way .mapsvg's normal 400px
+   cap is a width because most cards are wider than they are tall. */
+#chartFsBody svg.chart-svg{width:min(94vw,1500px);height:auto;max-height:100%}
+#chartFsBody svg.mapsvg.chart-svg{width:auto;height:min(76vh,860px);max-width:94vw;max-height:100%}
+/* .mapzoom{overflow:hidden} (base rule, above) is correct on the normal
+   page — it keeps the CARD's own size stable while zoomed, cropping
+   whatever's panned past the map's own edge instead of reflowing the rest
+   of the page. Full-screen has no such constraint to protect — there's
+   room to actually grow, which is the whole point of zooming in here —
+   so this overrides it back to visible; #chartFsBody's own overflow:auto
+   (above) picks up the now-larger transformed content and scrolls to it
+   if a heavy zoom pushes it past the viewport. */
+#chartFsBody .mapzoom{overflow:visible}
+/* .mapzoombtns normally sits absolute against .mapzoom itself (kurvan.css,
+   near .mapzoom's own rule) — right for the normal page, where the map's
+   card is the whole frame of reference. In full-screen .mapzoom shrinks to
+   roughly the map's own natural width, which on a wide screen can leave a
+   lot of empty space between it and the actual right edge of the screen;
+   fixed positioning pins the buttons to the SCREEN's edge instead, the
+   same "chart's own position shouldn't matter" reasoning #chartFsClose
+   already uses. */
+#chartFs.on .mapzoombtns{position:fixed;top:84px;right:24px}
+/* Renders a mark's data-card payload (charts.js/shell.js) as the exact
+   same .rstat card the rest of the app already uses (viewKarta's side
+   card, viewKon's women/men pair, ...) — .rstat/.rk/.dot/.rv/.rci/.tnum
+   are all existing rules, nothing new to define for the card itself, just
+   the strip that holds it. */
+#chartFsReadout{flex:none;padding:16px 24px 24px;border-top:1px solid var(--hair);min-height:1.4em}
+#chartFsReadout .rstat{max-width:280px}
 
 /* --- method --- */
 table.m{border-collapse:collapse;width:100%;min-width:760px;background:var(--surface)}

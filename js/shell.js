@@ -43,6 +43,11 @@ const ZOOM_MIN=1,ZOOM_MAX=3,ZOOM_STEP=0.5;
 // would silently select that region.
 let dragMoved=false;
 let currentIo = null;
+// data-mapid of whichever map is currently shown full-screen, if any (see
+// wireFullscreen()) — lets a render() that happens WHILE still fullscreen
+// (a map click's S.region update, e.g., still runs pick()'s render() same
+// as always) swap the freshly-rebuilt copy of THAT SAME map into view.
+let fsMapId=null;
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -103,6 +108,31 @@ function measureBanner(){
   if(el)document.documentElement.style.setProperty("--banner-h",el.offsetHeight+"px");
 }
 window.onresize=measureBanner;
+
+// Exiting full-screen (Esc or #chartFsClose, both funnel through the
+// browser's one fullscreenchange event) puts the page back to normal:
+// hide/clear the overlay, then render() — which rebuilds #app fresh, so
+// the svg wireFullscreen() moved out reappears exactly where it started,
+// with a brand-new expand button already wired, without this needing to
+// track the svg's original parent/sibling itself. Set once here (not
+// inside wire()) since it's a document-level listener, not tied to any
+// one render. Fires on ENTERING fullscreen too (fullscreenElement is
+// truthy then) — only the leaving case needs cleanup.
+document.onfullscreenchange=()=>{
+  if(document.fullscreenElement)return;
+  const fs=document.getElementById("chartFs");
+  if(!fs)return;
+  fs.classList.remove("on");
+  document.getElementById("chartFsBody").innerHTML="";
+  document.getElementById("chartFsReadout").textContent="";
+  fsMapId=null;
+  // #tiletip moved in alongside the chart (see wireFullscreen()) so hover
+  // still shows a card while fullscreened — move it back to <body> now, or
+  // the normal page's own hover cards stop working after exiting.
+  const tip=document.getElementById("tiletip");
+  if(tip)document.body.appendChild(tip);
+  render();
+};
 
 function wire(){
   measureBanner();
@@ -212,6 +242,179 @@ function wire(){
   if(ob)ob.onclick=()=>document.getElementById("sec-behov").scrollIntoView({behavior:"smooth"});
   wireMapZoomPan();
   paintTrendArrows();
+  wireFullscreen();
+}
+
+// Renders one mark's data-card payload (charts.js's dataCard(), attached
+// to every hoverable mark alongside its data-tip) as the SAME .rstat card
+// markup the rest of the app already uses for a region/value figure
+// (viewKarta's side card, viewKon's women/men pair, ...) — reusing those
+// existing classes/CSS rather than a plain data-tip sentence, so a click
+// inside full-screen reads exactly like the normal page does. Falls back
+// to the plain tip text if a mark somehow has no data-card (defensive; every
+// primitive sets one).
+function renderReadoutCard(mark){
+  const out=document.getElementById("chartFsReadout");
+  let data=null;
+  try{data=JSON.parse(mark.dataset.card||"null");}catch(e){/* fall through to plain text below */}
+  if(!data){out.textContent=mark.dataset.tip||"";return;}
+  const col=data.color||"var(--ink)";
+  const rows=(data.rows||[]).map(r=>`
+    ${r.label?`<div class="rk" style="margin-top:10px;color:var(--ink-2)">${esc(r.label)}</div>`:""}
+    <div class="rv tnum">${esc(r.value)}${r.unit?` <span style="font-size:13px;color:var(--ink-3)">${esc(r.unit)}</span>`:""}</div>
+    ${r.ci?`<div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${esc(r.ci)}</div>`:""}`).join("");
+  out.innerHTML=`<div class="rstat" style="border-top-color:${col}">
+    <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(data.title)}</div>
+    ${rows}
+  </div>`;
+}
+
+// Every chart primitive (charts.js) marks its root <svg> with a shared
+// chart-svg class — one generic pass here wires an expand trigger onto
+// each, rather than hand-adding it per view function. A single persistent
+// overlay (#chartFs — created once, lazily, same pattern #tiletip above
+// uses) owns the full-screen layout completely: a title bar (with its OWN
+// close control, not tied to any one chart's position — see below) + a big
+// centered chart area + a click-readout strip.
+function wireFullscreen(){
+  const canFs=document.body.requestFullscreen||document.body.webkitRequestFullscreen;
+  if(!canFs)return; // feature-detected: silently absent, not broken, on old Safari etc.
+
+  let fs=document.getElementById("chartFs");
+  if(!fs){
+    fs=document.createElement("div");
+    fs.id="chartFs";
+    fs.innerHTML=`<div id="chartFsHead">
+        <button type="button" id="chartFsClose" class="fsbtn-head" aria-label="${esc(t.chartFsClose)}">✕</button>
+        <h3 id="chartFsTitle"></h3>
+      </div>
+      <div id="chartFsBody"></div>
+      <div id="chartFsReadout"></div>`;
+    document.body.appendChild(fs);
+    // A fixed control in the head bar, not the per-chart trigger button
+    // moved/re-purposed — that button lives at the chart's own corner, which
+    // on a very wide screen can sit far from the actual top-left of the
+    // overlay once the (often portrait, e.g. the map) chart is centered in
+    // a much wider space. One control, always in the same spot regardless
+    // of chart size, reads more like "the corner of the screen" than "the
+    // corner of whatever's currently showing".
+    document.getElementById("chartFsClose").onclick=()=>(document.exitFullscreen||document.webkitExitFullscreen)?.call(document);
+    // Delegated: one listener for every chart ever shown here, not one per
+    // mark.
+    document.getElementById("chartFsBody").onclick=e=>{
+      const mark=e.target.closest("[data-tip]");
+      if(mark)renderReadoutCard(mark);
+    };
+  }
+
+  // #app svg.chart-svg, not just svg.chart-svg: once a chart is
+  // fullscreened, its svg (still chart-svg-classed) lives inside
+  // #chartFsBody, outside #app — without this scope, a render() fired
+  // while still fullscreened (a map click's S.region update, e.g., still
+  // fires its own onclick alongside the delegated one above) would find
+  // it again here and wrap it a second time.
+  document.querySelectorAll("#app svg.chart-svg").forEach(svg=>{
+    const holder=svg.parentElement;
+    if(!holder)return;
+    // The map is special: wireMapZoomPan() (below) finds each map's zoom
+    // buttons and its own +/- click handlers via document.querySelector on
+    // .mapzoom[data-mapid=...], then .mapsvg/.mapzoombtn WITHIN that same
+    // element — fresh lookups, not cached, so they keep working wherever
+    // .mapzoom currently lives, but ONLY as long as the svg and its zoom
+    // buttons stay together under that one element. Since .mapzoom IS
+    // already the svg's own parent (mapZoomWrap(), views.js) — already
+    // position:relative, already exactly what .mapzoombtns expects to sit
+    // absolute against — moving it whole (not wrapping the svg in a NEW
+    // div) keeps zoom AND drag-to-pan (pointer listeners live directly on
+    // .mapsvg, unaffected by reparenting) working in full-screen for free,
+    // with no changes to wireMapZoomPan() itself. Every other chart type
+    // gets a fresh, minimal wrap around just the svg instead, so a heading
+    // elsewhere in its holder doesn't travel along redundantly.
+    const isMap=holder.classList.contains("mapzoom");
+    const wrap=isMap?holder:document.createElement("div");
+    if(!isMap){
+      wrap.className="fswrap";
+      svg.replaceWith(wrap);
+      wrap.appendChild(svg);
+    }
+
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="fsbtn";
+    btn.setAttribute("aria-label",t.chartFullscreen);
+    btn.textContent="⛶";
+    btn.onclick=()=>{
+      // Title: the holder's OWN heading if it carries one directly (an
+      // .inner2 column's h4, e.g.), else the nearest .card-h's h3, else
+      // fall back to the svg's own aria-label — always something, never
+      // blank, regardless of which of the three DOM shapes this chart is.
+      const own=holder.querySelector(":scope > h3, :scope > h4");
+      const cardH=svg.closest(".card")?.querySelector(".card-h h3");
+      const title=(own||cardH)?.textContent||svg.getAttribute("aria-label")||"";
+      document.getElementById("chartFsTitle").textContent=title;
+      // .rvs: an existing small-muted-caption class (kurvan.css), reused
+      // here rather than styling the readout container itself — the
+      // container needs to stay colour-neutral so the .rstat card
+      // renderReadoutCard() swaps in on a click isn't dimmed by an
+      // inherited hint colour.
+      document.getElementById("chartFsReadout").innerHTML=`<span class="rvs">${esc(t.chartFsHint)}</span>`;
+      // The trigger button itself doesn't move — only the chart does. A
+      // second "expand" button sitting uselessly at the chart's corner
+      // inside full-screen (where #chartFsClose already handles closing)
+      // would just be visual clutter.
+      wrap.removeChild(btn);
+      // MOVE, not clone — a clone would carry the svg's data-tip/tabindex
+      // attributes but none of the onclick/onmouseenter/etc. listeners
+      // already attached to it (map click-to-select, hover tooltips,
+      // zoom/pan), since those aren't part of the DOM the way attributes
+      // are. Moving keeps all of it working with nothing to re-wire.
+      // #tiletip moves in too: while fs is the fullscreen element, only
+      // ITS subtree renders at all — a hover card left behind on <body>
+      // (a sibling of fs, not a descendant) would simply never be visible,
+      // not just hidden behind something.
+      document.getElementById("chartFsBody").appendChild(wrap);
+      const tip=document.getElementById("tiletip");
+      if(tip)fs.appendChild(tip);
+      // Only the map ever changes ITSELF from inside full-screen (a tile
+      // click runs the exact same S.region-setting pick() it always has,
+      // still wired on this very svg — see the MOVE-not-clone comment
+      // above) — remembered so the re-sync block below knows to go
+      // looking for a fresh copy of this one specifically.
+      fsMapId=isMap?wrap.dataset.mapid:null;
+      fs.classList.add("on");
+      (fs.requestFullscreen||fs.webkitRequestFullscreen).call(fs);
+    };
+    wrap.appendChild(btn);
+  });
+
+  // Re-sync: a tile click on the fullscreened map runs pick() same as
+  // ever (S.region=code; render()) — which rebuilds #app, including a
+  // FRESH .mapzoom with the same data-mapid, correct new selection glow
+  // (baked into chorMap()'s own SVG string at generation time, not
+  // something a class toggle on the old node could update) and its own
+  // freshly-wired zoom buttons. Without swapping it in, the stale copy
+  // stays on screen AND a second element now shares its data-mapid —
+  // wireMapZoomPan()'s document.querySelector(`.mapzoom[data-mapid=...]`)
+  // lookups (below) would start resolving to whichever of the two comes
+  // first in the document, not necessarily the one actually visible,
+  // breaking the zoom buttons too. Runs every wire() call (cheap no-op
+  // when nothing's fullscreen or the fullscreened chart isn't the map).
+  if(fsMapId&&document.fullscreenElement===fs){
+    const fresh=document.querySelector(`#app .mapzoom[data-mapid="${fsMapId}"]`);
+    if(fresh){
+      // The loop above already gave this fresh copy its own new .fsbtn
+      // (it's still svg.chart-svg, inside #app, at that point) — pull it
+      // back off, same reasoning as the original open: nothing to expand
+      // further, already full-screen.
+      const freshBtn=fresh.querySelector(":scope > .fsbtn");
+      if(freshBtn)freshBtn.remove();
+      const body=document.getElementById("chartFsBody");
+      body.innerHTML="";
+      body.appendChild(fresh);
+      const tip=document.getElementById("tiletip");
+      if(tip)fs.appendChild(tip);
+    }
+  }
 }
 
 // CSS transform:scale()+translate() on the vector <svg> itself, not a

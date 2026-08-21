@@ -5,6 +5,15 @@
    ===================================================================== */
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const fmt=(v,d,u)=>v==null||!isFinite(v)?"—":(S.lang==="sv"?v.toFixed(d).replace(".",","):v.toFixed(d))+(u?` ${u}`:"");
+// data-card: a small JSON payload alongside every mark's existing data-tip
+// (hover), read by shell.js's fullscreen click-readout to render the SAME
+// .rstat card markup the rest of the app already uses for a region/value
+// figure — rather than just dumping the tip's plain sentence. esc() first
+// (handles &/</>), then &quot; for the wrapping double-quoted attribute —
+// JSON.stringify's own quotes are the only " an object literal here could
+// produce, since none of this app's actual values (region names, formatted
+// numbers, unit strings) contain one.
+const dataCard=obj=>esc(JSON.stringify(obj)).replace(/"/g,"&quot;");
 
 function axisTicks(min,max,n){
   const raw=(max-min)/n, mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
@@ -22,7 +31,7 @@ function dotPlot(rows, opts){
   const lo=rows.length?Math.min(...rows.map(r=>r.lo)):0,hi=rows.length?Math.max(...rows.map(r=>r.hi)):1;
   const pad=(hi-lo)*0.08||1,x0=Math.max(0,lo-pad),x1=hi+pad;
   const X=v=>L+(v-x0)/(x1-x0)*(R-L);
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  let s=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   axisTicks(x0,x1,4).forEach(v=>{
     s+=`<line x1="${X(v).toFixed(1)}" y1="${top-4}" x2="${X(v).toFixed(1)}" y2="${top+rows.length*rowH}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${X(v).toFixed(1)}" y="${H-16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
@@ -41,7 +50,8 @@ function dotPlot(rows, opts){
     // all rather than a genuinely zero-width interval.
     const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
     const tip=`${r.name}: ${fmt(r.value,1)}${rangeTxt}${opts.unit?` ${opts.unit}`:""}`;
-    s+=`<g data-tip="${esc(tip)}">`;
+    const card=dataCard({title:r.name,color:col,rows:[{value:fmt(r.value,1),unit:opts.unit||"",ci:r.lo!==r.hi?`${fmt(r.lo,1)}–${fmt(r.hi,1)}`:""}]});
+    s+=`<g data-tip="${esc(tip)}" data-card="${card}">`;
     s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
     s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
   return s+"</svg>";
@@ -66,7 +76,7 @@ function lineChart(series,opts){
   if(opts.zero)y0=0;
   const pad=(y1-y0)*0.14||1;y0=Math.max(0,y0-(opts.zero?0:pad));y1+=pad;
   const X=v=>L+(v-x0)/((x1-x0)||1)*(R-L), Y=v=>B-(v-y0)/((y1-y0)||1)*(B-Tp);
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  let s=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   axisTicks(y0,y1,3).forEach(v=>{
     s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
@@ -125,7 +135,8 @@ function lineChart(series,opts){
     // point/anno dot) too — an exact-duplicate tip there is harmless.
     valid.forEach(p=>{
       const tip=`${se.label?se.label+", ":""}${xLabel(p[0])}: ${fmt(p[1],p[1]%1?1:0,opts.unit)}`;
-      s+=`<circle class="pt-hit" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}"/>`;
+      const card=dataCard({title:se.label?`${se.label}, ${xLabel(p[0])}`:String(xLabel(p[0])),color:se.color,rows:[{value:fmt(p[1],p[1]%1?1:0),unit:opts.unit||""}]});
+      s+=`<circle class="pt-hit" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}" data-card="${card}"/>`;
     });
   });
   (opts.notes||[]).forEach(n=>{
@@ -188,6 +199,7 @@ function chorMap(rows,opts){
     // worth doing when the browser already knows each shape's bounding box.
     const trendAttr=r.trend&&r.trend.arrow!=="→"
       ?` data-trend="${r.trend.arrow}" data-rel="${r.trend.rel||"neutral"}"`:"";
+    const card=dataCard({title:`${r.name} (${g.abbr})`,color:col,rows:[{value:fmt(r.value,1),unit:opts.unit||"",ci:r.lo!==r.hi?`${fmt(r.lo,1)}–${fmt(r.hi,1)}`:""}]});
     // The glow on the selected tile is an SVG filter, not a CSS one: the
     // viewBox is tiny (MAP_VIEWBOX is a handful of units across), so a CSS
     // blur radius in px would be resolved against that local coordinate
@@ -197,10 +209,10 @@ function chorMap(rows,opts){
     // browser's own unstyled OS tooltip, which is what this is replacing.
     // aria-label alone (already present) is enough for the accessible name,
     // so dropping <title> loses nothing for screen readers.
-    return `<path class="tile${sel?" on":""}" data-region="${r.code}" data-tip="${esc(title)}"${trendAttr} tabindex="0" role="button"
+    return `<path class="tile${sel?" on":""}" data-region="${r.code}" data-tip="${esc(title)}" data-card="${card}"${trendAttr} tabindex="0" role="button"
       aria-label="${esc(title)}" d="${g.d}" fill="${col}" fill-opacity="${op}"${sel?` filter="url(#tileglow)" style="stroke:${col}"`:""}></path>`;
   }).join("");
-  return `<svg class="mapsvg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}">
+  return `<svg class="mapsvg chart-svg" viewBox="${MAP_VIEWBOX}" role="group" aria-label="${esc(opts.aria||"")}">
     <defs><filter id="tileglow" x="-60%" y="-60%" width="220%" height="220%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="0.09" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -235,13 +247,15 @@ function histogram(rows,opts){
   const maxC=Math.max(...counts)||1;
   const bw=(R-L)/nbins;
   const X=i=>L+i*bw, Y=c=>B-c/maxC*(B-Tp);
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  let s=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   counts.forEach((c,i)=>{
     const x=X(i),y=Y(c),h=B-y;
     // data-tip, not <title> — same swap as chorMap/dotPlot, for the same
     // shared #tiletip card instead of the unstyled OS tooltip.
     const tip=`${fmt(lo+i*realSpan/nbins,1)}–${fmt(lo+(i+1)*realSpan/nbins,1)}${opts.unit?` ${opts.unit}`:""}: ${c}`;
-    s+=`<rect data-tip="${esc(tip)}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
+    const band=`${fmt(lo+i*realSpan/nbins,1)}–${fmt(lo+(i+1)*realSpan/nbins,1)}${opts.unit?` ${opts.unit}`:""}`;
+    const card=dataCard({title:band,color:col,rows:[{value:String(c),unit:S.lang==="sv"?"regioner":"regions"}]});
+    s+=`<rect data-tip="${esc(tip)}" data-card="${card}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });
   // Unit suffixed directly onto the two boundary numbers (6,2 / 9,6 %)
@@ -272,7 +286,7 @@ function scatter(pts,opts){
   const n=pts.length,mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
   let sxy=0,sxx=0;pts.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
   const b=sxy/sxx,a=my-b*mx,fit=x=>a+b*x;
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
+  let s=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||"")}">`;
   axisTicks(y0,y1,4).forEach(v=>{
     s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
@@ -300,7 +314,9 @@ function scatter(pts,opts){
     // opts.xName/yName/xUnit/yUnit are optional so a caller that hasn't been
     // updated still gets the old name-only tip instead of "undefined".
     const tip=opts.xName?`${p.name}, ${opts.xName}: ${fmt(p.x,1,opts.xUnit)} · ${opts.yName}: ${fmt(p.y,1,opts.yUnit)}`:p.name;
-    s+=`<circle class="spt" tabindex="0" data-tip="${esc(tip)}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
+    const card=dataCard({title:p.name,color:"var(--violet)",rows:opts.xName?
+      [{label:opts.xName,value:fmt(p.x,1),unit:opts.xUnit||""},{label:opts.yName,value:fmt(p.y,1),unit:opts.yUnit||""}]:[]});
+    s+=`<circle class="spt" tabindex="0" data-tip="${esc(tip)}" data-card="${card}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
     if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;
