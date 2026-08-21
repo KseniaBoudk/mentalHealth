@@ -99,6 +99,11 @@ sv:{
   withinCI:"inom intervallet",
   chgNote:(n,total)=>`<b>${n} av ${total||4} förändringar är inte förändringar.</b> De ligger inom intervallet och visas nedtonade.`,
   methodH:"Så är siffrorna framtagna",
+  mManifestH:"Källornas aktualitet och hämtningsdatum (Data Vintage)",
+  mManifestLead:"Varje hämtskript i pipelinen registrerar automatiskt sitt hämtningsdatum, ursprung och täckning i manifestet. Här framgår exakt hur färsk varje siffra är och hur den har hämtats.",
+  mColInd:"Dataserie / Mått",mColSource:"Ursprungskälla & register",mColFetched:"Hämtad (UTC)",mColCoverage:"Tidsperiod i data",mColScript:"Hämtskript",mColStatus:"Status",
+  mStatusReal:"Verklig data",mStatusSynth:"Syntetisk fallback",mStatusNoFetch:"Saknar öppet API",
+  mRecordsCount:n=>`${n.toLocaleString("sv-SE")} rader`,
   mIndicator:"Indikator",mSource:"Källa",mFrom:"Serie från",mGrain:"Nivå",mLimit:"Det viktigaste förbehållet",
   mRows:{
     distress:["Region, ~4-årsfönster","Endast 16–84 år. Ingen åldersuppdelning i regiontabellen; fönstren är ojämnt fördelade, inte en fast takt."],
@@ -231,6 +236,11 @@ en:{
   withinCI:"within interval",
   chgNote:(n,total)=>`<b>${n} of ${total||4} changes are not changes.</b> They sit inside the interval and are shown greyed.`,
   methodH:"How these figures were made",
+  mManifestH:"Data Vintage & Fetch Manifest",
+  mManifestLead:"Each pipeline fetcher automatically records its fetch timestamp, origin, and coverage directly to the manifest. This shows exactly how current every number is without asking.",
+  mColInd:"Dataset / Measure",mColSource:"Source registry & Agency",mColFetched:"Fetched (UTC)",mColCoverage:"Time coverage",mColScript:"Fetcher script",mColStatus:"Status",
+  mStatusReal:"Real data",mStatusSynth:"Synthetic fallback",mStatusNoFetch:"No open API",
+  mRecordsCount:n=>`${n.toLocaleString("en-US")} rows`,
   mIndicator:"Indicator",mSource:"Source",mFrom:"Series from",mGrain:"Grain",mLimit:"The caveat that matters most",
   mRows:{
     distress:["Region, ~4-year windows","Ages 16–84 only. No age breakdown in the region table; windows are unevenly spaced, not a fixed cadence."],

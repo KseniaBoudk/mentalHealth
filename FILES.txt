@@ -128,19 +128,10 @@ pipeline/fetch_kolada_context.py
     mental-health indicators. Saves straight to
     data/processed/kolada_context.json, no separate raw step.
 
-pipeline/build_kurvan_data.py
-    Reads the processed JSON files in data/processed/ and writes them out
-    as js/real_mh_data.js — the single generated JavaScript file the live
-    page actually loads. This is the last step to run after the fetchers.
-
 data/ — FETCHED DATA
 ---------------------
 data/raw/socialstyrelsen_mh_raw.json
 data/raw/socialstyrelsen_psych_raw.json
-data/raw/folkhalsodata_hlv_raw.json
-    The unprocessed API responses exactly as downloaded by each fetch
-    script, before being cleaned up.
-
 data/processed/socialstyrelsen_mh.json
 data/processed/socialstyrelsen_psych.json
 data/processed/folkhalsodata_hlv.json

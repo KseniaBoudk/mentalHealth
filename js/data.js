@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 /* =====================================================================
    1. THE CUBE — deterministic fake values on the REAL sources' skeleton.
@@ -372,6 +372,49 @@ function contextCell(indicator, regionCode) {
   if (!CONTEXT.active) return undefined;
   const row = CONTEXT.idx[indicator] && CONTEXT.idx[indicator][regionCode];
   return row || null;
+}
+
+/* Data-vintage manifest — compiled from pipeline/manifest.json by
+   build_kurvan_data.py into REAL_MANIFEST in real_mh_data.js.
+   getManifestRows() returns one entry per data source (real + the one
+   synthetic-only source, antidep) for the Metod view. */
+const DATA_MANIFEST = (() => {
+  const sources = (typeof REAL_MANIFEST !== "undefined" && Array.isArray(REAL_MANIFEST.sources))
+    ? REAL_MANIFEST.sources : [];
+  const builtAt = typeof REAL_MANIFEST !== "undefined" ? REAL_MANIFEST.built_at : null;
+  return { sources, builtAt };
+})();
+
+function getManifestRows() {
+  const rows = [];
+  (DATA_MANIFEST.sources || []).forEach(s => {
+    rows.push({
+      key: s.key,
+      source: s.source,
+      fetcher: s.fetcher,
+      indicators: s.indicators,
+      time_period: s.time_period,
+      records_count: s.records_count,
+      grain: s.grain,
+      fetched_at: s.fetched_at,
+      active: s.active,
+      isSynthOnly: false
+    });
+  });
+  // antidep has no open API, stays synthetic; add a row so it's visible
+  rows.push({
+    key: "antidep",
+    source: "Socialstyrelsen Läkemedelsregistret (ATC N06A)",
+    fetcher: "–",
+    indicators: ["antidep"],
+    time_period: "2006–2024",
+    records_count: null,
+    grain: "Region × Ålder × Kön",
+    fetched_at: null,
+    active: false,
+    isSynthOnly: true
+  });
+  return rows;
 }
 
 const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [], sjukfranvaro: [] };

@@ -593,9 +593,25 @@ function viewKarta(){
   </div>`;
 }
 
+function formatIsoDate(isoStr){
+  if(!isoStr) return "–";
+  try{
+    const d=new Date(isoStr);
+    if(isNaN(d.getTime())) return isoStr;
+    const y=d.getUTCFullYear();
+    const mo=String(d.getUTCMonth()+1).padStart(2,"0");
+    const day=String(d.getUTCDate()).padStart(2,"0");
+    const hh=String(d.getUTCHours()).padStart(2,"0");
+    const mm=String(d.getUTCMinutes()).padStart(2,"0");
+    return `${y}-${mo}-${day} ${hh}:${mm} UTC`;
+  }catch(e){ return isoStr; }
+}
+
 function viewMetod(){
   const P=t.mProse;
   const rs=realSummary();
+
+  // Original indicator-caveats table (unchanged)
   const rows=Object.keys(IND).map(x=>{
     const I=IND[x],[grain,limit]=t.mRows[x];
     const real=isRealActive(x);
@@ -606,6 +622,29 @@ function viewMetod(){
       <td class="mono">${x==="suicide"?"1997":I.start}</td>
       <td class="mono">${esc(grain)}</td>
       <td class="lim">${esc(limit)}</td></tr>`;}).join("");
+
+  // Data-vintage manifest table
+  const manifestList=getManifestRows();
+  const manifestRows=manifestList.map(item=>{
+    const indLabels=item.indicators.map(k=>t.ind[k]||k).join(", ");
+    const isReal=item.active;
+    const statusChip=item.isSynthOnly
+      ?`<span class="modechip synth">${esc(t.mStatusNoFetch)}</span>`
+      :isReal
+        ?`<span class="modechip real">${esc(t.mStatusReal)}</span>`
+        :`<span class="modechip synth">${esc(t.mStatusSynth)}</span>`;
+    const countText=item.records_count!=null?t.mRecordsCount(item.records_count):"";
+    const dateText=formatIsoDate(item.fetched_at);
+    return `<tr>
+      <td class="in">${esc(indLabels)}</td>
+      <td>${esc(item.source)}</td>
+      <td class="mono">${esc(dateText)}</td>
+      <td class="mono">${esc(item.time_period)}</td>
+      <td class="mono"><code>${esc(item.fetcher)}</code></td>
+      <td>${statusChip}${countText?`<span class="mono" style="font-size:10px;color:var(--ink-3);display:block;margin-top:2px">${esc(countText)}</span>`:""}</td>
+    </tr>`;
+  }).join("");
+
   return `
   <div class="prose">
     <h2>${esc(t.methodH)}</h2>
@@ -614,6 +653,26 @@ function viewMetod(){
     <h3>${esc(P.e)}</h3><p>${esc(P.f)}</p>
     <div class="note"><div class="l">${esc(P.g)}</div><p>${esc(P.h)}</p></div>
     <div class="note"><div class="l">${esc(t.realNoteL)}</div><p>${esc(rs.n>0?t.realNoteOn(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.realNoteOff)}</p></div>
+  </div>
+
+  <div class="prose" style="margin-top:30px">
+    <h3>${esc(t.mManifestH)}</h3>
+    <p>${esc(t.mManifestLead)}</p>
+  </div>
+  <div class="mwrap"><table class="m">
+    <thead><tr>
+      <th>${esc(t.mColInd)}</th>
+      <th>${esc(t.mColSource)}</th>
+      <th>${esc(t.mColFetched)}</th>
+      <th>${esc(t.mColCoverage)}</th>
+      <th>${esc(t.mColScript)}</th>
+      <th>${esc(t.mColStatus)}</th>
+    </tr></thead>
+    <tbody>${manifestRows}</tbody>
+  </table></div>
+
+  <div class="prose" style="margin-top:30px">
+    <h3>${esc(t.mIndicator)} &amp; ${esc(t.mLimit)}</h3>
   </div>
   <div class="mwrap"><table class="m">
     <thead><tr><th>${esc(t.mIndicator)}</th><th>${esc(t.mSource)}</th><th>${esc(t.mFrom)}</th><th>${esc(t.mGrain)}</th><th>${esc(t.mLimit)}</th></tr></thead>

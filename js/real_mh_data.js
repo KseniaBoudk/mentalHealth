@@ -164287,3 +164287,71 @@ const REAL_CONTEXT_MH = {
  ]
 };
 
+/* Data-vintage manifest: records the source, script, and fetch date for each dataset */
+const REAL_MANIFEST = {
+ "built_at": "2026-08-19T13:20:57+00:00",
+ "sources": [
+  {
+   "key": "socialstyrelsen_mh",
+   "var": "REAL_MH",
+   "source": "Socialstyrelsen Statistikdatabasen (Patientregistret + Dödsorsaksregistret)",
+   "fetcher": "fetch_socialstyrelsen_mh.py",
+   "indicators": ["selfharm", "suicide"],
+   "fetched_at": "2026-08-19T13:20:57+00:00",
+   "time_period": "2008–2022 (5-års fönster)",
+   "records_count": 25422,
+   "grain": "Region (12–17 år självskada, 15–19 år suicid)",
+   "active": true
+  },
+  {
+   "key": "socialstyrelsen_psych",
+   "var": "REAL_PSYCH_MH",
+   "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, F00-F99)",
+   "fetcher": "fetch_socialstyrelsen_psych.py",
+   "indicators": ["psych"],
+   "fetched_at": "2026-08-19T13:20:57+00:00",
+   "time_period": "2008–2023",
+   "records_count": 118812,
+   "grain": "Region × Ålder × Kön",
+   "active": true
+  },
+  {
+   "key": "folkhalsodata_hlv",
+   "var": "REAL_HLV_MH",
+   "source": "Folkhälsomyndigheten Folkhälsodata (Nationella folkhälsoenkäten / HLV)",
+   "fetcher": "fetch_folkhalsodata_hlv.py",
+   "indicators": ["distress"],
+   "fetched_at": "2026-08-19T13:20:57+00:00",
+   "time_period": "2004–2022 (~4-års fönster)",
+   "records_count": 11818,
+   "grain": "Region × Kön (16–84 år)",
+   "active": true
+  },
+  {
+   "key": "forsakringskassan_f43",
+   "var": "REAL_FK_MH",
+   "source": "Försäkringskassan (EntryScape REST/JSON API)",
+   "fetcher": "fetch_forsakringskassan.py",
+   "indicators": ["sjukfranvaro"],
+   "fetched_at": "2026-08-19T13:20:57+00:00",
+   "time_period": "2005–2019",
+   "records_count": 7916,
+   "grain": "Region × Kön",
+   "active": true
+  },
+  {
+   "key": "kolada_context",
+   "var": "REAL_CONTEXT_MH",
+   "source": "Kolada (Kommun- och regiondatabasen)",
+   "fetcher": "fetch_kolada_context.py",
+   "indicators": ["pop_density", "education_low_pct"],
+   "fetched_at": "2026-08-19T13:20:57+00:00",
+   "time_period": "2023",
+   "records_count": 42,
+   "grain": "Region (ovägt medelvärde av kommuner)",
+   "active": true
+  }
+ ]
+};
+
+
