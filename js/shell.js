@@ -262,7 +262,7 @@ function renderReadoutCard(mark){
   const rows=(data.rows||[]).map(r=>`
     ${r.label?`<div class="rk" style="margin-top:10px;color:var(--ink-2)">${esc(r.label)}</div>`:""}
     <div class="rv tnum">${esc(r.value)}${r.unit?` <span style="font-size:13px;color:var(--ink-3)">${esc(r.unit)}</span>`:""}</div>
-    ${r.ci?`<div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${esc(r.ci)}</div>`:""}`).join("");
+    ${r.ci?`<div class="rci tnum">95% ${ciWord()} ${esc(r.ci)}</div>`:""}`).join("");
   out.innerHTML=`<div class="rstat" style="border-top-color:${col}">
     <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(data.title)}</div>
     ${rows}
