@@ -7,7 +7,7 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Regioner"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Länsprofil"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
@@ -84,8 +84,11 @@ sv:{
     sjukfranvaro:"Andel av pågående sjukfall, inte andel av befolkningen. Räknar sjukfall, inte personer med psykisk ohälsa i stort — och mäter inte behandling eller diagnos i vården."
   },
   dl:"Ladda ner serien",
+  profileLead:"Samlad profil för regionens samtliga indikatorer, demografi, förändring över tid och jämförelse med liknande regioner.",
   peers:"Jämförs med liknande regioner (ålderstruktur och inkomst):",
-  rDistress:"Svår ängslan/oro",rTreated:"Behandlade",rSuicide:"Suicid",
+  rDistress:"Svår ängslan/oro",rTreated:"Behandlade",rPsych:"Specialistpsykiatri",rSelfharm:"Slutenvård självskada",rSuicide:"Suicid",rSjukfranvaro:"Sjukskrivning (F43)",
+  rPop:"Invånare",rDensity:"Invånare per km²",rLowEdu:"Låg utbildningsnivå",
+  rContextTitle:"Samhälle och demografi",rContextSub:"Befolkningsmått vid sidan av hälsodata (Kolada)",
   vsPeers:"Liknande regioner",notDiff:"Skillnaden går inte att skilja från noll.",
   higher:"Högre än liknande regioner.",lower:"Lägre än liknande regioner.",
   gapPos:"Regionens läge: behov mot vårdrespons",gapPosU:"avvikelse från genomsnittligt samband · 2024",
@@ -94,7 +97,7 @@ sv:{
   behovOpen:"Öppna Behov & vård →",
   changed:"Vad har rört sig",changedU:(a,b)=>`${a} → ${b} · förändring med intervall`,
   withinCI:"inom intervallet",
-  chgNote:n=>`<b>${n} av 4 förändringar är inte förändringar.</b> De ligger inom intervallet och visas nedtonade.`,
+  chgNote:(n,total)=>`<b>${n} av ${total||4} förändringar är inte förändringar.</b> De ligger inom intervallet och visas nedtonade.`,
   methodH:"Så är siffrorna framtagna",
   mIndicator:"Indikator",mSource:"Källa",mFrom:"Serie från",mGrain:"Nivå",mLimit:"Det viktigaste förbehållet",
   mRows:{
@@ -134,7 +137,7 @@ sv:{
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",metod:"Method",regioner:"Regions"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",metod:"Method",regioner:"County profile"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
@@ -213,8 +216,11 @@ en:{
     sjukfranvaro:"Share of ongoing sickness-benefit cases, not a share of the population. Counts sick-leave cases, not people with poor mental health in general — and doesn't measure treatment or diagnosis in healthcare."
   },
   dl:"Download this series",
+  profileLead:"Consolidated profile of all indicators, demographics, change over time and comparison with peer regions for the selected county.",
   peers:"Compared with peer regions (age structure and income):",
-  rDistress:"Severe anxiety",rTreated:"Treated",rSuicide:"Suicide",
+  rDistress:"Severe anxiety",rTreated:"Treated",rPsych:"Specialist care",rSelfharm:"Self-harm care",rSuicide:"Suicide",rSjukfranvaro:"Sickness absence (F43)",
+  rPop:"Residents",rDensity:"Residents per km²",rLowEdu:"Low education level",
+  rContextTitle:"Societal context and demographics",rContextSub:"Population measures alongside health data (Kolada)",
   vsPeers:"Peers",notDiff:"Difference not distinguishable from zero.",
   higher:"Higher than peers.",lower:"Lower than peers.",
   gapPos:"Where the region sits: need vs. response",gapPosU:"residual from the average association · 2024",
@@ -223,7 +229,7 @@ en:{
   behovOpen:"Open Need & care →",
   changed:"What moved",changedU:(a,b)=>`${a} → ${b} · change with intervals`,
   withinCI:"within interval",
-  chgNote:n=>`<b>${n} of 4 changes are not changes.</b> They sit inside the interval and are shown greyed.`,
+  chgNote:(n,total)=>`<b>${n} of ${total||4} changes are not changes.</b> They sit inside the interval and are shown greyed.`,
   methodH:"How these figures were made",
   mIndicator:"Indicator",mSource:"Source",mFrom:"Series from",mGrain:"Grain",mLimit:"The caveat that matters most",
   mRows:{

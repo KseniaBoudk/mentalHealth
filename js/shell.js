@@ -202,8 +202,10 @@ function wire(){
   // Used to switch tabs; every section already exists on the page now
   // (already showing the current S.region — that was set by the map click
   // that got the reader here), so "open" just means "scroll to it".
+  const scrollToRegion=()=>{const el=document.getElementById("sec-regioner");if(el)el.scrollIntoView({behavior:"smooth"});};
   const or=document.getElementById("b-openregion");
-  if(or)or.onclick=()=>document.getElementById("sec-regioner").scrollIntoView({behavior:"smooth"});
+  if(or)or.onclick=scrollToRegion;
+  document.querySelectorAll(".btn-openregion").forEach(b=>b.onclick=scrollToRegion);
   const ob=document.getElementById("b-openbehov");
   if(ob)ob.onclick=()=>document.getElementById("sec-behov").scrollIntoView({behavior:"smooth"});
   wireMapZoomPan();

@@ -226,6 +226,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .rstat.i-survey{border-top-color:var(--teal)}
 .rstat.i-reg{border-top-color:var(--violet)}
 .rstat.i-mort{border-top-color:var(--oxblood)}
+.rstat.i-fk{border-top-color:var(--amber)}
 .rk{display:flex;align-items:center;gap:7px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .rv{font-family:var(--mono);font-size:26px;margin-top:9px;letter-spacing:-.025em}
@@ -237,6 +238,13 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .rname{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.028em;line-height:1}
 .rpeers{font-size:11.5px;color:var(--ink-3);margin-top:8px}
 .rpeers b{color:var(--ink-2);font-weight:650}
+
+.rcontext-strip{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.rcontext-item{display:flex;align-items:baseline;gap:6px;background:var(--surface);border:1px solid var(--hair);border-radius:4px;padding:6px 12px;font-size:12px}
+.rcontext-k{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--ink-3)}
+.rcontext-v{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink)}
+.rcontext-u{font-size:10.5px;color:var(--ink-3);font-family:var(--sans)}
+.rcontext-src{font-size:9.5px;color:var(--ink-3);margin-left:2px;font-family:var(--mono)}
 
 /* --- map --- */
 /* 400px cap, not 280px — Michael's visual-theme-changes branch widened the

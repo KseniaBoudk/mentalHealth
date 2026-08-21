@@ -307,50 +307,87 @@ function viewOverTid(){
 
 function viewRegioner(){
   const R=RBY[S.region];
-  // The real Socialstyrelsen series lags several years behind "now" (that's
-  // the register, not a bug — see REAL's docstring in data.js), so once it's
-  // active this panel anchors on its latest common year rather than the
-  // synthetic indicators' fixed 2024. The three still-fabricated indicators
-  // read fine at any year the generator supports, so sharing one pair of
-  // years keeps every row on this page comparable instead of guarding nulls
-  // row by row.
-  const latest = REAL.active ? REAL.latestYear : 2024;
-  const prior = latest - 2;
   const peers=REGIONS.filter(r=>r[0]!==S.region)
     .map(r=>({r,d:Math.abs(r[4]-R[4])*1.4+Math.abs(r[3]-R[3])}))
     .sort((a,b)=>a.d-b.d).slice(0,4).map(p=>p.r);
 
-  // A real-backed indicator can genuinely have no published figure for one
-  // region/year (e.g. Gotland's distress window gap around 2020) — the
-  // fallback here is "no data", never a fabricated stand-in.
   const NO_DATA={value:null,lo:null,hi:null,suppressed:false};
-  const mine={},peer={};
-  ["distress","antidep","suicide"].forEach(x=>{
-    mine[x]=total(x,S.region,latest,"T",false)||NO_DATA;
-    const vs=peers.map(p=>total(x,p[0],latest,"T",false)).filter(Boolean).map(c=>c.value);
-    peer[x]=vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null;});
-  const cmp=x=>{
-    const m=mine[x],p=peer[x];
+
+  const indConfigs=[
+    {k:"distress",tag:t.rDistress,inst:"survey"},
+    {k:"antidep",tag:t.rTreated,inst:"reg"},
+    {k:"psych",tag:t.rPsych,inst:"reg"},
+    {k:"selfharm",tag:t.rSelfharm,inst:"reg"},
+    {k:"suicide",tag:t.rSuicide,inst:"mort"},
+    {k:"sjukfranvaro",tag:t.rSjukfranvaro,inst:"fk"}
+  ];
+
+  const mine={},peer={},latestYrs={};
+  indConfigs.forEach(item=>{
+    const k=item.k;
+    const yrs=validYears(k);
+    const lat=yrs[yrs.length-1];
+    latestYrs[k]=lat;
+    mine[k]=total(k,S.region,lat,"T",false)||NO_DATA;
+    const vs=peers.map(p=>total(k,p[0],lat,"T",false)).filter(Boolean).filter(c=>!c.suppressed).map(c=>c.value);
+    peer[k]=vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null;
+  });
+
+  const cmp=k=>{
+    const m=mine[k],p=peer[k];
     if(m.value==null||p==null)return `<span class="flat">${esc(fmt(null))}</span>`;
     if(p>=m.lo&&p<=m.hi)return `<span class="flat">${esc(t.vsPeers)} <em>${fmt(p,1)}</em>. ${esc(t.notDiff)}</span>`;
-    return `${esc(t.vsPeers)} <em>${fmt(p,1)}</em>. ${m.value>p?esc(t.higher):esc(t.lower)}`;};
+    return `${esc(t.vsPeers)} <em>${fmt(p,1)}</em>. ${m.value>p?esc(t.higher):esc(t.lower)}`;
+  };
 
-  // fakeTotal, deliberately: same reasoning as viewLaget's identical scatter — see data.js.
+  const ciText=(k,lat)=>{
+    const m=mine[k];
+    const u=esc(unitLabel(k));
+    if(k==="distress")return `${u} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(m.lo,1)}–${fmt(m.hi,1)} · 16–84 · ${lat}`;
+    if(k==="suicide"||k==="selfharm")return `${u} · ${esc(t.winLbl(lat))}`;
+    return `${u} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(m.lo,1)}–${fmt(m.hi,1)} · ${lat}`;
+  };
+
+  const ctxDensity=contextCell("pop_density",S.region);
+  const ctxLowEdu=contextCell("education_low_pct",S.region);
+
+  const gapLatest=REAL.active?REAL.latestYear:2024;
   const gap=REGIONS.map(r=>{
-    const d=fakeTotal("distress",r[0],latest,"T",false),a=fakeTotal("antidep",r[0],latest,"T",false);
-    return {x:d.value,y:a.value,code:r[0],name:r[1]};});
+    const d=fakeTotal("distress",r[0],gapLatest,"T",false),a=fakeTotal("antidep",r[0],gapLatest,"T",false);
+    return {x:d.value,y:a.value,code:r[0],name:r[1]};
+  });
 
-  const chgDefs=[["distress","survey"],["antidep","reg"],["psych","reg"],["suicide","mort"]];
+  const chgDefs=[
+    ["distress","survey"],
+    ["antidep","reg"],
+    ["psych","reg"],
+    ["selfharm","reg"],
+    ["suicide","mort"],
+    ["sjukfranvaro","fk"]
+  ];
   const changes=chgDefs.map(([x,inst])=>{
-    const a=total(x,S.region,latest,"T",false),b=total(x,S.region,prior,"T",false);
-    // A real-backed indicator can genuinely have no published figure for one
-    // of the two years in a small region (e.g. Gotland's distress window
-    // gap around 2020) — that's missing data, not "no change".
-    if(!a||!b) return {x,inst,d:null,within:false};
+    const yrs=validYears(x);
+    const lat=yrs[yrs.length-1];
+    const pri=yrs.length>1?yrs[yrs.length-2]:null;
+    if(!pri)return {x,inst,d:null,within:false,pri,lat};
+    const a=total(x,S.region,lat,"T",false);
+    const b=total(x,S.region,pri,"T",false);
+    if(!a||!b||a.suppressed||b.suppressed||a.value==null||b.value==null){
+      return {x,inst,d:null,within:false,pri,lat};
+    }
     const d=a.value-b.value;
-    return {x,inst,d,within:Math.abs(d)<(a.hi-a.lo)/2};});
+    const ciW=(a.hi-a.lo)/2;
+    return {x,inst,d,within:Math.abs(d)<ciW,pri,lat};
+  });
+
+  const latestCommon = REAL.active ? REAL.latestYear : 2024;
+  const priorCommon = latestCommon - 2;
 
   return `
+  <div class="hero">
+    <p>${esc(t.profileLead)}</p>
+  </div>
+
   <div class="rhead">
     <div>
       <div class="rname">${esc(R[1])}</div>
@@ -360,25 +397,64 @@ function viewRegioner(){
       <select id="c-reg2">${REGIONS.map(r=>`<option value="${r[0]}"${r[0]===S.region?" selected":""}>${esc(r[1])}</option>`).join("")}</select></div>
   </div>
 
-  <div class="rstats">
-    <div class="rstat i-survey">
-      <div class="rk" style="color:var(--teal)"><span class="dot" style="background:var(--teal)"></span>${esc(t.rDistress)}</div>
-      <div class="rv tnum">${fmt(mine.distress.value,1,unitLabel("distress"))}</div>
-      <div class="rci tnum">${esc(unitLabel("distress"))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.distress.lo,1)}–${fmt(mine.distress.hi,1)} · 16–84</div>
-      <div class="rvs">${cmp("distress")}</div>
+  <div class="rcontext-strip">
+    <div class="rcontext-item">
+      <span class="rcontext-k">${esc(t.rPop)}</span>
+      <span class="rcontext-v tnum">${R[2].toLocaleString(S.lang==="sv"?"sv-SE":"en-US")}</span>
     </div>
-    <div class="rstat i-reg">
-      <div class="rk" style="color:var(--violet)"><span class="dot" style="background:var(--violet)"></span>${esc(t.rTreated)}</div>
-      <div class="rv tnum">${fmt(mine.antidep.value,1,unitLabel("antidep"))}</div>
-      <div class="rci tnum">${esc(unitLabel("antidep"))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine.antidep.lo,1)}–${fmt(mine.antidep.hi,1)}</div>
-      <div class="rvs">${cmp("antidep")}</div>
+    ${ctxDensity?`
+    <div class="rcontext-item">
+      <span class="rcontext-k">${esc(t.rDensity)}</span>
+      <span class="rcontext-v tnum">${fmt(ctxDensity.value,1)} <span class="rcontext-u">/ km²</span></span>
+      <span class="rcontext-src">${ctxDensity.year||2023}</span>
+    </div>`:""}
+    ${ctxLowEdu?`
+    <div class="rcontext-item">
+      <span class="rcontext-k">${esc(t.rLowEdu)}</span>
+      <span class="rcontext-v tnum">${fmt(ctxLowEdu.value,1)} <span class="rcontext-u">%</span></span>
+      <span class="rcontext-src">${ctxLowEdu.year||2023}</span>
+    </div>`:""}
+  </div>
+
+  <div class="rstats rstats-6">
+    ${indConfigs.map(item=>{
+      const k=item.k, inst=item.inst, col=INST_COLOR[inst];
+      const m=mine[k];
+      return `
+      <div class="rstat i-${inst}">
+        <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(item.tag)}</div>
+        <div class="rv tnum">${fmt(m.value,1,unitLabel(k))}</div>
+        <div class="rci tnum">${ciText(k,latestYrs[k])}</div>
+        <div class="rvs">${cmp(k)}</div>
+      </div>`;
+    }).join("")}
+  </div>
+
+  <div class="card mt-fig">
+    <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(priorCommon,latestCommon))}</div></div>
+    <div class="card-b">
+      <svg viewBox="0 0 620 205" role="img" aria-label="Change between measurement periods for all six indicators">
+        <line x1="300" y1="12" x2="300" y2="188" stroke="var(--hair)" stroke-width="1"/>
+        ${changes.map((c,i)=>{
+          const y=26+i*28;
+          if(c.d==null){
+            return `<text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="10.5" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>
+              <text x="380" y="${y+3}" font-family="var(--mono)" font-size="9.5" fill="var(--ink-3)">${esc(fmt(null))}</text>`;
+          }
+          const mult=c.x==="suicide"?12:(c.x==="distress"||c.x==="sjukfranvaro")?8:4;
+          const w=Math.min(65,Math.abs(c.d)*mult+4);
+          const x2=300+(c.d>0?w:-w);
+          const col=c.within?"var(--ink-3)":INST_COLOR[c.inst];
+          const op=c.within?".45":"1";
+          return `<line x1="300" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" stroke="${col}" stroke-width="2.6" opacity="${op}" stroke-linecap="round"/>
+            <text x="380" y="${y+3}" font-family="var(--mono)" font-size="10" fill="${col}" opacity="${op}">${c.d>0?"+":"−"}${fmt(Math.abs(c.d),1)}</text>
+            <text x="424" y="${y+3}" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(unitLabel(c.x))}</text>
+            ${c.within?`<text x="510" y="${y+3}" font-family="var(--sans)" font-size="9" fill="var(--ink-3)">${esc(t.withinCI)}</text>`:""}
+            <text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="10.5" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>`;
+        }).join("")}
+      </svg>
     </div>
-    <div class="rstat i-mort">
-      <div class="rk" style="color:var(--oxblood)"><span class="dot" style="background:var(--oxblood)"></span>${esc(t.rSuicide)}</div>
-      <div class="rv tnum">${fmt(mine.suicide.value,1,unitLabel("suicide"))}</div>
-      <div class="rci tnum">${esc(unitLabel("suicide"))} · ${esc(t.winLbl(latest))}</div>
-      <div class="rvs">${cmp("suicide")}</div>
-    </div>
+    <div class="src">${t.chgNote(changes.filter(c=>c.within).length,changes.filter(c=>c.d!=null).length)}</div>
   </div>
 
   <div class="card mt-fig">
@@ -389,42 +465,6 @@ function viewRegioner(){
       ?"Ringad region är den valda. Avståndet till linjen visar hur regionen förhåller sig till det genomsnittliga sambandet mellan behov och respons."
       :"The circled region is the selected one. Distance from the line shows how the region compares with the average association between need and response."} ${esc(t.causalNote)}</div>
     <button id="b-openbehov" class="mapopen">${esc(t.behovOpen)}</button>
-  </div>
-  <div class="card mt-fig">
-    <div class="card-h"><h3>${esc(t.changed)}</h3><div class="u">${esc(t.changedU(prior,latest))}</div></div>
-    <div class="card-b">
-      <!-- LABEL_X 220, AXIS_X 300, MAX_W 65: the worst-case leftward bar
-           reaches 300-65=235, a 15-unit margin clear of LABEL_X — checked
-           as an absolute bound (AXIS_X-MAX_W vs LABEL_X), not per-row, so it
-           holds regardless of any indicator's actual delta or multiplier.
-           The value number sits in its own fixed column at NUM_X=380 — past
-           AXIS_X+MAX_W (300+65=365), the furthest any bar can ever reach —
-           so it's clear of every bar's own path in both directions, not
-           just clear of the label the way the axis gap is. -->
-      <svg viewBox="0 0 620 170" role="img" aria-label="${`Change since ${prior} for four indicators; changes inside the interval are greyed`}">
-        <line x1="300" y1="14" x2="300" y2="142" stroke="var(--hair)" stroke-width="1"/>
-        ${changes.map((c,i)=>{
-          const y=32+i*30;
-          if(c.d==null){
-            return `<text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="11" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>
-              <text x="380" y="${y+3}" font-family="var(--mono)" font-size="9.5" fill="var(--ink-3)">${esc(fmt(null))}</text>`;
-          }
-          const w=Math.min(65,Math.abs(c.d)*(c.x==="suicide"?12:6)+6);
-          const x2=300+(c.d>0?w:-w);
-          const col=c.within?"var(--ink-3)":INST_COLOR[c.inst];
-          const op=c.within?".45":"1";
-          // Each row appends its own unit (%, per 1,000, per 100,000) right
-          // after the number — these four indicators aren't on comparable
-          // scales, so without it "+340,6" and "−2,9" read as if they were.
-          return `<line x1="300" y1="${y}" x2="${x2.toFixed(1)}" y2="${y}" stroke="${col}" stroke-width="2.6" opacity="${op}" stroke-linecap="round"/>
-            <text x="380" y="${y+3}" font-family="var(--mono)" font-size="10" fill="${col}" opacity="${op}">${c.d>0?"+":"−"}${fmt(Math.abs(c.d),1)}</text>
-            <text x="424" y="${y+3}" font-family="var(--sans)" font-size="8" fill="var(--ink-3)">${esc(unitLabel(c.x))}</text>
-            ${c.within?`<text x="520" y="${y+3}" font-family="var(--sans)" font-size="9" fill="var(--ink-3)">${esc(t.withinCI)}</text>`:""}
-            <text x="220" y="${y+3}" text-anchor="end" font-family="var(--sans)" font-size="11" fill="var(--ink-2)">${esc(t.ind[c.x])}</text>`;
-        }).join("")}
-      </svg>
-    </div>
-    <div class="src">${t.chgNote(changes.filter(c=>c.within).length)}</div>
   </div>`;
 }
 
@@ -676,6 +716,7 @@ function viewSjukskrivning(){
               <div class="rci tnum">${esc(unitLabel(k))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine?mine.lo:null,1)}–${fmt(mine?mine.hi:null,1)}</div>
             </div>
           </div>
+          <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
         </div>
       </div>
     </div>
@@ -804,6 +845,7 @@ function viewSammanhang(){
               <div class="rci tnum">${esc(unit)} · 2023</div>
             </div>
           </div>
+          <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
         </div>
       </div>
     </div>
