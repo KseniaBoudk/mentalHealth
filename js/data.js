@@ -152,6 +152,36 @@ const IND = {
 const INST_COLOR = { survey:"var(--teal)", reg:"var(--violet)", mort:"var(--oxblood)", fk:"var(--amber)" };
 const SUPPRESS_BELOW = 10;
 
+/* Fixed reference events, drawn as vertical markers on calendar-year time
+   series (lineChart()'s opts.marks, charts.js — already built, just never
+   wired to anything until now). Dates only, no interpretation of what moved
+   because of them — that's for whoever reads the chart, not this array.
+   Both events below are universal (shown on every indicator's chart whose
+   year range covers them) — `ind` exists as a hook to restrict a future
+   event to one indicator's own history, unused by either entry today.
+   `color`/`anchor` are optional per-event style overrides (see the marks
+   renderer in charts.js): default is oxblood, label to the right of the
+   line; the HLV entry below overrides both so two events landing close
+   together (2018/2020 both fall inside most indicators' ranges) stay
+   visually distinct rather than reading as the same kind of marker twice.
+   See eventMarks() in views.js, which turns this into a given chart's own
+   opts.marks — filtered to events that actually fall inside that chart's
+   visible year range. */
+const EVENTS = [
+  { year: 2020, labelKey: "eventPandemic" },
+  // The HLV survey category backing `distress` changed — see
+  // fetch_folkhalsodata_hlv.py's docstring: "Nedsatt psykiskt välbefinnande"
+  // stopped being published after its 2015-2018 window; "Svår ängslan, oro
+  // eller ångest" is what's fetched from 2018 on. Shown as a general
+  // reference point on every chart (not just distress's), same as the
+  // pandemic marker — not the same mechanism as IND[k].breakAt above (a
+  // hypothetical synthetic step this data model supports but no indicator
+  // currently uses). Styled distinctly (grey, label to the left) so it
+  // doesn't read as a second pandemic marker when the two land close
+  // together.
+  { year: 2018, labelKey: "eventHlvBreak", color: "var(--ink-2)", anchor: "end" },
+];
+
 /* =====================================================================
    1b. REAL DATA — self-harm and suicide, from js/real_mh_data.js.
 

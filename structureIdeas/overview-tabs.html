@@ -1,0 +1,68 @@
+<meta charset="utf-8">
+<title>Kurvan — overview sketch: tabs</title>
+
+<link rel="stylesheet" href="../kurvan.css">
+<link rel="stylesheet" href="overview.css">
+
+<div id="app"></div>
+
+<script src="../js/real_mh_data.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/lang.js"></script>
+<script src="../js/state.js"></script>
+<script src="../js/charts.js"></script>
+<script src="../js/views.js"></script>
+<script src="shared.js"></script>
+<script>
+"use strict";
+// Structure B: one indicator's detail at a time (a bigger chart, its full
+// caveat, its source), picked via a self-contained toggle row — independent
+// of the app's own SECTIONS/nav, this doesn't touch shell.js at all. A
+// persistent "at a glance" strip stays visible below the detail panel no
+// matter which tab is open, so cross-indicator comparison never disappears
+// just because one indicator is expanded.
+let active = "distress";
+
+function render(){
+  const data = buildOverviewData();
+  const byKey = Object.fromEntries(data.map(d => [d.key, d]));
+  const cur = byKey[active];
+  const app = document.getElementById("app");
+  app.className = "wrap";
+  app.style.padding = "32px 22px 60px";
+
+  const tabs = data.map(d => `
+    <button class="ov-tab${d.key === active ? " on" : ""}" style="--tab-col:${d.color}" data-k="${d.key}">
+      <span class="dot" style="background:${d.color}"></span>${esc(d.name)}
+    </button>`).join("");
+
+  const glance = data.map(d => `
+    <span class="gi"><span class="dot" style="background:${d.color};width:7px;height:7px;display:inline-block;border-radius:50%"></span>
+      ${esc(d.name)} <b class="tnum">${fmt(d.latest ? d.latest.value : null, 1)}</b>
+      ${d.dir ? `<span class="dir-glyph ${d.dir}">${DIR_GLYPH[d.dir]}</span>` : ""}</span>`).join("");
+
+  app.innerHTML = `
+    <div class="hero">
+      <div class="kick">${esc(ovT.title)} — tabs</div>
+      <p style="max-width:62ch;color:var(--ink-2);font-size:14.5px;margin-top:10px;line-height:1.55">${esc(ovT.lede)}</p>
+    </div>
+    <div class="ov-tabs mt-fig">${tabs}</div>
+    <div class="card">
+      <div class="card-h">
+        <h3 style="color:${cur.color}">${esc(cur.name)}</h3>
+        <span class="modechip ${cur.real ? "real" : "synth"}">${esc(cur.real ? t.realLbl : t.synthLbl)}</span>
+      </div>
+      <div class="card-b">
+        ${lineChart([{ pts: cur.pts, color: cur.color, w: 2.4, dot: true }],
+          { aria: cur.name + " over time, national", h: 170, unit: cur.unit })}
+        <div class="ov-val tnum" style="color:${cur.color};margin-top:10px">${fmt(cur.latest ? cur.latest.value : null, 1)}
+          <span class="ov-unit" style="font-size:11px">${esc(cur.unit)} · ${cur.latestYear ?? "—"}</span></div>
+      </div>
+      <div class="src"><b>${esc(t.notNum)}</b> ${esc(cur.note)}<br>${cur.source}</div>
+    </div>
+    <div class="ov-glance">${glance}</div>`;
+
+  app.querySelectorAll(".ov-tab").forEach(b => { b.onclick = () => { active = b.dataset.k; render(); }; });
+}
+render();
+</script>

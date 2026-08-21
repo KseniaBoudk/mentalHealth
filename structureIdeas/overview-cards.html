@@ -1,0 +1,48 @@
+<meta charset="utf-8">
+<title>Kurvan — overview sketch: card grid</title>
+
+<link rel="stylesheet" href="../kurvan.css">
+<link rel="stylesheet" href="overview.css">
+
+<div id="app"></div>
+
+<script src="../js/real_mh_data.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/lang.js"></script>
+<script src="../js/state.js"></script>
+<script src="../js/charts.js"></script>
+<script src="../js/views.js"></script>
+<script src="shared.js"></script>
+<script>
+"use strict";
+// Structure A: all five indicators visible at once, side by side, in equal
+// cards — a spatial-comparison read (scan the row of numbers/sparklines)
+// rather than a drill-down one. No interaction needed to see all five.
+function render(){
+  const data = buildOverviewData();
+  const app = document.getElementById("app");
+  app.className = "wrap";
+  app.style.padding = "32px 22px 60px";
+
+  const cards = data.map(d => `
+    <div class="ov-card" style="--card-col:${d.color}">
+      <div class="ov-card-h">
+        <h4>${esc(d.name)}</h4>
+        <span class="modechip ${d.real ? "real" : "synth"}">${esc(d.real ? t.realLbl : t.synthLbl)}</span>
+      </div>
+      ${lineChart([{ pts: d.pts, color: d.color, w: 2.2 }], { aria: d.name + " over time", h: 64, w: 210 })}
+      <div class="ov-val tnum" style="color:${d.color}">${fmt(d.latest ? d.latest.value : null, 1)}
+        ${d.dir ? `<span class="dir-glyph ${d.dir}">${DIR_GLYPH[d.dir]}</span>` : ""}</div>
+      <div class="ov-unit">${esc(d.unit)} · ${d.latestYear ?? "—"}</div>
+      <div class="ov-note-sm">${esc(d.note)}</div>
+    </div>`).join("");
+
+  app.innerHTML = `
+    <div class="hero">
+      <div class="kick">${esc(ovT.title)} — card grid</div>
+      <p style="max-width:62ch;color:var(--ink-2);font-size:14.5px;margin-top:10px;line-height:1.55">${esc(ovT.lede)}</p>
+    </div>
+    <div class="ov-grid mt-fig">${cards}</div>`;
+}
+render();
+</script>
