@@ -42,6 +42,7 @@ const ZOOM_MIN=1,ZOOM_MAX=3,ZOOM_STEP=0.5;
 // without this, releasing a pan over a different region than it started on
 // would silently select that region.
 let dragMoved=false;
+let currentIo = null;
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -111,7 +112,8 @@ function wire(){
   // rather than on click, so it stays correct on free scrolling too, not
   // just after a link click.
   const sidebarLinks=[...document.querySelectorAll(".sidebar a")];
-  const io=new IntersectionObserver(entries=>{
+  if(currentIo) currentIo.disconnect();
+  currentIo=new IntersectionObserver(entries=>{
     entries.forEach(en=>{
       if(!en.isIntersecting)return;
       const sec=en.target.id.slice(4);
@@ -119,7 +121,7 @@ function wire(){
       sidebarLinks.forEach(a=>a.classList.toggle("active",a.dataset.sec===sec));
     });
   },{rootMargin:"-15% 0px -70% 0px"});
-  document.querySelectorAll('section[id^="sec-"]').forEach(s=>io.observe(s));
+  document.querySelectorAll('section[id^="sec-"]').forEach(s=>currentIo.observe(s));
   const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";render();};
   const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";render();};
   const bind=(id,fn)=>{const e=document.getElementById(id);if(e)e.onchange=()=>{fn(e.value);render();};};
