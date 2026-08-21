@@ -91,6 +91,19 @@ button{font:inherit}
   .wrap{max-width:1400px}
   :root{--fs-6:14px; --fs-7:28px; --fs-8:40px}
 }
+/* Same idea, two more tiers up: 1400px was still a fixed, fairly narrow
+   page on anything past a big desktop monitor — an ultra-wide or a 4K
+   window just got more of the same empty margin on both sides again.
+   .sidebar (kurvan.css, "one-page layout" section below) widens a little
+   at the same 1800px point too, so it doesn't read as thin against a
+   noticeably wider content column next to it. */
+@media (min-width:1800px){
+  .wrap{max-width:1680px}
+  .sidebar{width:248px}
+}
+@media (min-width:2200px){
+  .wrap{max-width:1900px}
+}
 
 /* --- masthead --- */
 /* gap/padding-top/margin-top/gap below are all literals for the same
