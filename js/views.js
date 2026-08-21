@@ -24,6 +24,15 @@ const unitLabel=(k)=>{
   return sc===100?"%":sc===1000?(S.lang==="sv"?"per 1 000":"per 1,000"):(S.lang==="sv"?"per 100 000":"per 100,000");
 };
 
+// "95% KI"/"95% CI" was typed out with its own inline language ternary at
+// every one of the ~9 spots a card shows a confidence interval — one
+// shared pair here instead, so a wording change only ever needs to happen
+// once. Used by views.js's own rstat/rci cards and by shell.js's
+// renderReadoutCard() (loaded after this file, so the functions are
+// already in scope by the time it runs).
+const ciWord=()=>S.lang==="sv"?"KI":"CI";
+const ciRange=(lo,hi)=>`95% ${ciWord()} ${fmt(lo,1)}–${fmt(hi,1)}`;
+
 // The banner, footer, and Metod tab's "what's actually real" note all used
 // to hand-count "four of five" and hand-list which indicators — the same
 // sentence typed three times, none of them updated when sjukfranvaro went
@@ -361,9 +370,9 @@ function viewRegioner(){
   const ciText=(k,lat)=>{
     const m=mine[k];
     const u=esc(unitLabel(k));
-    if(k==="distress")return `${u} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(m.lo,1)}–${fmt(m.hi,1)} · 16–84 · ${lat}`;
+    if(k==="distress")return `${u} · ${ciRange(m.lo,m.hi)} · 16–84 · ${lat}`;
     if(k==="suicide"||k==="selfharm")return `${u} · ${esc(t.winLbl(lat))}`;
-    return `${u} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(m.lo,1)}–${fmt(m.hi,1)} · ${lat}`;
+    return `${u} · ${ciRange(m.lo,m.hi)} · ${lat}`;
   };
 
   const ctxDensity=contextCell("pop_density",S.region);
@@ -545,7 +554,7 @@ function viewKarta(){
     <div class="rstat i-${key==="distress"?"survey":key==="antidep"?"reg":"mort"}">
       <div class="rk" style="color:${color}"><span class="dot" style="background:${color}"></span>${esc(label)}</div>
       <div class="rv tnum">${fmt(mine[key].value,1,unitLabel(key))}</div>
-      <div class="rci tnum">${esc(unitLabel(key))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine[key].lo,1)}–${fmt(mine[key].hi,1)}</div>
+      <div class="rci tnum">${esc(unitLabel(key))} · ${ciRange(mine[key].lo,mine[key].hi)}</div>
     </div>`;
 
   return `
@@ -831,7 +840,7 @@ function viewSjukskrivning(){
             <div class="rstat" style="border-top-color:${col}">
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ind[k])}</div>
               <div class="rv tnum">${fmt(mine?mine.value:null,1,unitLabel(k))}</div>
-              <div class="rci tnum">${esc(unitLabel(k))} · 95% ${S.lang==="sv"?"KI":"CI"} ${fmt(mine?mine.lo:null,1)}–${fmt(mine?mine.hi:null,1)}</div>
+              <div class="rci tnum">${esc(unitLabel(k))} · ${ciRange(mine?mine.lo:null,mine?mine.hi:null)}</div>
             </div>
           </div>
           <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
@@ -864,12 +873,12 @@ function viewKon(){
           <div class="rstat" style="border-top-color:${col}">
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.women)}</div>
             <div class="rv tnum">${fmt(natK?natK.value:null,1,unitLabel(k))}</div>
-            <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(natK?natK.lo:null,1)}–${fmt(natK?natK.hi:null,1)}</div>
+            <div class="rci tnum">${ciRange(natK?natK.lo:null,natK?natK.hi:null)}</div>
           </div>
           <div class="rstat" style="border-top-color:${col}">
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.men)}</div>
             <div class="rv tnum">${fmt(natM?natM.value:null,1,unitLabel(k))}</div>
-            <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(natM?natM.lo:null,1)}–${fmt(natM?natM.hi:null,1)}</div>
+            <div class="rci tnum">${ciRange(natM?natM.lo:null,natM?natM.hi:null)}</div>
           </div>
         </div>
       </div>
@@ -902,7 +911,7 @@ function viewKon(){
            xlabels:[[pyears[0],String(pyears[0])],[pyears[pyears.length-1],String(pyears[pyears.length-1])]],
            marks:eventMarks("psych",pyears),h:150,unit:unitLabel("psych")})}
         <div class="rv tnum" style="font-size:19px;margin-top:6px;color:${pcol}">${fmt(pNow?pNow.value:null,1,unitLabel("psych"))}</div>
-        <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(pNow?pNow.lo:null,1)}–${fmt(pNow?pNow.hi:null,1)}</div>
+        <div class="rci tnum">${ciRange(pNow?pNow.lo:null,pNow?pNow.hi:null)}</div>
         <div class="suppress">
           <b style="color:${dcol}">${esc(t.ind.distress)} (${esc(t.allAges)})</b>
           ${fmt(dNow?dNow.value:null,1,unitLabel("distress"))} · <b>${esc(isRealActive("distress")?t.realLbl:t.synthLbl)}</b> — ${esc(t.youthDistressCtx)}
@@ -956,7 +965,7 @@ function viewAlder(){
         <div class="rstat" style="border-top-color:${col}">
           <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(groupLabel[g.key])}</div>
           <div class="rv tnum">${fmt(c?c.value:null,1,unitLabel(k))}</div>
-          <div class="rci tnum">95% ${S.lang==="sv"?"KI":"CI"} ${fmt(c?c.lo:null,1)}–${fmt(c?c.hi:null,1)}</div>
+          <div class="rci tnum">${ciRange(c?c.lo:null,c?c.hi:null)}</div>
         </div>`).join("")}
       </div>
     </div>

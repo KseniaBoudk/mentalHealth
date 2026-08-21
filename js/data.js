@@ -492,13 +492,10 @@ function realCell(k, regionCode, year, ageIdx, sex) {
   const byAge = REAL.idx[k][county] && REAL.idx[k][county][ageIdx];
   const row = byAge && byAge[year];
   if (!row) return null;
-  const se = (row.count != null && row.count > 0) ? row.value / Math.sqrt(row.count) : null;
-  return {
-    value: row.value, count: row.count, denom: null,
-    lo: se != null ? Math.max(0, row.value - 1.96 * se) : row.value,
-    hi: se != null ? row.value + 1.96 * se : row.value,
-    suppressed: row.suppressed, window: row.window, real: true,
-  };
+  // realRowToCell's suppressed:false default doesn't apply here — selfharm/
+  // suicide rows (unlike psych/HLV/FK's) carry a real suppressed/window pair
+  // of their own, so those override the shared computation's default.
+  return { ...realRowToCell(row), suppressed: row.suppressed, window: row.window };
 }
 
 function realRowToCell(row) {
