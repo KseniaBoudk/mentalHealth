@@ -2,8 +2,19 @@
 # pipeline/README.md), and not needed for the prototype to run: js/real_mh_data.js
 # is the derived artifact the prototype actually reads, and that IS committed,
 # same convention as ../pipeline and ../frontend/public/data use.
-data/raw/
+# data/raw/* (not data/raw/), and the exception below, matter: a plain
+# trailing-slash directory ignore is pruned entirely — git won't even look
+# inside it to check a per-file negation. Globbing the contents instead
+# keeps the directory itself visible to git so the exception below works.
+data/raw/*
 data/processed/
+# EXCEPT the BUP waiting-time CSV: unlike everything else above, it is NOT
+# regenerable from an API — it only exists because a human exported it from
+# a browser session, and that exact rolling 12-month window can never be
+# reproduced again once it rolls forward. Committed so it isn't a single
+# point of loss sitting only on whoever's machine ran the export. See
+# pipeline/convert_vantetider_bup.py's docstring.
+!data/raw/vantetider_bup_manual_export.csv
 
 __pycache__/
 *.pyc

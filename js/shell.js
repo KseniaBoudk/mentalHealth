@@ -16,9 +16,10 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","metod","regioner"];
+const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","metod","regioner"];
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
-  sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,metod:viewMetod,regioner:viewRegioner};
+  sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
+  vantetider:viewVantetider,metod:viewMetod,regioner:viewRegioner};
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
@@ -56,7 +57,15 @@ function render(){
   // and names indicators the same way viewMetod()'s table does — it can't
   // fall behind the data the way a hand-typed "four of five" already did.
   const rs=realSummary();
-  document.getElementById("synth").innerHTML = rs.n>0
+  // synthN===0 checked first: rs.n>0 alone is also true once EVERY
+  // indicator is real, but synthPartialB/footBPartial/realNoteOn's
+  // sentences hard-assume there's at least one synthetic indicator left to
+  // name in synthNames — with that empty, they used to read "Only  is
+  // still generated". synthAllB/footBAll/realNoteAll are the versions
+  // without that clause, for exactly this case.
+  document.getElementById("synth").innerHTML = rs.synthN===0
+    ? `<b>${esc(t.synthAllT)}</b><span>${esc(t.synthAllB(rs.total,rs.realNames))}</span>`
+    : rs.n>0
     ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN))}</span>`
     : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`;
 
@@ -91,7 +100,7 @@ function render(){
         <div class="help"><span><b>${esc(t.helpA)}</b></span><span>${esc(t.helpB)}</span><span><b>${esc(t.helpC)}</b></span></div>
       </div>
     </div></main>
-    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(rs.n>0?t.footBPartial(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.footB)}</p></div></footer>`;
+    <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(rs.synthN===0?t.footBAll(rs.total,rs.realNames):rs.n>0?t.footBPartial(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.footB)}</p></div></footer>`;
   firstRender=false;
   wire();
 }
@@ -198,12 +207,13 @@ function wire(){
     tip.style.top=Math.max(m,Math.min(top,vh-th-m))+"px";
   };
   const hideTip=()=>{tip.style.display="none";};
-  // .tile is the map's regions — clickable/keyboard-selectable, unlike the
-  // dot-plot rows, histogram bars and scatter points below, which only ever
-  // show info. hideTip() first: render() rebuilds #app (including this very
-  // tile) without ever firing this tile's mouseleave, so without this the
-  // card from the tile under a still-stationary cursor was left stuck on
-  // screen until the mouse next moved.
+  // .tile is the map's regions — clickable/keyboard-selectable, same as
+  // .spt (scatter points) and .dotrow (dot-plot rows) below; histogram
+  // bars are the one mark type left that only ever shows info. hideTip()
+  // first: render() rebuilds #app (including this very tile) without ever
+  // firing this tile's mouseleave, so without this the card from the tile
+  // under a still-stationary cursor was left stuck on screen until the
+  // mouse next moved.
   document.querySelectorAll(".tile").forEach(b=>{
     // dragMoved: a pan gesture (wireMapZoomPan()) ending over this tile
     // isn't a click on it — skip the region-select once and reset, so the
@@ -218,6 +228,15 @@ function wire(){
   // from a click). Kept as its own block rather than merged with .tile's:
   // the two aren't quite identical, and it's only two call sites.
   document.querySelectorAll(".spt").forEach(b=>{
+    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
+    b.onclick=pick;
+    b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
+  });
+  // dotPlot()'s rows (viewOverTid's "All 21 regions" chart) — same
+  // pattern again. viewOverTid() itself already renders a "selected
+  // region" card from whichever region this lands on, the same way a map
+  // click already updates every other tab's own side panel.
+  document.querySelectorAll(".dotrow").forEach(b=>{
     const pick=()=>{hideTip();S.region=b.dataset.region;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};

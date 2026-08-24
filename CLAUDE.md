@@ -30,25 +30,31 @@ js/real_mh_data.js → js/data.js → js/lang.js → js/state.js → js/charts.j
 
 ## Tabs
 
-`laget`, `over_tid`, `karta`, `behov`, `sjukskrivning`, `sammanhang`, `metod`,
-`regioner` — all built now. `sjukskrivning` (sickness absence:
-Försäkringskassan F43 data, real 2005–2019, amber `fk` instrument colour)
-and `sammanhang` (context: Kolada population density + low-education
-share, region grain, 2023, unweighted municipality means — deliberately
-not shaped like `IND`/`REAL_*`, see `CONTEXT`/`CONTEXT_META` in
-`js/data.js`) both have their own dedicated view functions outside the
-`IND`-driven generic tabs.
+`laget`, `over_tid`, `karta`, `behov`, `sjukskrivning`, `sammanhang`,
+`vantetider`, `metod`, `regioner` — all built now. `sjukskrivning` (sickness
+absence: Försäkringskassan F43 data, real 2005–present, amber `fk`
+instrument colour), `sammanhang` (context: Kolada population density +
+low-education share, region grain, 2023, unweighted municipality means —
+deliberately not shaped like `IND`/`REAL_*`, see `CONTEXT`/`CONTEXT_META` in
+`js/data.js`), and `vantetider` (BUP — child/adolescent psychiatry —
+waiting times: Socialstyrelsen, region grain, median days to a completed
+first visit, monthly over a rolling ~12-month window only, no age/sex
+split, see `BUP_WAIT` in `js/data.js`; sourced by a MANUAL CSV export, not
+a script — see `pipeline/convert_vantetider_bup.py`'s docstring) all have
+their own dedicated view functions outside the `IND`-driven generic tabs.
 
 ## Data pipeline
 
 `pipeline/` (Python, run offline, not part of the live page) fetches real
-government data — Socialstyrelsen (psychiatric care, self-harm, suicide),
-Folkhälsomyndigheten (survey anxiety/worry), and Försäkringskassan (F43
-sickness absence, an EntryScape REST/JSON API, not PxWeb like the others) —
-into `data/processed/*.json`. `pipeline/build_kurvan_data.py` compiles that
-into `js/real_mh_data.js`. Antidepressant dispensing has no fetcher yet and
-stays synthetic. See `pipeline/README.md` for per-indicator caveats (age
-ranges, sex coverage, time windows).
+government data — Socialstyrelsen (psychiatric care, self-harm, suicide,
+antidepressant dispensing), Folkhälsomyndigheten (survey anxiety/worry), and
+Försäkringskassan (F43 sickness absence, not PxWeb like the others) — into
+`data/processed/*.json`.
+`pipeline/build_kurvan_data.py` compiles that into `js/real_mh_data.js`. See
+`pipeline/README.md` for per-indicator caveats (age ranges, sex coverage,
+time windows) — `viewBehov()`'s need-vs-response scatter is the one
+exception that stays on the fabricated generator for both axes regardless,
+on purpose (see that function's own comment in `js/views.js`).
 
 ## Interpretation rules
 

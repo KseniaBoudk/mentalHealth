@@ -7,9 +7,12 @@ CORS blocks when the prototype is opened straight off disk), this writes a
 plain JS file that assigns a few constants, loaded the same way as every
 other file in js/.
 
-Reads:  ../data/processed/socialstyrelsen_mh.json     (fetch_socialstyrelsen_mh.py)
-        ../data/processed/socialstyrelsen_psych.json  (fetch_socialstyrelsen_psych.py)
-Writes: ../js/real_mh_data.js  (REAL_MH and REAL_PSYCH_MH)
+Reads:  ../data/processed/socialstyrelsen_mh.json         (fetch_socialstyrelsen_mh.py)
+        ../data/processed/socialstyrelsen_psych.json      (fetch_socialstyrelsen_psych.py)
+        ../data/processed/socialstyrelsen_lakemedel.json  (fetch_socialstyrelsen_lakemedel.py)
+        ../data/processed/vantetider_bup.json  (convert_vantetider_bup.py — MANUAL source,
+                                                 see that script's own docstring)
+Writes: ../js/real_mh_data.js  (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_BUP_WAIT, ...)
 
 Run:  python prototype/pipeline/build_kurvan_data.py
 
@@ -55,13 +58,24 @@ SOURCES = [
                 "   same way; several stopped being published years ago.",
     },
     {
+        "var": "REAL_LAKEMEDEL_MH",
+        "file": "socialstyrelsen_lakemedel.json",
+        "source": "Socialstyrelsen Statistikdatabasen (Läkemedelsregistret, ATC N06A)",
+        "note": "Real, region-grain rates for antidepressants dispensed, all nine of\n"
+                "   Kurvan's age bands and all three sexes, annual. Fetched by\n"
+                "   fetch_socialstyrelsen_lakemedel.py. Was assumed to need a multi-\n"
+                "   gigabyte bulk download (the microdata register does) — this is a\n"
+                "   separate, small aggregate table on the same API as the other real\n"
+                "   Socialstyrelsen indicators here.",
+    },
+    {
         "var": "REAL_FK_MH",
         "file": "forsakringskassan_f43.json",
         "source": "Försäkringskassan (share of ongoing sickness-benefit cases, diagnosis F43)",
         "note": "Real, county-grain share (%) of ongoing sickness-benefit cases with a\n"
                 "   stress-reaction (F43) diagnosis, all three sexes, annual (averaged from\n"
-                "   quarterly), 2005-2019 only — this source does not extend into the 2020s.\n"
-                "   No age breakdown. Fetched by fetch_forsakringskassan.py.",
+                "   monthly), 2005 through the current year. No age breakdown. Fetched by\n"
+                "   fetch_forsakringskassan.py.",
     },
     {
         "var": "REAL_CONTEXT_MH",
@@ -72,6 +86,17 @@ SOURCES = [
                 "   2023 only. Region figures are an UNWEIGHTED mean of that region's\n"
                 "   municipalities, not population-weighted — a real simplification, not\n"
                 "   hidden (see n_kommuner per row). Fetched by fetch_kolada_context.py.",
+    },
+    {
+        "var": "REAL_BUP_WAIT",
+        "file": "vantetider_bup.json",
+        "source": "Socialstyrelsen (väntetider barn- och ungdomspsykiatrin — BUP waiting times)",
+        "note": "Real, region-grain MEDIAN DAYS waited for a completed first visit,\n"
+                "   monthly, no age/sex breakdown, from a rolling ~12-month window (not\n"
+                "   deep history). NOT fetched by a script — see\n"
+                "   convert_vantetider_bup.py's docstring: this source has no API, and\n"
+                "   the underlying CSV export needs a human to redo periodically to stay\n"
+                "   current.",
     },
 ]
 

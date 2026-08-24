@@ -61,7 +61,13 @@ function dotPlot(rows, opts){
     const rangeTxt=r.lo!==r.hi?` (${fmt(r.lo,1)}–${fmt(r.hi,1)})`:"";
     const tip=`${r.name}: ${fmt(r.value,1)}${rangeTxt}${opts.unit?` ${opts.unit}`:""}`;
     const card=dataCard({title:r.name,color:col,rows:[{value:fmt(r.value,1),unit:opts.unit||"",ci:r.lo!==r.hi?`${fmt(r.lo,1)}–${fmt(r.hi,1)}`:""}]});
-    s+=`<g data-tip="${esc(tip)}" data-card="${card}">`;
+    // class="dotrow"/data-region/tabindex: same click-to-select-region
+    // treatment as .tile/.spt (shell.js) — clicking (or Enter/Space on) a
+    // row sets S.region, which viewOverTid() already reads to render a
+    // "selected region" card in the dot plot's own card-b, in what used
+    // to be empty space below the SVG whenever it's shorter than its
+    // .stack siblings.
+    s+=`<g class="dotrow" data-region="${r.code}" tabindex="0" data-tip="${esc(tip)}" data-card="${card}">`;
     s+=`<line x1="${X(r.lo).toFixed(1)}" y1="${y}" x2="${X(r.hi).toFixed(1)}" y2="${y}" stroke="var(--ink-3)" stroke-width="1.5" opacity=".42" stroke-linecap="round"/>`;
     s+=`<circle cx="${X(r.value).toFixed(1)}" cy="${y}" r="${sel?4.2:3.2}" fill="${col}"${sel?' stroke="var(--surface)" stroke-width="1.4"':''}/></g>`;});
   return s+"</svg>";
@@ -151,10 +157,28 @@ function lineChart(series,opts){
       s+=`<circle class="pt-hit" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}" data-card="${card}"/>`;
     });
   });
+  // Every point across every series was null (see the empty-xs/ys comment
+  // above) — a real, known-in-advance state for some indicator/dimension
+  // combinations (e.g. distress/sjukfranvaro have no real age breakdown
+  // at all), not a bug, but a bare grid with an unfilled women/men legend
+  // and no visible reason why reads as broken. opts.emptyMsg lets a
+  // caller who KNOWS this can happen say why, right on the chart itself,
+  // rather than leaving a reader to find the small caveat line below it.
+  if(!all.length&&opts.emptyMsg){
+    s+=`<text x="${((L+R)/2).toFixed(1)}" y="${((Tp+B)/2).toFixed(1)}" text-anchor="middle" font-family="var(--sans)" font-size="11" fill="var(--ink-3)">${esc(opts.emptyMsg)}</text>`;
+  }
   (opts.notes||[]).forEach(n=>{
     s+=`<text x="${X(n.x).toFixed(1)}" y="${Y(n.y).toFixed(1)}" text-anchor="${n.anchor||"start"}" font-family="var(--sans)" font-size="8.5" font-style="italic" fill="var(--ink-3)">${esc(n.text)}</text>`;});
+  // Edge labels anchor inward (start at x0, end at x1) instead of always
+  // centering — a middle-anchored label sitting exactly at x0/x1 sticks
+  // half its width out past the plot's own left/right edge, invisible for
+  // a short label like "85+" but real clipping for a longer one like
+  // "Jun 2026" (viewVantetider's monthly x-axis). Anchoring inward keeps
+  // both edges' text fully inside the plot; any label away from the
+  // edges (e.g. an intermediate age-band tick) still centers as before.
   (opts.xlabels||[]).forEach(l=>{
-    s+=`<text x="${X(l[0]).toFixed(1)}" y="${H-9}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${esc(l[1])}</text>`;});
+    const anchor=l[0]===x1?"end":l[0]===x0?"start":"middle";
+    s+=`<text x="${X(l[0]).toFixed(1)}" y="${H-9}" text-anchor="${anchor}" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${esc(l[1])}</text>`;});
   return s+"</svg>";
 }
 

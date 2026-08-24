@@ -356,6 +356,11 @@ select option:disabled{color:var(--ink-3)}
    here also selects the region (shell.js). */
 .spt{outline:none;cursor:pointer}
 .spt:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+/* dotPlot()'s rows (charts.js) — same click-to-select affordance, same
+   outline treatment, now that a click here also selects the region
+   (shell.js). */
+.dotrow{outline:none;cursor:pointer}
+.dotrow:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 /* Custom hover card, replacing the browser's native SVG-title tooltip —
    light grey (var(--surface-2), the app's own secondary-surface tone, not
    a generic grey that would clash with the warm palette), same sans font

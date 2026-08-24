@@ -258,6 +258,13 @@ function viewOverTid(){
   }).filter(Boolean);
   const shown=rowsAll.filter(r=>!r.supp).sort((a,b)=>b.value-a.value);
   const suppressed=rowsAll.filter(r=>r.supp).map(r=>r.name);
+  // Whichever region a click on a dot-plot row (or the region picker
+  // below) landed on — undefined only for the "SE" pseudo-region, which
+  // isn't one of rowsAll's 21 real entries. Rendered into the dot plot's
+  // own card-b, in what used to be empty space below the SVG whenever
+  // the plot itself is shorter than its two .stack siblings (CSS grid's
+  // own stretch, same as every other side-by-side card pairing here).
+  const selRow=rowsAll.find(r=>r.code===S.region);
   const nat=S.age===-1?total(k,"SE",yr,S.sex,S.std):cell(k,"SE",yr,S.age,S.sex,S.std);
 
   // "SE" (Sweden) is a selectable pseudo-region here, not a RBY entry —
@@ -325,6 +332,14 @@ function viewOverTid(){
       <div class="card-b">
         ${shown.length?dotPlot(shown,{nat:nat?nat.value:null,color:col,aria:"All regions with confidence intervals",unit:unitLabel(k)}):""}
         ${suppressed.length?`<div class="suppress"><b>${esc(t.suppLbl)}</b> ${suppressed.map(esc).join(", ")}</div>`:""}
+        ${selRow?`<div class="rstats" style="grid-template-columns:1fr;margin-top:14px">
+          <div class="rstat" style="border-top-color:${col}">
+            <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(selRow.name)}</div>
+            <div class="rv tnum">${fmt(selRow.value,1,unitLabel(k))}</div>
+            <div class="rci tnum">${esc(unitLabel(k))} · ${ciRange(selRow.lo,selRow.hi)}</div>
+            <div class="rvs">${esc(t.statSentence[k](fmt(selRow.value,1)))}</div>
+          </div>
+        </div>`:""}
       </div>
       <div class="src">${spread!=null?t.spreadNote(fmt(spread,0),S.std?1:0):""}</div>
     </div>
@@ -333,7 +348,8 @@ function viewOverTid(){
         <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])}${isNat?"":" "+esc(t.ageSub)}</div></div>
         <div class="card-b">${lineChart(seriesAge,
           {band:isNat?[]:band,aria:isNat?"Age curve for Sweden as a whole":"Age curves for the selected region against the national band",
-           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k),xFmt:i=>AGES[i]})}
+           xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k),xFmt:i=>AGES[i],
+           emptyMsg:(isRealActive(k)&&REAL_AGE_LIMIT[k]&&!REAL_AGE_LIMIT[k].length)?t.noAgeData:null})}
           ${lineLegend(seriesAge)}
           ${isRealActive(k)&&t.realCaveat[k]?`<div class="suppress"><b>${esc(t.realLbl)}</b> ${esc(t.realCaveat[k])}</div>`:""}</div>
       </div>
@@ -572,6 +588,7 @@ function viewKarta(){
       <div class="rk" style="color:${color}"><span class="dot" style="background:${color}"></span>${esc(label)}</div>
       <div class="rv tnum">${fmt(mine[key].value,1,unitLabel(key))}</div>
       <div class="rci tnum">${esc(unitLabel(key))} · ${ciRange(mine[key].lo,mine[key].hi)}</div>
+      <div class="rvs">${esc(t.statSentence[key](fmt(mine[key].value,1)))}</div>
     </div>`;
 
   return `
@@ -697,7 +714,7 @@ function viewMetod(){
     <h3>${esc(P.c)}</h3><p>${esc(P.d)}</p>
     <h3>${esc(P.e)}</h3><p>${esc(P.f)}</p>
     <div class="note"><div class="l">${esc(P.g)}</div><p>${esc(P.h)}</p></div>
-    <div class="note"><div class="l">${esc(t.realNoteL)}</div><p>${esc(rs.n>0?t.realNoteOn(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.realNoteOff)}</p></div>
+    <div class="note"><div class="l">${esc(t.realNoteL)}</div><p>${esc(rs.synthN===0?t.realNoteAll(rs.realNames):rs.n>0?t.realNoteOn(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.realNoteOff)}</p></div>
   </div>
 
   <div class="prose" style="margin-top:30px">
@@ -885,6 +902,7 @@ function viewSjukskrivning(){
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ind[k])}</div>
               <div class="rv tnum">${fmt(mine?mine.value:null,1,unitLabel(k))}</div>
               <div class="rci tnum">${esc(unitLabel(k))} · ${ciRange(mine?mine.lo:null,mine?mine.hi:null)}</div>
+              ${mine?`<div class="rvs">${esc(t.statSentence.sjukfranvaro(fmt(mine.value,1)))}</div>`:""}
             </div>
           </div>
           <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
@@ -893,9 +911,11 @@ function viewSjukskrivning(){
     </div>
   </div>`;
 }
-// distress/psych/sjukfranvaro are the only three whose real sources publish
-// a genuine sex breakdown (REAL_SEX_ONLY_TOTAL, data.js) — selfharm/suicide
-// are deliberately absent here, not forgotten; t.konCaveat says why.
+// distress/psych/sjukfranvaro are the three real indicators shaped like an
+// ANNUAL time series — selfharm/suicide have real sex data too now (see
+// REAL's docstring, data.js), but as five-year rolling windows keyed by
+// midpoint year, a different shape this generic annual-card layout doesn't
+// fit; deliberately absent here, not forgotten. t.konCaveat says why.
 function viewKon(){
   const inds=["distress","psych","sjukfranvaro"];
   const cards=inds.map(k=>{
@@ -919,11 +939,13 @@ function viewKon(){
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.women)}</div>
             <div class="rv tnum">${fmt(natK?natK.value:null,1,unitLabel(k))}</div>
             <div class="rci tnum">${ciRange(natK?natK.lo:null,natK?natK.hi:null)}</div>
+            ${natK?`<div class="rvs">${esc(t.statSentence[k](fmt(natK.value,1)))}</div>`:""}
           </div>
           <div class="rstat" style="border-top-color:${col}">
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.men)}</div>
             <div class="rv tnum">${fmt(natM?natM.value:null,1,unitLabel(k))}</div>
             <div class="rci tnum">${ciRange(natM?natM.lo:null,natM?natM.hi:null)}</div>
+            ${natM?`<div class="rvs">${esc(t.statSentence[k](fmt(natM.value,1)))}</div>`:""}
           </div>
         </div>
       </div>
@@ -1012,6 +1034,7 @@ function viewAlder(){
           <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(groupLabel[g.key])}</div>
           <div class="rv tnum">${fmt(c?c.value:null,1,unitLabel(k))}</div>
           <div class="rci tnum">${ciRange(c?c.lo:null,c?c.hi:null)}</div>
+          ${c?`<div class="rvs">${esc(t.statSentence[k](fmt(c.value,1)))}</div>`:""}
         </div>`).join("")}
       </div>
     </div>
@@ -1057,6 +1080,85 @@ function viewSammanhang(){
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ctxInd[k])}</div>
               <div class="rv tnum">${fmt(mine?mine.value:null,1,unit)}</div>
               <div class="rci tnum">${esc(unit)} · 2023</div>
+              ${mine?`<div class="rvs">${esc(t.statSentence[k](fmt(mine.value,1)))}</div>`:""}
+            </div>
+          </div>
+          <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// BUP (barn- och ungdomspsykiatri) waiting times — its own dedicated view,
+// same "not IND-shaped" precedent as viewSammanhang above, plus a shape
+// none of the other real indicators have: MONTHLY, not annual, and only a
+// rolling ~12-month window rather than growing history. See BUP_WAIT's own
+// docstring (data.js) for the full "why this is different" — the prominent
+// note right under the hero (not just a small .src caveat) exists because
+// this indicator has more ways to be over-read than the others: a rolling
+// snapshot mistaken for a trend, or a low median mistaken for short waits
+// when it might just mean only the easy cases have finished yet.
+function viewVantetider(){
+  if(!BUP_WAIT.active)return viewComing();
+  const unit=S.lang==="sv"?"dagar":"days";
+  const col=INST_COLOR.reg;
+  const months=BUP_WAIT.months; // [[year,month],...] chronological, oldest first
+  const latest=months[months.length-1];
+  const monthLabel=([y,m])=>`${t.monthsShort[m-1]} ${y}`;
+
+  const rows=REGIONS.map(r=>{
+    const v=bupWaitCell(r[0],latest[0],latest[1]);
+    return v!=null&&{code:r[0],name:r[1],value:v,lo:v,hi:v};
+  }).filter(Boolean);
+  const nat=bupWaitCell("SE",latest[0],latest[1]);
+  const R=RBY[S.region];
+  const mine=bupWaitCell(S.region,latest[0],latest[1]);
+
+  // Two series: the national line always shown for reference, the picked
+  // region dashed alongside it — same shape as self-harm/suicide's
+  // women/men pairing, just region-vs-national instead of a sex split.
+  // If "SE" itself is picked the two lines simply coincide; not worth
+  // special-casing away for a rolling 12-point chart.
+  const natSeries={pts:months.map(([y,m],i)=>{const v=bupWaitCell("SE",y,m);return v!=null?[i,v]:null;}),
+    color:col,w:2.4,label:t.natLine};
+  const mineSeries={pts:months.map(([y,m],i)=>{const v=bupWaitCell(S.region,y,m);return v!=null?[i,v]:null;}),
+    color:col,dash:"5 3",w:1.9,label:R[1]};
+  const trendSeries=[natSeries,mineSeries];
+
+  return `
+  <div class="hero">
+    <p>${esc(t.vantetiderLead)}</p>
+  </div>
+  <div class="note mt-fig"><div class="l">${esc(t.vantetiderNoteL)}</div><p>${esc(t.vantetiderCaveat)}</p></div>
+  <div class="card mt-fig">
+    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(monthLabel(months[0]))}–${esc(monthLabel(latest))}</div></div>
+    <div class="card-b">${lineChart(trendSeries,
+      {aria:"BUP waiting time trend, national and selected region",
+       xlabels:[[0,monthLabel(months[0])],[months.length-1,monthLabel(latest)]],
+       h:200,unit,xFmt:i=>monthLabel(months[i])})}
+      ${lineLegend(trendSeries)}</div>
+    <div class="src">${esc(t.causalNote)}<br>Socialstyrelsen (väntetider barn- och ungdomspsykiatrin).</div>
+  </div>
+  <div class="grid-ex mt-fig">
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.vantetiderInd)} (${esc(unit)}) · ${esc(monthLabel(latest))}</div></div>
+      <div class="card-b">
+        ${mapZoomWrap(chorMap(rows,{color:col,nat,unit,aria:"Map of Sweden's 21 regions for BUP first-visit waiting time, click a region to see its figures"}),"vantetider")}
+        ${mapLegend(rows,col,unit,nat)}
+      </div>
+      <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-b">
+          <div class="rstats" style="grid-template-columns:1fr">
+            <div class="rstat" style="border-top-color:${col}">
+              <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.vantetiderInd)}</div>
+              <div class="rv tnum">${fmt(mine,1,unit)}</div>
+              <div class="rci tnum">${esc(unit)} · ${esc(monthLabel(latest))}</div>
+              ${mine!=null?`<div class="rvs">${esc(t.statSentence.bup_vantetid(fmt(mine,1)))}</div>`:""}
             </div>
           </div>
           <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>

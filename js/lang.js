@@ -7,12 +7,17 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",metod:"Metod",regioner:"Länsprofil"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",vantetider:"Väntetider, BUP",metod:"Metod",regioner:"Länsprofil"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
   ctxInd:{pop_density:"Invånare per kvadratkilometer",education_low_pct:"Andel med låg utbildningsnivå"},
   ctxCaveat:"Regionens värde är ett ovägt medelvärde av dess kommuner, inte befolkningsviktat. Källa: Kolada, 2023.",
+  vantetiderLead:"Väntetid till första besök inom barn- och ungdomspsykiatrin (BUP), median antal dagar bland avslutade besök. Ett smalt mått på tillgänglighet — inte på vårdens kvalitet eller hur stort behovet är.",
+  vantetiderNoteL:"Läs detta först",
+  vantetiderCaveat:"Rullande tolvmånadersfönster, inte en flerårig trend — källan sparar bara den senaste perioden. Uppdaterat för hand, inte automatiskt, så siffrorna kan ligga efter. Medianen gäller bara avslutade första besök — ett lågt värde kan betyda korta väntetider, eller bara att de enklaste fallen hunnit avslutas än så länge.",
+  vantetiderInd:"Väntetid till första besök",
+  monthsShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],
   legendRankNote:"Regionerna delas in i fem lika stora grupper efter värde — inte jämnstora intervall.",
   legendTiers:["Lägst","Lägre","Mitten","Högre","Högst"],
   langBtn:"EN", themeD:"Mörkt", themeL:"Ljust",
@@ -22,18 +27,56 @@ sv:{
   // Computed from IND/isRealActive() via realSummary() (views.js), not
   // hand-counted — see synthPartialB's English twin for why.
   synthPartialB:(n,total,realNames,synthNames,synthN)=>`${n} av ${total} indikatorer bygger nu på verklig, öppen statistik: ${realNames}. Bara ${synthNames} är fortfarande genererad${synthN>1?"e":""} — se märkningen vid varje diagram.`,
+  // synthN===0 (every indicator real) used to fall through to synthPartialB
+  // anyway, with an empty synthNames — "Bara  är fortfarande genererad" —
+  // since that sentence was written assuming there's always at least one
+  // synthetic indicator left to name. This is the complete-sentence version
+  // for when there genuinely isn't one.
+  synthAllT:"Verkliga data",
+  synthAllB:(total,realNames)=>`Alla ${total} indikatorer bygger nu på verklig, öppen statistik: ${realNames}.`,
   realLbl:"verkliga data", synthLbl:"syntetiska data",
   realCaveat:{
-    selfharm:"Verkliga siffror gäller endast 12–17 år, totalt kön, femårsfönster.",
-    suicide:"Verkliga siffror gäller endast 15–19 år, totalt kön, femårsfönster.",
+    selfharm:"Verkliga siffror gäller endast 12–17 år, femårsfönster.",
+    suicide:"Verkliga siffror gäller endast 15–19 år, femårsfönster.",
     psych:"Alla F00–F99-diagnoser samlat, årsvis, alla åldrar och kön — men bara specialistvård.",
     distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
-    sjukfranvaro:"Verkliga siffror gäller 2005–2019 (källan slutar där, täcker inte 2020-talet). Ingen åldersuppdelning."
+    sjukfranvaro:"Verkliga siffror sedan 2005, månadsvis genomsnitt per år. Ingen åldersuppdelning.",
+    antidep:"Alla åldrar och kön, årsvis sedan 2006 — men mäter uthämtade recept, inte diagnos; se not nedan."
+  },
+  // Turns a bare "value + unit" .rstat number into a full sentence — only
+  // used on the low-density, often-orphaned side-panel numbers (Karta,
+  // Sjukskrivning, Kön, Ålder, Sammanhang, Väntetider), never on chart
+  // tooltips/dot-plot rows/map hovers, which repeat up to 21x on screen
+  // and already sit next to a chart title naming the indicator — a
+  // sentence there would repeat words, not add clarity. Takes the value
+  // ALREADY formatted as a plain number (fmt(v,1), no unit attached),
+  // since each sentence places its own unit text wherever its own
+  // grammar needs it — sjukfranvaro's "% of ongoing sick-leave cases" is
+  // NOT "% of population", and bup_vantetid/pop_density aren't things
+  // people "are" the way an event rate is, so one shared template can't
+  // cover all of these (see CLAUDE.md's interpretation rules on not
+  // overstating what a number does/doesn't mean).
+  statSentence:{
+    selfharm:(n)=>`${n} per 100 000 vårdades för självskada.`,
+    suicide:(n)=>`${n} per 100 000 avled i suicid.`,
+    psych:(n)=>`${n} per 100 000 hade kontakt med psykiatrisk specialistvård.`,
+    distress:(n)=>`${n} % uppgav svår ängslan, oro eller ångest.`,
+    antidep:(n)=>`${n} per 1 000 hämtade ut antidepressiva.`,
+    sjukfranvaro:(n)=>`${n} % av pågående sjukfall hade diagnosen stressreaktion.`,
+    bup_vantetid:(n)=>`Medianväntetiden till första besök var ${n} dagar.`,
+    // Context indicators deliberately phrased plainly, not in the same
+    // clinical-sounding shape as the mental-health sentences above — see
+    // CONTEXT's own docstring in js/data.js on why these aren't shaped
+    // like IND/REAL_*; giving them the same sentence template would imply
+    // a comparability with the health measures this project avoids.
+    pop_density:(n)=>`Regionen har ${n} invånare per kvadratkilometer.`,
+    education_low_pct:(n)=>`${n} % av invånarna 25–64 år har låg utbildningsnivå.`
   },
   realNoteL:"Vad som faktiskt är verkligt här",
   // realNames leads the sentence here (unlike synthPartialB/footBPartial,
   // where it follows a colon) — capitalise just its first letter back up.
   realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} är nu verklig, öppen statistik, hämtad av prototype/pipeline/. Bara ${synthNames} saknar hämtskript i det här projektet och förblir genererad${synthN>1?"e":""} — se märkningen vid varje diagram.`,
+  realNoteAll:(realNames)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} är nu verklig, öppen statistik, hämtad av prototype/pipeline/.`,
   realNoteOff:"Ingen indikator är verklig data ännu på den här sidan. prototype/pipeline/ kan hämta verkliga siffror för svår ängslan/oro, psykiatrisk specialistvård, självskada och suicid; kör fetcherna och sedan build_kurvan_data.py för att aktivera dem.",
   legend:[["survey","Enkäten","frågar människor direkt"],["reg","Registren","räknar dem som nått vården"],["mort","Dödsorsaksregistret","missar ingen"]],
   kick:"Veckans bild",
@@ -74,7 +117,7 @@ sv:{
   ind:{distress:"Svår ängslan, oro eller ångest",antidep:"Uthämtade antidepressiva",psych:"Psykiatrisk specialistvård",selfharm:"Slutenvårdad för självskada",suicide:"Avlidna i suicid",sjukfranvaro:"Sjukskrivning, stressreaktion (F43)"},
   fkLead:"Andel pågående sjukfall med diagnosen stressreaktion (F43) — ett mått på samhällelig/funktionell påverkan, inte ett direkt mått på psykisk ohälsa och inte en kostnadsberäkning.",
   konLead:"Svår ängslan/oro, psykiatrisk specialistvård och sjukskrivning publiceras alla uppdelat på kön i sina källor — här jämförs kvinnor och män över tid för respektive mått, rikssiffror.",
-  konCaveat:"Slutenvårdad för självskada och avliden i suicid saknas här: de källorna publicerar bara totalt kön, ingen verklig uppdelning på kvinnor/män finns att visa.",
+  konCaveat:"Slutenvårdad för självskada och avliden i suicid saknas här: de källorna är femårsfönster kring en mittpunkt, inte årsvisa siffror som de tre andra — och skulle behöva en egen kortlayout, inte bara läggas till i den här.",
   youthTitle:"Unga: vårdkontakt, 15–24 år",
   youthUnit:"15–24 år · riket · uppdelat på kön",
   youthDistressCtx:"Ingen åldersuppdelning finns i källan — inte en 15–24-siffra.",
@@ -86,6 +129,7 @@ sv:{
   crude:"Ojusterat",std:"Åldersstandardiserat",
   dotTitle:"Alla 21 regioner",dotSub:"Sorterat · 95 % konfidensintervall. Överlappande intervall är ingen rangordning.",
   ageTitle:"Genom livet",ageSub:"mot rikets band",
+  noAgeData:"Ingen åldersuppdelning finns för den här indikatorn — se noten nedan.",
   timeTitle:"Över tid",
   natLine:"Riket",
   winLbl:y=>`${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end. No "fönster"/"window" prefix — the dash range already reads as a period, and the Over time tab's own year dropdown shows the same range unprefixed.
@@ -132,7 +176,7 @@ sv:{
     psych:["Region","Endast specialistvård (SVOV-definitionen från 2008). Primärvård ingår inte."],
     selfharm:["Region","Från 2008. Vårdtillfällen, inte personer. Y10–Y34 följer med."],
     suicide:["Region, 5-årsfönster","Från 1997 nationellt; fönster från 2001. Antal <10 undertrycks."],
-    sjukfranvaro:["Region","Från 2005, men källan slutar 2019 — täcker inte 2020-talet. Andel av pågående sjukfall med diagnos F43, inte en befolkningsandel."]
+    sjukfranvaro:["Region","Från 2005, månadsvis genomsnitt per år. Andel av pågående sjukfall med diagnos F43, inte en befolkningsandel."]
   },
   mProse:{
     a:"Tre instrument, inte ett",
@@ -148,7 +192,7 @@ sv:{
   mapNote:(real)=>real
     ?"Färgstyrkan visar nivå för vald indikator. Kartan är verklig geografi — värdena är verkliga Socialstyrelsen-data också; se förbehållet nedan."
     :"Färgstyrkan visar nivå för vald indikator, 2024. Kartan är själva geografin — värdena är fortfarande syntetiska.",
-  mapPicked:"vald region",mapOpen:"Öppna regionsidan",
+  mapPicked:"vald region",mapOpen:"Öppna länsprofilen",
   trendWith:"följer riket",trendAgainst:"mot rikets riktning",
   trendNote:(a,b)=>`Peka på en region för pil ↑/↓/→: förändring ${a}→${b} mot intervallet, och om den följer eller går mot rikets rörelse.`,
   cmpToggle:"⇄ Jämför två kartor",
@@ -162,16 +206,22 @@ sv:{
   helpA:"Självmordslinjen 90101",helpB:"öppet dygnet runt, alla dagar",helpC:"1177 för vårdrådgivning",
   footA:"Utkast. Byggd på den öppna dataarkitektur som utvecklats för Svenska barnhälsoobservatoriet. Ett fristående projekt, inte knutet till barnhalsovard.se.",
   footB:"Varje siffra på den här sidan är genererad för att visa en design. Ingen är en mätning och ingen ska citeras. Källhänvisningarna beskriver var de riktiga serierna finns.",
-  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} av ${total} indikatorer — ${realNames} — bygger nu på verklig, öppen statistik och kan citeras med respektive källhänvisning. Bara ${synthNames} är fortfarande genererad${synthN>1?"e":""} för att visa en design; den siffran är inte en mätning.`
+  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} av ${total} indikatorer — ${realNames} — bygger nu på verklig, öppen statistik och kan citeras med respektive källhänvisning. Bara ${synthNames} är fortfarande genererad${synthN>1?"e":""} för att visa en design; den siffran är inte en mätning.`,
+  footBAll:(total,realNames)=>`Alla ${total} indikatorer — ${realNames} — bygger nu på verklig, öppen statistik och kan citeras med respektive källhänvisning.`
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",metod:"Method",regioner:"County profile"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",vantetider:"Waiting times, BUP",metod:"Method",regioner:"County profile"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
   ctxInd:{pop_density:"Residents per square kilometre",education_low_pct:"Share with low education level"},
   ctxCaveat:"A region's value is an unweighted mean of its municipalities, not population-weighted. Source: Kolada, 2023.",
+  vantetiderLead:"Waiting time to a first visit in child and adolescent psychiatry (BUP), median days among completed visits. A narrow measure of accessibility — not of care quality, or of how large the need is.",
+  vantetiderNoteL:"Read this first",
+  vantetiderCaveat:"A rolling twelve-month window, not a multi-year trend — the source only keeps the most recent period. Updated by hand, not automatically, so figures can lag. The median covers only completed first visits — a low value can mean short waits, or just that the easiest cases have finished so far.",
+  vantetiderInd:"Waiting time to first visit",
+  monthsShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
   legendRankNote:"Regions are split into five equal-sized groups by value — not equal-width ranges.",
   legendTiers:["Lowest","Lower","Middle","Higher","Highest"],
   langBtn:"SV", themeD:"Dark", themeL:"Light",
@@ -183,18 +233,38 @@ en:{
   // can't quietly go stale the way a hand-typed "four of five" already did
   // once (it omitted sjukfranvaro after that indicator went real).
   synthPartialB:(n,total,realNames,synthNames,synthN)=>`${n} of ${total} indicators now draw on real, open statistics: ${realNames}. Only ${synthNames} ${synthN>1?"are":"is"} still generated — see the label on every chart.`,
+  // synthN===0 (every indicator real) used to fall through to synthPartialB
+  // anyway, with an empty synthNames — "Only  is still generated" — since
+  // that sentence was written assuming there's always at least one
+  // synthetic indicator left to name. This is the complete-sentence
+  // version for when there genuinely isn't one.
+  synthAllT:"Real data",
+  synthAllB:(total,realNames)=>`All ${total} indicators now draw on real, open statistics: ${realNames}.`,
   realLbl:"real data", synthLbl:"synthetic data",
   realCaveat:{
-    selfharm:"Real figures cover ages 12–17 only, total sex, five-year windows.",
-    suicide:"Real figures cover ages 15–19 only, total sex, five-year windows.",
+    selfharm:"Real figures cover ages 12–17 only, five-year windows.",
+    suicide:"Real figures cover ages 15–19 only, five-year windows.",
     psych:"All F00–F99 diagnoses pooled, annual, every age and sex — specialist care only.",
     distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
-    sjukfranvaro:"Real figures cover 2005–2019 only (the source stops there, doesn't extend into the 2020s). No age breakdown."
+    sjukfranvaro:"Real figures since 2005, monthly average per year. No age breakdown.",
+    antidep:"Every age and sex, annual since 2006 — but measures dispensed prescriptions, not diagnosis; see the note below."
+  },
+  statSentence:{
+    selfharm:(n)=>`${n} per 100,000 were hospitalised for self-harm.`,
+    suicide:(n)=>`${n} per 100,000 died by suicide.`,
+    psych:(n)=>`${n} per 100,000 had contact with specialist psychiatric care.`,
+    distress:(n)=>`${n}% reported severe anxiety, worry or dread.`,
+    antidep:(n)=>`${n} per 1,000 were dispensed antidepressants.`,
+    sjukfranvaro:(n)=>`${n}% of ongoing sickness-benefit cases had a stress-reaction diagnosis.`,
+    bup_vantetid:(n)=>`The median wait for a first visit was ${n} days.`,
+    pop_density:(n)=>`This region has ${n} residents per km².`,
+    education_low_pct:(n)=>`${n}% of residents 25–64 have a low education level.`
   },
   realNoteL:"What's actually real here",
   // realNames leads the sentence here (unlike synthPartialB/footBPartial,
   // where it follows a colon) — capitalise just its first letter back up.
   realNoteOn:(n,total,realNames,synthNames,synthN)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} now ${n>1?"run":"runs"} on real, open data, fetched by prototype/pipeline/. Only ${synthNames} ${synthN>1?"have":"has"} no fetcher anywhere in this project and stay${synthN>1?"":"s"} generated — see the label on every chart.`,
+  realNoteAll:(realNames)=>`${realNames.charAt(0).toUpperCase()+realNames.slice(1)} now run on real, open data, fetched by prototype/pipeline/.`,
   realNoteOff:"No indicator on this page is real data yet. prototype/pipeline/ can fetch real figures for severe anxiety/worry, specialist psychiatric care, self-harm and suicide; run the fetchers, then build_kurvan_data.py, to switch them on.",
   legend:[["survey","The survey","asks people directly"],["reg","The registers","count those who reached care"],["mort","The death register","misses nobody"]],
   kick:"This week's exhibit",
@@ -229,7 +299,7 @@ en:{
   ind:{distress:"Severe anxiety, worry or dread",antidep:"Antidepressants dispensed",psych:"Specialist psychiatric care",selfharm:"Hospitalised for self-harm",suicide:"Died by suicide",sjukfranvaro:"Sickness absence, stress reaction (F43)"},
   fkLead:"Share of ongoing sickness-benefit cases with a stress-reaction (F43) diagnosis — a societal/functional impact measure, not a direct measure of mental health and not a cost estimate.",
   konLead:"Severe anxiety/worry, specialist psychiatric care and sickness absence are all published broken down by sex in their sources — this compares women and men over time for each measure, national figures.",
-  konCaveat:"Hospitalised for self-harm and died by suicide aren't here: those sources only publish total sex, no real breakdown by women/men exists to show.",
+  konCaveat:"Hospitalised for self-harm and died by suicide aren't here: those sources are five-year rolling windows around a midpoint year, not annual figures like the other three — and would need their own card layout, not just adding into this one.",
   youthTitle:"Youth: care contact, ages 15-24",
   youthUnit:"ages 15-24 · national · by sex",
   youthDistressCtx:"The source has no age breakdown — not a 15-24 figure.",
@@ -241,6 +311,7 @@ en:{
   crude:"Crude",std:"Age-standardised",
   dotTitle:"All 21 regions",dotSub:"Sorted · 95% confidence intervals. Overlapping intervals are not a ranking.",
   ageTitle:"Across the life course",ageSub:"against the national band",
+  noAgeData:"No age breakdown exists for this indicator — see the note below.",
   timeTitle:"Over time",
   natLine:"Sweden",
   winLbl:y=>`${y-2}–${y+2}`,   // y is the window's MIDPOINT (matches midpoint_year everywhere real data is keyed), not its end. No "fönster"/"window" prefix — the dash range already reads as a period, and the Over time tab's own year dropdown shows the same range unprefixed.
@@ -287,7 +358,7 @@ en:{
     psych:["Region","Specialist care only (SVOV definition from 2008). Primary care not included."],
     selfharm:["Region","From 2008. Admissions, not people. Y10–Y34 carried alongside."],
     suicide:["Region, 5-year windows","From 1997 nationally; windows from 2001. Counts <10 withheld."],
-    sjukfranvaro:["Region","From 2005, but the source stops in 2019 — doesn't extend into the 2020s. Share of ongoing sickness-benefit cases with diagnosis F43, not a share of the population."]
+    sjukfranvaro:["Region","From 2005, monthly average per year. Share of ongoing sickness-benefit cases with diagnosis F43, not a share of the population."]
   },
   mProse:{
     a:"Three instruments, not one",
@@ -303,7 +374,7 @@ en:{
   mapNote:(real)=>real
     ?"Colour strength shows the level of the selected indicator. The map is real geography — the values are real Socialstyrelsen data too; see the caveat below."
     :"Colour strength shows the level of the selected indicator, 2024. The map itself is real geography — the values are still synthetic.",
-  mapPicked:"selected region",mapOpen:"Open the region page",
+  mapPicked:"selected region",mapOpen:"Open the county profile",
   trendWith:"tracking the national trend",trendAgainst:"against the national trend",
   trendNote:(a,b)=>`Hover a region for a ↑/↓/→ arrow: change ${a}→${b} against the interval, and whether it tracks or runs against the national move.`,
   cmpToggle:"⇄ Compare two maps",
@@ -317,5 +388,6 @@ en:{
   helpA:"Självmordslinjen 90101",helpB:"open around the clock, every day",helpC:"1177 for care advice",
   footA:"Draft. Built on the open-data observatory architecture developed for the Swedish Child Health Observatory. A separate project, not affiliated with barnhalsovard.se.",
   footB:"Every figure on this page is generated to show a design. None is a measurement, and none should be quoted. The source references describe where the real series live.",
-  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} of ${total} indicators — ${realNames} — now draw on real, open statistics and can be cited with their respective sources. Only ${synthNames} ${synthN>1?"are":"is"} still generated to show a design; that figure is not a measurement.`
+  footBPartial:(n,total,realNames,synthNames,synthN)=>`${n} of ${total} indicators — ${realNames} — now draw on real, open statistics and can be cited with their respective sources. Only ${synthNames} ${synthN>1?"are":"is"} still generated to show a design; that figure is not a measurement.`,
+  footBAll:(total,realNames)=>`All ${total} indicators — ${realNames} — now draw on real, open statistics and can be cited with their respective sources.`
 }};

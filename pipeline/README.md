@@ -5,15 +5,15 @@ Kurvan (`../kurvan.html`) started as a pure design exhibit: every number in
 like five real Swedish mental-health indicators without being any of them.
 Every chart said so ("synthetic data") and the footer said not to quote it.
 
-This folder pulls real numbers for **four of those five**:
+This folder now pulls real numbers for **all five of those**:
 
 - **Self-harm hospitalisation** and **suicide** — `fetch_socialstyrelsen_mh.py`,
   Socialstyrelsen Statistikdatabasen (Patientregistret / Dödsorsaksregistret),
-  county grain, ages 12–19 only, total sex only, five-year windows.
+  county grain, ages 12–19 only, all three sexes, five-year windows.
 - **Specialist psychiatric care** — `fetch_socialstyrelsen_psych.py`, same API,
   dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99. County grain,
   all nine of Kurvan's age bands, all three sexes, annual. The best fit of the
-  four — see that script's docstring for the live-verified dataset/dimension
+  five — see that script's docstring for the live-verified dataset/dimension
   ids.
 - **Severe anxiety, worry or dread** (backs Kurvan's `distress` indicator) —
   `fetch_folkhalsodata_hlv.py`, Folkhälsomyndigheten's Folkhälsodata (a
@@ -21,9 +21,13 @@ This folder pulls real numbers for **four of those five**:
   don't assume its dimension ids or sex-code order carry over). County grain,
   all three sexes, no age breakdown at all (the source table doesn't have
   one), ~4-year survey windows.
+- **Antidepressants dispensed** — `fetch_socialstyrelsen_lakemedel.py`, same
+  API/agency as self-harm/suicide/psych, dataset `lakemedel`, ATC N06A.
+  County grain, all nine of Kurvan's age bands, all three sexes, annual since
+  2006 — as comfortable a fit as psychiatric care. See "Why antidepressants
+  are real now" below for why this took longer than the other four.
 
-Only **antidepressants dispensed** has no fetcher here. Read on for why, and
-for why `distress` isn't named what you might expect from the code.
+Read on for why `distress` isn't named what you might expect from the code.
 
 A seventh script, `fetch_kolada_context.py`, backs the Context tab's two
 demographic/socioeconomic layers (population density, low-education
@@ -34,12 +38,44 @@ part of the `IND` shape the other six use.
 A sixth script, `fetch_forsakringskassan.py`, is unrelated to those five —
 it backs a new indicator, `sjukfranvaro` (share of ongoing sickness-benefit
 cases with a stress-reaction/F43 diagnosis), not a retrofit of an existing
-one. Different agency, different API technology (an EntryScape "rowstore"
-REST/JSON dataset, not PxWeb), and a real but dated coverage window: county
-grain, all three sexes, annual (averaged from the source's quarterly rows),
-but **2005–2019 only** — this source does not extend into the 2020s. No age
-breakdown. See that script's own docstring for the verified field names and
-dataset id.
+one. Different agency, different API technology, and NOT PxWeb: county
+grain, all three sexes, annual (averaged from the source's monthly rows),
+2005 through the current year. This used to stop at 2019 — that dataset
+turned out to be a frozen historical extract; the fetcher now hits
+Försäkringskassan's newer statistics-database API instead, recovered from a
+live browser Network-tab capture (its query shape isn't discoverable from
+its own metadata endpoint alone — see that script's docstring for the trap
+this involved and why "200 OK with an empty array" doesn't mean "no
+endpoint here"). No age breakdown. See that script's own docstring for the
+verified field names, endpoint, and query parameters.
+
+An eighth script, `convert_vantetider_bup.py`, is a different SPECIES of
+script from the other seven — **read its docstring before assuming it works
+like the others.** It backs BUP (barn- och ungdomspsykiatri, child/
+adolescent psychiatry) waiting times, and:
+
+- **It does not fetch anything.** Its source (Socialstyrelsen's
+  väntetider-barn-och-ungdomspsykiatrin database) is a classic ASP.NET
+  WebForms page with no JSON API — getting data out of it means a human
+  using its own built-in CSV export in a real browser (its postback
+  tokens are single-use and session-tied, not scriptable the way the
+  other sources' plain URL parameters are). The "fetch" step is a
+  documented manual procedure; this script only converts the resulting
+  CSV (checked in at `../data/raw/vantetider_bup_manual_export.csv`)
+  into the same tidy JSON shape the others produce.
+- **It goes stale and needs a human to refresh it.** Every other
+  indicator here can be updated by just re-running its script. This one
+  can't — refreshing it means repeating the manual export (steps are in
+  the script's own docstring) and re-running the converter.
+- **The source itself is a rolling ~12-month window**, not deep history
+  — its own page said "monthly data July 2025 - June 2026" as of the
+  2026-08-24 pull. This is a current-snapshot indicator, not something
+  to build a multi-year trend chart against.
+- Median waiting time (days) for a COMPLETED first visit, region grain,
+  monthly, all sexes/ages combined (that's what was requested in this
+  particular export — a different pull could ask for a sex/age split).
+  Small/northern regions (Blekinge, Västernorrland, Norrbotten) had
+  several months suppressed as too few contacts to publish.
 
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
@@ -56,20 +92,32 @@ what's actually shown (`js/lang.js`'s `ind.distress`, `rDistress`, `gapX`,
 docstring for the full per-category coverage check before picking a different
 one.
 
-## Why antidepressants still aren't real
+## Why antidepressants are real now
 
-Läkemedelsregistret (the prescribed drug register) is not exposed through any
-queryable API at all — only as large bulk CSV downloads (2006-2024, several
-GB) from `socialstyrelsen.se/statistik-och-data/statistik/for-utvecklare/`.
-Wiring it up is a bulk-file-parsing job, structurally different from the four
-fetchers here, and hasn't been attempted. `antidep` stays on the fabricated
-generator, clearly labelled as such on every chart.
+Läkemedelsregistret's own *microdata* really is only available as large bulk
+CSV downloads (2006-2024, several GB) from
+`socialstyrelsen.se/statistik-och-data/statistik/for-utvecklare/` — that part
+of the old assumption here was correct. What was wrong was assuming that was
+the only way in: Socialstyrelsen's statistics database (the same
+`sdb.socialstyrelsen.se/api/v1/` API self-harm/suicide/psych already use) has
+a separate, ordinary aggregate table for exactly this — `lakemedel`, filtered
+to ATC N06A — with no bulk download needed. See
+`fetch_socialstyrelsen_lakemedel.py`'s docstring for what was verified live
+before writing it, including a real trap of its own: this dataset's rate
+measure comes in four flavours (patients vs. dispensing events, each per-1000
+or raw), and the wrong one reads ~5x too high against everything the
+synthetic generator had shown up to that point.
+
+One thing that does NOT change with this: `viewBehov()`'s need-vs-response
+scatter still calls the fabricated generator for antidepressants on purpose,
+same as before — see the caveat two paragraphs down.
 
 ## What "real" means here, precisely
 
-Read each fetch script's docstring before changing anything in it — two of
-the four carry API traps that silently return wrong-but-plausible numbers if
-you get a URL segment wrong. The short version of what each hands back:
+Read each fetch script's docstring before changing anything in it — three of
+the five carry API traps that silently return wrong-but-plausible numbers if
+you get a URL segment (or, for antidepressants, a measure id) wrong. The
+short version of what each hands back:
 
 **Self-harm / suicide** (`fetch_socialstyrelsen_mh.py`):
 - County grain, plus one national row per indicator (this copy keeps the
@@ -104,6 +152,19 @@ you get a URL segment wrong. The short version of what each hands back:
   gaps in the cadence — take the window list from the API, don't assume a
   fixed step).
 
+**Antidepressants dispensed** (`fetch_socialstyrelsen_lakemedel.py`), also a
+comfortable fit:
+- County grain plus a national row. All nine of Kurvan's age bands (pooled
+  from the register's own 5-year bands, same trick psychiatric care uses)
+  and all three sexes.
+- No pre-aggregated "all ages" figure on this dataset (unlike psychiatric
+  care's) — the fetcher reconstructs one itself, pooled across all eighteen
+  5-year bands instead of just pairs of two.
+- Annual, 2006 onward. No window, no disclosure floor.
+- Measures dispensed prescriptions (whoever prescribed them), not a
+  diagnosis — rises when treatment improves as well as when health worsens.
+  Already said in `js/lang.js`'s `notNumB.antidep`, now doubly true once real.
+
 `js/data.js` enforces all of this: once real data is loaded for an indicator,
 asking for an age band, sex, or year the source doesn't publish returns
 `null` ("no data"), never a fabricated fallback number sitting next to a real
@@ -123,7 +184,8 @@ pip install -r requirements.txt
 python fetch_socialstyrelsen_mh.py     # self-harm + suicide, ~2 minutes
 python fetch_socialstyrelsen_psych.py  # psychiatric care, ~1 minute, ~40 requests
 python fetch_folkhalsodata_hlv.py      # severe anxiety, ~15 seconds, 1 request
-python fetch_forsakringskassan.py      # sickness absence (F43), ~10 seconds, paginated
+python fetch_socialstyrelsen_lakemedel.py  # antidepressants, ~1 minute, 36 requests
+python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, single request
 python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
 python build_kurvan_data.py            # writes ../js/real_mh_data.js
 ```

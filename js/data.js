@@ -97,7 +97,7 @@ const IND = {
     reg:"Hälsa på lika villkor (FoHM)", regEn:"Hälsa på lika villkor (FoHM)"
   },
   antidep: {
-    inst:"reg", start:2006,
+    inst:"reg", start:2006, real:true,
     scale:1000, dec:1,
     age:[8,62,78,92,108,118,124,138,152],
     mMul:[.62,.60,.60,.62,.64,.68,.72,.78,.84],
@@ -193,19 +193,23 @@ const EVENTS = [
    running those two scripts again.
 
    Only `selfharm` and `suicide` have a real fetcher anywhere in this repo.
-   `distress`, `antidep` and `psych` stay on the fabricated generator above —
-   see the docstring at the top of this file — because nothing here pulls
-   HLV/FoHM survey data or Läkemedelsregistret dispensing.
+   `distress` and `psych` stay on the fabricated generator above — see the
+   docstring at the top of this file — because nothing here pulls HLV/FoHM
+   survey data; `antidep` has its own real source now too (1f below).
 
    What the real source actually publishes, and what it does not:
      - county grain only (plus one national row) — never municipality
      - self-harm: ages 12-14 and 15-17 ONLY. suicide: ages 15-19 ONLY.
        Nothing for 25-84+. Real teenage-suicide registers do not cover
        pensioners, however much the synthetic curve below does.
-     - sex "T" (total) only — no real M/K split
+     - all three sexes (M/K/T) — fetch_socialstyrelsen_mh.py requests
+       kon/1,2,3, confirmed live to work on both underlying datasets.
      - five-year rolling windows plotted at the midpoint year, not annual
      - self-harm rates are never suppressed; suicide counts below 10 per
-       window are withheld (the rate is still published)
+       window are withheld (the rate is still published) — per SEX now,
+       so a county's single-sex count is suppressed far more often than
+       its combined-sex count was, which is the same disclosure floor
+       working as intended on a genuinely smaller sub-population.
 
    REAL.active is false until someone has actually run the fetcher (an empty
    real_mh_data.js ships by default-safe). While it's false, cell()/total()
@@ -228,7 +232,7 @@ const REAL = (() => {
   const CAUSES = { selfharm: ["self_harm_hosp_per_100k", "undetermined_intent_hosp_per_100k"],
                     suicide: ["suicide_per_100k"] };
 
-  const idx = { selfharm: {}, suicide: {} };
+  const idx = { selfharm: {}, suicide: {} };  // idx[k][county][ageIdx][sex][midpoint_year]
   for (const k of Object.keys(idx)) {
     const ageOf = {};
     for (const ai in AGE_MAP[k]) ageOf[AGE_MAP[k][ai]] = ai;
@@ -238,11 +242,12 @@ const REAL = (() => {
       if (ageIdx === undefined) continue;
       const byCounty = idx[k][row.county_code] || (idx[k][row.county_code] = {});
       const byAge = byCounty[ageIdx] || (byCounty[ageIdx] = {});
-      const cur = byAge[row.midpoint_year];
+      const bySex = byAge[row.sex] || (byAge[row.sex] = {});
+      const cur = bySex[row.midpoint_year];
       if (!cur) {
-        byAge[row.midpoint_year] = { value: row.value, count: row.count, suppressed: row.suppressed, window: row.window };
+        bySex[row.midpoint_year] = { value: row.value, count: row.count, suppressed: row.suppressed, window: row.window };
       } else {
-        // Two causes (X60-X84 and Y10-Y34) landing on the same county/age/window: sum the rates.
+        // Two causes (X60-X84 and Y10-Y34) landing on the same county/age/sex/window: sum the rates.
         cur.value += row.value;
         cur.count = (cur.count != null && row.count != null) ? cur.count + row.count : null;
         cur.suppressed = cur.suppressed || row.suppressed;
@@ -254,7 +259,7 @@ const REAL = (() => {
     const nat = idx[k]["00"];
     if (!nat) return null;
     let best = null;
-    for (const ai in nat) for (const y in nat[ai]) { const yn = +y; if (best === null || yn > best) best = yn; }
+    for (const ai in nat) for (const sex in nat[ai]) for (const y in nat[ai][sex]) { const yn = +y; if (best === null || yn > best) best = yn; }
     return best;
   };
   const latestYear = active
@@ -375,7 +380,72 @@ function realTotalFK(regionCode, year, sex) {
 function realCellFK() { return REAL_FK.active ? null : undefined; }
 
 /* =====================================================================
-   1f. CONTEXT — demographic/socioeconomic layers for the Sammanhang tab,
+   1f. REAL DATA — antidepressants dispensed (ATC N06A), from
+   js/real_mh_data.js's REAL_LAKEMEDEL_MH (fetch_socialstyrelsen_lakemedel.py
+   + build_kurvan_data.py).
+
+   Same comfortable shape as psych (1c above), and the same IIFE/lookup
+   pair reused almost verbatim: county grain (plus a national row), ALL
+   nine of Kurvan's age bands, all three sexes, ANNUAL. Unlike psych, the
+   source table has no pre-aggregated "0-85+" row of its own — the fetcher
+   reconstructs one itself (same population-recovery pooling it uses for
+   the nine age bands, just applied across all eighteen 5-year bands) and
+   writes it under age_group "0-85+" in the same row shape, so it can be
+   read here exactly like psych's real "all ages" row.
+
+   pipeline/README.md used to say this indicator needed a multi-gigabyte
+   bulk download (true of the microdata register, not this aggregate
+   table) — see that fetcher's docstring for what changed.
+
+   viewBehov()'s need-vs-response scatter (js/views.js) still calls
+   fakeTotal() directly for antidep regardless of this — it deliberately
+   never reads real data for either of its two axes, since that chart's
+   whole "distance from the average association" story depends on both
+   values coming from the same internally-correlated fabricated
+   generator. Nothing here changes that; leave it be.
+   ===================================================================== */
+const REAL_ANTIDEP = (() => {
+  const rows = (typeof REAL_LAKEMEDEL_MH !== "undefined" && Array.isArray(REAL_LAKEMEDEL_MH.rows)) ? REAL_LAKEMEDEL_MH.rows : [];
+  const active = rows.length > 0;
+  const ageIdxOf = {}; AGES.forEach((a, i) => { ageIdxOf[a] = i; });
+
+  const idx = {};     // idx[county][ageIdx][sex][year] = {value,count}
+  const idxAll = {};  // idxAll[county][sex][year] = {value,count}  -- reconstructed "0-85+"
+  for (const row of rows) {
+    if (row.age_group === "0-85+") {
+      const byCounty = idxAll[row.county_code] || (idxAll[row.county_code] = {});
+      const bySex = byCounty[row.sex] || (byCounty[row.sex] = {});
+      bySex[row.year] = { value: row.value, count: row.count };
+      continue;
+    }
+    const ai = ageIdxOf[row.age_group];
+    if (ai === undefined) continue;
+    const byCounty = idx[row.county_code] || (idx[row.county_code] = {});
+    const byAge = byCounty[ai] || (byCounty[ai] = {});
+    const bySex = byAge[row.sex] || (byAge[row.sex] = {});
+    bySex[row.year] = { value: row.value, count: row.count };
+  }
+
+  const years = new Set(rows.filter(r => r.age_group === "0-85+").map(r => r.year));
+  return { active, idx, idxAll, years: [...years].sort((a, b) => a - b),
+           generatedAt: active ? REAL_LAKEMEDEL_MH.generated_at : null };
+})();
+function realCellAntidep(regionCode, year, ageIdx, sex) {
+  if (!REAL_ANTIDEP.active) return undefined;
+  const county = regionCode === "SE" ? "00" : regionCode;
+  const row = REAL_ANTIDEP.idx[county] && REAL_ANTIDEP.idx[county][ageIdx] &&
+              REAL_ANTIDEP.idx[county][ageIdx][sex] && REAL_ANTIDEP.idx[county][ageIdx][sex][year];
+  return row ? realRowToCell(row) : null;
+}
+function realTotalAntidep(regionCode, year, sex) {
+  if (!REAL_ANTIDEP.active) return undefined;
+  const county = regionCode === "SE" ? "00" : regionCode;
+  const row = REAL_ANTIDEP.idxAll[county] && REAL_ANTIDEP.idxAll[county][sex] && REAL_ANTIDEP.idxAll[county][sex][year];
+  return row ? realRowToCell(row) : null;
+}
+
+/* =====================================================================
+   1g. CONTEXT — demographic/socioeconomic layers for the Sammanhang tab,
    from js/real_mh_data.js's REAL_CONTEXT_MH (fetch_kolada_context.py,
    Kolada). Deliberately NOT shaped like IND/REAL_*: these are not mental-
    health indicators (no age/sex breakdown, no synthetic fallback — a
@@ -402,6 +472,54 @@ function contextCell(indicator, regionCode) {
   if (!CONTEXT.active) return undefined;
   const row = CONTEXT.idx[indicator] && CONTEXT.idx[indicator][regionCode];
   return row || null;
+}
+
+/* =====================================================================
+   1h. BUP WAITING TIMES — median days waited for a completed first visit
+   at barn- och ungdomspsykiatrin (child/adolescent psychiatry), from
+   js/real_mh_data.js's REAL_BUP_WAIT (pipeline/convert_vantetider_bup.py
+   + build_kurvan_data.py). Deliberately NOT shaped like IND/REAL_* —
+   same reasoning as CONTEXT above, plus more of its own:
+
+     - MONTHLY, not annual — every real IND indicator is a yearly figure;
+       this is the only one with a month dimension.
+     - No age/sex breakdown (this pull requested "Alla kön"/"Alla åldrar"
+       combined) — read as a single value per county/year/month, no `sex`
+       lookup key needed the way REAL_ANTIDEP etc. have one.
+     - NOT fetched by a script — convert_vantetider_bup.py's own docstring
+       explains why (no API, a human has to use the source's own CSV
+       export) and that this needs a person to redo that export
+       periodically to stay current; `generatedAt` here is the date of
+       that manual export, not a live fetch timestamp.
+     - The source itself only holds a ROLLING ~12-MONTH WINDOW — `months`
+       below is never going to grow into a multi-year history the way
+       every other real series here eventually could.
+     - Suppressed cells (too few contacts to publish, mostly the smaller/
+       northern regions) are simply absent, same "missing, not zero" rule
+       as everywhere else.
+   ===================================================================== */
+const BUP_WAIT = (() => {
+  const rows = (typeof REAL_BUP_WAIT !== "undefined" && Array.isArray(REAL_BUP_WAIT.rows)) ? REAL_BUP_WAIT.rows : [];
+  const active = rows.length > 0;
+  const idx = {};   // idx[county][year][month] = value (days)
+  for (const row of rows) {
+    const byCounty = idx[row.county_code] || (idx[row.county_code] = {});
+    const byYear = byCounty[row.year] || (byCounty[row.year] = {});
+    byYear[row.month] = row.value;
+  }
+  // Chronological (year, month) pairs actually present in the national
+  // ("00") series — the x-axis for the trend chart, and months[months.
+  // length-1] is "latest" for the map, same idea as REAL_PSYCH's maxYear.
+  const months = Object.entries(idx["00"] || {})
+    .flatMap(([y, byM]) => Object.keys(byM).map(m => [+y, +m]))
+    .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  return { active, idx, months, generatedAt: active ? REAL_BUP_WAIT.generated_at : null };
+})();
+function bupWaitCell(regionCode, year, month) {
+  if (!BUP_WAIT.active) return undefined;
+  const county = regionCode === "SE" ? "00" : regionCode;
+  const v = BUP_WAIT.idx[county] && BUP_WAIT.idx[county][year] && BUP_WAIT.idx[county][year][month];
+  return v == null ? null : v;
 }
 
 /* Data-vintage manifest — compiled from pipeline/manifest.json by
@@ -431,18 +549,24 @@ function getManifestRows() {
       isSynthOnly: false
     });
   });
-  // antidep has no open API, stays synthetic; add a row so it's visible
+  // Hand-appended, not read from REAL_MANIFEST (see this function's own
+  // sources loop above): antidep's own row, reflecting whichever mode is
+  // actually active right now rather than a hardcoded "always synthetic" —
+  // it stopped being fetcher-less once fetch_socialstyrelsen_lakemedel.py
+  // shipped (see REAL_ANTIDEP's docstring above).
   rows.push({
     key: "antidep",
-    source: "Socialstyrelsen Läkemedelsregistret (ATC N06A)",
-    fetcher: "–",
+    source: "Socialstyrelsen Statistikdatabasen (Läkemedelsregistret, ATC N06A)",
+    fetcher: "fetch_socialstyrelsen_lakemedel.py",
     indicators: ["antidep"],
-    time_period: "2006–2024",
+    time_period: REAL_ANTIDEP.active
+      ? `${REAL_ANTIDEP.years[0]}–${REAL_ANTIDEP.years[REAL_ANTIDEP.years.length - 1]}`
+      : "2006–2024",
     records_count: null,
     grain: "Region × Ålder × Kön",
-    fetched_at: null,
-    active: false,
-    isSynthOnly: true
+    fetched_at: REAL_ANTIDEP.active ? REAL_ANTIDEP.generatedAt : null,
+    active: REAL_ANTIDEP.active,
+    isSynthOnly: !REAL_ANTIDEP.active
   });
   return rows;
 }
@@ -457,17 +581,22 @@ function ageAvailable(k, ageIdx) {
 // lands exactly on an AGES boundary (65-74 starts cleanly), but 18 does not
 // -- AGES[1] ("15-24") mixes 15-17-year-olds in with 18-24-year-olds, so
 // "adult" here really means 15-64, not a clean 18-64 (see viewAlder's
-// caveat note, which says so). Only psych currently has real data across
-// every AGES band (REAL_AGE_LIMIT above has no entry for it), so this is
-// the only indicator that can honestly use all three groups today.
+// caveat note, which says so). psych and antidep are the only indicators
+// with real data across every AGES band (REAL_AGE_LIMIT above has no entry
+// for either), so those are the only ones that can honestly use all three
+// groups today.
 const AGE_GROUPS = [
   { key: "child",   idxs: [0] },         // 0-14
   { key: "adult",   idxs: [1,2,3,4,5] }, // 15-64
   { key: "elderly", idxs: [6,7,8] },     // 65-74, 75-84, 85+
 ];
 // Indicators whose real source only ever publishes sex "T" (total). Absent
-// from this map (psych, distress) means the real source publishes M/K/T all three.
-const REAL_SEX_ONLY_TOTAL = { selfharm: true, suicide: true };
+// from this map means the real source publishes M/K/T all three — true of
+// every real indicator now (selfharm/suicide included, since
+// fetch_socialstyrelsen_mh.py started requesting kon/1,2,3), kept as an
+// empty map rather than deleted so a future real source that genuinely
+// only has a sex total has somewhere to say so.
+const REAL_SEX_ONLY_TOTAL = {};
 function sexAvailable(k, sex) {
   if (isRealActive(k) && REAL_SEX_ONLY_TOTAL[k]) return sex === "T";
   return true;
@@ -477,6 +606,7 @@ function isRealActive(k) {
   if (k === "psych") return REAL_PSYCH.active;
   if (k === "distress") return REAL_HLV.active;
   if (k === "sjukfranvaro") return REAL_FK.active;
+  if (k === "antidep") return REAL_ANTIDEP.active;
   return REAL.active;
 }
 
@@ -487,10 +617,10 @@ function isRealActive(k) {
     cell otherwise. */
 function realCell(k, regionCode, year, ageIdx, sex) {
   if (!REAL.active) return undefined;
-  if (sex !== "T") return null;                        // never published by sex
   const county = regionCode === "SE" ? "00" : regionCode;
   const byAge = REAL.idx[k][county] && REAL.idx[k][county][ageIdx];
-  const row = byAge && byAge[year];
+  const bySex = byAge && byAge[sex];
+  const row = bySex && bySex[year];
   if (!row) return null;
   // realRowToCell's suppressed:false default doesn't apply here — selfharm/
   // suicide rows (unlike psych/HLV/FK's) carry a real suppressed/window pair
@@ -543,10 +673,11 @@ function validYears(k){
   if (k === "psych" && REAL_PSYCH.active) return REAL_PSYCH.years;
   if (k === "distress" && REAL_HLV.active) return REAL_HLV.years;
   if (k === "sjukfranvaro" && REAL_FK.active) return REAL_FK.years;
+  if (k === "antidep" && REAL_ANTIDEP.active) return REAL_ANTIDEP.years;
   if (IND[k].real && REAL.active) {
     const nat = REAL.idx[k]["00"];
     const years = new Set();
-    if (nat) for (const ai in nat) for (const y in nat[ai]) years.add(+y);
+    if (nat) for (const ai in nat) for (const sex in nat[ai]) for (const y in nat[ai][sex]) years.add(+y);
     if (years.size) return [...years].sort((a, b) => a - b);
   }
   const I=IND[k], out=[];
@@ -627,6 +758,9 @@ function cell(k, regionCode, year, ageIdx, sex, standardised){
   } else if (k === "sjukfranvaro") {
     const r = realCellFK();    // always null once active: no real age dimension
     if (r !== undefined) return r;
+  } else if (k === "antidep") {
+    const r = realCellAntidep(regionCode, year, ageIdx, sex);
+    if (r !== undefined) return r;
   } else if (IND[k].real) {
     const r = realCell(k, regionCode, year, ageIdx, sex);
     if (r !== undefined) return r;   // real data loaded: real result wins, even if null
@@ -644,6 +778,9 @@ function total(k, regionCode, year, sex, standardised){
     if (r !== undefined) return r;
   } else if (k === "sjukfranvaro") {
     const r = realTotalFK(regionCode, year, sex);
+    if (r !== undefined) return r;
+  } else if (k === "antidep") {
+    const r = realTotalAntidep(regionCode, year, sex);
     if (r !== undefined) return r;
   } else if (IND[k].real && REAL.active) {
     const cells=[];
