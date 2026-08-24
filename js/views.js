@@ -1065,3 +1065,30 @@ function viewSammanhang(){
     </div>
   </div>`;
 }
+
+function viewPolicyNews() {
+  const items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  
+  return `
+  <div class="card">
+    <div class="card-h"><h3>${esc(S.lang==="sv"?"Nyheter & Policy":"Policy & News")}</h3></div>
+    <div class="card-b">
+      <div class="feed">
+        ${items.map(item => `
+          <div class="feed-item">
+            <div class="feed-meta">
+              <span class="feed-type">${esc(item.item_type)}</span>
+              <span class="feed-topic">${esc(item.topic)}</span>
+              <span class="feed-date">${esc(item.published_at.substring(0, 10))}</span>
+            </div>
+            <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
+            <p>${esc(item.summary)}</p>
+            <div class="feed-note">
+              <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(item.observatory_note)}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  </div>`;
+}

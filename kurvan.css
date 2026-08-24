@@ -498,3 +498,14 @@ footer p{margin:0 0 6px;max-width:72ch}
   .seg{margin-left:0}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* --- Policy & News Feed --- */
+.feed { display:flex; flex-direction:column; gap:var(--sp-6); }
+.feed-item { border-left:3px solid var(--violet); padding-left:var(--sp-5); }
+.feed-meta { font-size:var(--fs-2); color:var(--ink-3); margin-bottom:var(--sp-2); }
+.feed-meta span { margin-right:var(--sp-4); text-transform:uppercase; letter-spacing:.05em; font-weight:600; }
+.feed-item h4 { margin:0 0 var(--sp-3); font-size:var(--fs-6); }
+.feed-item h4 a { color:var(--ink); text-decoration:none; }
+.feed-item h4 a:hover { text-decoration:underline; }
+.feed-item p { margin:0 0 var(--sp-3); color:var(--ink-2); }
+.feed-note { background:var(--surface-2); padding:var(--sp-3); font-size:var(--fs-4); border-radius:4px; }
