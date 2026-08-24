@@ -1084,7 +1084,7 @@ function viewPolicyNews() {
             <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
             <p>${esc(item.summary)}</p>
             <div class="feed-note">
-              <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(item.observatory_note)}
+              <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(S.lang==="sv"?item.observatory_note:item.observatory_note_en)}
             </div>
           </div>
         `).join("")}

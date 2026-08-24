@@ -36,13 +36,31 @@ def fetch_and_process():
     # For now, it returns a structured mock feed item
     print("Fetching and processing policy/news items...")
     
+    # In a real pipeline, we would fetch from actual RSS/Atom URLs
+    # For now, pointing to stable authoritative hubs
     mock_items = [
         {
             "id": "1",
-            "title": "Ny nationell strategi för suicidprevention",
-            "url": "https://www.regeringen.se/nyhet1",
+            "title": "Nationell strategi för suicidprevention",
+            "url": "https://www.regeringen.se/regeringens-politik/folkhalsa-och-sjukvard/nationell-strategi-for-suicidprevention/",
             "source_name": "Regeringen",
             "source_type": "policy",
+            "published_at": datetime.datetime.now().isoformat(),
+        },
+        {
+            "id": "2",
+            "title": "Statistik om psykisk ohälsa",
+            "url": "https://www.socialstyrelsen.se/statistik-och-data/statistik/statistikamnen/psykisk-ohalsa/",
+            "source_name": "Socialstyrelsen",
+            "source_type": "authority_update",
+            "published_at": datetime.datetime.now().isoformat(),
+        },
+        {
+            "id": "3",
+            "title": "Unga och psykisk hälsa",
+            "url": "https://www.folkhalsomyndigheten.se/livsvillkor-levnadsvanor/psykisk-halsa-och-suicidprevention/psykisk-halsa-hos-barn-och-unga/",
+            "source_name": "Folkhälsomyndigheten",
+            "source_type": "news",
             "published_at": datetime.datetime.now().isoformat(),
         }
     ]
