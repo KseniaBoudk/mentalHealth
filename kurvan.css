@@ -443,8 +443,16 @@ select option:disabled{color:var(--ink-3)}
    sizing would either overflow vertically or leave it tiny — sizing by
    height fits it properly instead, the same way .mapsvg's normal 400px
    cap is a width because most cards are wider than they are tall. */
-#chartFsBody svg.chart-svg{width:min(94vw,1500px);height:auto;max-height:100%}
-#chartFsBody svg.mapsvg.chart-svg{width:auto;height:min(76vh,860px);max-width:94vw;max-height:100%}
+/* 1500px/860px used to cap these well short of the available room on
+   anything wider than a laptop screen — max-height:100% already keeps a
+   wide/short viewport from overflowing vertically (a replaced element's
+   explicit width + height:auto still yields to max-height, recomputing
+   proportionally, so raising these is safe, not just "try it and see").
+   Bigger on purpose: fullscreen exists specifically to see the chart
+   larger, so it should actually use a large monitor's width instead of
+   stopping at a bound sized for a much smaller one. */
+#chartFsBody svg.chart-svg{width:min(96vw,1900px);height:auto;max-height:100%}
+#chartFsBody svg.mapsvg.chart-svg{width:auto;height:min(84vh,1100px);max-width:96vw;max-height:100%}
 /* .mapzoom{overflow:hidden} (base rule, above) is correct on the normal
    page — it keeps the CARD's own size stable while zoomed, cropping
    whatever's panned past the map's own edge instead of reflowing the rest

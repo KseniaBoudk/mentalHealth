@@ -120,7 +120,36 @@ function lineChart(series,opts){
     const col=m.color||"var(--oxblood)", end=m.anchor==="end";
     const lx=X(m.x);
     s+=`<line x1="${lx.toFixed(1)}" y1="${Tp-4}" x2="${lx.toFixed(1)}" y2="${B}" stroke="${col}" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>`;
-    s+=`<text x="${(end?lx-3:lx+3).toFixed(1)}" y="${B-5-(mi%2)*10}" text-anchor="${end?"end":"start"}" font-family="var(--sans)" font-size="7.5" fill="${col}">${esc(m.label)}</text>`;});
+    // The bottom-row default (above) assumes series trend upward, so the
+    // bottom is usually clear — not always true, and checking only the
+    // mark's own x isn't enough either: text-anchor="end" (HLV's own
+    // marker) makes the label extend LEFTWARD from the mark, often several
+    // years' worth of pixels away from m.x itself, so a line can cross
+    // under the label's WIDTH while the mark's exact x is nowhere near it.
+    // Real case this missed: the men's line dipping under "HLV measure
+    // revised" a few years before 2018, not at 2018 itself. So: walk
+    // every segment of every series, keep the ones that horizontally
+    // overlap the label's own pixel footprint at all, and sample each
+    // such segment's y at the edges of that overlap (a straight segment's
+    // y is monotonic between its own endpoints, so its two overlap edges
+    // bound whatever it reaches inside the label's width).
+    const textW=m.label.length*4.3; // ~px/char at this font-size
+    const spanL=end?lx-3-textW:lx+3, spanR=end?lx-3:lx+3+textW;
+    let ly=B-5-(mi%2)*10;
+    const collidingYs=[];
+    series.forEach(se=>{
+      const valid=se.pts.filter(Boolean);
+      for(let i=0;i<valid.length-1;i++){
+        const ax=X(valid[i][0]),ay=Y(valid[i][1]),bx=X(valid[i+1][0]),by=Y(valid[i+1][1]);
+        const lo=Math.max(spanL,Math.min(ax,bx)),hi=Math.min(spanR,Math.max(ax,bx));
+        if(lo>hi)continue; // this segment never crosses the label's width at all
+        const yAt=px=>ax===bx?ay:ay+(px-ax)/(bx-ax)*(by-ay);
+        collidingYs.push(yAt(lo),yAt(hi));
+      }
+    });
+    const hit=collidingYs.filter(y=>Math.abs(y-ly)<10);
+    if(hit.length)ly=Math.min(B+10,Math.max(...hit)+9);
+    s+=`<text x="${(end?lx-3:lx+3).toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${end?"end":"start"}" font-family="var(--sans)" font-size="7.5" fill="${col}">${esc(m.label)}</text>`;});
   // opts.xFmt formats a point's x-value for its hover tip below — default
   // is the literal x (a calendar year, the common case). Callers whose x is
   // an AGES band index rather than a year (viewLaget's/viewOverTid's age
@@ -329,17 +358,29 @@ function scatter(pts,opts){
   axisTicks(x0,x1,4).forEach(v=>{
     s+=`<text x="${X(v).toFixed(1)}" y="${B+16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
   s+=`<line x1="${X(x0).toFixed(1)}" y1="${Y(fit(x0)).toFixed(1)}" x2="${X(x1).toFixed(1)}" y2="${Y(fit(x1)).toFixed(1)}" stroke="var(--violet)" stroke-width="1.5" stroke-dasharray="6 4" opacity=".7"/>`;
-  // Smaller and wrapped onto short lines (wrapWords, above) rather than one
-  // long run of text anchored off the line's right end — at full length
-  // this used to stretch back across most of the chart width and cut
-  // straight through whichever point/connector line happened to sit under
-  // it (e.g. the below/above annotations at line ~321). The paint-order
-  // halo (same trick as .trendarrow in kurvan.css) is a second line of
-  // defence: anything that still ends up behind the caption is masked by
-  // it instead of visibly crossing the letters.
+  // Wrapped onto short lines (wrapWords, above) rather than one long run
+  // anchored off the line's right end, which used to stretch back across
+  // most of the chart width and cut through whatever point sat under it.
+  // That's still not enough on its own: even wrapped, the caption's
+  // default spot (right at the line's end) can land on a point that
+  // simply happens to be there. Drawing it on TOP of the point (a paint-
+  // order halo, tried first) fixed the visual crossing but then hid the
+  // point entirely whenever the two coincided — worse, not better, since
+  // the point is real data and the caption is just a label. So: find
+  // whichever points fall under the caption's own horizontal column
+  // (regardless of their y) and push the caption above the highest of
+  // them instead, with the halo kept only as a safety net for whatever a
+  // width/height estimate this rough still doesn't catch.
   const gapLines=wrapWords(t.gapLine,26);
-  const gapY0=Y(fit(x1))-6-(gapLines.length-1)*9.5;
-  s+=`<text x="${R}" y="${gapY0.toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="8" font-weight="600" fill="var(--violet)" paint-order="stroke" stroke="var(--surface)" stroke-width="3" stroke-linejoin="round">${gapLines.map((l,i)=>`<tspan x="${R}" dy="${i?9.5:0}">${esc(l)}</tspan>`).join("")}</text>`;
+  const gapLineH=9.5;
+  const gapBoxW=Math.max(...gapLines.map(l=>l.length))*4.6; // ~px/char at this font-size/weight
+  const gapPad=12; // clears a highlighted ring's radius (7.6) plus the halo's own width
+  const gapColumn=pts.filter(p=>{const px=X(p.x);return px>=R-gapBoxW-gapPad&&px<=R+gapPad;});
+  const gapDefaultY0=Y(fit(x1))-6-(gapLines.length-1)*gapLineH;
+  const gapY0=gapColumn.length
+    ? Math.max(Tp+8, Math.min(gapDefaultY0, Math.min(...gapColumn.map(p=>Y(p.y)))-gapPad-(gapLines.length-1)*gapLineH))
+    : gapDefaultY0;
+  s+=`<text x="${R}" y="${gapY0.toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="8" font-weight="600" fill="var(--violet)" paint-order="stroke" stroke="var(--surface)" stroke-width="3" stroke-linejoin="round">${gapLines.map((l,i)=>`<tspan x="${R}" dy="${i?gapLineH:0}">${esc(l)}</tspan>`).join("")}</text>`;
   let below=null,above=null;
   pts.forEach(p=>{p.res=p.y-fit(p.x);if(!below||p.res<below.res)below=p;if(!above||p.res>above.res)above=p;});
   // Selected region gets its own ring colour/label ONLY when it isn't
