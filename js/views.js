@@ -1068,13 +1068,15 @@ function viewSammanhang(){
 
 function viewPolicyNews() {
   const items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  const limit = 10;
+  const initialItems = items.slice(0, limit);
   
   return `
   <div class="card">
     <div class="card-h"><h3>${esc(S.lang==="sv"?"Nyheter & Policy":"Policy & News")}</h3></div>
     <div class="card-b">
-      <div class="feed">
-        ${items.map(item => `
+      <div class="feed" id="policy-feed">
+        ${initialItems.map(item => `
           <div class="feed-item">
             <div class="feed-meta">
               <span class="feed-type">${esc(item.item_type)}</span>
@@ -1089,6 +1091,34 @@ function viewPolicyNews() {
           </div>
         `).join("")}
       </div>
+      ${items.length > limit ? `<button id="load-more-policy" onclick="loadMorePolicy()"> ${esc(S.lang==="sv"?"Visa mer":"View more")}</button>` : ""}
     </div>
   </div>`;
+}
+
+function loadMorePolicy() {
+  const container = document.getElementById("policy-feed");
+  const btn = document.getElementById("load-more-policy");
+  const items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  const currentCount = container.children.length;
+  const nextItems = items.slice(currentCount, currentCount + 10);
+  
+  nextItems.forEach(item => {
+    container.innerHTML += `
+      <div class="feed-item">
+        <div class="feed-meta">
+          <span class="feed-type">${esc(item.item_type)}</span>
+          <span class="feed-topic">${esc(item.topic)}</span>
+          <span class="feed-date">${esc(item.published_at.substring(0, 10))}</span>
+        </div>
+        <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
+        <p>${esc(item.summary)}</p>
+        <div class="feed-note">
+          <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(S.lang==="sv"?item.observatory_note:item.observatory_note_en)}
+        </div>
+      </div>
+    `;
+  });
+  
+  if (container.children.length >= items.length) btn.remove();
 }

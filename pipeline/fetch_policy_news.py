@@ -1,10 +1,24 @@
 import datetime
+import feedparser
+import json
 
-# Mock source list
+# Authoritative source list with RSS feeds
 SOURCES = [
-    {"name": "Socialstyrelsen", "type": "authority_update", "url": "https://www.socialstyrelsen.se"},
-    {"name": "Folkhälsomyndigheten", "type": "news", "url": "https://www.folkhalsomyndigheten.se"},
-    {"name": "Regeringen", "type": "policy", "url": "https://www.regeringen.se"}
+    {
+        "name": "Socialstyrelsen",
+        "type": "authority_update",
+        "feed_url": "https://www.socialstyrelsen.se/om-socialstyrelsen/pressrum/press/RssFeed/?url=https://www.socialstyrelsen.se/om-socialstyrelsen/pressrum/press/"
+    },
+    {
+        "name": "Folkhälsomyndigheten",
+        "type": "news",
+        "feed_url": "https://www.folkhalsomyndigheten.se/nyheter-och-press/nyhetsarkiv/?syndication=rss"
+    },
+    {
+        "name": "Regeringen",
+        "type": "policy",
+        "feed_url": "https://www.regeringen.se/Filter/RssFeed?filterType=Taxonomy&filterByType=FilterablePageBase&preFilteredCategories=1284%2C1285%2C1286%2C1287%2C1288%2C1290%2C1291%2C1292%2C1293%2C1294%2C1295%2C1296%2C1297%2C2425&rootPageReference=0&filteredContentCategories=1334%2C1341%2C1329%2C1331&filteredPoliticalLevelCategories=&filteredPoliticalAreaCategories=2747&filteredPublisherCategories=1292"
+    }
 ]
 
 class MockClassifier:
@@ -32,47 +46,37 @@ class MockClassifier:
         }
 
 def fetch_and_process():
-    # In a real implementation, this would fetch from actual RSS feeds
-    # For now, it returns a structured mock feed item
-    print("Fetching and processing policy/news items...")
-    
-    # In a real pipeline, we would fetch from actual RSS/Atom URLs
-    # For now, pointing to stable authoritative hubs
-    mock_items = [
-        {
-            "id": "1",
-            "title": "Nationell strategi för suicidprevention",
-            "url": "https://www.regeringen.se/regeringens-politik/folkhalsa-och-sjukvard/nationell-strategi-for-suicidprevention/",
-            "source_name": "Regeringen",
-            "source_type": "policy",
-            "published_at": datetime.datetime.now().isoformat(),
-        },
-        {
-            "id": "2",
-            "title": "Statistik om psykisk ohälsa",
-            "url": "https://www.socialstyrelsen.se/statistik-och-data/statistik/statistikamnen/psykisk-ohalsa/",
-            "source_name": "Socialstyrelsen",
-            "source_type": "authority_update",
-            "published_at": datetime.datetime.now().isoformat(),
-        },
-        {
-            "id": "3",
-            "title": "Unga och psykisk hälsa",
-            "url": "https://www.folkhalsomyndigheten.se/livsvillkor-levnadsvanor/psykisk-halsa-och-suicidprevention/psykisk-halsa-hos-barn-och-unga/",
-            "source_name": "Folkhälsomyndigheten",
-            "source_type": "news",
-            "published_at": datetime.datetime.now().isoformat(),
-        }
-    ]
+    print("Fetching and processing policy/news items from live feeds...")
     
     classifier = MockClassifier()
     processed_items = []
-    
-    for item in mock_items:
-        classification = classifier.classify(item)
-        item.update(classification)
-        item["retrieved_at"] = datetime.datetime.now().isoformat()
-        processed_items.append(item)
+    seen_urls = set()
+
+    for src in SOURCES:
+        print(f"Fetching {src['name']}...")
+        try:
+            feed = feedparser.parse(src["feed_url"])
+            for entry in feed.entries:
+                if entry.link in seen_urls:
+                    continue
+                
+                item = {
+                    "id": entry.get("id", entry.link),
+                    "title": entry.title,
+                    "url": entry.link,
+                    "source_name": src["name"],
+                    "source_type": src["type"],
+                    "published_at": entry.get("published", datetime.datetime.now().isoformat()),
+                }
+                
+                classification = classifier.classify(item)
+                item.update(classification)
+                item["retrieved_at"] = datetime.datetime.now().isoformat()
+                
+                processed_items.append(item)
+                seen_urls.add(entry.link)
+        except Exception as e:
+            print(f"Error fetching {src['name']}: {e}")
         
     return processed_items
 

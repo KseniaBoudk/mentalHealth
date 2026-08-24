@@ -16,7 +16,7 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","policy_news","kon","alder","sammanhang","metod","regioner"];
+const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","metod","regioner","policy_news"];
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,policy_news:viewPolicyNews,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,metod:viewMetod,regioner:viewRegioner};
 
