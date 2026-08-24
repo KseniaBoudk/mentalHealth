@@ -14,6 +14,16 @@ const fmt=(v,d,u)=>v==null||!isFinite(v)?"—":(S.lang==="sv"?v.toFixed(d).repla
 // produce, since none of this app's actual values (region names, formatted
 // numbers, unit strings) contain one.
 const dataCard=obj=>esc(JSON.stringify(obj)).replace(/"/g,"&quot;");
+// wrapWords: greedy char-budget line wrap for SVG <text>, which has no
+// native word-wrap. Used to keep long labels (e.g. scatter()'s trend-line
+// caption) narrow enough that they don't stretch across the whole chart
+// and run into whatever else is plotted along the way.
+const wrapWords=(str,maxChars)=>{
+  const words=str.split(" ");const lines=[];let cur="";
+  words.forEach(w=>{const t=cur?cur+" "+w:w;if(t.length>maxChars&&cur){lines.push(cur);cur=w;}else cur=t;});
+  if(cur)lines.push(cur);
+  return lines;
+};
 
 function axisTicks(min,max,n){
   const raw=(max-min)/n, mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
@@ -57,8 +67,13 @@ function dotPlot(rows, opts){
   return s+"</svg>";
 }
 
-/* series: [{pts:[[x,y]|null,...], color, dash, w, dot, label, labelAt, anno}] — a
-   null point breaks the line (a real series break must not be joined). */
+/* series: [{pts:[[x,y]|null,...], color, dash, w, dot, label, anno}] — a
+   null point breaks the line (a real series break must not be joined).
+   label doesn't draw on the chart itself (a caller with 2+ labelled series
+   used to anchor each one at its last point, which crowded the plot and
+   read badly whenever two lines ended near each other or a label ran long
+   — see kurvan.css's .line-legend for where it went instead); it still
+   feeds each point's hover tip below ("women, 2020: ..."). */
 function lineChart(series,opts){
   const W=opts.w||420,H=opts.h||190,L=42,R=W-14,Tp=16,B=H-26;
   const all=series.flatMap(se=>se.pts.filter(Boolean));
@@ -85,17 +100,16 @@ function lineChart(series,opts){
     const up=opts.band.map(p=>`${X(p[0]).toFixed(1)},${Y(p[2]).toFixed(1)}`).join(" L");
     const dn=opts.band.slice().reverse().map(p=>`${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(" L");
     s+=`<path d="M${up} L${dn} Z" fill="var(--band)"/>`;}
-  // Labels sit near the BOTTOM of the plot, not the top: series labels
-  // (se.label below) anchor at the last point, which in an upward-trending
-  // series — the common case here — is near the top-right, exactly where a
-  // mark near the end of the range would otherwise print underneath it.
-  // y also alternates per mark (mi%2) so two events close together on the
-  // x-axis (e.g. 2018 and 2020, both often inside the same chart's range)
-  // don't print their labels on top of EACH OTHER either. m.color/m.anchor
-  // (data.js's EVENTS, passed through by eventMarks() in views.js) let two
-  // such close events diverge further still — a different colour, and a
-  // label anchored to the opposite side of its line — rather than relying
-  // on the y-stagger alone to tell them apart.
+  // Labels sit near the BOTTOM of the plot, not the top — series lines
+  // here tend to trend upward, which would otherwise put a mark near the
+  // end of the range right underneath the highest curve. y also alternates
+  // per mark (mi%2) so two events close together on the x-axis (e.g. 2018
+  // and 2020, both often inside the same chart's range) don't print their
+  // labels on top of EACH OTHER either. m.color/m.anchor (data.js's EVENTS,
+  // passed through by eventMarks() in views.js) let two such close events
+  // diverge further still — a different colour, and a label anchored to
+  // the opposite side of its line — rather than relying on the y-stagger
+  // alone to tell them apart.
   (opts.marks||[]).forEach((m,mi)=>{
     const col=m.color||"var(--oxblood)", end=m.anchor==="end";
     const lx=X(m.x);
@@ -121,8 +135,6 @@ function lineChart(series,opts){
     if(valid.length===1)s+=`<circle cx="${X(valid[0][0]).toFixed(1)}" cy="${Y(valid[0][1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
     const last=[...se.pts].reverse().find(Boolean);
     if(se.dot&&last)s+=`<circle cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.6" fill="${se.color}"/>`;
-    if(se.label){const p=se.pts.filter(Boolean)[se.labelAt??(se.pts.filter(Boolean).length-1)];
-      if(p)s+=`<text x="${(X(p[0])-4).toFixed(1)}" y="${(Y(p[1])-10).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="10.5" font-weight="700" fill="${se.color}">${esc(se.label)}</text>`;}
     if(se.anno){const p=se.anno.at;
       s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="4" fill="${se.color}"/>`;
       s+=`<text x="${(X(p[0])+se.anno.dx).toFixed(1)}" y="${(Y(p[1])+se.anno.dy).toFixed(1)}" text-anchor="${se.anno.dx<0?"end":"start"}" font-family="var(--sans)" font-size="10.5" font-weight="700" fill="${se.color}">${esc(se.anno.text)}</text>`;}
@@ -293,7 +305,17 @@ function scatter(pts,opts){
   axisTicks(x0,x1,4).forEach(v=>{
     s+=`<text x="${X(v).toFixed(1)}" y="${B+16}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
   s+=`<line x1="${X(x0).toFixed(1)}" y1="${Y(fit(x0)).toFixed(1)}" x2="${X(x1).toFixed(1)}" y2="${Y(fit(x1)).toFixed(1)}" stroke="var(--violet)" stroke-width="1.5" stroke-dasharray="6 4" opacity=".7"/>`;
-  s+=`<text x="${R}" y="${(Y(fit(x1))-8).toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="9.5" font-weight="650" fill="var(--violet)">${esc(t.gapLine)}</text>`;
+  // Smaller and wrapped onto short lines (wrapWords, above) rather than one
+  // long run of text anchored off the line's right end — at full length
+  // this used to stretch back across most of the chart width and cut
+  // straight through whichever point/connector line happened to sit under
+  // it (e.g. the below/above annotations at line ~321). The paint-order
+  // halo (same trick as .trendarrow in kurvan.css) is a second line of
+  // defence: anything that still ends up behind the caption is masked by
+  // it instead of visibly crossing the letters.
+  const gapLines=wrapWords(t.gapLine,26);
+  const gapY0=Y(fit(x1))-6-(gapLines.length-1)*9.5;
+  s+=`<text x="${R}" y="${gapY0.toFixed(1)}" text-anchor="end" font-family="var(--sans)" font-size="8" font-weight="600" fill="var(--violet)" paint-order="stroke" stroke="var(--surface)" stroke-width="3" stroke-linejoin="round">${gapLines.map((l,i)=>`<tspan x="${R}" dy="${i?9.5:0}">${esc(l)}</tspan>`).join("")}</text>`;
   let below=null,above=null;
   pts.forEach(p=>{p.res=p.y-fit(p.x);if(!below||p.res<below.res)below=p;if(!above||p.res>above.res)above=p;});
   // Selected region gets its own ring colour/label ONLY when it isn't
@@ -316,7 +338,7 @@ function scatter(pts,opts){
     const tip=opts.xName?`${p.name}, ${opts.xName}: ${fmt(p.x,1,opts.xUnit)} · ${opts.yName}: ${fmt(p.y,1,opts.yUnit)}`:p.name;
     const card=dataCard({title:p.name,color:"var(--violet)",rows:opts.xName?
       [{label:opts.xName,value:fmt(p.x,1),unit:opts.xUnit||""},{label:opts.yName,value:fmt(p.y,1),unit:opts.yUnit||""}]:[]});
-    s+=`<circle class="spt" tabindex="0" data-tip="${esc(tip)}" data-card="${card}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
+    s+=`<circle class="spt" tabindex="0" data-tip="${esc(tip)}" data-card="${card}" data-region="${p.code}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${hl?5.4:4.2}" fill="var(--violet)" opacity="${p.res<0?.62:1}"/>`;
     if(hl)s+=`<circle cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="7.6" fill="none" stroke="${p===below?"var(--oxblood)":p===above?"var(--teal)":"var(--ink)"}" stroke-width="1.8"/>`;});
   [[below,"var(--oxblood)",1],[above,"var(--teal)",-1]].forEach(([p,col,dir])=>{
     s+=`<line x1="${X(p.x).toFixed(1)}" y1="${Y(p.y).toFixed(1)}" x2="${X(p.x).toFixed(1)}" y2="${Y(fit(p.x)).toFixed(1)}" stroke="${col}" stroke-width="2"/>`;

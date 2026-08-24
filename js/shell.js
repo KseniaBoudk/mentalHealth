@@ -212,6 +212,16 @@ function wire(){
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
   });
+  // Scatter points (charts.js's scatter(), e.g. viewBehov/viewRegioner's
+  // need-vs-response charts) — same region-select-on-click as map tiles
+  // above, minus the dragMoved guard (no pan gesture here to disambiguate
+  // from a click). Kept as its own block rather than merged with .tile's:
+  // the two aren't quite identical, and it's only two call sites.
+  document.querySelectorAll(".spt").forEach(b=>{
+    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
+    b.onclick=pick;
+    b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
+  });
   // Every mark that carries data-tip gets the same hover card — map tiles
   // (data-tip set alongside the click handling above), dot-plot rows,
   // histogram bars and scatter points (charts.js) all use it, so one loop
@@ -334,8 +344,15 @@ function wireFullscreen(){
     const wrap=isMap?holder:document.createElement("div");
     if(!isMap){
       wrap.className="fswrap";
+      // A multi-line chart's .line-legend (views.js's lineLegend()) is the
+      // svg's own next sibling, not part of the svg itself — grabbed here,
+      // before replaceWith() detaches svg (nextElementSibling would be null
+      // once it's out of the tree), so it travels into full-screen with its
+      // chart instead of being left behind, invisible, in the emptied card.
+      const legend=svg.nextElementSibling?.classList.contains("line-legend")?svg.nextElementSibling:null;
       svg.replaceWith(wrap);
       wrap.appendChild(svg);
+      if(legend)wrap.appendChild(legend);
     }
 
     const btn=document.createElement("button");

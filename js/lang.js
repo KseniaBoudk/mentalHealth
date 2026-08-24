@@ -57,6 +57,16 @@ sv:{
   disagreeY:"i psykiatrisk specialistvård, per 100 000 (register)",
   disagreeCaveat:"Två oberoende mått på samma breda problem: självrapporterad ångest (enkät) och registrerad kontakt med specialistpsykiatrin (register). Ett samband säger inte varför de skiljer sig åt i en viss region — det kan bero på att vården inte nås, inte söks, eller att datan är ofullständig.",
   gapPiece:{tag:"Behov och respons",inst:"reg",h:"Störst avstånd mellan behov och respons",p:"Regionen med störst skillnad mellan rapporterat behov och registrerad vårdrespons, 2024.",numl:"störst avstånd 2024"},
+  // Fills the sidebar's second card (viewBehov) with whichever region is
+  // currently selected — clicking a point in the scatter (shell.js) sets
+  // S.region and re-renders, so this updates per click. Two full sentence
+  // functions (not fragments assembled in views.js), same shape as
+  // disagreeUnit above — word order differs by direction and language,
+  // and every UI string belongs in this file (see CLAUDE.md).
+  gapSelTag:"Vald region",
+  gapSelAbove:(xv,yv,resAbs)=>`${xv} uppger svår ångest här; ${yv} hämtas ut — ${resAbs} fler än det genomsnittliga sambandet mellan behov och respons skulle antyda.`,
+  gapSelBelow:(xv,yv,resAbs)=>`${xv} uppger svår ångest här; ${yv} hämtas ut — ${resAbs} färre än det genomsnittliga sambandet mellan behov och respons skulle antyda.`,
+  gapSelNuml:"jämfört med genomsnittligt samband · 2024",
   pieces:[
     {tag:"Livsloppet",inst:"mort",h:"De äldsta männen",p:"Suicidtalet bland män 85+ är landets högsta. Enkäten slutar vid 84, så gruppen syns inte i något mått på självrapporterad ohälsa.",numl:"per 100 000 · män 85+"},
     {tag:"Förskrivning",inst:"reg",h:"Unga kvinnor, 20 år av ökning",p:"Uthämtade antidepressiva bland kvinnor 15–24 sedan registret startade 2006.",numl:"2006 → 2024 · kvinnor 15–24"}
@@ -208,6 +218,10 @@ en:{
   disagreeY:"in specialist psychiatric care, per 100,000 (register)",
   disagreeCaveat:"Two independent measures of the same broad problem: self-reported anxiety (survey) and recorded contact with specialist psychiatric care (register). A relationship doesn't say why they diverge for a given region — that could mean care isn't being reached, isn't being sought, or that the data itself is incomplete.",
   gapPiece:{tag:"Need and response",inst:"reg",h:"Widest distance between need and response",p:"The region with the largest distance between reported need and recorded care response, 2024.",numl:"widest distance, 2024"},
+  gapSelTag:"Selected region",
+  gapSelAbove:(xv,yv,resAbs)=>`${xv} report severe anxiety here; ${yv} are dispensed — ${resAbs} more than the average association between need and response would suggest.`,
+  gapSelBelow:(xv,yv,resAbs)=>`${xv} report severe anxiety here; ${yv} are dispensed — ${resAbs} fewer than the average association between need and response would suggest.`,
+  gapSelNuml:"vs. average association · 2024",
   pieces:[
     {tag:"Life course",inst:"mort",h:"The oldest men",p:"Suicide among men 85+ is the country's highest rate. The survey stops at 84, so the group appears in no measure of self-reported health.",numl:"per 100,000 · men 85+"},
     {tag:"Prescribing",inst:"reg",h:"Young women, 20 years of increase",p:"Antidepressants dispensed to women 15–24 since the register began in 2006.",numl:"2006 → 2024 · women 15–24"}

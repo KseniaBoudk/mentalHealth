@@ -107,7 +107,13 @@ def main():
             payload = {"generated_at": now, "source": spec["source"], "rows": rows}
             f.write(f"/* {spec['note']} */\n")
             f.write(f"const {spec['var']} = ")
-            f.write(json.dumps(payload, ensure_ascii=False, indent=1))
+            # Compact, not indent=1: this file is loaded as a blocking
+            # <script> on every page load (see the module docstring above
+            # for why it can't be a fetch()ed JSON file instead), so its
+            # size is pure page-weight — pretty-printing ~16,000 rows added
+            # a quarter more bytes for zero benefit, since nobody reads this
+            # file (the "Do not hand-edit" note above is the whole point).
+            f.write(json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
             f.write(";\n\n")
 
     print(f"[build_kurvan_data] wrote {OUT}")

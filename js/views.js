@@ -77,6 +77,20 @@ const fakeAgePts=(k,regionCode,year,sex,std)=>agePtsWith(fakeCell,k,regionCode,y
 const legendStrip=()=>`<div class="legend">${t.legend.map(([k,b,r])=>
   `<span class="li"><span class="dot" style="background:${INST_COLOR[k==="survey"?"survey":k==="reg"?"reg":"mort"]}"></span><span><b>${esc(b)}</b> ${esc(r)}</span></span>`).join("")}</div>`;
 
+// lineLegend: one row per labelled series in a lineChart() call, each a
+// short stroke sample (colour + dash + width, matching the line itself
+// exactly) next to its name — replaces the on-chart caption lineChart()
+// used to draw at each line's last point, which got crowded or ran off
+// the plot on anything longer than a one-word label (see kurvan.css's
+// .line-legend). Series without a label (e.g. a lone annotated line) are
+// skipped rather than showing up as a blank row.
+const lineLegend=series=>{
+  const labelled=series.filter(se=>se.label);
+  if(!labelled.length)return "";
+  return `<div class="line-legend">${labelled.map(se=>
+    `<span class="li"><svg class="ln" width="28" height="12" aria-hidden="true"><line x1="1" y1="6" x2="27" y2="6" stroke="${se.color}" stroke-width="${se.w||2.3}"${se.dash?` stroke-dasharray="${se.dash}"`:""} stroke-linecap="round"/></svg>${esc(se.label)}</span>`).join("")}</div>`;
+};
+
 // Five swatches, shared by every chorMap() card — matches the map's own
 // fill exactly (chorMap() shades each tile by BAND_OP[quintile rank], a
 // fixed 5-step opacity ladder, not a continuous value->shade function; an
@@ -184,6 +198,10 @@ function viewLaget(){
   const suM=fakeAgePts("suicide","SE",2024,"M"),suK=fakeAgePts("suicide","SE",2024,"K");
   const shPeak=shK.filter(Boolean).reduce((a,p)=>p[1]>a[1]?p:a);
   const suPeak=suM.filter(Boolean)[suM.filter(Boolean).length-1];
+  const shSeries=[{pts:shK,color:"var(--violet)",w:2.5,label:t.women,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
+                   {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men}];
+  const suSeries=[{pts:suM,color:"var(--oxblood)",w:2.6,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
+                   {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women}];
   const oldMen=fakeCell("suicide","SE",2024,8,"M",false);
   const yw06=cell("antidep","SE",2006,1,"K",false),yw24=cell("antidep","SE",2024,1,"K",false);
   const growth=Math.round((yw24.value/yw06.value-1)*100);
@@ -201,17 +219,15 @@ function viewLaget(){
     <div class="inner2">
       <div>
         <h4>${esc(t.shTitle)}</h4><div class="u">${srcLine("selfharm")}</div>
-        ${lineChart(
-          [{pts:shK,color:"var(--violet)",w:2.5,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
-           {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men,labelAt:4}],
+        ${lineChart(shSeries,
           {aria:"Self-harm admissions by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("selfharm"),xFmt:i=>AGES[i]})}
+        ${lineLegend(shSeries)}
       </div>
       <div>
         <h4>${esc(t.suTitle)}</h4><div class="u">${srcLine("suicide")}</div>
-        ${lineChart(
-          [{pts:suM,color:"var(--oxblood)",w:2.6,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
-           {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women,labelAt:4}],
+        ${lineChart(suSeries,
           {aria:"Suicide by age and sex",xlabels:xl,zero:true,h:205,unit:unitLabel("suicide"),xFmt:i=>AGES[i]})}
+        ${lineLegend(suSeries)}
       </div>
     </div>
     <div class="src"><b>${S.lang==="sv"?"Syntetiska data.":"Synthetic data."}</b> ${S.lang==="sv"
@@ -256,8 +272,8 @@ function viewOverTid(){
     const c=cell(k,"SE",yr,i,"T",S.std);
     if(c){band.push([i,c.lo*0.96,c.hi*1.04]);natT.push([i,c.value]);}}
   const seriesAge = S.sex==="T"
-    ? [{pts:agePts(k,S.region,yr,"K",S.std),color:col,w:2.4,label:t.women,labelAt:2},
-       {pts:agePts(k,S.region,yr,"M",S.std),color:col,dash:"5 3",w:1.9,label:t.men,labelAt:5}]
+    ? [{pts:agePts(k,S.region,yr,"K",S.std),color:col,w:2.4,label:t.women},
+       {pts:agePts(k,S.region,yr,"M",S.std),color:col,dash:"5 3",w:1.9,label:t.men}]
     : [{pts:agePts(k,S.region,yr,S.sex,S.std),color:col,w:2.4}];
   // Only annotates the FABRICATED age curve: the real HLV table has no age
   // dimension at all (see REAL_HLV in data.js), so there is no curve to
@@ -318,6 +334,7 @@ function viewOverTid(){
         <div class="card-b">${lineChart(seriesAge,
           {band:isNat?[]:band,aria:isNat?"Age curve for Sweden as a whole":"Age curves for the selected region against the national band",
            xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k),xFmt:i=>AGES[i]})}
+          ${lineLegend(seriesAge)}
           ${isRealActive(k)&&t.realCaveat[k]?`<div class="suppress"><b>${esc(t.realLbl)}</b> ${esc(t.realCaveat[k])}</div>`:""}</div>
       </div>
       <div class="card">
@@ -730,10 +747,24 @@ function viewBehov(){
   const gap=REGIONS.map(r=>{
     const d=fakeTotal("distress",r[0],2024,"T",false),a=fakeTotal("antidep",r[0],2024,"T",false);
     return {x:d.value,y:a.value,code:r[0],name:r[1]};});
-  const worst=(()=>{const n=gap.length,mx=gap.reduce((s,p)=>s+p.x,0)/n,my=gap.reduce((s,p)=>s+p.y,0)/n;
-    let sxy=0,sxx=0;gap.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
-    const b=sxy/sxx,a=my-b*mx;
-    return gap.slice().sort((p,q)=>(p.y-(a+b*p.x))-(q.y-(a+b*q.x)))[0];})();
+  // Rendered here, not inline in the template below, and BEFORE worst/
+  // selPoint: scatter() mutates each point in `gap` with `.res` (its own
+  // regression residual) as a side effect — calling it first lets both of
+  // those reuse that instead of re-deriving the same regression by hand.
+  const gapSvg=scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380,
+    xName:t.ind.distress,yName:t.ind.antidep,xUnit:unitLabel("distress"),yUnit:unitLabel("antidep")});
+  const worst=gap.slice().sort((p,q)=>p.res-q.res)[0];
+  // The region behind the sidebar's second card — whichever one is
+  // currently selected (clicking a point in the scatter below sets
+  // S.region and re-renders, shell.js), falling back to `worst` on the
+  // rare S.region value `gap` doesn't cover (e.g. "SE", reachable from
+  // other tabs' region pickers).
+  const selPoint=gap.find(p=>p.code===S.region)||worst;
+  const selAbove=selPoint.res>=0;
+  const selResAbs=fmt(Math.abs(selPoint.res),1,unitLabel("antidep"));
+  const selSentence=(selAbove?t.gapSelAbove:t.gapSelBelow)(
+    fmt(selPoint.x,1,unitLabel("distress")),fmt(selPoint.y,1,unitLabel("antidep")),selResAbs);
+  const selCol=selAbove?"var(--teal)":"var(--oxblood)";
   const gp=t.gapPiece;
 
   // Disagreement scatter: reported distress against care contact, per
@@ -764,8 +795,7 @@ function viewBehov(){
   <div class="figrow" style="margin-top:20px">
     <div class="card">
       <div class="card-h"><h3>${esc(t.gapTitle)}</h3><div class="u">${esc(t.gapUnit)}</div></div>
-      <div class="card-b">${scatter(gap,{aria:"Reported need against healthcare response across 21 regions",w:620,h:380,
-        xName:t.ind.distress,yName:t.ind.antidep,xUnit:unitLabel("distress"),yUnit:unitLabel("antidep")})}</div>
+      <div class="card-b">${gapSvg}</div>
       ${scatterKey()}
       ${srcStrip("antidep",t.causalNote)}
     </div>
@@ -775,6 +805,19 @@ function viewBehov(){
         <h4>${esc(gp.h)}</h4><p>${esc(gp.p)}</p>
         <div class="num tnum" style="color:${INST_COLOR[gp.inst]}">${esc(worst.name)}</div>
         <div class="numl">${esc(gp.numl)}</div>
+      </div>
+      <!-- Fills what used to be dead space below the card above (this
+           column stretches to match the taller scatter next to it, CSS
+           grid's default align-items:stretch) — click any point in that
+           scatter to change which region this reports on. Sized up a
+           notch from .piece's own defaults (extra padding, a bigger
+           .num) since this is the one that actually needs to fill that
+           leftover height, not just sit in it. -->
+      <div class="piece" style="padding:22px 24px 26px">
+        <div class="tag" style="color:var(--violet)">${esc(t.gapSelTag)}</div>
+        <h4>${esc(selPoint.name)}</h4><p>${esc(selSentence)}</p>
+        <div class="num tnum" style="color:${selCol};font-size:34px">${selAbove?"+":"−"}${selResAbs}</div>
+        <div class="numl">${esc(t.gapSelNuml)}</div>
       </div>
     </div>
   </div>
@@ -808,6 +851,8 @@ function viewSjukskrivning(){
   const rows=REGIONS.map(r=>{const c=total(k,r[0],latest,"T",false); return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi};}).filter(Boolean);
   const R=RBY[S.region];
   const mine=total(k,S.region,latest,"T",false);
+  const sexSeries=[{pts:ts("K"),color:col,w:2.4,label:t.women},
+                    {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}];
 
   return `
   <div class="hero">
@@ -815,12 +860,11 @@ function viewSjukskrivning(){
   </div>
   <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
-    <div class="card-b">${lineChart(
-      [{pts:ts("K"),color:col,w:2.4,label:t.women},
-       {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
+    <div class="card-b">${lineChart(sexSeries,
       {aria:"Sickness absence trend, women and men",
        xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
-       marks:eventMarks(k,years),h:200,unit:unitLabel(k)})}</div>
+       marks:eventMarks(k,years),h:200,unit:unitLabel(k)})}
+      ${lineLegend(sexSeries)}</div>
     ${srcStrip(k)}
   </div>
   <div class="grid-ex mt-fig">
@@ -859,16 +903,17 @@ function viewKon(){
     const{years,ts}=sexTimeSeries(k,false);
     const latest=years[years.length-1];
     const natK=total(k,"SE",latest,"K",false), natM=total(k,"SE",latest,"M",false);
+    const sexSeries=[{pts:ts("K"),color:col,w:2.4,label:t.women},
+                      {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}];
     return `
     <div class="card mt-fig">
       <div class="card-h"><h3>${esc(t.ind[k])}</h3><div class="u">${esc(t.natLine)} · ${esc(unitLabel(k))}</div></div>
       <div class="card-b">
-        ${lineChart(
-          [{pts:ts("K"),color:col,w:2.4,label:t.women},
-           {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}],
+        ${lineChart(sexSeries,
           {aria:t.ind[k]+", women and men over time",
            xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
            marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
+        ${lineLegend(sexSeries)}
         <div class="rstats" style="grid-template-columns:1fr 1fr;margin-top:14px">
           <div class="rstat" style="border-top-color:${col}">
             <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.women)}</div>
@@ -949,17 +994,18 @@ function viewAlder(){
   const dashes=[null,"5 3","2 3"];
   const groupLabel={child:t.ageChild,adult:t.ageAdult,elderly:t.ageElderly};
   const totals=AGE_GROUPS.map(g=>({g,c:ageGroupTotal(k,"SE",latest,g.idxs,"T",false)}));
+  const ageSeries=AGE_GROUPS.map((g,i)=>({pts:ts(g),color:col,dash:dashes[i],w:i===0?2.4:1.9,label:groupLabel[g.key]}));
 
   return `
   <div class="hero"><p>${esc(t.alderLead)}</p></div>
   <div class="card mt-fig">
     <div class="card-h"><h3>${esc(t.ind[k])}</h3><div class="u">${esc(t.natLine)} · ${esc(unitLabel(k))}</div></div>
     <div class="card-b">
-      ${lineChart(
-        AGE_GROUPS.map((g,i)=>({pts:ts(g),color:col,dash:dashes[i],w:i===0?2.4:1.9,label:groupLabel[g.key]})),
+      ${lineChart(ageSeries,
         {aria:t.ind[k]+", children, adults and elderly over time",
          xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
          marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
+      ${lineLegend(ageSeries)}
       <div class="rstats" style="grid-template-columns:1fr 1fr 1fr;margin-top:14px">
         ${totals.map(({g,c})=>`
         <div class="rstat" style="border-top-color:${col}">

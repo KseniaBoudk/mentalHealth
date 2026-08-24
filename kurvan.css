@@ -173,6 +173,41 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .legend .dot{width:9px;height:9px;border-radius:50%;flex:none;position:relative;top:.5px}
 .legend b{font-weight:700}
 
+/* --- line-chart legend: which line is which, off the plot itself ---
+   A colour dot (like .legend's above) can't tell two same-colour lines
+   apart when only their dash pattern differs (women/men, child/adult/
+   elderly all reuse one instrument colour) — this draws a short stroke
+   sample instead, so solid vs. dashed vs. dotted reads the same here as
+   it does on the chart. Sits under the chart it describes, replacing the
+   old on-SVG per-line caption (see charts.js's lineChart doc comment).
+   One row per line, stacked (not a side-by-side wrapping strip like
+   .legend above) — with only two or three lines per chart there's no
+   space pressure, and a stacked list reads at a glance instead of asking
+   the eye to scan sideways past a swatch to find its label. width:fit-content
+   is load-bearing, not decoration: this sits right after the chart's own
+   <svg>, a plain block that (like any block box) defaults to filling its
+   container's full width — the chart's own container, sized to the huge
+   fullscreen svg beside it. Left at that default width, this being
+   display:flex made every row stretch to match (flex's own default
+   align-items:stretch), spreading each swatch and its label to opposite
+   ends of a mostly-empty row instead of sitting next to each other. */
+.line-legend{display:flex;flex-direction:column;gap:8px;width:fit-content;max-width:100%;margin-top:10px;padding:2px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.line-legend .li{display:flex;gap:10px;align-items:center;white-space:nowrap;line-height:1}
+/* Explicit width/height, not left to the svg's own width/height attributes:
+   the bare `svg{width:100%;height:auto}` reset above (this file's very
+   first rules) matches this swatch too, since nothing here overrode it.
+   %-width resolves against .li's stretched (see .line-legend's own
+   align-items:stretch, unset above) row width, not the drawn 28px, and
+   height:auto then scales up to match that same 28:12 ratio — so the
+   swatch was rendering many px taller than 12, with its <line>'s literal
+   y="6" (views.js's lineLegend()) sitting near that inflated box's TOP
+   rather than its middle. That's a growing, row-width-dependent offset,
+   which is why neither an earlier line-height fix nor a fixed px `top`
+   nudge (the fix .legend .dot, a plain span never touched by the global
+   svg rule, actually needs) ever closed the gap. Pinning the real size
+   here is what makes align-items:center on .li above work as intended. */
+.line-legend .ln{flex:none;display:block;width:28px;height:12px}
+
 /* --- cards --- */
 .card{background:var(--surface);border:1px solid var(--hair);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
 .card-h{padding:14px 18px 12px;border-bottom:1px solid var(--hair-soft);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
@@ -316,8 +351,10 @@ select option:disabled{color:var(--ink-3)}
 .pt-hit{opacity:0;transition:opacity .12s ease}
 .pt-hit:hover,.pt-hit:focus-visible{opacity:1}
 /* scatter()'s points (charts.js) — same outline treatment as .tile, just
-   scoped to its own class since these circles carry no other class. */
-.spt{outline:none}
+   scoped to its own class since these circles carry no other class.
+   cursor:pointer matches .tile's own affordance too, now that a click
+   here also selects the region (shell.js). */
+.spt{outline:none;cursor:pointer}
 .spt:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
 /* Custom hover card, replacing the browser's native SVG-title tooltip —
    light grey (var(--surface-2), the app's own secondary-surface tone, not
