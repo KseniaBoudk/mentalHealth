@@ -6,12 +6,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 21 Aug 2026 09:07:22 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu lanseras ett nationellt hälsoprogram för barn och unga",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253506"
+    "retrieved_at": "2026-08-24T16:12:07.176670"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0c72f8bb0b924a8f90ba36e483a0f563.aspx",
@@ -20,12 +20,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 14 Aug 2026 10:00:31 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen utreder hur beredskapssjukhus kan stärka vården vid krig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253525"
+    "retrieved_at": "2026-08-24T16:12:07.176703"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ec856f51c7ff420ba2246c7da6767333.aspx",
@@ -34,12 +34,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 01 Jul 2026 09:15:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler transplantationer trots färre organdonatorer i Sverige",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253537"
+    "retrieved_at": "2026-08-24T16:12:07.176713"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dca94563082840ca8f960eaacd0dc041.aspx",
@@ -48,12 +48,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 22 Jun 2026 09:47:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: När vården behöver hjälp över gränserna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253545"
+    "retrieved_at": "2026-08-24T16:12:07.176720"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/62f55de964c94b30bbe3793c75836107.aspx",
@@ -62,12 +62,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 16 Jun 2026 09:00:23 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kvinnor får vänta längre på akuten – oavsett ålder",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253560"
+    "retrieved_at": "2026-08-24T16:12:07.176732"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b080cc223453498a811c988b0a2f7803.aspx",
@@ -76,12 +76,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 16 Jun 2026 08:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt brist på vikarier  för äldreomsorgen i sommar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253570"
+    "retrieved_at": "2026-08-24T16:12:07.176741"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ba0f6b04d9194676ae5fd837dc4ef739.aspx",
@@ -90,12 +90,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 15 Jun 2026 06:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet vårdplatser ökar i Sverige – men fortsatt arbete krävs",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253580"
+    "retrieved_at": "2026-08-24T16:12:07.176749"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fae681d1882c4ccbb1c13c69d5111b10.aspx",
@@ -104,12 +104,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 11 Jun 2026 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Andelen blodgivare i landet fortsätter att minska",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253588"
+    "retrieved_at": "2026-08-24T16:12:07.176758"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d7e53ea89d4f46cd8d734e8ec9bade16.aspx",
@@ -118,12 +118,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 09 Jun 2026 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Två av tre läkare uppger att tidsbrist försvårar arbetet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253597"
+    "retrieved_at": "2026-08-24T16:12:07.176766"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/599ed74d022744ae8eacb4aa08459365.aspx",
@@ -132,12 +132,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 03 Jun 2026 06:30:40 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny kartläggning: Tusentals barn med allvarlig beteendeproblematik får aldrig rätt diagnos",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253605"
+    "retrieved_at": "2026-08-24T16:12:07.176773"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d201a4a477a948b5991083bf6548ff3e.aspx",
@@ -146,12 +146,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 02 Jun 2026 09:27:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu tas nästa steg för att införa civilplikt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253615"
+    "retrieved_at": "2026-08-24T16:12:07.176782"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5c21b96f3ec443b0910e69ea3b4da42c.aspx",
@@ -160,12 +160,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Jun 2026 09:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tusentals äldre deltog i aktiviteter mot ensamhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253624"
+    "retrieved_at": "2026-08-24T16:12:07.176789"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c63b0b23b68c4cf887689ff310fef6a9.aspx",
@@ -174,12 +174,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 28 May 2026 06:30:40 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: AI och digital terapi allt vanligare i psykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253632"
+    "retrieved_at": "2026-08-24T16:12:07.176796"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4abf524170ca4f358a191eaea7509996.aspx",
@@ -188,12 +188,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 27 May 2026 06:30:41 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Många kommuner har börjat  använda AI i äldreomsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253640"
+    "retrieved_at": "2026-08-24T16:12:07.176803"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/25fc30106f1d4a8b8e5969ec2ed53a95.aspx",
@@ -202,12 +202,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 27 May 2026 06:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Hundratusentals med obesitas får inte vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253650"
+    "retrieved_at": "2026-08-24T16:12:07.176811"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/554c137f8ccb4d66ae8e45ad3224797e.aspx",
@@ -216,12 +216,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 20 May 2026 06:30:40 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler barn orosanmäls – men ofta när det har gått för långt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253659"
+    "retrieved_at": "2026-08-24T16:12:07.176819"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/04282241c8b24336ab43ee94ed9f739a.aspx",
@@ -230,12 +230,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 19 May 2026 06:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Var femte på skyddat boende är man – många är kriminella avhoppare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253668"
+    "retrieved_at": "2026-08-24T16:12:07.176830"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b90dfbdd44904ddeb821ba8904910920.aspx",
@@ -244,12 +244,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 15 May 2026 07:02:06 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Sveriges stöd fortsätter: över  300 patienter evakuerade från Ukraina",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253677"
+    "retrieved_at": "2026-08-24T16:12:07.176837"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3d56dbacb75c4723bf14d65e0fd14271.aspx",
@@ -258,12 +258,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 08 May 2026 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny rapport: Svårt avslöja kriminalitet i välfärden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253686"
+    "retrieved_at": "2026-08-24T16:12:07.176845"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/025ea1e193724f878b3d79d9de2bff4b.aspx",
@@ -272,12 +272,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 07 May 2026 09:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny lägesbild: Andelen äldre med hemtjänst minskar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253695"
+    "retrieved_at": "2026-08-24T16:12:07.176853"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8a9a44bae25642288a1cd060ce1b89d3.aspx",
@@ -286,12 +286,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 06 May 2026 07:30:30 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora brister i vård och skola för barn som är placerade",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253704"
+    "retrieved_at": "2026-08-24T16:12:07.176861"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0d82568877f648149b68ecf2540cf961.aspx",
@@ -300,12 +300,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 21 Apr 2026 14:21:19 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen inviger SweCan för att stärka framtidens cancervård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253713"
+    "retrieved_at": "2026-08-24T16:12:07.176868"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b403f361d1ac4ec694eb15bd69811246.aspx",
@@ -314,12 +314,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 16 Apr 2026 09:10:03 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler får hormonbehandling vid klimakteriebesvär – men stora skillnader utifrån socioekonomi",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253723"
+    "retrieved_at": "2026-08-24T16:12:07.176876"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8d2a4c91f8064506a4de7cdd5c789e34.aspx",
@@ -328,12 +328,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 09 Apr 2026 09:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt färre får personlig assistans",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253731"
+    "retrieved_at": "2026-08-24T16:12:07.176883"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/08d0905aab9b498e9ecfaefc82acdc5e.aspx",
@@ -342,12 +342,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Apr 2026 06:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya riktlinjer för allergivård  ska hjälpa miljontals svenskar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253739"
+    "retrieved_at": "2026-08-24T16:12:07.176890"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bb5abb14212445e1810076311407e3aa.aspx",
@@ -356,12 +356,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 31 Mar 2026 09:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre bebisar på sjukhus efter RS-satsning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253748"
+    "retrieved_at": "2026-08-24T16:12:07.176897"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/47a69e8615cd47b88d4fce0d15065d04.aspx",
@@ -370,12 +370,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 30 Mar 2026 08:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Äldre får omsorg allt senare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253757"
+    "retrieved_at": "2026-08-24T16:12:07.176904"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/40134657f7264bf98b95680e543a061b.aspx",
@@ -384,12 +384,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 27 Mar 2026 09:00:30 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya rekommendationer om graviditetsdiabetes – för bättre hälsa hos mammor och barn",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253767"
+    "retrieved_at": "2026-08-24T16:12:07.176911"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/20a8d3ae6ed64331bf4c6a415153848a.aspx",
@@ -398,12 +398,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 24 Mar 2026 06:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Många LSS-boenden saknar plan  för evakuering vid krig eller kris",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253776"
+    "retrieved_at": "2026-08-24T16:12:07.176922"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/83cb70be719a459d813ead8fd9837fd3.aspx",
@@ -412,12 +412,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Mar 2026 06:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressad arbetsmiljö och höga sjuktal en stor utmaning för äldreomsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253785"
+    "retrieved_at": "2026-08-24T16:12:07.176929"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/00db861ad3ba487b817119a690e440d9.aspx",
@@ -426,12 +426,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 06 Mar 2026 09:00:20 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora brister i vården för  barn med adhd och autism",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253794"
+    "retrieved_at": "2026-08-24T16:12:07.176939"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/771733072acd4754b46bed1a09615658.aspx",
@@ -440,12 +440,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 23 Feb 2026 10:00:21 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny rapport: Rätt till motion är  inte likvärdig på LSS-boenden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253803"
+    "retrieved_at": "2026-08-24T16:12:07.176947"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b0077eb1d866473db205b10015853f10.aspx",
@@ -454,12 +454,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Feb 2026 09:10:59 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya nationella riktlinjer för könsdysfori",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253811"
+    "retrieved_at": "2026-08-24T16:12:07.176954"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3f86e35d532a460fbe42ecfced07778b.aspx",
@@ -468,12 +468,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 Feb 2026 07:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny prognos: Åldrande befolkning ger höjda krav på cancervården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253820"
+    "retrieved_at": "2026-08-24T16:12:07.176961"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e7bead40054e439ea3dc46d5211e1ecb.aspx",
@@ -482,12 +482,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Feb 2026 07:02:57 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Brist på allergivård trots växande  behov – patienter kan bli utan vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253829"
+    "retrieved_at": "2026-08-24T16:12:07.176969"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/13f6e4e6febc4cb9bcc031f217ec74b1.aspx",
@@ -496,12 +496,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 30 Jan 2026 09:00:30 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Självskador bland unga flickor  och kvinnor kvar på höga nivåer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253837"
+    "retrieved_at": "2026-08-24T16:12:07.176976"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e499d55ee2cf41e0866c492683f9ae04.aspx",
@@ -510,12 +510,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 Jan 2026 09:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre organdonatorer – för andra året i rad",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253846"
+    "retrieved_at": "2026-08-24T16:12:07.176983"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1a6d9f6fb5b5489889c856eab1aba0be.aspx",
@@ -524,12 +524,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 17 Dec 2025 06:00:22 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Lång väntan på demensdiagnoser  - men stor skillnad mellan regioner",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253855"
+    "retrieved_at": "2026-08-24T16:12:07.176990"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/15c130b022a247c4916072b15543a03d.aspx",
@@ -538,12 +538,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 10 Dec 2025 14:49:34 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Svenska fertilitetskliniker berörs  inte av dansk donationshändelse",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253864"
+    "retrieved_at": "2026-08-24T16:12:07.176997"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9f4ace7cf9b243d38690f798b67fdad0.aspx",
@@ -552,12 +552,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 10 Dec 2025 10:30:42 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så vill Socialstyrelsen minska onödig vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253872"
+    "retrieved_at": "2026-08-24T16:12:07.177004"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c131404e0630468e8a207271e7dd9e4e.aspx",
@@ -566,12 +566,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 08 Dec 2025 11:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Palliativ vård  behöver nå fler och sättas in tidigare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253881"
+    "retrieved_at": "2026-08-24T16:12:07.177013"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b559a2ea7f914f78b57ca6d882132970.aspx",
@@ -580,12 +580,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 04 Dec 2025 15:00:09 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny studie: barnfamiljer som riskerar avhysning har ökat",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253890"
+    "retrieved_at": "2026-08-24T16:12:07.177020"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d70d0527060b4ac88ac527aa502bc219.aspx",
@@ -594,12 +594,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 04 Dec 2025 09:00:04 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet födda barn fortsätter att minska – lägsta nivån på 20 år",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253899"
+    "retrieved_at": "2026-08-24T16:12:07.177027"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a176c3bdb61244aaa7e86e2296ac3eac.aspx",
@@ -608,12 +608,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 02 Dec 2025 09:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligt med psykisk ohälsa bland personer som avlidit till följd av läkemedels- och narkotikaförgiftning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253908"
+    "retrieved_at": "2026-08-24T16:12:07.177036"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f6ebbade147a4f4bad8f182b2d1c1afa.aspx",
@@ -622,12 +622,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Dec 2025 06:30:43 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Äldreomsorgen: Bristande följsamhet till rutiner för hygien och smittförebyggande åtgärder",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253917"
+    "retrieved_at": "2026-08-24T16:12:07.177043"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/72487390eddb4187bd2c2e86744b1922.aspx",
@@ -636,12 +636,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 27 Nov 2025 07:05:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Så kan civilplikt  stärka vårdens bemanning i krig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253931"
+    "retrieved_at": "2026-08-24T16:12:07.177050"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/389ba02a37fb454e934a8b70d7f7a642.aspx",
@@ -650,12 +650,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 26 Nov 2025 09:00:21 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Positiv trend för hjärtinfarkter men stora regionala skillnader kvarstår",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253946"
+    "retrieved_at": "2026-08-24T16:12:07.177076"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d4495fde020c44b69da9a131e225dde5.aspx",
@@ -664,12 +664,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 19 Nov 2025 06:05:00 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hög risk för självmord efter upprepad psykiatrisk tvångsvård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253960"
+    "retrieved_at": "2026-08-24T16:12:07.177084"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9c40d40ce3e947788efd7d9707d78980.aspx",
@@ -678,12 +678,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 18 Nov 2025 09:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre drabbas och dör av stroke",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253975"
+    "retrieved_at": "2026-08-24T16:12:07.177091"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/87a64dc16d2740f282ff7e1e46b794aa.aspx",
@@ -692,12 +692,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 04 Nov 2025 09:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Cancer drabbar hårdare i socioekonomiskt utsatta områden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253986"
+    "retrieved_at": "2026-08-24T16:12:07.177105"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fa8ade7a3a1448ec9c3b998254eaa4b9.aspx",
@@ -706,12 +706,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 30 Oct 2025 09:00:21 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Dags för Donationsveckan – så säkras tillgången på organ och vävnader",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.253998"
+    "retrieved_at": "2026-08-24T16:12:07.177125"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5101f3ff6b8049e7aec6b6e7e503e918.aspx",
@@ -720,12 +720,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 Oct 2025 09:00:20 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Äldreomsorg: 50 000 gick utbildning  – men halv miljard användes inte",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254007"
+    "retrieved_at": "2026-08-24T16:12:07.177139"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0b6001f17c3047f79b4af0b1ed2a64a5.aspx",
@@ -734,12 +734,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 23 Oct 2025 10:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny satsning ska öka antalet  organ- och vävnadsdonationer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254015"
+    "retrieved_at": "2026-08-24T16:12:07.177151"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0e010ae3b4744612a7a3f7a11f1a117b.aspx",
@@ -748,12 +748,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 16 Oct 2025 09:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hemtjänstpersonalen  tar hand om fler äldre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254025"
+    "retrieved_at": "2026-08-24T16:12:07.177160"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e3cf6ee8ee024df489bf639781bc4f37.aspx",
@@ -762,12 +762,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Oct 2025 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hälften av landets kommuner hade brist på sommarvikarier",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254051"
+    "retrieved_at": "2026-08-24T16:12:07.177168"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/351414498d1c4d6d90d610d7de9fce94.aspx",
@@ -776,12 +776,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 14 Oct 2025 07:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya riktlinjer ska stärka vården vid klimakteriebesvär",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254060"
+    "retrieved_at": "2026-08-24T16:12:07.177176"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/546e133a528f43e0bbf35778fb1be7ae.aspx",
@@ -790,12 +790,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 09 Oct 2025 06:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Anhöriga hyllar äldreomsorgspersonal – men samtidigt minskar förtroendet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254070"
+    "retrieved_at": "2026-08-24T16:12:07.177185"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b9ab4c23864d4e149699f77b704c4ad6.aspx",
@@ -804,12 +804,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 01 Oct 2025 07:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler medicinskt olämpliga kan ha vapen –  myndigheter vill stärka systemet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254080"
+    "retrieved_at": "2026-08-24T16:12:07.177194"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ed8ec10f1f5f4785aecb2abb6555a64d.aspx",
@@ -818,12 +818,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 29 Sep 2025 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Minutstyrning vanlig i hemtjänsten  – stora skillnader mellan kommuner",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254089"
+    "retrieved_at": "2026-08-24T16:12:07.177202"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9052de88f17041b1b963dd160d6e8393.aspx",
@@ -832,12 +832,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 18 Sep 2025 09:00:21 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Dödstalen halverade sedan 1960-talet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254098"
+    "retrieved_at": "2026-08-24T16:12:07.177210"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a9cb2258b64b48dfa26227351511b67c.aspx",
@@ -846,12 +846,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 17 Sep 2025 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationell plan: så kan förlossningsvården och eftervården bli bättre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254109"
+    "retrieved_at": "2026-08-24T16:12:07.177219"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/58f499837ae742b0abd002371a1ec355.aspx",
@@ -860,12 +860,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 02 Sep 2025 06:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Robotar och kameror kan göra omsorgen bättre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254123"
+    "retrieved_at": "2026-08-24T16:12:07.177227"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/297e06767bb3483ab883d4bb1fdc9d5a.aspx",
@@ -874,12 +874,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 10 Jul 2025 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Statsbidrag mot ofrivillig ensamhet bland äldre gav resultat i hela landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254145"
+    "retrieved_at": "2026-08-24T16:12:07.177235"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5e608856c1e7477693cb809c7e7c3160.aspx",
@@ -888,12 +888,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 30 Jun 2025 08:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt färre anmäler sig till Donationsregistret",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254154"
+    "retrieved_at": "2026-08-24T16:12:07.177243"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/20291404d5fb4526a0442aecf35a89e8.aspx",
@@ -902,12 +902,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 26 Jun 2025 10:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Bättre tandhälsa – men skillnaderna ökar och målen för tandvården nås inte",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254162"
+    "retrieved_at": "2026-08-24T16:12:07.177251"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/91b622583ba245359e5870e3ab071a7a.aspx",
@@ -916,12 +916,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 23 Jun 2025 07:30:41 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kommuner redo för ny socialtjänstlag – men tydliga behov av fortsatt stöd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254172"
+    "retrieved_at": "2026-08-24T16:12:07.177260"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e2cc323011cf4883b851ceca2e748a85.aspx",
@@ -930,12 +930,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 18 Jun 2025 08:15:48 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Många lider i tystnad – nu får vården nationella riktlinjer för bäckenbottendysfunktion",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254181"
+    "retrieved_at": "2026-08-24T16:12:07.177269"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/809df315b1ec4547bf6f55ecbd170952.aspx",
@@ -944,12 +944,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Jun 2025 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre besök och kortare väntetider på akuten",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254212"
+    "retrieved_at": "2026-08-24T16:12:07.177277"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1e2a583d589144f1a5e2c2462aed72a6.aspx",
@@ -958,12 +958,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 13 Jun 2025 14:40:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny trend för födelsedagar – allt fler bebisar föds på sommaren",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254221"
+    "retrieved_at": "2026-08-24T16:12:07.177288"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ed463cbe976b45339e26eb531b261615.aspx",
@@ -972,12 +972,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 13 Jun 2025 08:00:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora regionala skillnader – unga män sticker ut i blodgivningsstatistiken",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254231"
+    "retrieved_at": "2026-08-24T16:12:07.177298"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/40caac0451cb4f3293e9bd8a0c100451.aspx",
@@ -986,12 +986,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 13 Jun 2025 06:05:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet vårdplatser i Sverige minskar – Socialstyrelsen: \"Mer arbete behövs\"",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254242"
+    "retrieved_at": "2026-08-24T16:12:07.177309"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e7c43c8d825c4aa8bef70427ca59ef95.aspx",
@@ -1000,12 +1000,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 10 Jun 2025 09:00:01 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Efter åtta års nedgång – nu bromsar minskningen av hushåll med ekonomiskt bistånd in",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254253"
+    "retrieved_at": "2026-08-24T16:12:07.177318"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/63c141a57de1446f87d2c55580bdc294.aspx",
@@ -1014,12 +1014,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 09 Jun 2025 08:55:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny rapport: Nationell strategi krävs  för att säkra tillgången på blodplasma",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254275"
+    "retrieved_at": "2026-08-24T16:12:07.177326"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c4fd4018f4134dfba139e3a824f439ec.aspx",
@@ -1028,12 +1028,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 05 Jun 2025 06:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Utmaning för hemtjänsten när äldre dricker allt mer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254284"
+    "retrieved_at": "2026-08-24T16:12:07.177347"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/52027b707d624b85af9fb60b149caae1.aspx",
@@ -1042,12 +1042,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 Jun 2025 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Användning av välfärdsteknik i vård och omsorg går i otakt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254292"
+    "retrieved_at": "2026-08-24T16:12:07.177354"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a88de22e1a6544fb8c0b4eb15db228aa.aspx",
@@ -1056,12 +1056,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 27 May 2025 08:15:00 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Placerade barn har sämre psykisk hälsa och får mer psykofarmaka – nu behövs flera insatser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254301"
+    "retrieved_at": "2026-08-24T16:12:07.177361"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b9144cd184fd451f967b3030cb63d61d.aspx",
@@ -1070,12 +1070,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 22 May 2025 09:00:10 +0200",
-    "topic": "substance_use",
+    "topic": "substance use",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt fler får behandling för spelberoende",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254309"
+    "retrieved_at": "2026-08-24T16:12:07.177368"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4bed8004cadb4eaa809be61d6ef4db78.aspx",
@@ -1084,12 +1084,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 21 May 2025 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Rekordmånga aborter görs i hemmet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254324"
+    "retrieved_at": "2026-08-24T16:12:07.177381"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8e597afe8f8c484b8db8137e7e6d8cf2.aspx",
@@ -1098,12 +1098,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 20 May 2025 09:03:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Bättre tänder – men inte för alla",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254333"
+    "retrieved_at": "2026-08-24T16:12:07.177389"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e871f7753c33420bb232ad7e395d3e92.aspx",
@@ -1112,12 +1112,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 May 2025 07:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny lag: Så blir processen för att ändra juridiskt kön",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254341"
+    "retrieved_at": "2026-08-24T16:12:07.177396"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/da411f2dc7ec4433a88718e6b4fc6c07.aspx",
@@ -1126,12 +1126,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 May 2025 06:05:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Snart kan halv miljon svenskar med sällsynta hälsotillstånd få bättre vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254351"
+    "retrieved_at": "2026-08-24T16:12:07.177405"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4cba2b001b7c4b44b7f443158dc0a72e.aspx",
@@ -1140,12 +1140,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 08 May 2025 09:00:11 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Psykiatrisk vård ökar vid övergång från BUP till vuxenpsykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254360"
+    "retrieved_at": "2026-08-24T16:12:07.177412"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b5befa1863f0463fbc7ccac14b3387eb.aspx",
@@ -1154,12 +1154,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 08 May 2025 06:15:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny uppföljning: Fler behöver få en fast läkarkontakt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254369"
+    "retrieved_at": "2026-08-24T16:12:07.177419"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/095798faad8641fab14f4fb72ef78372.aspx",
@@ -1168,12 +1168,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 07 May 2025 13:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre vårdskador – men fortfarande  drabbas tusentals patienter varje år",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254379"
+    "retrieved_at": "2026-08-24T16:12:07.177427"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6501cfdf9f784e68a2497d2b7ac5bc28.aspx",
@@ -1182,12 +1182,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 29 Apr 2025 06:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tillfällig hemtjänst kan bli dyr  utmaning för semesterkommuner",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254387"
+    "retrieved_at": "2026-08-24T16:12:07.177442"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/75c1a53a03af4f40817957c49fe1a981.aspx",
@@ -1196,12 +1196,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 23 Apr 2025 09:00:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt ökning av adhd-läkemedel – särskilt bland unga kvinnor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254396"
+    "retrieved_at": "2026-08-24T16:12:07.177449"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c0cd56dc1d8548758c7f5a40198b5c88.aspx",
@@ -1210,12 +1210,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 15 Apr 2025 11:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: ”Vi behöver arbeta med ännu mer fokus på resultat”",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254405"
+    "retrieved_at": "2026-08-24T16:12:07.177457"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3dd62f77898d40579969d32f1583638d.aspx",
@@ -1224,12 +1224,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 14 Apr 2025 09:41:41 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora brister i vården vid kronisk sjukdom",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254413"
+    "retrieved_at": "2026-08-24T16:12:07.177464"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/837a5b7db9d94e68a436d0b736297324.aspx",
@@ -1238,12 +1238,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 10 Apr 2025 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu kommer helt ny statistik om personal i primärvården – med även icke-legitimerad personal",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254424"
+    "retrieved_at": "2026-08-24T16:12:07.177475"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b55de55a960946e89ef6b0aa21a81961.aspx",
@@ -1252,12 +1252,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 02 Apr 2025 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Eftersatt krisberedskap och färre sociala LSS-insatser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254432"
+    "retrieved_at": "2026-08-24T16:12:07.177483"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a9f69574af7b4bdea92012c76fecd826.aspx",
@@ -1266,12 +1266,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 02 Apr 2025 07:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler ska få hjälp till snabbare vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254442"
+    "retrieved_at": "2026-08-24T16:12:07.177491"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b2add341b4a4462db392288e4afa7554.aspx",
@@ -1280,12 +1280,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 14 Mar 2025 08:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Återkrav fastställt av Socialstyrelsen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254450"
+    "retrieved_at": "2026-08-24T16:12:07.177498"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f25b51d6e3e54161bfe28d585cb4aee9.aspx",
@@ -1294,12 +1294,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 05 Mar 2025 15:30:19 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya rekommendationer i nationella riktlinjer för graviditet, förlossning och tiden efter",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254460"
+    "retrieved_at": "2026-08-24T16:12:07.177506"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6dcc03a702b5480bac5d971cc04a9fd6.aspx",
@@ -1308,12 +1308,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 04 Mar 2025 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Statligt styrd tandvård kan bli mer effektiv och jämlik",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254469"
+    "retrieved_at": "2026-08-24T16:12:07.177514"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7b5ddbb708824778a56093e4558f76de.aspx",
@@ -1322,12 +1322,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 17 Feb 2025 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Sjuktransporter i Sverige – flera åtgärder behövs för att möta behoven i kris och krig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254482"
+    "retrieved_at": "2026-08-24T16:12:07.177522"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2f5bf5dd23e7410581c2805c4a086a8f.aspx",
@@ -1336,12 +1336,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 12 Feb 2025 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Positiv trend för ökad patientsäkerhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254490"
+    "retrieved_at": "2026-08-24T16:12:07.177529"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dad9f27e723a4373a321c5d2cd32b1cd.aspx",
@@ -1350,12 +1350,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 04 Feb 2025 08:59:35 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Cancer på väg att bli den vanligaste dödsorsaken",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254498"
+    "retrieved_at": "2026-08-24T16:12:07.177535"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6abfc16b274046f1b153d1fb7f8e44a0.aspx",
@@ -1364,12 +1364,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 30 Jan 2025 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora skillnader i kommunernas avgifter för äldreomsorg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254507"
+    "retrieved_at": "2026-08-24T16:12:07.177543"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/27c7b05a66304c79b4f647d6bacb1cfc.aspx",
@@ -1378,12 +1378,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 22 Jan 2025 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Multimedicinering kan innebära allvarliga risker",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254515"
+    "retrieved_at": "2026-08-24T16:12:07.177550"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a777cd5b6af24d8f977246c41b632faa.aspx",
@@ -1392,12 +1392,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Jan 2025 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Adhd-utredningar slukar  allt mer av BUP:s resurser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254527"
+    "retrieved_at": "2026-08-24T16:12:07.177557"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/95c490a172cc40ccaf333155e8b7af25.aspx",
@@ -1406,12 +1406,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Jan 2025 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet organdonatorer minskade förra året",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254537"
+    "retrieved_at": "2026-08-24T16:12:07.177566"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/591a349f79b34ca6b141428935322dcc.aspx",
@@ -1420,12 +1420,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 23 Dec 2024 09:37:35 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Sverige har tagit emot över  200 patienter från Ukraina",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254545"
+    "retrieved_at": "2026-08-24T16:12:07.177574"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8d692499213f4f2ea1286c9d8962d5d0.aspx",
@@ -1434,12 +1434,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Dec 2024 06:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad rörlighet bland nyutexaminerade sjuksköterskor utmanar kompetensförsörjningen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254554"
+    "retrieved_at": "2026-08-24T16:12:07.177581"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/54a61f6208a448189fb78cbe5ee3fb79.aspx",
@@ -1448,12 +1448,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 10 Dec 2024 07:45:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen överväger återbetalning på 10,6 miljoner",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254563"
+    "retrieved_at": "2026-08-24T16:12:07.177588"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3311d6a793764947854573dbbbf6c78e.aspx",
@@ -1462,12 +1462,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 10 Dec 2024 07:30:31 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre barn på skyddade boenden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254570"
+    "retrieved_at": "2026-08-24T16:12:07.177595"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/adf62f616905400198e888d7c68fb2eb.aspx",
@@ -1476,12 +1476,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 09 Dec 2024 14:30:03 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vi behöver mer kunskap om barn som skjuter och spränger",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254579"
+    "retrieved_at": "2026-08-24T16:12:07.177602"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c46f61491b014384a846d97c4540b69b.aspx",
@@ -1490,12 +1490,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 05 Dec 2024 09:00:08 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Mödrarna i Sverige blir allt äldre – och färre barn föds",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254588"
+    "retrieved_at": "2026-08-24T16:12:07.177609"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/94754a363add410bb20173b94fbe9ece.aspx",
@@ -1504,12 +1504,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 04 Dec 2024 07:10:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så ska vården vid ätstörningar bli bättre – mer kunskap behövs så att fler får vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254597"
+    "retrieved_at": "2026-08-24T16:12:07.177618"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a08a988f1f4646adb684e4e9405cc811.aspx",
@@ -1518,12 +1518,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Dec 2024 05:54:56 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kraftig ökning av autism bland flickor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254606"
+    "retrieved_at": "2026-08-24T16:12:07.177625"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f97a44f658314f6fbb6d083dfec97aa6.aspx",
@@ -1532,12 +1532,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 26 Nov 2024 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Omkring 1 000 färre hjärtinfarkter i Sverige 2023",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254615"
+    "retrieved_at": "2026-08-24T16:12:07.177632"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3377661d3c2a40f1938a00552a132c23.aspx",
@@ -1546,12 +1546,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 20 Nov 2024 07:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vården behöver erbjuda samtal om levnadsvanor till fler",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254625"
+    "retrieved_at": "2026-08-24T16:12:07.177640"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4989fe7267c148f3b5af1ff7403b38e2.aspx",
@@ -1560,12 +1560,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 14 Nov 2024 12:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen och regionerna i unik beredskapsövning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254635"
+    "retrieved_at": "2026-08-24T16:12:07.177649"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2d27b403edab4a2184df27d2da2de10c.aspx",
@@ -1574,12 +1574,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 13 Nov 2024 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre anmäler sig till donationsregistret",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254643"
+    "retrieved_at": "2026-08-24T16:12:07.177657"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a328e5c5c68e41fa9f2e3212613c272a.aspx",
@@ -1588,12 +1588,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 01 Nov 2024 11:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Miljarder i statsbidrag lyft  för äldreomsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254652"
+    "retrieved_at": "2026-08-24T16:12:07.177664"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f4ffe3ae6b9e4ad28e509c700b77bdfd.aspx",
@@ -1602,12 +1602,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 01 Nov 2024 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Donationsveckan firar 15-årsjubileum",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254661"
+    "retrieved_at": "2026-08-24T16:12:07.177671"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/58c6d956bb8b4d0f9e2ab7db12e4d688.aspx",
@@ -1616,12 +1616,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 31 Oct 2024 06:05:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Sverige behöver en fristående nationell blodorganisation",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254670"
+    "retrieved_at": "2026-08-24T16:12:07.177679"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/21519a0a95e94d16936c085bb0ce7c90.aspx",
@@ -1630,12 +1630,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 14 Oct 2024 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Brist på vikarier utmaning för äldreomsorgen i norra Sverige",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254678"
+    "retrieved_at": "2026-08-24T16:12:07.177686"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1da778b20b0d49dc93e74cbc7bb423f9.aspx",
@@ -1644,12 +1644,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 08 Oct 2024 07:00:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Positiv trend för äldres mående",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254686"
+    "retrieved_at": "2026-08-24T16:12:07.177693"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/cd24642be4f34847bab78d39964ecf37.aspx",
@@ -1658,12 +1658,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 30 Sep 2024 08:59:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny riskbedömning av blodgivare kan ge kortare karenstid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254695"
+    "retrieved_at": "2026-08-24T16:12:07.177700"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6513bdb3551d408392b8645cf39b45d4.aspx",
@@ -1672,12 +1672,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 12 Sep 2024 08:00:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Sjukvården i fokus i svensk Natoövning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254703"
+    "retrieved_at": "2026-08-24T16:12:07.177707"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c921605123a74362a2e623809db99437.aspx",
@@ -1686,12 +1686,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Sep 2024 12:00:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vissa framsteg i arbetet med god och nära vård - men längre kvar till andra mål",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254713"
+    "retrieved_at": "2026-08-24T16:12:07.177716"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/294c1191a51a47dc86eeef56e82a6fe0.aspx",
@@ -1700,12 +1700,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 14 Aug 2024 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så får patienter med postcovid bäst vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254722"
+    "retrieved_at": "2026-08-24T16:12:07.177723"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2bd29e1e330548f3b8d01411bcc794db.aspx",
@@ -1714,12 +1714,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Jul 2024 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Organ- och vävnadsdonation – alla kurvor pekar uppåt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254731"
+    "retrieved_at": "2026-08-24T16:12:07.177731"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e22ad768524b4c82b377063027cfab36.aspx",
@@ -1728,12 +1728,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 18 Jun 2024 12:30:19 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så kan arbetet mot kriminalitet bland unga i utsatta områden fortsätta – efter statsbidrag",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254739"
+    "retrieved_at": "2026-08-24T16:12:07.177738"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3c6f3b9ce61546329e2687efdc082672.aspx",
@@ -1742,12 +1742,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 18 Jun 2024 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Framgångsrik modell minskar hemlöshet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254748"
+    "retrieved_at": "2026-08-24T16:12:07.177745"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b02828fe21eb489da209a79c8119cea3.aspx",
@@ -1756,12 +1756,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 14 Jun 2024 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: fördubbla antalet blodgivare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254756"
+    "retrieved_at": "2026-08-24T16:12:07.177752"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/097d68842ea14ef3a1dace4039f8f08e.aspx",
@@ -1770,12 +1770,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 11 Jun 2024 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt färre personer får ekonomiskt bistånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254765"
+    "retrieved_at": "2026-08-24T16:12:07.177759"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/355ce337c2854e85b1b25e563ef11cea.aspx",
@@ -1784,12 +1784,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 10 Jun 2024 13:01:33 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Besöken på akuten fortsätter att öka",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254772"
+    "retrieved_at": "2026-08-24T16:12:07.177765"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5ce269194c32468e8173a72235fac060.aspx",
@@ -1798,12 +1798,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Jun 2024 07:11:29 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Brådskande behov av att öka antalet vårdplatser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254781"
+    "retrieved_at": "2026-08-24T16:12:07.177772"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1ca52832d41e4d6085c64cdef2faf74a.aspx",
@@ -1812,12 +1812,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 May 2024 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Över 100 000 har sökt skyddad yrkestitel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254789"
+    "retrieved_at": "2026-08-24T16:12:07.177780"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/04631eef536a4c17adaab59fc49f6a87.aspx",
@@ -1826,12 +1826,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 22 May 2024 09:01:23 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Förbättrad tandhälsa i Sverige",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254798"
+    "retrieved_at": "2026-08-24T16:12:07.177788"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3ab73a939d16496baa4307487f26fca2.aspx",
@@ -1840,12 +1840,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 21 May 2024 07:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Miljoner till kommunerna när nytt statsbidrag betalas ut",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254807"
+    "retrieved_at": "2026-08-24T16:12:07.177795"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/89c48a3f09c1450f82c98746656aa12a.aspx",
@@ -1854,12 +1854,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 14 May 2024 10:00:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre unga vuxna får antidepressiva",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254815"
+    "retrieved_at": "2026-08-24T16:12:07.177802"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/110624a0af504fa9b60d00838a928431.aspx",
@@ -1868,12 +1868,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 03 May 2024 06:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Alltför många med ätstörningar får inte vård – nu kommer för första gången nationella riktlinjer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254825"
+    "retrieved_at": "2026-08-24T16:12:07.177810"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9052dc90465342a488e690fdd9fd6cc3.aspx",
@@ -1882,12 +1882,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 26 Apr 2024 12:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Informationen till invånarna om fast läkarkontakt behöver bli bättre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254833"
+    "retrieved_at": "2026-08-24T16:12:07.177817"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1ddab382cd7d4afe9756acd39c5dc358.aspx",
@@ -1896,12 +1896,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 26 Apr 2024 08:37:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Gör en insats – nu startar en nationell informationsinsats om familjehem",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254843"
+    "retrieved_at": "2026-08-24T16:12:07.177825"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8489ede25ae84d4faf19a8aaed6a18e4.aspx",
@@ -1910,12 +1910,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 09 Apr 2024 10:30:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning av läkemedel med semaglutid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254851"
+    "retrieved_at": "2026-08-24T16:12:07.177832"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b8f26454135c4f65a51f7c82c84aa9c0.aspx",
@@ -1924,12 +1924,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 09 Apr 2024 08:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler söker hjälp för att sluta använda våld i nära relation",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254860"
+    "retrieved_at": "2026-08-24T16:12:07.177839"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3579dac3b92a4765a11982708e271dcf.aspx",
@@ -1938,12 +1938,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 26 Mar 2024 12:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socioekonomi har betydelse för hälsan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254868"
+    "retrieved_at": "2026-08-24T16:12:07.177846"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6fccb9e0e484467a997c0bca0d8d46a1.aspx",
@@ -1952,12 +1952,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 26 Mar 2024 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ojämlik screening för dödlig sjukdom",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254876"
+    "retrieved_at": "2026-08-24T16:12:07.177852"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3e28e07aaa2a4f989018f954f7054a2f.aspx",
@@ -1966,12 +1966,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 25 Mar 2024 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Trygghetslarm vanligaste första stöd för äldre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254886"
+    "retrieved_at": "2026-08-24T16:12:07.177861"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fe24e874d7c844f98a12fdb4b4334d82.aspx",
@@ -1980,12 +1980,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 19 Mar 2024 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera nyheter i nationella riktlinjer för adhd och autism",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254895"
+    "retrieved_at": "2026-08-24T16:12:07.177868"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4a1b12e4142940caa38938b65f4cec14.aspx",
@@ -1994,12 +1994,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 14 Mar 2024 11:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Betydligt högre risk att dö i cancer för personer med funktionsnedsättning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254903"
+    "retrieved_at": "2026-08-24T16:12:07.177875"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7281950158c54c82a7e0b9fedf80f48d.aspx",
@@ -2008,12 +2008,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 05 Mar 2024 09:00:04 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora skillnader i tillgång till vårdpersonal i landet – nya arbetssätt kan behövas i framtiden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254913"
+    "retrieved_at": "2026-08-24T16:12:07.177883"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d8443361f3a742d18b502f511df96cf0.aspx",
@@ -2022,12 +2022,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 29 Feb 2024 14:30:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Risk för demens kan påverkas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254921"
+    "retrieved_at": "2026-08-24T16:12:07.177891"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/28364cee8db04c88b92a7cccbcbdd0d7.aspx",
@@ -2036,12 +2036,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 15 Feb 2024 09:00:05 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Alltför få placerade barn och unga får en hälsoundersökning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254931"
+    "retrieved_at": "2026-08-24T16:12:07.177897"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e0200bb412094b688964e73292d02741.aspx",
@@ -2050,12 +2050,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 07 Feb 2024 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Över 100 kommuner får nästan 70 miljoner för att motverka hemlöshet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254939"
+    "retrieved_at": "2026-08-24T16:12:07.177904"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0ed158d60fa149d5a3efaede98a60e0d.aspx",
@@ -2064,12 +2064,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 01 Feb 2024 06:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hemlösheten fortsatt kvar på hög nivå",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254947"
+    "retrieved_at": "2026-08-24T16:12:07.177911"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6bc3248ce1bb4b58bca57ebda94561d1.aspx",
@@ -2078,12 +2078,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 31 Jan 2024 07:05:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allvarliga brister i samhällets  skyddsnät visar dödsfallsutredningarna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254956"
+    "retrieved_at": "2026-08-24T16:12:07.177919"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4464e73b14584696bf7f8b9d5ac4486a.aspx",
@@ -2092,12 +2092,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 04 Jan 2024 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Största antalet organdonatorer någonsin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254965"
+    "retrieved_at": "2026-08-24T16:12:07.177926"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ddd0e96b5e0d47cfb2f9390e7005d494.aspx",
@@ -2106,12 +2106,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 19 Dec 2023 09:00:13 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Malignt melanom ökar mest bland äldre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254974"
+    "retrieved_at": "2026-08-24T16:12:07.177934"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ab6544b40fce41498adb6ceb6def862f.aspx",
@@ -2120,12 +2120,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 18 Dec 2023 09:00:23 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så kan vården före, under och efter förlossning bli bättre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254984"
+    "retrieved_at": "2026-08-24T16:12:07.177941"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b415019889a34b5d9d2df0eb96cf0953.aspx",
@@ -2134,12 +2134,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 14 Dec 2023 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tidig diagnos förbättrar vården för benskörhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.254993"
+    "retrieved_at": "2026-08-24T16:12:07.177951"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/92f851d633f74ba5b61fed9668361047.aspx",
@@ -2148,12 +2148,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 05 Dec 2023 09:00:00 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre barn föddes under 2022 – av äldre mödrar med högre BMI",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255001"
+    "retrieved_at": "2026-08-24T16:12:07.177958"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1a0d1dcbe8944d05afda0a7313b84cc8.aspx",
@@ -2162,12 +2162,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 04 Dec 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Onödig och skadlig vård behöver fasas ut",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255010"
+    "retrieved_at": "2026-08-24T16:12:07.177965"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/09a6ae71ad68469b9931010c5507194a.aspx",
@@ -2176,12 +2176,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 30 Nov 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler äldre får antidepressiva läkemedel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255018"
+    "retrieved_at": "2026-08-24T16:12:07.177972"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c559f66194c44eec921fa0ef127a132b.aspx",
@@ -2190,12 +2190,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 Nov 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hjärtinfarkterna fortsätter att minska",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255027"
+    "retrieved_at": "2026-08-24T16:12:07.177979"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0497f15813f046e68c9b6229c433b5a7.aspx",
@@ -2204,12 +2204,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 28 Nov 2023 09:00:12 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt kraftig ökning av adhd-diagnoser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255035"
+    "retrieved_at": "2026-08-24T16:12:07.177986"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c245f109fe7643c29fc8e1fc462545fb.aspx",
@@ -2218,12 +2218,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 23 Nov 2023 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökning av läkemedels- och narkotikarelaterade dödsfall förra året",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255045"
+    "retrieved_at": "2026-08-24T16:12:07.177996"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9cc84b3e25ec43b9910f13dd869cc734.aspx",
@@ -2232,12 +2232,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 02 Nov 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Donationsveckan: Donerad vävnad från avliden kan hjälpa femtio personer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255053"
+    "retrieved_at": "2026-08-24T16:12:07.178004"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/93fb530b2b784f8a87ab7fae6d7e0df6.aspx",
@@ -2246,12 +2246,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 01 Nov 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Anhöriga behöver bättre stöd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255063"
+    "retrieved_at": "2026-08-24T16:12:07.178015"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/94baf38d2ed0447085040a9fc5de0700.aspx",
@@ -2260,12 +2260,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 05 Oct 2023 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Minskning av äldre som upplever ofrivillig ensamhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255071"
+    "retrieved_at": "2026-08-24T16:12:07.178023"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/72bc723720bd469fb55607fe79819a1e.aspx",
@@ -2274,12 +2274,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 Oct 2023 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Personer med psykisk funktionsnedsättning utsätts oftare för övergrepp",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255080"
+    "retrieved_at": "2026-08-24T16:12:07.178031"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4227139be6c64c85ab35dd044e21cb1b.aspx",
@@ -2288,12 +2288,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 Oct 2023 09:00:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Många äldre hbtqi-personer känner oro för framtida äldreomsorg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255089"
+    "retrieved_at": "2026-08-24T16:12:07.178038"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2dd18e525c9749e49458e0ce4de7578e.aspx",
@@ -2302,12 +2302,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Oct 2023 09:00:23 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning visar behov av att stärka familjecentraler",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255098"
+    "retrieved_at": "2026-08-24T16:12:07.178045"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7c8ea2f74e934e289cb5315339523949.aspx",
@@ -2316,12 +2316,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 26 Sep 2023 09:00:10 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Högre risk för suicid när ekonomin kraschar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255106"
+    "retrieved_at": "2026-08-24T16:12:07.178052"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1f9f13a43d434c71b7f130cf3db9433c.aspx",
@@ -2330,12 +2330,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 20 Sep 2023 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Väntetiderna på akuten fortsätter att öka",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255114"
+    "retrieved_at": "2026-08-24T16:12:07.178059"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/010259897d654620bf3176060cf79013.aspx",
@@ -2344,12 +2344,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 01 Sep 2023 10:15:00 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Det handlar om livet – ny nationell strategi för psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255123"
+    "retrieved_at": "2026-08-24T16:12:07.178066"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/136d34c3b76943688c8bbe5b57deeb62.aspx",
@@ -2358,12 +2358,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 30 Aug 2023 09:00:22 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora regionala skillnader i omställningen till god och nära vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255131"
+    "retrieved_at": "2026-08-24T16:12:07.178077"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ef7bf008a3ef4b0ab9d83a46dc498896.aspx",
@@ -2372,12 +2372,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 01 Aug 2023 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Tvångsvården i landet är inte likvärdig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255140"
+    "retrieved_at": "2026-08-24T16:12:07.178084"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a1f55c8d29864085a2117f84fb1bc440.aspx",
@@ -2386,12 +2386,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 27 Jun 2023 09:00:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt färre unga synskadade får rätt till ledsagning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255149"
+    "retrieved_at": "2026-08-24T16:12:07.178092"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/623a16580ed8411b962186775ed743fd.aspx",
@@ -2400,12 +2400,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 20 Jun 2023 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Högsta antalet organdonatorer hittills",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255157"
+    "retrieved_at": "2026-08-24T16:12:07.178099"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7b24c1bb2deb448ea8ce4662b5f1d4b8.aspx",
@@ -2414,12 +2414,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 19 Jun 2023 09:00:25 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kraftig minskning av skadade i trafikolyckor de senaste 20 åren",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255166"
+    "retrieved_at": "2026-08-24T16:12:07.178106"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dd1017d94090475bb29d47af8eb27606.aspx",
@@ -2428,12 +2428,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 Jun 2023 09:20:49 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tidsbrist påverkar arbetet för åtta av tio läkare i primärvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255175"
+    "retrieved_at": "2026-08-24T16:12:07.178114"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fd22c1b9051841728811d2e6eef2ae5b.aspx",
@@ -2442,12 +2442,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 12 Jun 2023 09:00:34 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny uppskattning: 68 000 kvinnor och flickor kan ha varit utsatta för könsstympning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255184"
+    "retrieved_at": "2026-08-24T16:12:07.178121"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a32ee8cc541049d598513f5fc77b8994.aspx",
@@ -2456,12 +2456,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 31 May 2023 06:03:02 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt riktvärde visar behov av ytterligare 2300 vårdplatser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255193"
+    "retrieved_at": "2026-08-24T16:12:07.178128"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bb16eee18afc462db125e5e364681878.aspx",
@@ -2470,12 +2470,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 29 May 2023 08:00:50 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning visar på behov av ökad stabilitet för placerade barn",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255203"
+    "retrieved_at": "2026-08-24T16:12:07.178138"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5a177b9427694420ad6bd3f6d998ee10.aspx",
@@ -2484,12 +2484,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 26 May 2023 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Utvecklingen inom välfärdsteknik har bromsat in",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255211"
+    "retrieved_at": "2026-08-24T16:12:07.178146"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ad31c3442e344cfba542906816e19443.aspx",
@@ -2498,12 +2498,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 02 May 2023 13:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt fler kommuner får pengar för avhopparverksamheter",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255219"
+    "retrieved_at": "2026-08-24T16:12:07.178153"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7ffe24c94c894d2fa6a5ae1aa346e1dc.aspx",
@@ -2512,12 +2512,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 28 Apr 2023 08:00:03 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så har arbetet mot kriminalitet i utsatta områden stärkts med statsbidrag",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255228"
+    "retrieved_at": "2026-08-24T16:12:07.178160"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1f3df283435a424482d02b33a7253a9d.aspx",
@@ -2526,12 +2526,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 18 Apr 2023 09:05:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu är kraven klara för undersköterskors skyddade yrkestitel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255238"
+    "retrieved_at": "2026-08-24T16:12:07.178168"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/88da3bbc75394f4a91482aeb3512d7b0.aspx",
@@ -2540,12 +2540,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Apr 2023 10:02:56 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Förebyggande hälsoarbete ökar men fler insjuknar i cancer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255247"
+    "retrieved_at": "2026-08-24T16:12:07.178176"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d8b11c1dc4a34028b30a5debd5bec127.aspx",
@@ -2554,12 +2554,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Apr 2023 09:01:12 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligt med avslag på ansökan om LSS-boende",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255255"
+    "retrieved_at": "2026-08-24T16:12:07.178183"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/96cc953d34954cb98557e8bebd07af5a.aspx",
@@ -2568,12 +2568,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 31 Mar 2023 10:00:47 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler med erfarenhet av barnutredningar i socialtjänsten – men kompetensutmaningar kvarstår",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255264"
+    "retrieved_at": "2026-08-24T16:12:07.178191"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/90b9e91b8fc8420180282b11424e0a3a.aspx",
@@ -2582,12 +2582,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 31 Mar 2023 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så kan naloxon bli tillgängligt för fler",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255299"
+    "retrieved_at": "2026-08-24T16:12:07.178199"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c33f81c442fc4cd89d94c3f5031cb0d4.aspx",
@@ -2596,12 +2596,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 Mar 2023 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora skillnader i avgifter för äldreomsorg i landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255308"
+    "retrieved_at": "2026-08-24T16:12:07.178206"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/135574063fa84c638d9be75966d040e2.aspx",
@@ -2610,12 +2610,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 09 Mar 2023 12:31:34 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Gemensamma ansträngningar ska korta vårdköer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255352"
+    "retrieved_at": "2026-08-24T16:12:07.178213"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bb75ce85587e4b83aab24379ab765c47.aspx",
@@ -2624,12 +2624,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Mar 2023 15:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Unikt beslut fattat för vård vid könsdysfori",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255362"
+    "retrieved_at": "2026-08-24T16:12:07.178220"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/853102b35c5d4fbeb883546549d2a30c.aspx",
@@ -2638,12 +2638,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 28 Feb 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt brist på legitimerad hälso- och sjukvårdspersonal",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255371"
+    "retrieved_at": "2026-08-24T16:12:07.178227"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/275fb3cbcb8a4a95b51bc0e13c43f1bc.aspx",
@@ -2652,12 +2652,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 17 Feb 2023 08:00:08 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera förbättringsområden inom artrosvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255382"
+    "retrieved_at": "2026-08-24T16:12:07.178252"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/aeed80b9bfab45afa9f63f308217cde2.aspx",
@@ -2666,12 +2666,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 16 Feb 2023 06:30:24 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny översyn av screeningprogram klar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255392"
+    "retrieved_at": "2026-08-24T16:12:07.178261"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/21f2ed85818245dc880f3ea8ab93ddd6.aspx",
@@ -2680,12 +2680,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Feb 2023 09:01:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera utmaningar för ambulanssjukvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255400"
+    "retrieved_at": "2026-08-24T16:12:07.178268"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/cc5dda65c43446f38159ca1eca9a83ac.aspx",
@@ -2694,12 +2694,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Feb 2023 17:16:48 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Samverkan om utvecklingen av totalförsvaret med myndighetschefer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255409"
+    "retrieved_at": "2026-08-24T16:12:07.178276"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a160b10b0df548aeb370fe5cfc8b3e7b.aspx",
@@ -2708,12 +2708,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Feb 2023 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Brister i vården för patienter som avsiktligt skadat sig själva",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255417"
+    "retrieved_at": "2026-08-24T16:12:07.178284"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/64cb4ae985f546c1b94750869cb57543.aspx",
@@ -2722,12 +2722,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 02 Feb 2023 09:09:43 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så kan beredskapen inom kommunal vård och omsorg stärkas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255426"
+    "retrieved_at": "2026-08-24T16:12:07.178305"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9344d7445d1e456c9542084763e15477.aspx",
@@ -2736,12 +2736,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 24 Jan 2023 06:30:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Screening för dödlig sjukdom ska rädda liv",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255434"
+    "retrieved_at": "2026-08-24T16:12:07.178312"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/57662838b46348bfb4129f137b3fac3d.aspx",
@@ -2750,12 +2750,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 19 Dec 2022 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Så kan äldres ensamhet brytas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255442"
+    "retrieved_at": "2026-08-24T16:12:07.178319"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/71264b53fa6946fb898ac945e7614697.aspx",
@@ -2764,12 +2764,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 16 Dec 2022 12:00:07 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdaterat kunskapsstöd för vård vid könsdysfori hos unga",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255450"
+    "retrieved_at": "2026-08-24T16:12:07.178326"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/16ca6212e8c34f4885f894a70e21fb80.aspx",
@@ -2778,12 +2778,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 14 Dec 2022 10:00:31 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera kunskapsstöd ska bidra till bättre förlossningsvård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255460"
+    "retrieved_at": "2026-08-24T16:12:07.178334"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a987936257fc49e5bfdfac787ff1b108.aspx",
@@ -2792,12 +2792,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 06 Dec 2022 09:00:18 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt högre BMI bland blivande mödrar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255468"
+    "retrieved_at": "2026-08-24T16:12:07.178341"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6dd9b8180a0a4761affe32250515e95a.aspx",
@@ -2806,12 +2806,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 02 Dec 2022 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Pandemin har fortsatt stor påverkan på vården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255478"
+    "retrieved_at": "2026-08-24T16:12:07.178349"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bf2ea8e9e4a9469c83eece820e092ffe.aspx",
@@ -2820,12 +2820,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 30 Nov 2022 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Svag ökning av antalet hjärtinfarkter",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255488"
+    "retrieved_at": "2026-08-24T16:12:07.178357"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dfedfb7821f045328b4b47f37713d43c.aspx",
@@ -2834,12 +2834,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 29 Nov 2022 15:01:09 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Se direktsänt seminarium om barn och unga med adhd och autism",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255497"
+    "retrieved_at": "2026-08-24T16:12:07.178365"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c54ac77bcdc1415685f7a6f61919faec.aspx",
@@ -2848,12 +2848,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 23 Nov 2022 09:45:04 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationella riktlinjer ska förbättra vården för kvinnor med vulvasmärta",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255505"
+    "retrieved_at": "2026-08-24T16:12:07.178373"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d98627342a574fab90ff0f9fe636cce7.aspx",
@@ -2862,12 +2862,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 16 Nov 2022 08:00:07 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Orosanmälningarna ökar – berör var tionde barn",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255514"
+    "retrieved_at": "2026-08-24T16:12:07.178383"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/231f7240b3d94572bafd8a0a966e95d4.aspx",
@@ -2876,12 +2876,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 11 Nov 2022 14:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Anmälningar till donationsregistret ökar kraftigt under kampanj",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255523"
+    "retrieved_at": "2026-08-24T16:12:07.178390"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/35c6188e33d84a58a8fc048342aa9fda.aspx",
@@ -2890,12 +2890,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 07 Nov 2022 10:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet organdonatorer det högsta som noterats",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255532"
+    "retrieved_at": "2026-08-24T16:12:07.178397"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4d210b3cc81e410a804cf385a4f6379d.aspx",
@@ -2904,12 +2904,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 28 Oct 2022 09:00:28 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationellt centrum behövs för att höja kompetensen om autism och intellektuell funktionsnedsättning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255541"
+    "retrieved_at": "2026-08-24T16:12:07.178405"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7c2941356dac4bb18769f83fb22b2223.aspx",
@@ -2918,12 +2918,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 20 Oct 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu kommer nationella riktlinjer för adhd och autism",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255551"
+    "retrieved_at": "2026-08-24T16:12:07.178414"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/962cb4529f044c8e84a4e1a45681cf5a.aspx",
@@ -2932,12 +2932,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 19 Oct 2022 10:00:11 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kraftig ökning av självskador bland unga flickor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255562"
+    "retrieved_at": "2026-08-24T16:12:07.178421"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b878dfa7785541e5b4215c69a71a773e.aspx",
@@ -2946,12 +2946,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 18 Oct 2022 09:00:30 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Väntetiderna på akuten ökar igen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255571"
+    "retrieved_at": "2026-08-24T16:12:07.178429"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d445947335e84cbf89ce099efa33a470.aspx",
@@ -2960,12 +2960,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 11 Oct 2022 11:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Högisoleringsvård blir nationell högspecialiserad vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255580"
+    "retrieved_at": "2026-08-24T16:12:07.178436"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ac59fc101405402cac0ecbed9880f38a.aspx",
@@ -2974,12 +2974,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 07 Oct 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Stort behov av utbildning och övning för att stärka krisberedskap och civilt försvar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255589"
+    "retrieved_at": "2026-08-24T16:12:07.178444"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/5a7dfae426fd4505b88e0e1510d2b026.aspx",
@@ -2988,12 +2988,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Oct 2022 10:00:14 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning visar på stora behov av nationella hälsodata",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255598"
+    "retrieved_at": "2026-08-24T16:12:07.178451"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0e8f40142f324c9db3b3281b9df8b464.aspx",
@@ -3002,12 +3002,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Oct 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Många brister i vården vid schizofreni",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255606"
+    "retrieved_at": "2026-08-24T16:12:07.178458"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2274d45df72e498fb4771fc48e53f699.aspx",
@@ -3016,12 +3016,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 Sep 2022 10:00:06 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler flickor vårdas på barn- och ungdomspsykiatrisk avdelning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255614"
+    "retrieved_at": "2026-08-24T16:12:07.178465"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/239528264a6949d4b89fb3c21efa8554.aspx",
@@ -3030,12 +3030,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 24 Aug 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så ska undersköterskor få en skyddad yrkestitel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255622"
+    "retrieved_at": "2026-08-24T16:12:07.178472"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/27ddcf7c6fa143c4975d47a49a95de71.aspx",
@@ -3044,12 +3044,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 11 Aug 2022 17:00:02 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationellt kompetenscentrum för äldreomsorg invigt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255631"
+    "retrieved_at": "2026-08-24T16:12:07.178479"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/810933a81a0a4b4ca98e984ab4d9b4b0.aspx",
@@ -3058,12 +3058,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 22 Jun 2022 10:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Årets äldreenkät: Stor skillnad mellan kommunerna i hur lätt det är att träffa läkare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255639"
+    "retrieved_at": "2026-08-24T16:12:07.178486"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8e461c633e9e498aa04ce70a8c878882.aspx",
@@ -3072,12 +3072,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 22 Jun 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Covid-19 femte vanligaste dödsorsaken 2021",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255648"
+    "retrieved_at": "2026-08-24T16:12:07.178493"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ea226bd30d874f88b0a650304bff3e86.aspx",
@@ -3086,12 +3086,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 21 Jun 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Aborterna fortsätter att minska  - allt fler medicinska aborter avslutas i hemmet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255658"
+    "retrieved_at": "2026-08-24T16:12:07.178502"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8b86ab3f148c4df89179b615ec6989a3.aspx",
@@ -3100,12 +3100,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 17 Jun 2022 10:00:03 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Försämrad munhälsa hos sexåringar syns i ny analys",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255666"
+    "retrieved_at": "2026-08-24T16:12:07.178509"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0a468ad7cc284768beccdace2d8a325e.aspx",
@@ -3114,12 +3114,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 16 Jun 2022 09:02:33 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Ojämlika förutsättningar för upptäckt av bröstcancer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255675"
+    "retrieved_at": "2026-08-24T16:12:07.178517"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d4ffc4868f7044d7a63184736566b2cb.aspx",
@@ -3128,12 +3128,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Jun 2022 09:00:11 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Hög återfallsfrekvens bland unga som lagförs för narkotikabrott",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255683"
+    "retrieved_at": "2026-08-24T16:12:07.178524"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/53b9a471d3394210b29485ca6046b59f.aspx",
@@ -3142,12 +3142,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Jun 2022 08:55:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Miljarder till fler sjuksköterskor och färre timanställda i äldreomsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255692"
+    "retrieved_at": "2026-08-24T16:12:07.178531"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/445eeb436e5a4ecfbbd9d9bca7ba864e.aspx",
@@ -3156,12 +3156,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 10 Jun 2022 09:00:09 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så mycket fick kommuner och regioner i återhämtningsbonus – hela listan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255701"
+    "retrieved_at": "2026-08-24T16:12:07.178539"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/77c520b719c24a8fb505d3bff28f2e7b.aspx",
@@ -3170,12 +3170,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 02 Jun 2022 13:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Rehabilitering för personer med cancer behöver förbättras",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255710"
+    "retrieved_at": "2026-08-24T16:12:07.178546"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/048af85c05844818bbc2dd4d36b422e8.aspx",
@@ -3184,12 +3184,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 01 Jun 2022 13:00:10 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Majoriteten av de som dör av läkemedels- och narkotikaförgiftningar har haft psykiatriska diagnoser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255719"
+    "retrieved_at": "2026-08-24T16:12:07.178554"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/79bf98a1ad6a4bffaa176eb04d1be7d8.aspx",
@@ -3198,12 +3198,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 31 May 2022 10:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen tar fram strategi för välfärdsteknik",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255727"
+    "retrieved_at": "2026-08-24T16:12:07.178562"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f5cdcda09dab454bb186a25f6f9dd515.aspx",
@@ -3212,12 +3212,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 31 May 2022 09:30:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Fallpreventivt arbete lönar sig för regioner och kommuner enligt ny rapport",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255737"
+    "retrieved_at": "2026-08-24T16:12:07.178569"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1371e09490d94a729f3d6a025c44c84c.aspx",
@@ -3226,12 +3226,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 19 May 2022 16:19:13 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Lagändring kan möjliggöra fler organdonationer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255748"
+    "retrieved_at": "2026-08-24T16:12:07.178578"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/41577ed1f99d4247bee906ed0842108e.aspx",
@@ -3240,12 +3240,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 18 May 2022 15:30:06 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya beslut för stärkt vård vid ätstörningar och självskadebeteende",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255757"
+    "retrieved_at": "2026-08-24T16:12:07.178588"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/57b9ce30a13f4ed3b62ce2562418b29f.aspx",
@@ -3254,12 +3254,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 13 May 2022 10:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tillgången till välfärdsteknik varierar över landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255766"
+    "retrieved_at": "2026-08-24T16:12:07.178596"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e205c3a59a114ff9974c92bd319e4b3d.aspx",
@@ -3268,12 +3268,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 06 May 2022 11:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu skickar Socialstyrelsen ytterligare sjukvårdsmateriel till Ukraina",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255775"
+    "retrieved_at": "2026-08-24T16:12:07.178604"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/efc83319e119499897ce9b6cf8ffafe6.aspx",
@@ -3282,12 +3282,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 04 May 2022 08:00:10 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre men sjukare patienter på de psykiatriska akutmottagningarna under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255784"
+    "retrieved_at": "2026-08-24T16:12:07.178611"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1f4960e2dd754252bf3302e16826fc92.aspx",
@@ -3296,12 +3296,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 May 2022 11:00:57 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Effekterna av pandemin syns fortsatt i tandvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255793"
+    "retrieved_at": "2026-08-24T16:12:07.178618"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1711e06e1eac4f2097057c18d99977e7.aspx",
@@ -3310,12 +3310,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 29 Apr 2022 15:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationellt riktvärde för fast läkarkontakt ska bidra till ökad kontinuitet och trygghet i primärvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255802"
+    "retrieved_at": "2026-08-24T16:12:07.178626"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4b263caa2f904a16aa78af790315cfd0.aspx",
@@ -3324,12 +3324,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 28 Apr 2022 13:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Statsbidrag har stärkt det brottsförebyggande arbetet i utsatta områden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255810"
+    "retrieved_at": "2026-08-24T16:12:07.178633"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/02f0c6a5586149969acec7f6326dee74.aspx",
@@ -3338,12 +3338,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 28 Apr 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya riktlinjer ska ge bättre vård för 1,4 miljoner med obesitas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255819"
+    "retrieved_at": "2026-08-24T16:12:07.178641"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d90b61aa241c4117a8bb1e4e5576c8f7.aspx",
@@ -3352,12 +3352,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 12 Apr 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stödlinje för personer som utövar våld i nära relationer har stor potential att växa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255828"
+    "retrieved_at": "2026-08-24T16:12:07.178649"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/11a8a291162441bea58bb9262f274736.aspx",
@@ -3366,12 +3366,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 11 Apr 2022 09:00:14 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt kunskapsstöd ska bidra till en stärkt förlossningsvård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255838"
+    "retrieved_at": "2026-08-24T16:12:07.178657"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d6381e4abb5c4a91b6b05539b49f48e4.aspx",
@@ -3380,12 +3380,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 07 Apr 2022 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet LSS-insatser ökar – men färre får kommunal personlig assistans",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255848"
+    "retrieved_at": "2026-08-24T16:12:07.178665"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dd414f50252545adbec0b64b587cf5a5.aspx",
@@ -3394,12 +3394,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 01 Apr 2022 11:05:02 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny kartläggning visar på brister i stöd till adopterade",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255856"
+    "retrieved_at": "2026-08-24T16:12:07.178673"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/02e4dd785d8341f7b429b5318f18319b.aspx",
@@ -3408,12 +3408,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 31 Mar 2022 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt fler väntar längre än vårdgarantins gräns",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255864"
+    "retrieved_at": "2026-08-24T16:12:07.178680"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c0d9fc2e88ec4672b2715db0b930a4c0.aspx",
@@ -3422,12 +3422,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 30 Mar 2022 12:00:14 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Medicinska evakueringar av ukrainska patienter genomförda",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255873"
+    "retrieved_at": "2026-08-24T16:12:07.178687"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/61477b58b9364da0aa2c08f3eeb6e495.aspx",
@@ -3436,12 +3436,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 30 Mar 2022 09:31:06 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Efter pandemieffekt: Allt fler äldre söker sig till omsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255881"
+    "retrieved_at": "2026-08-24T16:12:07.178694"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d18c43a58a4c46f28129dfbe1f3b1fcb.aspx",
@@ -3450,12 +3450,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 25 Mar 2022 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Positiv utveckling inom vården på flera områden  - men skillnader består",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255890"
+    "retrieved_at": "2026-08-24T16:12:07.178702"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/354ca75a8a144e6a9b1ba5dd5d8ca19c.aspx",
@@ -3464,12 +3464,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 24 Mar 2022 10:00:05 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Varannan kommun saknar evakueringsplaner för boenden inom funktionshinderområdet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255900"
+    "retrieved_at": "2026-08-24T16:12:07.178711"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ffad7a78acb64470899bc75dcb346128.aspx",
@@ -3478,12 +3478,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 18 Mar 2022 13:30:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt stöd för vårdens prioriteringar i katastrofer och krig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255909"
+    "retrieved_at": "2026-08-24T16:12:07.178718"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/59c6eff14e6d4da684e594d39e861037.aspx",
@@ -3492,12 +3492,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 17 Mar 2022 09:01:05 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Katastrofmedicinskt Centrum får i uppdrag att bistå nationell samordning av patientmottagande från Ukraina",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255919"
+    "retrieved_at": "2026-08-24T16:12:07.178726"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3b9d5e4ae0614559939cc258f4ac83dd.aspx",
@@ -3506,12 +3506,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 15 Mar 2022 15:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Planeringen av kommunernas krisberedskap behöver stärkas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255930"
+    "retrieved_at": "2026-08-24T16:12:07.178737"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/59919fa2d74347398260515726c29394.aspx",
@@ -3520,12 +3520,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 08 Mar 2022 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträffarna med anledning av pandemin upphör",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255939"
+    "retrieved_at": "2026-08-24T16:12:07.178744"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8fce4af867704269acd3e947c9642ea0.aspx",
@@ -3534,12 +3534,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 02 Mar 2022 12:10:56 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen har donerat sjukvårdsmateriel till Ukraina",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255948"
+    "retrieved_at": "2026-08-24T16:12:07.178751"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/50d63086fdb74987bff9434773fbe616.aspx",
@@ -3548,12 +3548,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 28 Feb 2022 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad brist inom flera av legitimationsyrkena i hälso- och sjukvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255957"
+    "retrieved_at": "2026-08-24T16:12:07.178760"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/14cf95f89a02441d978e33515f7ab848.aspx",
@@ -3562,12 +3562,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 24 Feb 2022 09:00:11 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre patienter söker vård för postcovid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255965"
+    "retrieved_at": "2026-08-24T16:12:07.178785"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/65ae68dc98d04545aaf0184f130bfba0.aspx",
@@ -3576,12 +3576,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 22 Feb 2022 10:00:10 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdaterade rekommendationer för hormonbehandling vid könsdysfori hos unga",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255974"
+    "retrieved_at": "2026-08-24T16:12:07.178793"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e31ec5b233a144fca2298ab204f345de.aspx",
@@ -3590,12 +3590,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 22 Feb 2022 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Skärpta krav på att förebygga smittspridning i omsorgen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255982"
+    "retrieved_at": "2026-08-24T16:12:07.178801"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7a4853544dc2469182c803bb1d5db6d6.aspx",
@@ -3604,12 +3604,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 17 Feb 2022 18:30:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stort behov av att förbättra äldres vård och omsorg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255991"
+    "retrieved_at": "2026-08-24T16:12:07.178808"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/04bf27142f9c456cb40e9138d76116a4.aspx",
@@ -3618,12 +3618,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 09 Feb 2022 18:10:02 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad efterfrågan på rätt information om arbetet i svensk socialtjänst",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.255999"
+    "retrieved_at": "2026-08-24T16:12:07.178816"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f14df9b2f03041439d7abdbcdec9978a.aspx",
@@ -3632,12 +3632,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 31 Jan 2022 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsens dödsfallsutredningar visar ett 30-tal brister i samhällets skyddsnät",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256008"
+    "retrieved_at": "2026-08-24T16:12:07.178837"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/54e8df7da86f44b2adfaca7f52d48c77.aspx",
@@ -3646,12 +3646,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 20 Jan 2022 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet organdonatorer i Sverige det högsta hittills",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256018"
+    "retrieved_at": "2026-08-24T16:12:07.178846"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/03c95aea370d42598a88ad8b06c5be9e.aspx",
@@ -3660,12 +3660,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 19 Jan 2022 09:00:00 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nio av tio stora kommuner har fältarbetare som arbetar med barn och unga",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256028"
+    "retrieved_at": "2026-08-24T16:12:07.178853"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/400fe607bc29447ea4fc0e9eee43eade.aspx",
@@ -3674,12 +3674,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 12 Jan 2022 09:00:21 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Rollatorn är det vanligaste hjälpmedlet visar ny statistik",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256036"
+    "retrieved_at": "2026-08-24T16:12:07.178861"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/37ce653fc70245cd8f52592c64f0397b.aspx",
@@ -3688,12 +3688,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 21 Dec 2021 09:00:10 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Psykisk ohälsa i barndomen kan få flera allvarliga konsekvenser i vuxen ålder",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256044"
+    "retrieved_at": "2026-08-24T16:12:07.178868"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/60bcf401b44641d99d0a16f094c3bd90.aspx",
@@ -3702,12 +3702,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Dec 2021 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tydlig nedgång av antalet cancerfall under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256053"
+    "retrieved_at": "2026-08-24T16:12:07.178875"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f431b4163fc34c1cb5da1ea055bc974a.aspx",
@@ -3716,12 +3716,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 13 Dec 2021 10:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt färre äldre än tidigare som sökt och fått hemtjänst",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256062"
+    "retrieved_at": "2026-08-24T16:12:07.178883"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6d7038f18e09497e9311a38debbb32bc.aspx",
@@ -3730,12 +3730,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 08 Dec 2021 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet hjärtinfarkter fortsätter att minska",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256070"
+    "retrieved_at": "2026-08-24T16:12:07.178890"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d463680a9ba34cf7bc81fcd6bce6c6d4.aspx",
@@ -3744,12 +3744,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 02 Dec 2021 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Strokefallen fortsatte att minska",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256078"
+    "retrieved_at": "2026-08-24T16:12:07.178896"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/030fff98a32b4691b2c71f03a4c5bf6f.aspx",
@@ -3758,12 +3758,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 01 Dec 2021 09:00:09 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler förlossningar sätts igång och allvarliga bristningar minskar enligt ny statistik",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256087"
+    "retrieved_at": "2026-08-24T16:12:07.178903"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/404a9140c619426686f3b67455eea77c.aspx",
@@ -3772,12 +3772,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 25 Nov 2021 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Minskning av narkotika- och läkemedelsrelaterade dödsfall förra året",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256096"
+    "retrieved_at": "2026-08-24T16:12:07.178912"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/29d43575b85e4e62865b9a1076d2870f.aspx",
@@ -3786,12 +3786,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 18 Nov 2021 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Dödligheten vände ned första halvåret – covid-19 fortfarande tredje vanligaste dödsorsaken",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256107"
+    "retrieved_at": "2026-08-24T16:12:07.178922"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ed63dd1c94e4433b8e8f50c21725f28b.aspx",
@@ -3800,12 +3800,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 15 Nov 2021 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Självprovtagning för livmoderhalscancer permanentas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256116"
+    "retrieved_at": "2026-08-24T16:12:07.178929"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/506d4ddf16094b169eef452ce5678cf5.aspx",
@@ -3814,12 +3814,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 08 Nov 2021 10:30:44 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya rekommendationer för socialtjänstens arbete med barn och brott",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256124"
+    "retrieved_at": "2026-08-24T16:12:07.178939"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4a289d16b38a42e0b1d723ccf8191159.aspx",
@@ -3828,12 +3828,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 08 Nov 2021 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Organdonation - mer kan göras för att fler liv ska kunna räddas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256133"
+    "retrieved_at": "2026-08-24T16:12:07.178948"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a718dbe74cc745c4bc5bed3f1aea80e1.aspx",
@@ -3842,12 +3842,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 02 Nov 2021 12:33:41 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Två av tre kommuner och regioner ansökte om återhämtningsbonus – här är fördelningslistan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256142"
+    "retrieved_at": "2026-08-24T16:12:07.178956"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ab6c510a988f4074a2fbebb5444baa1f.aspx",
@@ -3856,12 +3856,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Nov 2021 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya stöd ska hjälpa socialtjänsten och vården i arbetet mot våld i nära relationer och hedersvåld",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256151"
+    "retrieved_at": "2026-08-24T16:12:07.178964"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/75d83c24533c49a8bc3f41b7a3963a8f.aspx",
@@ -3870,12 +3870,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Nov 2021 09:05:42 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning visar stort behov av kunskap och utbildning i arbetet mot könsstympning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256160"
+    "retrieved_at": "2026-08-24T16:12:07.178972"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2b01afcbf3a64167827c0052d8d2531f.aspx",
@@ -3884,12 +3884,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 13 Oct 2021 13:50:36 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya beslut tagna om nationell högspecialiserad vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256169"
+    "retrieved_at": "2026-08-24T16:12:07.178979"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/c817e07f282f4cf7a3c4af90dda75dee.aspx",
@@ -3898,12 +3898,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 07 Oct 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Drygt fyra av tio med ekonomiskt bistånd är i behov av långvarigt stöd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256178"
+    "retrieved_at": "2026-08-24T16:12:07.178986"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/48ca427a254d4931b5c7048e5a3bcbfa.aspx",
@@ -3912,12 +3912,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 01 Oct 2021 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Pandemin har förstärkt vårdens tidigare utmaningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256186"
+    "retrieved_at": "2026-08-24T16:12:07.178993"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/471cf5e562514573b694f7e8bcb0c807.aspx",
@@ -3926,12 +3926,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 30 Sep 2021 10:00:12 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligt med klimakteriebesvär – men information och kunskap brister",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256197"
+    "retrieved_at": "2026-08-24T16:12:07.179002"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7534b619ad814950a38269974b3bd9bb.aspx",
@@ -3940,12 +3940,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 Sep 2021 09:00:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre inlagda på sjukhus för skador – men antalet som vårdas för cykelolyckor ökar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256206"
+    "retrieved_at": "2026-08-24T16:12:07.179010"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2ab77e7530e2470ba94e1063e33fc23d.aspx",
@@ -3954,12 +3954,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 28 Sep 2021 09:00:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera nyheter när riktlinjer för tandvård presenteras",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256215"
+    "retrieved_at": "2026-08-24T16:12:07.179017"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/29c1d6a02d51457c9ba4ca2b566050fe.aspx",
@@ -3968,12 +3968,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 27 Sep 2021 11:00:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler åtgärder behövs för att förebygga hemlöshet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256223"
+    "retrieved_at": "2026-08-24T16:12:07.179024"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d8886b3c0d7c4694ba64dbf6bc619c7c.aspx",
@@ -3982,12 +3982,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 22 Sep 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Minskat antal patienter på sjukhus under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256231"
+    "retrieved_at": "2026-08-24T16:12:07.179031"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4dd58bf27ca24bc4977833a1aaafd35b.aspx",
@@ -3996,12 +3996,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 20 Sep 2021 10:00:30 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad patientsäkerhet inom flera områden – men fortsatt utveckling behövs",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256240"
+    "retrieved_at": "2026-08-24T16:12:07.179039"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/98d32786f0e94245be7b58d4223f0a64.aspx",
@@ -4010,12 +4010,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 14 Sep 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: 13 000 fick yrkeslegitimation i fjol – fyra av tio var sjuksköterskor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256249"
+    "retrieved_at": "2026-08-24T16:12:07.179047"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2c2a231d4ae5424e8059104572e058e3.aspx",
@@ -4024,12 +4024,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 31 Aug 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Komplext uppdrag för chefer inom äldreomsorgen visar ny kartläggning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256258"
+    "retrieved_at": "2026-08-24T16:12:07.179054"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f518695c6ea74fbba510c28e56bb81fa.aspx",
@@ -4038,12 +4038,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 30 Aug 2021 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Omställningen till en mer nära vård har påverkats av pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256268"
+    "retrieved_at": "2026-08-24T16:12:07.179062"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/592e8ca427524c29ab167a3ff5486d2c.aspx",
@@ -4052,12 +4052,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Aug 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Indragna aktiviteter har bidragit till ökad psykisk ohälsa bland personer med funktionsnedsättning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256278"
+    "retrieved_at": "2026-08-24T16:12:07.179070"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/096981817ac140129bf786e302c67ab7.aspx",
@@ -4066,12 +4066,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 23 Jun 2021 12:15:04 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Personal och skyddsutrustning största merkostnaderna för regioner och kommuner under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256289"
+    "retrieved_at": "2026-08-24T16:12:07.179079"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/aab5dd115b2e4de5a6eed4486b00535e.aspx",
@@ -4080,12 +4080,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 22 Jun 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flest postcovidpatienter inom primärvården – kvinnorna i majoritet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256299"
+    "retrieved_at": "2026-08-24T16:12:07.179092"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/514beba7fa89447a8ec9a05ac1c7f185.aspx",
@@ -4094,12 +4094,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 18 Jun 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre fick ekonomiskt bistånd förra året",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256307"
+    "retrieved_at": "2026-08-24T16:12:07.179100"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/edf1d8813a324b9b8d86ae18b3c3d182.aspx",
@@ -4108,12 +4108,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 17 Jun 2021 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stor minskning av patienter som fått vård enligt nationella riktlinjer under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256316"
+    "retrieved_at": "2026-08-24T16:12:07.179108"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d741a7b2ceb74309a5e1a48d92ae72db.aspx",
@@ -4122,12 +4122,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 10 Jun 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Pandemin orsakade överdödlighet 2020 – vissa utrikesfödda mer drabbade",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256325"
+    "retrieved_at": "2026-08-24T16:12:07.179116"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/27be7bb8ee744b6c89301037ec138a7c.aspx",
@@ -4136,12 +4136,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 02 Jun 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt ökad förskrivning av adhd-läkemedel efter att fler diagnostiserats",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256334"
+    "retrieved_at": "2026-08-24T16:12:07.179123"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/288cd5ec2f584fdb8cb4b1a092344f0f.aspx",
@@ -4150,12 +4150,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 17 May 2021 10:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tydlig pandemieffekt på digitaliseringen i kommunerna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256342"
+    "retrieved_at": "2026-08-24T16:12:07.179130"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7c658094f9b5408d8ff169741a56f191.aspx",
@@ -4164,12 +4164,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 11 May 2021 10:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre operationer och längre väntetider under pandemins första och andra våg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256351"
+    "retrieved_at": "2026-08-24T16:12:07.179137"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3f4dd778070e442396a3fa191fb67694.aspx",
@@ -4178,12 +4178,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 04 May 2021 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kostnadsfria preventivmedel en av förklaringarna till att aborterna minskar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256360"
+    "retrieved_at": "2026-08-24T16:12:07.179145"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1dadd429474f48dd95ea92bd2d956433.aspx",
@@ -4192,12 +4192,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 16 Apr 2021 08:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Naloxon och sprututbyten nu i nästan alla regioner",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256368"
+    "retrieved_at": "2026-08-24T16:12:07.179152"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bf4ad8cf6d3046d29106008af8ec6009.aspx",
@@ -4206,12 +4206,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 15 Apr 2021 14:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Behovet av multiprofessionella insatser lyfts fram i nytt kunskapsstöd om postcovid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256378"
+    "retrieved_at": "2026-08-24T16:12:07.179160"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/62052fadd2c646c09fee6175ebe55dbe.aspx",
@@ -4220,12 +4220,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 09 Apr 2021 09:00:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: En av tio unga kvinnor får antidepressiva läkemedel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256389"
+    "retrieved_at": "2026-08-24T16:12:07.179167"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3dae5d0b68ca4f748fc7b6f85e698ff8.aspx",
@@ -4234,12 +4234,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 06 Apr 2021 15:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad isolering bland personer med funktionsnedsättning när insatser ställts in",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256397"
+    "retrieved_at": "2026-08-24T16:12:07.179175"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3ade964e6d43461d8996484dda6e6791.aspx",
@@ -4248,12 +4248,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 06 Apr 2021 14:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökad dödlighet bland vårdade för covid-19 under andra vågen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256407"
+    "retrieved_at": "2026-08-24T16:12:07.179182"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/cf9cd7e5272644f296adca72db77a9a3.aspx",
@@ -4262,12 +4262,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 31 Mar 2021 09:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stort behov av att höja kompetensen hos personal på LSS-boenden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256416"
+    "retrieved_at": "2026-08-24T16:12:07.179193"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/51769c9db9e340cebfe861b10a022080.aspx",
@@ -4276,12 +4276,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 29 Mar 2021 10:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tydlig minskning av äldre som flyttat till äldreboende under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256425"
+    "retrieved_at": "2026-08-24T16:12:07.179200"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fc09bc425ce04586ba7f8f7c18159073.aspx",
@@ -4290,12 +4290,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 18 Mar 2021 15:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Covid-19 tredje vanligaste dödsorsaken under andra halvåret",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256433"
+    "retrieved_at": "2026-08-24T16:12:07.179207"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a3458936baba445fb645166e996899d6.aspx",
@@ -4304,12 +4304,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 01 Mar 2021 10:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Var fjärde sjukhusvistelse bland de mest sjuka äldre följs av en ny inskrivning inom kort",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256458"
+    "retrieved_at": "2026-08-24T16:12:07.179223"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/2f140b15fe8248259cb47acd7605dd1a.aspx",
@@ -4318,12 +4318,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 26 Feb 2021 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Covid-19 ökar risken att föda för tidigt",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256467"
+    "retrieved_at": "2026-08-24T16:12:07.179230"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/7cc7c169ddf842768e518583d93fc15a.aspx",
@@ -4332,12 +4332,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 25 Feb 2021 14:30:00 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stor minskning av akutbesök bland barn under första vågen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256479"
+    "retrieved_at": "2026-08-24T16:12:07.179240"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fecc07625fe6406190a2b7054cb483a3.aspx",
@@ -4346,12 +4346,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 25 Feb 2021 08:00:49 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen föreslår att patientregistret utvidgas för bättre uppföljning av vården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256490"
+    "retrieved_at": "2026-08-24T16:12:07.179249"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4540ae4487e24779bd6078312f6c49a4.aspx",
@@ -4360,12 +4360,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 24 Feb 2021 09:00:44 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Större efterfrågan än tillgång på legitimerad hälso- och sjukvårdspersonal inom flera områden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256499"
+    "retrieved_at": "2026-08-24T16:12:07.179257"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b144560e5f86450981a3d5292bd539b0.aspx",
@@ -4374,12 +4374,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 18 Feb 2021 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Äldreomsorgens förebyggande arbete skiljer stort över landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256508"
+    "retrieved_at": "2026-08-24T16:12:07.179265"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e79d2996e8fc423c86c9b384a4b223d4.aspx",
@@ -4388,12 +4388,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 15 Feb 2021 15:04:33 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Regionerna får merparten av statsbidraget för merkostnader till följd av covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256517"
+    "retrieved_at": "2026-08-24T16:12:07.179273"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/ef85057251624be698291a710864fe0f.aspx",
@@ -4402,12 +4402,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 12 Feb 2021 09:00:03 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler kvinnor än män sjukskrivna till följd av covid-19 under första vågen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256526"
+    "retrieved_at": "2026-08-24T16:12:07.179281"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3993452ab1c64695b6a2f3f24c84cd4d.aspx",
@@ -4416,12 +4416,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 12 Jan 2021 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler orosanmälningar till socialtjänsten – ökad kunskap en av förklaringarna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256535"
+    "retrieved_at": "2026-08-24T16:12:07.179289"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0ace1052f76d43fa88dffb1dfe9640fe.aspx",
@@ -4430,12 +4430,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 22 Dec 2020 13:35:23 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Olivia Wigzell ska leda arbetet med att ta fram en äldreomsorgslag",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256543"
+    "retrieved_at": "2026-08-24T16:12:07.179299"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/567e857794b44f9f9aeca3f6652ba50f.aspx",
@@ -4444,12 +4444,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 15 Dec 2020 09:00:10 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre besök på de psykiatriska akutmottagningarna under pandemin - men fler inläggningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256552"
+    "retrieved_at": "2026-08-24T16:12:07.179307"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d07983babab94e558b4c53d0df57e973.aspx",
@@ -4458,12 +4458,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 08 Dec 2020 10:30:06 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera vårdområden blir nationell högspecialiserad vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256561"
+    "retrieved_at": "2026-08-24T16:12:07.179315"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9d9c63b509b4432f874492f6c353f43d.aspx",
@@ -4472,12 +4472,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 08 Dec 2020 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt vanligare med igångsättning av förlossningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256569"
+    "retrieved_at": "2026-08-24T16:12:07.179322"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/717eb3ebce2b4924ab7a8ea7693edee1.aspx",
@@ -4486,12 +4486,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 03 Dec 2020 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre patienter på akutmottagningarna under pandemin – men andelen inskrivningar ökar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256581"
+    "retrieved_at": "2026-08-24T16:12:07.179331"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1b1902e9d1654d34a92fc1ceafd52ae6.aspx",
@@ -4500,12 +4500,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 27 Nov 2020 11:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så mycket får regioner och kommuner i statsbidrag för merkostnader – hela listan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256590"
+    "retrieved_at": "2026-08-24T16:12:07.179339"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/3ee58cbb87a34c78b5d4277f268e927f.aspx",
@@ -4514,12 +4514,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 27 Nov 2020 09:30:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre operationer och ökad väntan på specialistvård under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256599"
+    "retrieved_at": "2026-08-24T16:12:07.179349"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fbc86b14a4d04b3593c2cccfd07865b9.aspx",
@@ -4528,12 +4528,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 24 Nov 2020 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Halvering av andelen döda bland dem som sjukhusvårdats för covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256607"
+    "retrieved_at": "2026-08-24T16:12:07.179357"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/267a1a8c1392411d874102ba118bc6c9.aspx",
@@ -4542,12 +4542,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 17 Nov 2020 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Dödligheten ökade första halvåret - covid-19 tredje vanligaste dödsorsaken",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256616"
+    "retrieved_at": "2026-08-24T16:12:07.179364"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/29b84a82b67841f7957684e619b63a81.aspx",
@@ -4556,12 +4556,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 12 Nov 2020 10:00:00 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler insatser behövs för bättre munhälsa och tandvård för placerade barn",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256624"
+    "retrieved_at": "2026-08-24T16:12:07.179371"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1ab84568f9fe4bfd944f8bf74c2a1fbe.aspx",
@@ -4570,12 +4570,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 05 Nov 2020 14:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre nya fall av depressioner och ångest under pandemin – men adhd ökar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256634"
+    "retrieved_at": "2026-08-24T16:12:07.179378"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b6e59fccd8d5492683bb1b266155b09b.aspx",
@@ -4584,12 +4584,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 03 Nov 2020 14:00:18 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre har besökt tandvården under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256647"
+    "retrieved_at": "2026-08-24T16:12:07.179385"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f1323e3bc7ac473d9ce9e2eff3437822.aspx",
@@ -4598,12 +4598,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Nov 2020 10:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stort antal donatorer i år – men många väntar ännu på ett organ",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256660"
+    "retrieved_at": "2026-08-24T16:12:07.179393"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/778402c2eeee47ec8210716928e4625a.aspx",
@@ -4612,12 +4612,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 29 Oct 2020 09:00:34 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Föräldradelaktighet central i nytt stöd för neonatalvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256675"
+    "retrieved_at": "2026-08-24T16:12:07.179401"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/71c69cbcf4a1477fa0fdd73ab0312034.aspx",
@@ -4626,12 +4626,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 22 Oct 2020 14:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre rapporterade fall av stroke och hjärtinfarkt under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256690"
+    "retrieved_at": "2026-08-24T16:12:07.179413"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4a86de7990b24eeca7294d1c754024c9.aspx",
@@ -4640,12 +4640,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 15 Oct 2020 14:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Minskning av äldre som fått hemtjänst under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256700"
+    "retrieved_at": "2026-08-24T16:12:07.179420"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/1f3e53783d3b482c8484c82e058718bb.aspx",
@@ -4654,12 +4654,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 13 Oct 2020 15:00:25 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler tog ut läkemedel mot astma och högt blodtryck",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256708"
+    "retrieved_at": "2026-08-24T16:12:07.179427"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/33fc01bde6f841cfb23b1379086bec98.aspx",
@@ -4668,12 +4668,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 05 Oct 2020 10:34:29 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fördubblat statsbidrag för merkostnader till kommuner och regioner i första ansökningsomgången",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256718"
+    "retrieved_at": "2026-08-24T16:12:07.179435"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b4d1a9cf03c34301a94bd0eae0572aba.aspx",
@@ -4682,12 +4682,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 28 Sep 2020 09:00:36 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fortsatt stora regionala skillnader i inlagda på sjukhus efter fallolyckor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256727"
+    "retrieved_at": "2026-08-24T16:12:07.179442"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/fe2010224dd6427dbf0718b78b26b3d8.aspx",
@@ -4696,12 +4696,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 23 Sep 2020 11:25:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökning av äldre som upplever ensamhet, oro och ängslan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256735"
+    "retrieved_at": "2026-08-24T16:12:07.179449"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/994175058a9a4a86b6aa8d0979b4638a.aspx",
@@ -4710,12 +4710,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 22 Sep 2020 14:15:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: 10 miljarder i statsbidrag för merkostnader – delas ut i två steg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256745"
+    "retrieved_at": "2026-08-24T16:12:07.179461"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4280272b77ec4123814f7f76f133f16d.aspx",
@@ -4724,12 +4724,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 16 Sep 2020 14:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Första målnivåerna för vård och omsorg vid demens framtagna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256753"
+    "retrieved_at": "2026-08-24T16:12:07.179469"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4c746d07c8404c5e806ad9dd6d374f17.aspx",
@@ -4738,12 +4738,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 15 Sep 2020 14:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Så vill Socialstyrelsen stötta regionernas hantering av uppdämda vårdbehov",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256762"
+    "retrieved_at": "2026-08-24T16:12:07.179476"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/107e54fe2c8e4f2c98effc7b05fd17c3.aspx",
@@ -4752,12 +4752,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 15 Sep 2020 13:15:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen bedömer att besöksförbudet på äldreboenden kan upphöra",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256770"
+    "retrieved_at": "2026-08-24T16:12:07.179484"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/be64ffe2a56c454d889e3da019362d93.aspx",
@@ -4766,12 +4766,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 02 Sep 2020 10:08:58 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Över 300 ansökningar om statsbidrag för merkostnader till följd av covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256781"
+    "retrieved_at": "2026-08-24T16:12:07.179492"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6c7515a6dfdc462bba539871e24abd0f.aspx",
@@ -4780,12 +4780,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 01 Sep 2020 12:11:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialstyrelsen: Bra förutsättningar att hantera nya utbrott av covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256790"
+    "retrieved_at": "2026-08-24T16:12:07.179500"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/dde05f761dad45f88fea33eac8b9c74d.aspx",
@@ -4794,12 +4794,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 20 Aug 2020 14:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny statistik om äldre med covid-19 som vårdats på sjukhus",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256798"
+    "retrieved_at": "2026-08-24T16:12:07.179507"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/07926f45274d4dab9539938e6b1aa601.aspx",
@@ -4808,12 +4808,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 19 Aug 2020 17:42:59 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Besöksförbudet hindrar inte äldre att lämna boendet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256807"
+    "retrieved_at": "2026-08-24T16:12:07.179514"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/02db368243e54ccfb8e6f2bbcb678082.aspx",
@@ -4822,12 +4822,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 10 Jul 2020 12:27:39 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Inget hinder att använda maskerna från Socialstyrelsen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256815"
+    "retrieved_at": "2026-08-24T16:12:07.179521"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/9bf1f0352da94320ac35bab791f1c8fb.aspx",
@@ -4836,12 +4836,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 30 Jun 2020 14:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya regler möjliggör livmoderhalsscreening med självprovtagning under pandemin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256825"
+    "retrieved_at": "2026-08-24T16:12:07.179528"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/6b4433630f0b49d49e6c5021ab7bdaab.aspx",
@@ -4850,12 +4850,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 25 Jun 2020 14:08:19 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Coronapandemin har fått färre att söka vård på akutmottagningarna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256833"
+    "retrieved_at": "2026-08-24T16:12:07.179538"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/94af92e089d54485b1a663d6d1982f2b.aspx",
@@ -4864,12 +4864,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 23 Jun 2020 10:00:00 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt fler barn och unga får vård för psykiatriska tillstånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256841"
+    "retrieved_at": "2026-08-24T16:12:07.179545"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/af2fdf18c2224f189401d732efc8d678.aspx",
@@ -4878,12 +4878,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 17 Jun 2020 13:00:05 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Stora minskningar av vårdbesök och operationer under våren",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256850"
+    "retrieved_at": "2026-08-24T16:12:07.179552"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/903a6856a0db4f9eb87ca81b758fea50.aspx",
@@ -4892,12 +4892,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 17 Jun 2020 10:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kommunernas krisberedskap varierar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256857"
+    "retrieved_at": "2026-08-24T16:12:07.179558"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/b94418c424414b99900806aef8fce1ea.aspx",
@@ -4906,12 +4906,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 16 Jun 2020 13:00:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Tillfällig möjlighet till självprovtagning för livmoderhalscancer föreslås",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256867"
+    "retrieved_at": "2026-08-24T16:12:07.179567"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/10a433b431774eb6b393f6f08b3d36d8.aspx",
@@ -4920,12 +4920,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 15 Jun 2020 09:30:24 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Antalet skyddade boenden ökar - och fler som bor på skyddade boenden",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256876"
+    "retrieved_at": "2026-08-24T16:12:07.179574"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/451d7f88331a427199d7c8228b4dd648.aspx",
@@ -4934,12 +4934,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 27 May 2020 14:30:24 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Långa vårdtider på sjukhus för patienter med covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256885"
+    "retrieved_at": "2026-08-24T16:12:07.179582"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/4a111db3465e4d42bbd9ea87584f6d4c.aspx",
@@ -4948,12 +4948,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 26 May 2020 09:00:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Digitalisering ger ökad effektivitet och kvalitet i kommunerna",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256894"
+    "retrieved_at": "2026-08-24T16:12:07.179590"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/bcb12a4e96a6428f9e7d1986c626d059.aspx",
@@ -4962,12 +4962,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 15 May 2020 15:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt stöd för att möta ökat behov av rehabilitering efter covid-19",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256921"
+    "retrieved_at": "2026-08-24T16:12:07.179600"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0af6c45e0463423cb62267f0ec343b92.aspx",
@@ -4976,12 +4976,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 06 May 2020 14:30:00 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny statistik om smittade och avlidna i covid-19 bland äldre",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256950"
+    "retrieved_at": "2026-08-24T16:12:07.179607"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/18cf1ae85a224ad5950dba14f58f27b2.aspx",
@@ -4990,12 +4990,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 29 Apr 2020 10:00:13 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu kommer reviderade riktlinjer för rörelseorganens sjukdomar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256965"
+    "retrieved_at": "2026-08-24T16:12:07.179615"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f42a47b3e5414438a59badac6794f5e4.aspx",
@@ -5004,12 +5004,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 27 Apr 2020 14:15:46 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Dödsorsaksintyg över avlidna i covid-19 visar högst andel i Stockholm",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.256993"
+    "retrieved_at": "2026-08-24T16:12:07.179622"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/78ed7d34da70457b872ac2f0a133e56a.aspx",
@@ -5018,12 +5018,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 26 Mar 2020 14:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt stöd med nationella principer för prioritering inom intensivvård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257003"
+    "retrieved_at": "2026-08-24T16:12:07.179630"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/f02092e7582a4e2e8b415a4021dc7958.aspx",
@@ -5032,12 +5032,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 25 Mar 2020 09:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligare med ekonomiskt bistånd bland personer med funktionsnedsättning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257014"
+    "retrieved_at": "2026-08-24T16:12:07.179638"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/0f32a153f30349eab166ad5fcba533ea.aspx",
@@ -5046,12 +5046,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 18 Mar 2020 12:30:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Utbildningarna om skyddsutrustning rullar ut",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257024"
+    "retrieved_at": "2026-08-24T16:12:07.179646"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/61a26a99dd38405ea993763506a950dd.aspx",
@@ -5060,12 +5060,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 12 Mar 2020 09:00:00 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler kan få hjälp att få barn genom donation",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257046"
+    "retrieved_at": "2026-08-24T16:12:07.179653"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e8bff6e0ad32425eab48506abe5372f7.aspx",
@@ -5074,12 +5074,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 11 Mar 2020 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Färre dödsfall till följd av läkemedels- och narkotikaförgiftningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257055"
+    "retrieved_at": "2026-08-24T16:12:07.179660"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d08143f4d4454f8cae5db9109c290e5d.aspx",
@@ -5088,12 +5088,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 09 Mar 2020 14:30:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Personal övas i säker hantering av skyddsutrustning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257081"
+    "retrieved_at": "2026-08-24T16:12:07.179667"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/a9732a226c504330b792a66743803426.aspx",
@@ -5102,12 +5102,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 02 Mar 2020 10:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Nytt stöd i planeringen av vårdens kompetensförsörjning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257090"
+    "retrieved_at": "2026-08-24T16:12:07.179674"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/84ead010438b45bdaa788733372918c2.aspx",
@@ -5116,12 +5116,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 27 Feb 2020 14:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Allt färre kvinnor drabbas av allvarliga bristningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257099"
+    "retrieved_at": "2026-08-24T16:12:07.179682"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d357cdf0965747579319a8c5814cdcee.aspx",
@@ -5130,12 +5130,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Thu, 20 Feb 2020 09:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Goda medicinska resultat men fortsatta problem med tillgång till vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257110"
+    "retrieved_at": "2026-08-24T16:12:07.179690"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/933dd8c8601a4de8a73eb28e5bb9f131.aspx",
@@ -5144,12 +5144,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 12 Feb 2020 10:00:10 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligt med flera psykiatriska diagnoser hos personer med könsdysfori",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257132"
+    "retrieved_at": "2026-08-24T16:12:07.179697"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/d00834f13dfb4633b6b50aba5016e775.aspx",
@@ -5158,12 +5158,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Mon, 03 Feb 2020 10:00:00 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Kartläggning: läkemedel vid klimakteriet varierar stort över landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257140"
+    "retrieved_at": "2026-08-24T16:12:07.179705"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/eb664f47f3b04a20af3d5a0b51e77505.aspx",
@@ -5172,12 +5172,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Fri, 31 Jan 2020 09:00:18 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Första nationella handlingsplanen ska stärka patientsäkerheten",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257149"
+    "retrieved_at": "2026-08-24T16:12:07.179712"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/e10c292b6d5040b89f71fb16f661eedc.aspx",
@@ -5186,12 +5186,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Wed, 15 Jan 2020 10:00:10 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera nyheter när riktlinjerna för strokevården ses över",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257158"
+    "retrieved_at": "2026-08-24T16:12:07.179720"
   },
   {
     "id": "https://www.socialstyrelsen.se/link/8f987be445cf4f59864873310fc7d5cf.aspx",
@@ -5200,12 +5200,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Socialstyrelsen",
     "source_type": "authority_update",
     "published_at": "Tue, 07 Jan 2020 10:00:10 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "authority_update",
     "relevance": 0.8,
     "summary": "Mock summary for: Fler barn och unga får vård och behandling för psykisk ohälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.257166"
+    "retrieved_at": "2026-08-24T16:12:07.179727"
   },
   {
     "id": "a0f9f935-9faa-4fc6-a241-d17f4bd26931",
@@ -5214,12 +5214,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Thu, 20 Aug 2026 09:00:47 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Seminarium om ny verksamhet för suicidutredningar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313395"
+    "retrieved_at": "2026-08-24T16:12:07.240694"
   },
   {
     "id": "8552274e-4c99-4c48-9168-2d39445683f6",
@@ -5228,12 +5228,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Sat, 15 Aug 2026 17:21:53 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera fall av mässling i Sverige",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313406"
+    "retrieved_at": "2026-08-24T16:12:07.240710"
   },
   {
     "id": "fb412d52-a318-4bf0-ab13-01504666239c",
@@ -5242,12 +5242,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Tue, 28 Jul 2026 09:00:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Hbtqi-strategiska myndigheter samlas på Pride House",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313415"
+    "retrieved_at": "2026-08-24T16:12:07.240719"
   },
   {
     "id": "83832e2d-bc81-4472-abe2-0f5c7e096ac9",
@@ -5256,12 +5256,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Mon, 27 Jul 2026 08:01:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Vanligt med utsatthet och våld mot hbt-personer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313424"
+    "retrieved_at": "2026-08-24T16:12:07.240728"
   },
   {
     "id": "9a5e5323-c1d8-402a-826b-9e26fc6afde1",
@@ -5270,12 +5270,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Fri, 03 Jul 2026 15:49:35 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: WHO: Utbrottet av hantavirus är över",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313433"
+    "retrieved_at": "2026-08-24T16:12:07.240736"
   },
   {
     "id": "e2fbeb04-2898-4bbe-8c72-49b493a91b2c",
@@ -5284,12 +5284,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Wed, 17 Jun 2026 11:00:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Antibiotikaresistensen fortsatte att öka i Sverige under 2025",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313442"
+    "retrieved_at": "2026-08-24T16:12:07.240745"
   },
   {
     "id": "5d5b0504-0ed7-47d7-919f-981a88e64ccc",
@@ -5298,12 +5298,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Thu, 11 Jun 2026 16:30:48 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny rekommendation: Vänta med smarta telefoner till det år då barnet fyller 13 år",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313455"
+    "retrieved_at": "2026-08-24T16:12:07.240764"
   },
   {
     "id": "2d05e87e-ceb3-443a-8ff5-8753dc36ba27",
@@ -5312,12 +5312,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Tue, 09 Jun 2026 10:45:28 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Ökade hälsorisker när Europas narkotikamarknad förändras",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313464"
+    "retrieved_at": "2026-08-24T16:12:07.240772"
   },
   {
     "id": "ca9db29e-a0fe-41da-bfed-60d388e16f20",
@@ -5326,12 +5326,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Mon, 08 Jun 2026 09:00:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny statistik över Folkhälsomyndighetens beredskapsdiagnostik",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313473"
+    "retrieved_at": "2026-08-24T16:12:07.240781"
   },
   {
     "id": "ad5e7da7-0af4-47be-9d35-2dda85a5a728",
@@ -5340,12 +5340,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Wed, 03 Jun 2026 07:00:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny rapport: Utmaningar kvarstår för den sexuella hälsan i befolkningen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313483"
+    "retrieved_at": "2026-08-24T16:12:07.240790"
   },
   {
     "id": "18e938bd-2e02-4f6d-9cae-f869682ffebb",
@@ -5354,12 +5354,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Mon, 01 Jun 2026 09:25:08 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Folkhälsomyndigheten presenterar nya rekommendationer om föräldrars skärmvanor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313494"
+    "retrieved_at": "2026-08-24T16:12:07.240800"
   },
   {
     "id": "0baadded-51c1-423e-80c3-0c72f9163ce2",
@@ -5368,12 +5368,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Fri, 29 May 2026 09:47:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Vi kraftsamlar mot ensamhet 5 juni",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313502"
+    "retrieved_at": "2026-08-24T16:12:07.240808"
   },
   {
     "id": "5e0db095-7917-4646-a550-a6e3bbfb02e4",
@@ -5382,12 +5382,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Wed, 27 May 2026 11:00:47 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny enhet på Folkhälsomyndigheten för att utreda suicid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313512"
+    "retrieved_at": "2026-08-24T16:12:07.240816"
   },
   {
     "id": "24189552-659b-4c9f-9161-6ecd9f6ad67c",
@@ -5396,12 +5396,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Tue, 26 May 2026 08:14:24 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Förslag att 20 substanser klassificeras som narkotika eller hälsofarlig vara",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313521"
+    "retrieved_at": "2026-08-24T16:12:07.240825"
   },
   {
     "id": "e4dbf6ba-51d8-4531-9ddf-3d185eefc5a0",
@@ -5410,12 +5410,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Mon, 25 May 2026 10:00:47 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Rörelse och gemenskap på Järvaveckan",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313530"
+    "retrieved_at": "2026-08-24T16:12:07.240833"
   },
   {
     "id": "3773c18a-f771-409c-b146-c3437485f4fb",
@@ -5424,12 +5424,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Fri, 22 May 2026 13:37:06 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Säsongen för RS-virus och influensa är över i landet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313539"
+    "retrieved_at": "2026-08-24T16:12:07.240841"
   },
   {
     "id": "1d3fb90c-061b-43a7-aa20-3133aa4cd43b",
@@ -5438,12 +5438,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Sun, 17 May 2026 11:26:56 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: WHO: Spridning av ebola är ett internationellt hälsohot",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313551"
+    "retrieved_at": "2026-08-24T16:12:07.240853"
   },
   {
     "id": "6b1666dc-7e75-4d24-8bdf-ba3c6447f43d",
@@ -5452,12 +5452,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Wed, 13 May 2026 13:09:01 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Studie visar på ökad antibiotikaresistens i Europa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313560"
+    "retrieved_at": "2026-08-24T16:12:07.240862"
   },
   {
     "id": "477c4f38-cb4b-4d18-aaa0-a5f66956b378",
@@ -5466,12 +5466,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Tue, 12 May 2026 15:59:23 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Antibiotikasmarta sjukhus utsedda",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313568"
+    "retrieved_at": "2026-08-24T16:12:07.240870"
   },
   {
     "id": "453dc145-b665-4022-9235-79be1855cca8",
@@ -5480,12 +5480,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Folkhälsomyndigheten",
     "source_type": "news",
     "published_at": "Fri, 08 May 2026 16:25:09 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "news",
     "relevance": 0.8,
     "summary": "Mock summary for: Folkhälsomyndigheten följer det internationella utbrottet av andesvirus",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.313581"
+    "retrieved_at": "2026-08-24T16:12:07.240889"
   },
   {
     "id": "be508274-bc1e-40d2-be31-3ef8a21712ef",
@@ -5494,12 +5494,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 19 Aug 2026 08:41:20 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialtjänstministern besöker Kalmar län och Kronobergs län",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508006"
+    "retrieved_at": "2026-08-24T16:12:07.422805"
   },
   {
     "id": "9ee7139c-ea6c-485f-ab75-33fa2fe14561",
@@ -5508,12 +5508,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 16 Jul 2026 10:30:09 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Försäkringskassan ska stärka dialogen om psykisk ohälsa med arbetsgivare",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508017"
+    "retrieved_at": "2026-08-24T16:12:07.422819"
   },
   {
     "id": "4f0ea3ad-b0c3-46b5-95e0-f7e636f5f00b",
@@ -5522,12 +5522,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 09 Jul 2026 12:30:05 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Utredning ska se över ökat statligt ansvarstagande för den rättspsykiatriska vården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508026"
+    "retrieved_at": "2026-08-24T16:12:07.422827"
   },
   {
     "id": "5dd1c71c-84db-4a56-9848-68bdb1554bb2",
@@ -5536,12 +5536,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 03 Jul 2026 15:01:14 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Delegation för att utveckla stödet för barn och unga med NPF-diagnoser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508034"
+    "retrieved_at": "2026-08-24T16:12:07.422834"
   },
   {
     "id": "57e33dea-dbff-4a76-9621-66443192a0bf",
@@ -5550,12 +5550,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 02 Jul 2026 15:39:07 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om ny utredning om barn och unga med neuropsykiatriska diagnoser",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508043"
+    "retrieved_at": "2026-08-24T16:12:07.422842"
   },
   {
     "id": "c8f49a42-4407-44e8-86c5-7bba2432ceb7",
@@ -5564,12 +5564,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 16 Jun 2026 12:30:10 +0200",
-    "topic": "substance_use",
+    "topic": "substance use",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Arbetet för att stärka vården vid skadligt bruk och beroende och samsjuklighet fortsätter",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508052"
+    "retrieved_at": "2026-08-24T16:12:07.422850"
   },
   {
     "id": "8b14c4ca-8fbd-4313-8f6d-0987a2ab110d",
@@ -5578,12 +5578,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 08 Jun 2026 15:51:16 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Ny utredning ska förbättra den psykiatriska tvångsvården och stärka skyddet för patienter och närstående",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508061"
+    "retrieved_at": "2026-08-24T16:12:07.422857"
   },
   {
     "id": "0cd799a9-5c68-4e08-a408-23862d045773",
@@ -5592,12 +5592,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 05 Jun 2026 12:02:42 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker stöd via telefon och nätet vid psykisk ohälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508069"
+    "retrieved_at": "2026-08-24T16:12:07.422865"
   },
   {
     "id": "134c2240-3459-4b9b-addb-b9870d0b5ab8",
@@ -5606,12 +5606,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 01 Jun 2026 17:51:14 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Läkemedelsverket får uppdrag om adhd-läkemedel",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508078"
+    "retrieved_at": "2026-08-24T16:12:07.422872"
   },
   {
     "id": "043821c1-6876-466b-ba59-20f71c293348",
@@ -5620,12 +5620,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 26 May 2026 09:30:06 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Kunskap om skillnader mellan fysiska och digitala umgängesformer bland barn och unga ska tas fram",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508089"
+    "retrieved_at": "2026-08-24T16:12:07.422943"
   },
   {
     "id": "5b815f47-4aca-438d-9a0f-0d92aa67d18b",
@@ -5634,12 +5634,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 21 May 2026 15:21:06 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Väntetiderna till utredning inom BUP har minskat",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508098"
+    "retrieved_at": "2026-08-24T16:12:07.422951"
   },
   {
     "id": "9c56108d-b218-48be-99a7-7e293efa4c4a",
@@ -5648,12 +5648,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 19 May 2026 17:05:02 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressbriefing om tillgängligheten inom BUP",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508116"
+    "retrieved_at": "2026-08-24T16:12:07.422959"
   },
   {
     "id": "0ebf8dba-591d-49a7-9c81-e1443bfe9952",
@@ -5662,12 +5662,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 06 May 2026 15:30:07 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Kammarrättsråd Hanna Kristiansson utses till utredare i Samsjuklighetsdelegationen",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508126"
+    "retrieved_at": "2026-08-24T16:12:07.422967"
   },
   {
     "id": "7817a2a3-ee30-44f3-b75f-214b84ddf2b3",
@@ -5676,12 +5676,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 05 May 2026 15:45:38 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Myndigheter delredovisar uppdrag att förebygga psykisk ohälsa och suicid för personer i ekonomisk utsatthet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508134"
+    "retrieved_at": "2026-08-24T16:12:07.422975"
   },
   {
     "id": "757c340d-f410-432e-a001-70d4245a6f0a",
@@ -5690,12 +5690,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 04 May 2026 16:13:11 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker vården och stödet för personer med skadligt bruk eller beroende och psykiatriska tillstånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508143"
+    "retrieved_at": "2026-08-24T16:12:07.422982"
   },
   {
     "id": "e52e1425-c002-4631-8934-6aff2e162025",
@@ -5704,12 +5704,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 27 Apr 2026 17:34:53 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialminister Jakob Forssmed till Vadstena och Malmö",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508151"
+    "retrieved_at": "2026-08-24T16:12:07.422989"
   },
   {
     "id": "9a27e2f1-4141-45c2-bd55-fb726774c421",
@@ -5718,12 +5718,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 09 Apr 2026 09:32:02 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Åtgärder för att förhindra vansinnesdåd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508160"
+    "retrieved_at": "2026-08-24T16:12:07.422995"
   },
   {
     "id": "951a8329-1aed-4c1e-a788-babe3b2f1e71",
@@ -5732,12 +5732,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 30 Mar 2026 15:12:12 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialministern besöker Sundsvall",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508167"
+    "retrieved_at": "2026-08-24T16:12:07.423002"
   },
   {
     "id": "8675257d-81db-4f1b-86fc-1b9e7423dbea",
@@ -5746,12 +5746,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 30 Mar 2026 11:00:23 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker arbetet med psykisk hälsa och suicidprevention inför kris, beredskap och ytterst krig",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508176"
+    "retrieved_at": "2026-08-24T16:12:07.423009"
   },
   {
     "id": "dc95b02e-e731-4177-9e6a-f6d0819f4f49",
@@ -5760,12 +5760,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 30 Mar 2026 08:00:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker arbetet med IPS-modellen för arbetsrehabilitering",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508185"
+    "retrieved_at": "2026-08-24T16:12:07.423017"
   },
   {
     "id": "bf29ba0d-7013-425f-8231-c7af673c0f14",
@@ -5774,12 +5774,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 30 Mar 2026 08:00:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen främjar fler utbildningstjänster för psykologer",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508194"
+    "retrieved_at": "2026-08-24T16:12:07.423026"
   },
   {
     "id": "19c6db44-ce1d-4e52-bce2-097c9b8d7205",
@@ -5788,12 +5788,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 17 Mar 2026 13:27:44 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: En nationell utredningsfunktion för att förebygga suicid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508203"
+    "retrieved_at": "2026-08-24T16:12:07.423034"
   },
   {
     "id": "476117d2-62f3-4825-bf16-7f8b09fce9ab",
@@ -5802,12 +5802,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 13 Mar 2026 13:09:26 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker stödet för psykisk hälsa inom idrotten",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508212"
+    "retrieved_at": "2026-08-24T16:12:07.423041"
   },
   {
     "id": "91f6c5f1-10c0-4723-abc8-159eaf922471",
@@ -5816,12 +5816,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 26 Feb 2026 16:58:44 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker vården för personer med skadligt bruk och beroende och andra psykiatriska tillstånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508220"
+    "retrieved_at": "2026-08-24T16:12:07.423048"
   },
   {
     "id": "97ff114a-6fe8-4573-ab6d-c5b82efee08a",
@@ -5830,12 +5830,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 25 Feb 2026 15:01:16 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om nya insatser för personer med skadligt bruk och beroende och andra psykiatriska tillstånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508229"
+    "retrieved_at": "2026-08-24T16:12:07.423056"
   },
   {
     "id": "36901783-0118-4dfb-8b91-04d2bd40958a",
@@ -5844,12 +5844,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 11 Feb 2026 11:44:44 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker stödet till vården för att förebygga våldsdåd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508238"
+    "retrieved_at": "2026-08-24T16:12:07.423065"
   },
   {
     "id": "6185ae25-fe19-4ae5-89d8-dd82a8d8b66b",
@@ -5858,12 +5858,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 06 Feb 2026 11:45:21 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen fortsätter satsa på kortare väntetider och vårdköer inom BUP",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508247"
+    "retrieved_at": "2026-08-24T16:12:07.423074"
   },
   {
     "id": "719a0906-dbae-44e3-b2a2-d6d75cc077f4",
@@ -5872,12 +5872,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 28 Jan 2026 15:30:08 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen beviljar 35 miljoner kronor till svenska Röda Korset för arbete med psykiatrisk traumavård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508255"
+    "retrieved_at": "2026-08-24T16:12:07.423082"
   },
   {
     "id": "8ab111f9-bc74-4d15-8b4d-701ec9b70190",
@@ -5886,12 +5886,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 28 Jan 2026 15:30:08 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen beviljar 8 miljoner kronor till svenska Röda Korset för arbete med psykisk hälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508282"
+    "retrieved_at": "2026-08-24T16:12:07.423089"
   },
   {
     "id": "b8103384-83ed-4774-971c-ed98a302553d",
@@ -5900,12 +5900,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 21 Jan 2026 14:11:56 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker vårdkapaciteten i vuxenpsykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508295"
+    "retrieved_at": "2026-08-24T16:12:07.423095"
   },
   {
     "id": "c0d8ca04-3c87-4bd8-8f39-f468613ed619",
@@ -5914,12 +5914,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 20 Jan 2026 15:54:38 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om insatser för att stärka vuxenpsykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508305"
+    "retrieved_at": "2026-08-24T16:12:07.423102"
   },
   {
     "id": "34c11fa7-b84e-4ee0-9892-41ade395f306",
@@ -5928,12 +5928,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 29 Dec 2025 12:17:03 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Ytterligare medel till regionerna för ökad tillgänglighet till barn- och ungdomspsykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508315"
+    "retrieved_at": "2026-08-24T16:12:07.423110"
   },
   {
     "id": "be60818f-b7a8-4033-ba7d-08e26f2a819e",
@@ -5942,12 +5942,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 29 Dec 2025 10:43:21 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: 1,3 miljarder kronor till kommuner och regioner för insatser inom psykisk hälsa och suicidprevention 2026",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508324"
+    "retrieved_at": "2026-08-24T16:12:07.423118"
   },
   {
     "id": "1d1a27af-889d-4ef5-8fc9-9b85807c5fd5",
@@ -5956,12 +5956,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 23 Dec 2025 13:52:01 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag ska förebygga och motverka ensamhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508346"
+    "retrieved_at": "2026-08-24T16:12:07.423125"
   },
   {
     "id": "6c3ed3a8-d225-4ebd-abfc-0eb79473873d",
@@ -5970,12 +5970,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 19 Dec 2025 10:12:38 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Flera nya uppdrag i arbetet för psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508374"
+    "retrieved_at": "2026-08-24T16:12:07.423133"
   },
   {
     "id": "ae4fc7ae-8f56-4705-a5cf-c89ad447038a",
@@ -5984,12 +5984,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 16 Dec 2025 10:11:48 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Stärkt stöd till ekonomiskt utsatta ska förebygga psykisk ohälsa och suicid",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508383"
+    "retrieved_at": "2026-08-24T16:12:07.423140"
   },
   {
     "id": "55f72175-402a-4c2a-983c-7b6c2c46adf2",
@@ -5998,12 +5998,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 08 Dec 2025 09:27:14 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen tar nästa steg i arbetet mot suicid – ny lag föreslås",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508393"
+    "retrieved_at": "2026-08-24T16:12:07.423148"
   },
   {
     "id": "c2748ee1-73b3-4958-976b-2ad27246aca8",
@@ -6012,12 +6012,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 04 Dec 2025 13:00:29 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Förnyad miljardsatsning på psykisk hälsa under 2026",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508402"
+    "retrieved_at": "2026-08-24T16:12:07.423155"
   },
   {
     "id": "c500cf88-077f-4842-a03d-7fb93384c79f",
@@ -6026,12 +6026,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 12 Nov 2025 13:33:13 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Insatser för att stärka studenters psykiska hälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508410"
+    "retrieved_at": "2026-08-24T16:12:07.423162"
   },
   {
     "id": "80029f67-4d8d-4e61-b44a-65e879bdecb0",
@@ -6040,12 +6040,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 11 Nov 2025 15:46:12 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen vill stärka ungdomsmottagningarnas arbete",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508431"
+    "retrieved_at": "2026-08-24T16:12:07.423168"
   },
   {
     "id": "91336e17-49df-4d12-992a-b6261fe98fb6",
@@ -6054,12 +6054,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 10 Nov 2025 16:05:46 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Nya regeringsuppdrag för ökad kunskap och minskat stigma kring psykisk hälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508440"
+    "retrieved_at": "2026-08-24T16:12:07.423176"
   },
   {
     "id": "e09d5d48-d839-4b0e-b0b9-dda47d8d9c32",
@@ -6068,12 +6068,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 07 Nov 2025 13:57:44 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om åtgärder och nya initiativ för stärkt psykisk hälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508448"
+    "retrieved_at": "2026-08-24T16:12:07.423183"
   },
   {
     "id": "5cabc830-5dca-419e-a718-89aca115c4cc",
@@ -6082,12 +6082,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 20 Oct 2025 15:45:10 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialminister Jakob Forssmed till Östersund",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508457"
+    "retrieved_at": "2026-08-24T16:12:07.423190"
   },
   {
     "id": "834cdac6-e628-412a-824a-f10ffb4f6b6c",
@@ -6096,12 +6096,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 16 Oct 2025 11:47:24 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Jakob Forssmed besöker Skåne",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508469"
+    "retrieved_at": "2026-08-24T16:12:07.423196"
   },
   {
     "id": "3c8923d2-1565-4456-a098-d57a35f60d65",
@@ -6110,12 +6110,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 13 Oct 2025 17:31:51 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Sverige har skrivit under Jutland-deklarationen, en EU-deklaration om skydd av barn och unga online",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508479"
+    "retrieved_at": "2026-08-24T16:12:07.423202"
   },
   {
     "id": "c3cf19b5-6e9b-43c4-8746-10677a2aa42d",
@@ -6124,12 +6124,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 30 Sep 2025 08:53:49 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Nu blir det enklare för personer med adhd att få körkortstillstånd",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508491"
+    "retrieved_at": "2026-08-24T16:12:07.423210"
   },
   {
     "id": "3720856c-f361-4e46-bdce-d9888f770245",
@@ -6138,12 +6138,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 26 Sep 2025 15:31:56 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Förstärkta satsningar på psykisk hälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508500"
+    "retrieved_at": "2026-08-24T16:12:07.423218"
   },
   {
     "id": "b2b20c49-0bd1-4b5f-9fce-2bcc83e66f5d",
@@ -6152,12 +6152,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 19 Sep 2025 06:00:25 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen deltar vid FN:s generalförsamlings öppnande i New York",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508509"
+    "retrieved_at": "2026-08-24T16:12:07.423225"
   },
   {
     "id": "10c71e2e-31bd-4038-9c0c-193f64b6d353",
@@ -6166,12 +6166,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 18 Sep 2025 12:57:36 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Miljardsatsning mot vårdköer och andra riktade satsningar till hälso- och sjukvården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508518"
+    "retrieved_at": "2026-08-24T16:12:07.423233"
   },
   {
     "id": "235def7e-49e6-4ec5-9e82-9ec1b1c2440e",
@@ -6180,12 +6180,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 12 Sep 2025 16:20:39 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Kraftfull satsning för att stärka arbetet med psykisk hälsa, beroendevård och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508526"
+    "retrieved_at": "2026-08-24T16:12:07.423240"
   },
   {
     "id": "73052712-a0fa-4cf0-8dbb-1437084e1c50",
@@ -6194,12 +6194,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 08 Sep 2025 12:34:07 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialministern till Halland – fokus på ungas hälsa, idrott och cykling",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508535"
+    "retrieved_at": "2026-08-24T16:12:07.423248"
   },
   {
     "id": "3ee605b7-9a64-4f63-afa9-9676281f229a",
@@ -6208,12 +6208,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 05 Sep 2025 08:32:54 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Förstärkt tillsyn av suicidprevention och tvångsvård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508545"
+    "retrieved_at": "2026-08-24T16:12:07.423261"
   },
   {
     "id": "b2e1c3d3-93d0-4e83-8b71-d84894083ee5",
@@ -6222,12 +6222,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 05 Sep 2025 06:00:18 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Camilla Waltersson Grönvall möter Friluftsfrämjandet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508553"
+    "retrieved_at": "2026-08-24T16:12:07.423268"
   },
   {
     "id": "aaa968c6-9a0f-4711-9957-b1c35253597c",
@@ -6236,12 +6236,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 15 Jul 2025 11:13:18 +0200",
-    "topic": "substance_use",
+    "topic": "substance use",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Gemensam satsning för en bättre beroendevård och ett stärkt förebyggande arbete",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508561"
+    "retrieved_at": "2026-08-24T16:12:07.423276"
   },
   {
     "id": "3e0c6770-8650-402d-a788-b32264aa9e2b",
@@ -6250,12 +6250,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 30 Jun 2025 16:40:03 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "report",
     "relevance": 0.8,
     "summary": "Mock summary for: WHO lanserar omfattande rapport om ensamhet och social inkludering",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508588"
+    "retrieved_at": "2026-08-24T16:12:07.423283"
   },
   {
     "id": "aff10bc8-60d5-443e-87a2-99881bc4465f",
@@ -6264,12 +6264,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Sun, 22 Jun 2025 08:30:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag för att stärka primärvårdens arbete med psykisk ohälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508597"
+    "retrieved_at": "2026-08-24T16:12:07.423289"
   },
   {
     "id": "784d1b2c-4427-4532-925a-101df8c1c4de",
@@ -6278,12 +6278,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Sat, 21 Jun 2025 08:30:10 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag att utveckla arbetet med flexibla övergångar mellan barn- och ungdomspsykiatrin och vuxenpsykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508606"
+    "retrieved_at": "2026-08-24T16:12:07.423296"
   },
   {
     "id": "8b464cc3-ff47-4c89-8071-a3fc639d9c04",
@@ -6292,12 +6292,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 20 Jun 2025 10:00:15 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Halv miljard kronor till regionerna för förstärkning av psykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508615"
+    "retrieved_at": "2026-08-24T16:12:07.423303"
   },
   {
     "id": "50ce29f6-ca6d-4568-8646-835b3ffda27a",
@@ -6306,12 +6306,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 04 Jun 2025 13:33:16 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Civilministern och socialministern bjuder in till rundabordssamtal om stöd till skuldsatta med sociala problem",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508624"
+    "retrieved_at": "2026-08-24T16:12:07.423311"
   },
   {
     "id": "c83fa5f4-ac14-4018-a362-49c269e38668",
@@ -6320,12 +6320,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 03 Jun 2025 12:58:38 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Femdubblade resurser till uppdrag om sjukskrivning och rehabilitering",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508634"
+    "retrieved_at": "2026-08-24T16:12:07.423317"
   },
   {
     "id": "e919251d-d43a-4761-afdc-0b0fcf24a9af",
@@ -6334,12 +6334,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 14 Apr 2025 08:30:11 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Informationskampanj med fokus på hälsosamma skärmvanor hos barn och unga",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508644"
+    "retrieved_at": "2026-08-24T16:12:07.423324"
   },
   {
     "id": "bcf0643c-60f4-4ba2-b4b6-5196615836b0",
@@ -6348,12 +6348,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 14 Apr 2025 08:30:11 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag att förbereda nationell kraftsamling för ökad daglig rörelse och fysisk aktivitet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508658"
+    "retrieved_at": "2026-08-24T16:12:07.423332"
   },
   {
     "id": "4dfed962-c675-45bc-a35e-3b95c2c8686c",
@@ -6362,12 +6362,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 14 Apr 2025 08:30:11 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Ytterligare satsningar på arbetet med suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508667"
+    "retrieved_at": "2026-08-24T16:12:07.423339"
   },
   {
     "id": "a1ef6d0f-1d7a-4b61-a336-91066b988caa",
@@ -6376,12 +6376,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 07 Apr 2025 15:08:02 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Åtgärder för unga som varken arbetar eller studerar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508675"
+    "retrieved_at": "2026-08-24T16:12:07.423346"
   },
   {
     "id": "99be713a-cfc1-4244-952c-def962fd4569",
@@ -6390,12 +6390,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 04 Apr 2025 13:14:22 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om åtgärder för att stödja unga som varken arbetar eller studerar",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508684"
+    "retrieved_at": "2026-08-24T16:12:07.423352"
   },
   {
     "id": "57eef48d-4847-4b30-aaaf-03d1478c2391",
@@ -6404,12 +6404,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 02 Apr 2025 13:27:11 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: En halv miljard kronor i förstärkt satsning på den specialiserade psykiatriska vården under 2025",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508694"
+    "retrieved_at": "2026-08-24T16:12:07.423374"
   },
   {
     "id": "a569280d-ea60-4f76-988a-3f29ac3dc4fa",
@@ -6418,12 +6418,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 02 Apr 2025 09:58:53 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Anna Tenje deltar i panelsamtal om yngre personer med demenssjukdom",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508702"
+    "retrieved_at": "2026-08-24T16:12:07.423381"
   },
   {
     "id": "0dc784dc-05dc-416d-ba68-fc5c87391f2f",
@@ -6432,12 +6432,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 01 Apr 2025 15:32:18 +0200",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om förstärkt satsning på psykiatrisk vård",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508711"
+    "retrieved_at": "2026-08-24T16:12:07.423389"
   },
   {
     "id": "ef34b59c-b784-4264-8bbc-9ba3328c3499",
@@ -6446,12 +6446,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 21 Mar 2025 16:38:28 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialminister Jakob Forssmed deltar vid informellt hälsoministermöte i Warszawa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508720"
+    "retrieved_at": "2026-08-24T16:12:07.423396"
   },
   {
     "id": "0d37bc66-3793-4b24-b318-879e41216b50",
@@ -6460,12 +6460,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 18 Mar 2025 11:03:57 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Den privata vården kring neuropsykiatriska funktionsnedsättningar ska undersökas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508741"
+    "retrieved_at": "2026-08-24T16:12:07.423403"
   },
   {
     "id": "9de0a2a9-fde0-4e48-83d3-6d299d13a703",
@@ -6474,12 +6474,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 17 Mar 2025 16:13:48 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialminister Jakob Forssmed besöker Gävle",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508750"
+    "retrieved_at": "2026-08-24T16:12:07.423410"
   },
   {
     "id": "3af58bbe-cf83-4208-9c64-c000cc5646eb",
@@ -6488,12 +6488,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 14 Mar 2025 09:42:18 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker patient- och anhörigorganisationernas roll i vården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508759"
+    "retrieved_at": "2026-08-24T16:12:07.423418"
   },
   {
     "id": "3ca300ac-952a-4629-b90f-e86a40a87aca",
@@ -6502,12 +6502,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 28 Feb 2025 13:35:12 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen tar krafttag mot ensamheten",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508767"
+    "retrieved_at": "2026-08-24T16:12:07.423424"
   },
   {
     "id": "ceeacbf6-b71e-4478-89fe-78820c52153a",
@@ -6516,12 +6516,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 28 Feb 2025 13:29:34 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Nationell strategi mot ensamhet överlämnas",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508775"
+    "retrieved_at": "2026-08-24T16:12:07.423434"
   },
   {
     "id": "04d002b5-1e0e-45c5-b085-d236eb668bff",
@@ -6530,12 +6530,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 28 Feb 2025 09:00:39 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Historisk satsning ska korta väntetiderna till BUP",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508782"
+    "retrieved_at": "2026-08-24T16:12:07.423444"
   },
   {
     "id": "e1052772-464a-488f-ba04-3737d048386f",
@@ -6544,12 +6544,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 27 Feb 2025 15:56:37 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen satsar en halv miljard kronor på ett förbättrat omhändertagande i primärvården vid psykisk ohälsa",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508791"
+    "retrieved_at": "2026-08-24T16:12:07.423453"
   },
   {
     "id": "630741f6-c09d-41a4-9b55-33abed0ea691",
@@ -6558,12 +6558,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 27 Feb 2025 13:28:27 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om nationell strategi mot ensamhet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508799"
+    "retrieved_at": "2026-08-24T16:12:07.423461"
   },
   {
     "id": "4d1a0b56-e31c-4c82-a156-839e8ec2f99b",
@@ -6572,12 +6572,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 18 Feb 2025 14:03:48 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Riskbedömningar inom psykiatrin ses över",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508807"
+    "retrieved_at": "2026-08-24T16:12:07.423468"
   },
   {
     "id": "9c377a62-54a3-4d45-9e54-9873c2e963d8",
@@ -6586,12 +6586,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 13 Feb 2025 15:03:43 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: 8 miljoner kronor till Svenska Röda Korset för hälsofrämjande insatser för asylsökande och nyanlända",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508817"
+    "retrieved_at": "2026-08-24T16:12:07.423475"
   },
   {
     "id": "18c52134-6c3d-41b2-aec1-130b3d4b77fe",
@@ -6600,12 +6600,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 13 Feb 2025 13:59:29 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Jakob Forssmed besöker Umeå",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508827"
+    "retrieved_at": "2026-08-24T16:12:07.423482"
   },
   {
     "id": "01dc0199-da82-41a4-a4ab-6772867f2b1b",
@@ -6614,12 +6614,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 12 Feb 2025 06:00:27 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen och Sverigedemokraterna presenterar åtgärder för att stärka säkerheten i skolor",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508837"
+    "retrieved_at": "2026-08-24T16:12:07.423489"
   },
   {
     "id": "0883cae5-0404-4c64-8e3f-9ccb55200739",
@@ -6628,12 +6628,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 03 Feb 2025 06:00:21 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Miljardsatsning på psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508845"
+    "retrieved_at": "2026-08-24T16:12:07.423496"
   },
   {
     "id": "51ff805e-ee92-4ac2-a7c6-c5de3d30014e",
@@ -6642,12 +6642,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 21 Jan 2025 13:03:45 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen har presenterat en utvecklad nationell demensstrategi",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508852"
+    "retrieved_at": "2026-08-24T16:12:07.423503"
   },
   {
     "id": "0be6b791-c929-416d-a9c5-4e28bdb48e30",
@@ -6656,12 +6656,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 17 Jan 2025 14:01:22 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Delegation ska stärka insatserna för personer med samsjuklighet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508861"
+    "retrieved_at": "2026-08-24T16:12:07.423510"
   },
   {
     "id": "a9766921-14b7-44fb-aa48-7f74fb758ab3",
@@ -6670,12 +6670,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 16 Jan 2025 13:00:19 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om tillsättandet av en samsjuklighetsdelegation",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508869"
+    "retrieved_at": "2026-08-24T16:12:07.423517"
   },
   {
     "id": "a8f5cbd0-1d93-4ee7-bcd7-f95edd5c20ba",
@@ -6684,12 +6684,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 10 Jan 2025 13:31:31 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: En ambitiös agenda för förändring kring psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508878"
+    "retrieved_at": "2026-08-24T16:12:07.423524"
   },
   {
     "id": "a1f9e675-970d-47c8-b8d5-51667a16844d",
@@ -6698,12 +6698,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 09 Jan 2025 15:37:11 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om nationell strategi för psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508885"
+    "retrieved_at": "2026-08-24T16:12:07.423530"
   },
   {
     "id": "6c0e6070-2b4d-4921-b17e-827d101574cb",
@@ -6712,12 +6712,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 27 Dec 2024 08:00:29 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Kraftig förstärkning på den prehospitala akutsjukvården för personer med psykisk ohälsa och suicidalitet",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508894"
+    "retrieved_at": "2026-08-24T16:12:07.423537"
   },
   {
     "id": "eda1278e-e00b-40a8-8279-2aa93e6767d9",
@@ -6726,12 +6726,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 27 Dec 2024 08:00:29 +0100",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: 150 miljoner kronor till det civila samhällets organisationer i kraftigt förstärkt satsning för psykisk hälsa och suicidprevention",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508903"
+    "retrieved_at": "2026-08-24T16:12:07.423545"
   },
   {
     "id": "64fb1ea2-8cec-4721-b317-f3985a8f9ff4",
@@ -6740,12 +6740,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 20 Dec 2024 17:21:22 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag att kartlägga användningen av digitala verktyg i psykiatrin",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508911"
+    "retrieved_at": "2026-08-24T16:12:07.423552"
   },
   {
     "id": "6d2698fc-feec-4418-9444-8e22a6fdb64e",
@@ -6754,12 +6754,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 19 Dec 2024 12:45:16 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Uppdrag att undersöka hur psykisk hälsa kan främjas hos barn inom socialtjänsten",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508919"
+    "retrieved_at": "2026-08-24T16:12:07.423559"
   },
   {
     "id": "9d720a0f-50db-4202-9f6a-ce185a7c4b2e",
@@ -6768,12 +6768,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Wed, 18 Dec 2024 15:55:24 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: 1,5 miljarder till regionerna för ökad tillgänglighet i vården",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508929"
+    "retrieved_at": "2026-08-24T16:12:07.423567"
   },
   {
     "id": "b73b944e-a76d-4659-b7a6-30551b13a1ec",
@@ -6782,12 +6782,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Mon, 16 Dec 2024 14:14:29 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Vägledning för barns och ungas digitala medieanvändning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508937"
+    "retrieved_at": "2026-08-24T16:12:07.423574"
   },
   {
     "id": "168ab799-a2f1-4907-93b7-148b63da0d45",
@@ -6796,12 +6796,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 13 Dec 2024 14:07:48 +0100",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Pressträff om vägledning för barns och ungas digitala medieanvändning",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508945"
+    "retrieved_at": "2026-08-24T16:12:07.423581"
   },
   {
     "id": "2c70c267-c4e3-44e4-962e-f277c79f9c94",
@@ -6810,12 +6810,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 21 Nov 2024 13:00:17 +0100",
-    "topic": "psychiatric_care",
+    "topic": "psychiatric care",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Stärkt samverkan för bättre psykiatrisk vård vid SiS",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508953"
+    "retrieved_at": "2026-08-24T16:12:07.423588"
   },
   {
     "id": "84084370-0d5c-420b-ba56-c875dd01cb09",
@@ -6824,12 +6824,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 05 Nov 2024 09:42:02 +0100",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialministern gör verksamhetsbesök i Norrköping",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508964"
+    "retrieved_at": "2026-08-24T16:12:07.423594"
   },
   {
     "id": "7b86689a-fc04-447c-9d20-fce5a5d490b5",
@@ -6838,12 +6838,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Fri, 18 Oct 2024 11:40:52 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Sjukvårdsministern och Ukrainas hälsominister har i Kiev signerat ett avtal för fortsatt stöd till Ukrainas EU-närmande på hälso- och sjukvårdens område",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508974"
+    "retrieved_at": "2026-08-24T16:12:07.423604"
   },
   {
     "id": "dfd43adc-b773-4ed7-a6d5-029c21e365de",
@@ -6852,12 +6852,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 10 Oct 2024 14:50:56 +0200",
-    "topic": "mental_health",
+    "topic": "mental health",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Regeringen stärker arbetet med sjukskrivning och rehabilitering",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508982"
+    "retrieved_at": "2026-08-24T16:12:07.423611"
   },
   {
     "id": "21521019-7674-4c0d-a554-5aaa9e85119d",
@@ -6866,12 +6866,12 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Thu, 10 Oct 2024 11:16:09 +0200",
-    "topic": "children_young_people",
+    "topic": "children young people",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Socialministern deltar i konferens om barns och ungas psykiska hälsa i Göteborg",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508990"
+    "retrieved_at": "2026-08-24T16:12:07.423623"
   },
   {
     "id": "f14dcd98-79bf-47dc-8a2e-63384ab78e4e",
@@ -6880,11 +6880,11 @@ const REAL_POLICY_NEWS = [
     "source_name": "Regeringen",
     "source_type": "policy",
     "published_at": "Tue, 01 Oct 2024 11:25:43 +0200",
-    "topic": "suicide_prevention",
+    "topic": "suicide prevention",
     "item_type": "policy",
     "relevance": 0.8,
     "summary": "Mock summary for: Suicidanalysutredningen redovisade slutbetänkande",
     "observatory_note": "Awaiting AI interpretation.",
-    "retrieved_at": "2026-08-24T13:41:58.508997"
+    "retrieved_at": "2026-08-24T16:12:07.423629"
   }
 ];

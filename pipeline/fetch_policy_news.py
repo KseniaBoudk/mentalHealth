@@ -27,11 +27,11 @@ class MockClassifier:
         # Very basic rule-based classification
         title = item.get("title", "").lower()
         
-        topic = "mental_health"
-        if "barn" in title or "ung" in title: topic = "children_young_people"
-        elif "suicid" in title: topic = "suicide_prevention"
-        elif "psykiatri" in title: topic = "psychiatric_care"
-        elif "missbruk" in title or "beroende" in title: topic = "substance_use"
+        topic = "mental health"
+        if "barn" in title or "ung" in title: topic = "children young people"
+        elif "suicid" in title: topic = "suicide prevention"
+        elif "psykiatri" in title: topic = "psychiatric care"
+        elif "missbruk" in title or "beroende" in title: topic = "substance use"
 
         item_type = item.get("source_type", "news")
         if "remiss" in title: item_type = "remiss"
@@ -60,13 +60,19 @@ def fetch_and_process():
                 if entry.link in seen_urls:
                     continue
                 
+                pub_date = entry.get("published")
+                if not pub_date and hasattr(entry, "published_parsed") and entry.published_parsed:
+                    pub_date = datetime.datetime(*entry.published_parsed[:6]).isoformat()
+                if not pub_date:
+                    pub_date = datetime.datetime.now().isoformat()
+
                 item = {
                     "id": entry.get("id", entry.link),
                     "title": entry.title,
                     "url": entry.link,
                     "source_name": src["name"],
                     "source_type": src["type"],
-                    "published_at": entry.get("published", datetime.datetime.now().isoformat()),
+                    "published_at": pub_date,
                 }
                 
                 classification = classifier.classify(item)

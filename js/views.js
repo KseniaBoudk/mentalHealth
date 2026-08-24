@@ -1119,7 +1119,7 @@ function viewPolicyNews() {
               <span class="feed-source">${esc(item.source_name)}${item.author ? ` · ${esc(item.author)}` : ""}</span>
               <span class="feed-type">${esc(item.item_type)}</span>
               <span class="feed-topic">${esc(item.topic)}</span>
-              <span class="feed-date">${esc(item.published_at ? item.published_at.substring(0, 10) : "")}</span>
+              <span class="feed-date">${esc(item.published_at ? (item.published_at.includes("T") ? item.published_at.substring(0, 10) : item.published_at.trim().split(/\s+/).slice(0, 4).join(" ")) : "")}</span>
             </div>
             <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
             <p>${esc(item.summary)}</p>
@@ -1160,7 +1160,7 @@ function loadMorePolicy() {
         <span class="feed-source">${esc(item.source_name)}${item.author ? ` · ${esc(item.author)}` : ""}</span>
         <span class="feed-type">${esc(item.item_type)}</span>
         <span class="feed-topic">${esc(item.topic)}</span>
-        <span class="feed-date">${esc(item.published_at ? item.published_at.substring(0, 10) : "")}</span>
+        <span class="feed-date">${esc(item.published_at ? (item.published_at.includes("T") ? item.published_at.substring(0, 10) : item.published_at.trim().split(/\s+/).slice(0, 4).join(" ")) : "")}</span>
       </div>
       <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
       <p>${esc(item.summary)}</p>
