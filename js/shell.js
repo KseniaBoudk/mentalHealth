@@ -165,6 +165,8 @@ function wire(){
   bind("c-mapind",pickInd);
   bind("c-cmpind",v=>S.cmpInd=v);
   bind("c-ctxind",v=>S.ctxInd=v);
+  bind("c-policy-filter",v=>S.policyFilter=v);
+  bind("c-policy-sort",v=>S.policySort=v);
   const ct=document.getElementById("c-cmptoggle");
   if(ct)ct.onclick=()=>{S.cmpOn=!S.cmpOn;render();};
   const stepYear=d=>{

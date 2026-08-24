@@ -11,7 +11,7 @@ function initTheme(){
   try{return (window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
   catch(e){return "light";}
 }
-const S={lang:initLang(),theme:initTheme(),tab:"laget",ind:"antidep",age:6,sex:"T",year:2024,std:true,region:"24",mapYear:null,cmpOn:false,cmpInd:null,ctxInd:"pop_density"};
+const S={lang:initLang(),theme:initTheme(),tab:"laget",ind:"antidep",age:6,sex:"T",year:2024,std:true,region:"24",mapYear:null,cmpOn:false,cmpInd:null,ctxInd:"pop_density",policyFilter:"all",policySort:"desc"};
 // mapYear: null means "latest available for the current indicator" — the
 // Karta tab's own year, kept separate from `year` (Over time's) so scrubbing
 // the map slider doesn't silently move the Over time tab's year underneath it.

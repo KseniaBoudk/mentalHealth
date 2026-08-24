@@ -1067,21 +1067,59 @@ function viewSammanhang(){
 }
 
 function viewPolicyNews() {
-  const items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  let items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  
+  // Filtering
+  if (S.policyFilter && S.policyFilter !== "all") {
+    items = items.filter(item => item.topic === S.policyFilter || item.item_type === S.policyFilter || item.source_name === S.policyFilter);
+  }
+  
+  // Sorting
+  items = items.slice().sort((a, b) => {
+    const dateA = new Date(a.published_at || 0).getTime();
+    const dateB = new Date(b.published_at || 0).getTime();
+    return S.policySort === "asc" ? dateA - dateB : dateB - dateA;
+  });
+
   const limit = 10;
   const initialItems = items.slice(0, limit);
   
+  const topics = [
+    {val: "all", sv: "Alla ämnen / källor", en: "All Topics / Sources"},
+    {val: "mental_health", sv: "Psykisk hälsa", en: "Mental Health"},
+    {val: "children_young_people", sv: "Barn och unga", en: "Children & Young People"},
+    {val: "Socialstyrelsen", sv: "Socialstyrelsen", en: "Socialstyrelsen"},
+    {val: "Folkhälsomyndigheten", sv: "Folkhälsomyndigheten", en: "Folkhälsomyndigheten"},
+    {val: "Regeringskansliet", sv: "Regeringskansliet", en: "Government Offices"}
+  ];
+
   return `
   <div class="card">
     <div class="card-h"><h3>${esc(S.lang==="sv"?"Nyheter & Policy":"Policy & News")}</h3></div>
+    <div class="ctrl" style="padding: 12px 18px; border-bottom: 1px solid var(--line);">
+      <div class="f">
+        <label>${esc(S.lang==="sv"?"Filtrera":"Filter")}</label>
+        <select id="c-policy-filter">
+          ${topics.map(tp => `<option value="${tp.val}"${S.policyFilter===tp.val?" selected":""}>${esc(S.lang==="sv"?tp.sv:tp.en)}</option>`).join("")}
+        </select>
+      </div>
+      <div class="f">
+        <label>${esc(S.lang==="sv"?"Sortering":"Sort")}</label>
+        <select id="c-policy-sort">
+          <option value="desc"${S.policySort==="desc"?" selected":""}>${esc(S.lang==="sv"?"Nyast först":"Newest first")}</option>
+          <option value="asc"${S.policySort==="asc"?" selected":""}>${esc(S.lang==="sv"?"Äldst först":"Oldest first")}</option>
+        </select>
+      </div>
+    </div>
     <div class="card-b">
-      <div class="feed" id="policy-feed">
-        ${initialItems.map(item => `
+      <div class="feed" id="policy-feed" data-total-items="${items.length}">
+        ${initialItems.length === 0 ? `<p style="color:var(--ink-3); padding: 12px 0;">${esc(S.lang==="sv"?"Inga träffar.":"No items found.")}</p>` : initialItems.map(item => `
           <div class="feed-item">
             <div class="feed-meta">
+              <span class="feed-source">${esc(item.source_name)}${item.author ? ` · ${esc(item.author)}` : ""}</span>
               <span class="feed-type">${esc(item.item_type)}</span>
               <span class="feed-topic">${esc(item.topic)}</span>
-              <span class="feed-date">${esc(item.published_at.substring(0, 10))}</span>
+              <span class="feed-date">${esc(item.published_at ? item.published_at.substring(0, 10) : "")}</span>
             </div>
             <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
             <p>${esc(item.summary)}</p>
@@ -1099,26 +1137,39 @@ function viewPolicyNews() {
 function loadMorePolicy() {
   const container = document.getElementById("policy-feed");
   const btn = document.getElementById("load-more-policy");
-  const items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  let items = typeof REAL_POLICY_NEWS !== "undefined" ? REAL_POLICY_NEWS : [];
+  
+  if (S.policyFilter && S.policyFilter !== "all") {
+    items = items.filter(item => item.topic === S.policyFilter || item.item_type === S.policyFilter || item.source_name === S.policyFilter);
+  }
+  
+  items = items.slice().sort((a, b) => {
+    const dateA = new Date(a.published_at || 0).getTime();
+    const dateB = new Date(b.published_at || 0).getTime();
+    return S.policySort === "asc" ? dateA - dateB : dateB - dateA;
+  });
+
   const currentCount = container.children.length;
   const nextItems = items.slice(currentCount, currentCount + 10);
   
   nextItems.forEach(item => {
-    container.innerHTML += `
-      <div class="feed-item">
-        <div class="feed-meta">
-          <span class="feed-type">${esc(item.item_type)}</span>
-          <span class="feed-topic">${esc(item.topic)}</span>
-          <span class="feed-date">${esc(item.published_at.substring(0, 10))}</span>
-        </div>
-        <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
-        <p>${esc(item.summary)}</p>
-        <div class="feed-note">
-          <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(S.lang==="sv"?item.observatory_note:item.observatory_note_en)}
-        </div>
+    const div = document.createElement("div");
+    div.className = "feed-item";
+    div.innerHTML = `
+      <div class="feed-meta">
+        <span class="feed-source">${esc(item.source_name)}${item.author ? ` · ${esc(item.author)}` : ""}</span>
+        <span class="feed-type">${esc(item.item_type)}</span>
+        <span class="feed-topic">${esc(item.topic)}</span>
+        <span class="feed-date">${esc(item.published_at ? item.published_at.substring(0, 10) : "")}</span>
+      </div>
+      <h4><a href="${esc(item.url)}" target="_blank">${esc(item.title)}</a></h4>
+      <p>${esc(item.summary)}</p>
+      <div class="feed-note">
+        <b>${esc(S.lang==="sv"?"Observatoriets notering":"Observatory note")}:</b> ${esc(S.lang==="sv"?item.observatory_note:item.observatory_note_en)}
       </div>
     `;
+    container.appendChild(div);
   });
   
-  if (container.children.length >= items.length) btn.remove();
+  if (container.children.length >= items.length && btn) btn.remove();
 }
