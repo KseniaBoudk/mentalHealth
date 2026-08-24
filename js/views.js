@@ -1090,7 +1090,7 @@ function viewPolicyNews() {
     {val: "children_young_people", sv: "Barn och unga", en: "Children & Young People"},
     {val: "Socialstyrelsen", sv: "Socialstyrelsen", en: "Socialstyrelsen"},
     {val: "Folkhälsomyndigheten", sv: "Folkhälsomyndigheten", en: "Folkhälsomyndigheten"},
-    {val: "Regeringskansliet", sv: "Regeringskansliet", en: "Government Offices"}
+    {val: "Regeringen", sv: "Regeringen", en: "Regeringen"}
   ];
 
   return `
