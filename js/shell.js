@@ -552,6 +552,18 @@ function readoutCardHTML(mark){
 function renderReadoutCard(mark){
   document.getElementById("chartFsReadout").innerHTML=readoutCardHTML(mark);
 }
+// Karta's compare-two-maps mode, fullscreened as a pair (cmpPair,
+// wireFullscreen()) — a region click there should show BOTH maps' numbers
+// for that region side by side, not just the one actually clicked,
+// otherwise fullscreen would be showing a comparison while only ever
+// reading out half of it. .rstats (kurvan.css) is the same 2-3-column
+// card-grid class viewKarta's own side panel already uses elsewhere;
+// explicit 1fr 1fr here since this is always exactly a pair, not
+// .rstats' own default 3-up.
+function renderReadoutCardPair(markA,markB){
+  const cards=[markA,markB].filter(Boolean).map(readoutCardHTML).join("");
+  document.getElementById("chartFsReadout").innerHTML=`<div class="rstats" style="grid-template-columns:1fr 1fr">${cards}</div>`;
+}
 
 // PNG/CSV export (wireFullscreen()'s #chartFsPng/#chartFsCsv, below) — both
 // act on whichever chart is CURRENTLY in #chartFsBody, so neither needs to
@@ -717,7 +729,25 @@ function wireFullscreen(){
     // mark.
     document.getElementById("chartFsBody").onclick=e=>{
       const mark=e.target.closest("[data-tip]");
-      if(mark)renderReadoutCard(mark);
+      if(!mark)return;
+      // A tile click also ran .tile's own onclick first (region-select,
+      // wire() below) — bubbled up to here SECOND, by which point render()
+      // already rebuilt #app. mark itself is a detached leftover from
+      // before that, but still a structurally intact subtree (closest()/
+      // querySelector() below still walk it fine) with the exact same
+      // data-card/data-region it always had — that content never depended
+      // on which region was selected, so reading it post-detach is safe,
+      // the same quiet reliance renderReadoutCard() already has for the
+      // ordinary single-map case.
+      const mapzoom=mark.closest(".mapzoom");
+      const pair=mark.dataset.region&&mapzoom&&mapzoom.closest(".mapcmp");
+      if(pair){
+        const other=[...pair.querySelectorAll(".mapzoom")].find(mz=>mz!==mapzoom);
+        const otherMark=other&&other.querySelector(`[data-region="${mark.dataset.region}"]`);
+        renderReadoutCardPair(mark,otherMark);
+        return;
+      }
+      renderReadoutCard(mark);
     };
   }
 

@@ -554,6 +554,19 @@ select option:disabled{color:var(--ink-3)}
    same "chart's own position shouldn't matter" reasoning #chartFsClose
    already uses. */
 #chartFs.on .mapzoombtns{position:fixed;top:84px;right:24px}
+/* Karta's compare-two-maps mode fullscreens as a pair (.mapcmp — both
+   mini-maps together, wireFullscreen()'s cmpPair handling, js/shell.js):
+   the screen-pinned rule above was written for the single-map case and
+   assumes only one .mapzoombtns ever exists in here — with two, both sets
+   of +/-  buttons would land on the exact same fixed screen position,
+   visually merged into one clickable cluster that only ever actually
+   zooms whichever one happens to be on top. Each mini-map still has its
+   own card/heading here, so its own corner (the base .mapzoombtns rule,
+   position:absolute against .mapzoom) is the correct reference point
+   again, same as the normal page — this selector's extra specificity
+   (id + two classes vs id + one) wins over the rule above regardless of
+   source order. */
+#chartFs.on .mapcmp .mapzoombtns{position:absolute;top:var(--sp-3);right:var(--sp-3)}
 /* Renders a mark's data-card payload (charts.js/shell.js) as the exact
    same .rstat card the rest of the app already uses (viewKarta's side
    card, viewKon's women/men pair, ...) — .rstat/.rk/.dot/.rv/.rci/.tnum
