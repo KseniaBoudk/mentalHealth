@@ -33,8 +33,8 @@ self-reported severe anxiety/worry (Folkhälsomyndigheten), specialist
 psychiatric care, hospitalisation for self-harm, and death by suicide
 (Socialstyrelsen), and sickness absence with a stress-reaction diagnosis
 (Försäkringskassan) — fetched by the scripts in [`pipeline/`](pipeline/) and
-compiled into `js/real_mh_data.js`. Antidepressant dispensing has no
-queryable API available and stays on a clearly-labelled synthetic generator.
+compiled into `js/data/*.js` (one small file per source, loaded lazily —
+see `CLAUDE.md`'s "Load order").
 See [`pipeline/README.md`](pipeline/README.md) for exactly what "real" means
 per indicator (age coverage, sex coverage, time windows, and the caveats
 that come with each).
@@ -63,8 +63,8 @@ python fetch_kolada_context.py
 python build_kurvan_data.py
 ```
 
-Then reopen `kurvan.html`. `js/real_mh_data.js` is checked in with whatever
-was fetched last, so the app works on a fresh checkout without Python.
+Then reopen `kurvan.html`. `js/data/*.js` is checked in with whatever was
+fetched last, so the app works on a fresh checkout without Python.
 
 ## Repo structure
 
@@ -74,7 +74,7 @@ was fetched last, so the app works on a fresh checkout without Python.
   architecture and load order, or [`FILES.txt`](FILES.txt) for a walkthrough
   of every individual file.
 - [`pipeline/`](pipeline/) — Python scripts that fetch real government data
-  and compile it into `js/real_mh_data.js`. Run offline, not part of the live
+  and compile it into `js/data/*.js`. Run offline, not part of the live
   page.
 - [`data/`](data/) — raw and processed intermediate files from the pipeline
   (gitignored except for the final compiled output).

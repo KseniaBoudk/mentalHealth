@@ -180,10 +180,13 @@ function lineChart(series,opts){
     // hover, so the chart looks unchanged when nothing's being pointed at;
     // sits on top of any already-visible marker above (single-point/last-
     // point/anno dot) too — an exact-duplicate tip there is harmless.
+    // tabindex/role: same "clickable/keyboard-reachable data-tip mark" as
+    // .tile/.spt/.dotrow (charts.js/data.js elsewhere) — this one used to
+    // be hover-only, the one gap wire()'s click-to-pin now also covers.
     valid.forEach(p=>{
       const tip=`${se.label?se.label+", ":""}${xLabel(p[0])}: ${fmt(p[1],p[1]%1?1:0,opts.unit)}`;
       const card=dataCard({title:se.label?`${se.label}, ${xLabel(p[0])}`:String(xLabel(p[0])),color:se.color,rows:[{value:fmt(p[1],p[1]%1?1:0),unit:opts.unit||""}]});
-      s+=`<circle class="pt-hit" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}" data-card="${card}"/>`;
+      s+=`<circle class="pt-hit" tabindex="0" role="button" cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="7" fill="${se.color}" data-tip="${esc(tip)}" data-card="${card}"/>`;
     });
   });
   // Every point across every series was null (see the empty-xs/ys comment
@@ -351,7 +354,7 @@ function histogram(rows,opts){
     const tip=`${fmt(lo+i*realSpan/nbins,1)}–${fmt(lo+(i+1)*realSpan/nbins,1)}${opts.unit?` ${opts.unit}`:""}: ${c}`;
     const band=`${fmt(lo+i*realSpan/nbins,1)}–${fmt(lo+(i+1)*realSpan/nbins,1)}${opts.unit?` ${opts.unit}`:""}`;
     const card=dataCard({title:band,color:col,rows:[{value:String(c),unit:S.lang==="sv"?"regioner":"regions"}]});
-    s+=`<rect data-tip="${esc(tip)}" data-card="${card}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
+    s+=`<rect tabindex="0" role="button" data-tip="${esc(tip)}" data-card="${card}" x="${(x+1.5).toFixed(1)}" y="${y.toFixed(1)}" width="${(bw-3).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}" opacity="${c?".82":".14"}"/>`;
     if(c)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="8.5" fill="var(--ink-2)">${c}</text>`;
   });
   // Unit suffixed directly onto the two boundary numbers (6,2 / 9,6 %)

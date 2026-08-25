@@ -19,16 +19,21 @@ kurvan.css
 .gitignore
     Tells git to ignore data/raw/ and data/processed/ (the pipeline's
     intermediate files) and Python cache folders — only the final
-    js/real_mh_data.js output is committed.
+    js/data/*.js output is committed.
 
 js/ — THE APP
 -------------
-js/real_mh_data.js
-    Generated data file (not hand-written). Holds the real, fetched
-    statistics — self-harm hospitalisation, suicide, psychiatric care, and
-    self-reported anxiety rates — pulled from Swedish government registers
-    by the pipeline/ scripts. If this file is empty, the app falls back to
-    fabricated (fake) numbers instead.
+js/data/*.js
+    Generated data files (not hand-written), one per real source. Hold the
+    real, fetched statistics — self-harm hospitalisation, suicide,
+    psychiatric care, self-reported anxiety rates, antidepressant/other
+    medication dispensing, sickness absence, context layers, BUP waiting
+    times, HBSC, and SCB population — pulled from Swedish government
+    registers by the pipeline/ scripts. Loaded lazily by js/shell.js after
+    the page's first paint (see CLAUDE.md's "Load order"), one small
+    <script> at a time instead of one large one. If a given file is empty
+    (or hasn't loaded yet), the app falls back to fabricated (fake) numbers
+    for that source's indicator(s) instead.
 
 js/real_policy_news.js
     Generated data file holding fetched policy and mental health news items
@@ -39,7 +44,7 @@ js/data.js
     that invents plausible-looking numbers for all 21 Swedish regions, ages,
     and years — used as a fallback and for the two charts that must always
     stay fabricated (their story depends on the fake generator's built-in
-    correlations). Also loads/indexes the real data from real_mh_data.js
+    correlations). Also loads/indexes the real data from js/data/*.js
     and decides, per indicator/region/year/age/sex, whether to return a
     real number, a fabricated number, or "no data". Contains the real map
     of Sweden's county borders (as SVG path data) too.
@@ -96,7 +101,8 @@ pipeline/manifest.py
     Orchestrator script that runs all pipeline fetchers and data building steps in order.
 
 pipeline/build_kurvan_data.py
-    Pipeline script that compiles cleaned raw/processed data into js/real_mh_data.js.
+    Pipeline script that compiles cleaned raw/processed data into js/data/*.js
+    (one small file per source).
 
 pipeline/kommuner.csv
     A reference table mapping Swedish municipality codes to names and
@@ -138,6 +144,22 @@ pipeline/fetch_kolada_context.py
     mental-health indicators. Saves straight to
     data/processed/kolada_context.json, no separate raw step.
 
+pipeline/fetch_hbsc.py
+    Downloads the share of 11/13/15-year-olds reporting feeling low at
+    least weekly from Folkhälsomyndigheten's Skolbarns hälsovanor (HBSC)
+    survey — same Folkhälsodata PxWeb host as fetch_folkhalsodata_hlv.py,
+    a different table. Backs the dedicated Skolbarns hälsovanor tab, not
+    one of the IND-shaped indicators — a single survey snapshot
+    (2021-2022 as of writing), not a trend. Saves straight to
+    data/processed/hbsc.json, no separate raw step.
+
+pipeline/fetch_scb_population.py
+    Downloads population by region, age band and sex from SCB (Statistics
+    Sweden)'s BE0101A table — the denominator behind real age-
+    standardisation for psych/antidep in js/data.js's standardRate().
+    Not a mental-health measure. Saves straight to
+    data/processed/scb_population.json, no separate raw step.
+
 pipeline/fetch_policy_news.py
     Downloads policy and mental health news updates for real policy tracking.
 
@@ -150,13 +172,16 @@ data/processed/socialstyrelsen_psych.json
 data/processed/folkhalsodata_hlv.json
     The same data after being cleaned/reshaped into a simple common format
     (region, year, age group, sex, value, confidence bounds) — this is what
-    build_kurvan_data.py reads to produce js/real_mh_data.js.
+    build_kurvan_data.py reads to produce js/data/*.js.
 
 data/processed/forsakringskassan_f43.json
 data/processed/kolada_context.json
+data/processed/hbsc.json
+data/processed/scb_population.json
     Written directly by their fetchers (no separate data/raw/ step, unlike
-    the three above) — sickness absence and the two Sammanhang context
-    layers respectively. Also read by build_kurvan_data.py.
+    the three above) — sickness absence, the two Sammanhang context
+    layers, HBSC, and the SCB population denominator respectively. Also
+    read by build_kurvan_data.py.
 
 .git/
     Git's own internal folder (version history) — not part of the app.

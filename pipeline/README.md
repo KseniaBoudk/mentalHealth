@@ -11,21 +11,29 @@ This folder now pulls real numbers for **all five of those**:
   Socialstyrelsen Statistikdatabasen (Patientregistret / Dödsorsaksregistret),
   county grain, ages 12–19 only, all three sexes, five-year windows.
 - **Specialist psychiatric care** — `fetch_socialstyrelsen_psych.py`, same API,
-  dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99. County grain,
-  all nine of Kurvan's age bands, all three sexes, annual. The best fit of the
-  five — see that script's docstring for the live-verified dataset/dimension
-  ids.
+  dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99 — split into
+  **six diagnosis-type series** (DIAGNOS_GROUPS: substance use, psychosis,
+  depression/mood, anxiety/stress, eating disorders, ADHD/childhood-onset)
+  rather than fetched as one combined number; `js/data.js` sums them back
+  into an "all" total for every chart that doesn't ask for a specific type.
+  County grain, all nine of Kurvan's age bands, all three sexes, annual. The
+  best fit of the five — see that script's docstring for the live-verified
+  dataset/dimension ids, including the six diagnosis-type ids and two
+  labelling caveats.
 - **Severe anxiety, worry or dread** (backs Kurvan's `distress` indicator) —
   `fetch_folkhalsodata_hlv.py`, Folkhälsomyndigheten's Folkhälsodata (a
   *different* agency and a different PxWeb instance from the three above —
   don't assume its dimension ids or sex-code order carry over). County grain,
   all three sexes, no age breakdown at all (the source table doesn't have
   one), ~4-year survey windows.
-- **Antidepressants dispensed** — `fetch_socialstyrelsen_lakemedel.py`, same
-  API/agency as self-harm/suicide/psych, dataset `lakemedel`, ATC N06A.
-  County grain, all nine of Kurvan's age bands, all three sexes, annual since
-  2006 — as comfortable a fit as psychiatric care. See "Why antidepressants
-  are real now" below for why this took longer than the other four.
+- **Psychiatric medication dispensed** — `fetch_socialstyrelsen_lakemedel.py`,
+  same API/agency as self-harm/suicide/psych, dataset `lakemedel` — split
+  into **five ATC-class series** (ATC_GROUPS: antidepressants N06A, ADHD
+  medication N06BA, antipsychotics N05A, anxiety medication N05B, sleep
+  medication N05C), same "all" reconstruction as psych above. County grain,
+  all nine of Kurvan's age bands, all three sexes, annual since 2006 — as
+  comfortable a fit as psychiatric care. See "Why antidepressants are real
+  now" below for why this took longer than the other four to begin with.
 
 Read on for why `distress` isn't named what you might expect from the code.
 
@@ -76,6 +84,29 @@ adolescent psychiatry) waiting times, and:
   particular export — a different pull could ask for a sex/age split).
   Small/northern regions (Blekinge, Västernorrland, Norrbotten) had
   several months suppressed as too few contacts to publish.
+
+A ninth script, `fetch_hbsc.py`, backs a new dedicated tab — Skolbarns
+hälsovanor (HBSC), the WHO-collaborative survey of 11/13/15-year-olds.
+Same host as `fetch_folkhalsodata_hlv.py` (Folkhälsomyndigheten's
+Folkhälsodata), a different table (`C_HBSC`, not `B_HLV`). Fetches one
+item — the share reporting feeling low at least weekly — out of the
+survey's eight self-reported complaints, deliberately not a composite
+across them (see that script's own docstring for why). County grain, both
+sexes, own age keys (11/13/15, not Kurvan's nine AGES bands — they don't
+fit; see `js/data.js`'s `HBSC` docstring). **A single snapshot**: only one
+regional survey window is published so far (2021-2022), not a trend.
+
+A tenth script, `fetch_scb_population.py`, is not a mental-health fetcher
+at all — it backs `standardRate()` in `js/data.js`, real age-
+standardisation for `psych`/`antidep` (the only two real indicators with
+full nine-band age coverage). SCB (Statistics Sweden)'s `BE0101A`
+population table, county grain, Kurvan's nine age bands (pooled from
+SCB's own single-year ages), both sexes, annual 2006-2024 — deliberately
+NOT extended to 2025 via the sibling `BefolkningCKM` table, which turns
+out to have a structurally different shape (see that script's own
+docstring for exactly how). A missing population year simply means that
+year can't be standardised, same "no data, not a fabricated number" rule
+every other real source here follows.
 
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
@@ -182,16 +213,18 @@ synthetic. See `fakeCell()` and `fakeTotal()`'s docstrings in `js/data.js`.
 ```
 pip install -r requirements.txt
 python fetch_socialstyrelsen_mh.py     # self-harm + suicide, ~2 minutes
-python fetch_socialstyrelsen_psych.py  # psychiatric care, ~1 minute, ~40 requests
+python fetch_socialstyrelsen_psych.py  # psychiatric care, ~4-5 minutes, ~240 requests (6 diagnosis types)
 python fetch_folkhalsodata_hlv.py      # severe anxiety, ~15 seconds, 1 request
-python fetch_socialstyrelsen_lakemedel.py  # antidepressants, ~1 minute, 36 requests
+python fetch_socialstyrelsen_lakemedel.py  # medication, ~4-5 minutes, ~180 requests (5 ATC classes)
 python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, single request
 python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
-python build_kurvan_data.py            # writes ../js/real_mh_data.js
+python fetch_hbsc.py                   # HBSC "felt low", ~5 seconds, 2 requests
+python fetch_scb_population.py         # population denominator, ~15 seconds, 5 requests
+python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
 
-Then reopen `../kurvan.html`. `../js/real_mh_data.js` is checked in with
-whatever was fetched last, so the prototype works without Python on a fresh
+Then reopen `../kurvan.html`. `../js/data/*.js` is checked in with whatever
+was fetched last, so the prototype works without Python on a fresh
 checkout — regenerate it whenever you want fresher numbers. Each fetcher is
 independent: run only one and `build_kurvan_data.py` still works, and only
 that fetcher's indicator(s) go real. Skip a fetcher entirely and its

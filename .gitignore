@@ -1,7 +1,10 @@
 # Fetched data. Regenerable from Socialstyrelsen's public API (see
-# pipeline/README.md), and not needed for the prototype to run: js/real_mh_data.js
-# is the derived artifact the prototype actually reads, and that IS committed,
-# same convention as ../pipeline and ../frontend/public/data use.
+# pipeline/README.md), and not needed for the prototype to run: js/data/*.js
+# (one small file per source — pipeline/build_kurvan_data.py used to write
+# a single js/real_mh_data.js, split for page-weight reasons; see that
+# script's own module docstring) are the derived artifacts the prototype
+# actually reads, and those ARE committed, same convention as ../pipeline
+# and ../frontend/public/data use.
 # data/raw/* (not data/raw/), and the exception below, matter: a plain
 # trailing-slash directory ignore is pruned entirely — git won't even look
 # inside it to check a per-file negation. Globbing the contents instead

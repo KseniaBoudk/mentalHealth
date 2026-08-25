@@ -5,10 +5,11 @@
    ===================================================================== */
 
 /* isRealActive(k) is defined in data.js: true once this indicator is
-   actually being served from REAL (js/real_mh_data.js has rows), not just
-   eligible for it. Every label below reads it rather than IND[k].real
-   alone, so a reader never sees "real data" before anyone has run the
-   fetcher. */
+   actually being served from REAL (js/data/real_mh.js has rows AND has
+   finished its lazy load — see js/shell.js's loadRealSourcesLazily()),
+   not just eligible for it. Every label below reads it rather than
+   IND[k].real alone, so a reader never sees "real data" before anyone has
+   run the fetcher (or, now, before that indicator's own file has landed). */
 // The survey (distress) is FoHM's, not Socialstyrelsen's — real now, so this
 // citation has to be accurate, not just plausible-looking.
 const INST_NAME={survey:"FoHM",reg:"Socialstyrelsen",mort:"Socialstyrelsen",fk:"Försäkringskassan"};
@@ -58,17 +59,17 @@ const realSummary=()=>{
 // only in which cell-getter feeds it. Trims trailing AND leading nulls (a
 // real series break must stay a break, so only the outer run of "no data
 // published for this age band at all" gets cut, not gaps in the middle).
-function agePtsWith(getCell,k,regionCode,year,sex,std){
+function agePtsWith(getCell,k,regionCode,year,sex,std,type){
   const pts=[];
   for(let i=0;i<AGES.length;i++){
-    const c=getCell(k,regionCode,year,i,sex,std);
+    const c=getCell(k,regionCode,year,i,sex,std,type);
     pts.push(c?[i,c.value]:null);
   }
   while(pts.length&&!pts[pts.length-1])pts.pop();
   let i0=0;while(i0<pts.length&&!pts[i0])i0++;
   return pts.slice(i0);
 }
-const agePts=(k,regionCode,year,sex,std)=>agePtsWith(cell,k,regionCode,year,sex,std);
+const agePts=(k,regionCode,year,sex,std,type)=>agePtsWith(cell,k,regionCode,year,sex,std,type);
 /* Forces the fabricated generator even for indicators REAL can now answer.
    Used only by viewLaget's life-course exhibit — see fakeCell()'s docstring
    in data.js for why that one chart can never honestly go real. */
@@ -251,9 +252,16 @@ function viewOverTid(){
   const years=validYears(k);
   if(!years.includes(S.year))S.year=years[years.length-1];
   const yr=S.year;
+  // Diagnosis type (psych) / medication class (antidep) — the only two
+  // indicators this applies to; cell()/total() ignore a `type` argument
+  // for every other k, and default it to "all" themselves when it's
+  // undefined, so this is a no-op everywhere else. See PSYCH_TYPES/
+  // MED_TYPES and rebuildREAL_PSYCH()'s docstring in js/data.js.
+  const hasType = k==="psych" || k==="antidep";
+  const type = k==="psych" ? S.psychType : k==="antidep" ? S.medType : undefined;
 
   const rowsAll=REGIONS.map(r=>{
-    const c=S.age===-1?total(k,r[0],yr,S.sex,S.std):cell(k,r[0],yr,S.age,S.sex,S.std);
+    const c=S.age===-1?total(k,r[0],yr,S.sex,S.std,type):cell(k,r[0],yr,S.age,S.sex,S.std,type);
     return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi,supp:c.suppressed};
   }).filter(Boolean);
   const shown=rowsAll.filter(r=>!r.supp).sort((a,b)=>b.value-a.value);
@@ -265,7 +273,7 @@ function viewOverTid(){
   // the plot itself is shorter than its two .stack siblings (CSS grid's
   // own stretch, same as every other side-by-side card pairing here).
   const selRow=rowsAll.find(r=>r.code===S.region);
-  const nat=S.age===-1?total(k,"SE",yr,S.sex,S.std):cell(k,"SE",yr,S.age,S.sex,S.std);
+  const nat=S.age===-1?total(k,"SE",yr,S.sex,S.std,type):cell(k,"SE",yr,S.age,S.sex,S.std,type);
 
   // "SE" (Sweden) is a selectable pseudo-region here, not a RBY entry —
   // cell()/total() already treat it as the national aggregate everywhere
@@ -276,12 +284,12 @@ function viewOverTid(){
   const isNat=S.region==="SE";
   const band=[];const natT=[];
   for(let i=0;i<AGES.length;i++){
-    const c=cell(k,"SE",yr,i,"T",S.std);
+    const c=cell(k,"SE",yr,i,"T",S.std,type);
     if(c){band.push([i,c.lo*0.96,c.hi*1.04]);natT.push([i,c.value]);}}
   const seriesAge = S.sex==="T"
-    ? [{pts:agePts(k,S.region,yr,"K",S.std),color:col,w:2.4,label:t.women},
-       {pts:agePts(k,S.region,yr,"M",S.std),color:col,dash:"5 3",w:1.9,label:t.men}]
-    : [{pts:agePts(k,S.region,yr,S.sex,S.std),color:col,w:2.4}];
+    ? [{pts:agePts(k,S.region,yr,"K",S.std,type),color:col,w:2.4,label:t.women},
+       {pts:agePts(k,S.region,yr,"M",S.std,type),color:col,dash:"5 3",w:1.9,label:t.men}]
+    : [{pts:agePts(k,S.region,yr,S.sex,S.std,type),color:col,w:2.4}];
   // Only annotates the FABRICATED age curve: the real HLV table has no age
   // dimension at all (see REAL_HLV in data.js), so there is no curve to
   // annotate once distress is real-active — band/seriesAge are empty there.
@@ -290,7 +298,7 @@ function viewOverTid(){
 
   const ts=[];
   validYears(k).forEach(y=>{
-    const c=S.age===-1?total(k,S.region,y,S.sex,S.std):cell(k,S.region,y,S.age,S.sex,S.std);
+    const c=S.age===-1?total(k,S.region,y,S.sex,S.std,type):cell(k,S.region,y,S.age,S.sex,S.std,type);
     if(!c||c.suppressed){ts.push(null);return;}
     if(I.breakAt&&y>=I.breakAt&&ts.length&&ts[ts.length-1]&&ts[ts.length-1][0]<I.breakAt)ts.push(null);
     ts.push([y,c.value]);});
@@ -303,11 +311,23 @@ function viewOverTid(){
   // as "nothing to compare here".
   const spread=shown.length>1&&nat?Math.round((shown[0].value-shown[shown.length-1].value)/nat.value*100):null;
   const winNote=I.window?` · ${t.winLbl(yr)}`:"";
+  // Real psych/antidep's standardRate() (data.js) only exists for the "all
+  // ages" aggregate — a single age band standardised against itself is
+  // meaningless, so cell() never applies it, and the crude/standardised
+  // toggle is otherwise a silent no-op whenever a specific band is picked
+  // (S.age defaults to a band, not "All ages" — this bit for real data
+  // otherwise, since fakeCell()'s own standardisation DOES apply per band).
+  const stdNoopHere = isRealActive(k) && stdCapable(k) && S.age !== -1;
+  const stdDisabled = !stdCapable(k) || stdNoopHere;
+  const stdTip = !stdCapable(k) ? t.stdDisabledTip : stdNoopHere ? t.stdAgeOnlyTip : "";
 
   return `
   <div class="ctrl">
     <div class="f"><label>${esc(t.lblInd)}</label><select id="c-ind">
       ${Object.keys(IND).map(x=>`<option value="${x}"${x===k?" selected":""}>${esc(t.ind[x])}</option>`).join("")}</select></div>
+    ${hasType?`<div class="f"><label>${esc(t.lblType)}</label><select id="c-type">
+      <option value="all"${type==="all"?" selected":""}>${esc(t.typeAll)}</option>
+      ${(k==="psych"?PSYCH_TYPES:MED_TYPES).map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("")}</select></div>`:""}
     <div class="f"><label>${esc(t.lblAge)}</label><select id="c-age">
       <option value="-1"${S.age===-1?" selected":""}>${esc(t.allAges)}</option>
       ${AGES.map((a,i)=>ageAvailable(k,i)?`<option value="${i}"${i===S.age?" selected":""}>${a}</option>`:"").join("")}</select></div>
@@ -320,9 +340,9 @@ function viewOverTid(){
       ${REGIONS.map(r=>`<option value="${r[0]}"${r[0]===S.region?" selected":""}>${esc(r[1])}</option>`).join("")}</select></div>
     <div class="f"><label>${esc(t.lblYear)}</label><select id="c-year">
       ${years.slice().reverse().map(y=>`<option value="${y}"${y===yr?" selected":""}>${I.window?`${y-2}–${y+2}`:y}</option>`).join("")}</select></div>
-    <div class="seg"${isRealActive(k)?' title="Real figures cover too few age bands to standardise"':""}>
-      <button data-std="0" class="${S.std?"":"on"}"${isRealActive(k)?" disabled":""}>${esc(t.crude)}</button>
-      <button data-std="1" class="${S.std?"on":""}"${isRealActive(k)?" disabled":""}>${esc(t.std)}</button>
+    <div class="seg"${stdTip?` title="${esc(stdTip)}"`:""}>
+      <button data-std="0" class="${S.std?"":"on"}"${stdDisabled?" disabled":""}>${esc(t.crude)}</button>
+      <button data-std="1" class="${S.std?"on":""}"${stdDisabled?" disabled":""}>${esc(t.std)}</button>
     </div>
   </div>
 
@@ -534,6 +554,13 @@ function viewKarta(){
   const years=validYears(k);
   const yrIdx=S.mapYear!=null&&years.includes(S.mapYear)?years.indexOf(S.mapYear):years.length-1;
   const yr=years[yrIdx];
+  // See viewOverTid()'s own comment on hasType/type — same convention.
+  // Compare mode's second map (cmpK, below) always stays on "all" even if
+  // cmpK itself is psych/antidep — one type selector, for the primary map
+  // only, keeps this control row from needing a second one that only
+  // sometimes appears depending on what's picked in compare mode.
+  const hasType = k==="psych" || k==="antidep";
+  const type = k==="psych" ? S.psychType : k==="antidep" ? S.medType : undefined;
 
   // Builds one indicator's region rows for a given year, trend arrows
   // included: each row compares against the previous *available* point for
@@ -542,14 +569,14 @@ function viewKarta(){
   // a region can rise while the country falls, and that's the interesting
   // case, not the raw up/down. Shared by the primary map and, in compare
   // mode, the second one, so neither loses its arrows.
-  const mapRows=(indK,yrVal,yrsList)=>{
+  const mapRows=(indK,yrVal,yrsList,ty)=>{
     const idx=yrsList.indexOf(yrVal), priorYr=idx>0?yrsList[idx-1]:null;
-    const nat=total(indK,"SE",yrVal,"T",S.std);
-    const natPrior=priorYr?total(indK,"SE",priorYr,"T",S.std):null;
+    const nat=total(indK,"SE",yrVal,"T",S.std,ty);
+    const natPrior=priorYr?total(indK,"SE",priorYr,"T",S.std,ty):null;
     const natDelta=nat&&natPrior?nat.value-natPrior.value:null;
     const trendOf=(code,c)=>{
       if(!priorYr)return null;
-      const p=total(indK,code,priorYr,"T",S.std);
+      const p=total(indK,code,priorYr,"T",S.std,ty);
       if(!p||p.suppressed)return null;
       const d=c.value-p.value, within=Math.abs(d)<(c.hi-c.lo)/2;
       if(within)return{arrow:"→",rel:null};
@@ -558,13 +585,13 @@ function viewKarta(){
       return{arrow,rel:(d>0)===(natDelta>0)?"with":"against"};
     };
     const rows=REGIONS.map(r=>{
-      const c=total(indK,r[0],yrVal,"T",S.std);
+      const c=total(indK,r[0],yrVal,"T",S.std,ty);
       return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi,supp:c.suppressed,trend:c.suppressed?null:trendOf(r[0],c)};
     }).filter(Boolean);
     return{rows,nat,priorYr};
   };
 
-  const{rows,nat,priorYr}=mapRows(k,yr,years);
+  const{rows,nat,priorYr}=mapRows(k,yr,years,type);
 
   // Compare mode: a second, independent indicator on its own mini map next
   // to the first, with its own trend arrows against its own history.
@@ -595,9 +622,12 @@ function viewKarta(){
   <div class="ctrl">
     <div class="f"><label>${esc(t.lblInd)}</label><select id="c-mapind">
       ${Object.keys(IND).map(x=>`<option value="${x}"${x===k?" selected":""}>${esc(t.ind[x])}</option>`).join("")}</select></div>
-    <div class="seg"${isRealActive(k)?' title="Real figures cover too few age bands to standardise"':""}>
-      <button data-std="0" class="${S.std?"":"on"}"${isRealActive(k)?" disabled":""}>${esc(t.crude)}</button>
-      <button data-std="1" class="${S.std?"on":""}"${isRealActive(k)?" disabled":""}>${esc(t.std)}</button>
+    ${hasType?`<div class="f"><label>${esc(t.lblType)}</label><select id="c-maptype">
+      <option value="all"${type==="all"?" selected":""}>${esc(t.typeAll)}</option>
+      ${(k==="psych"?PSYCH_TYPES:MED_TYPES).map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("")}</select></div>`:""}
+    <div class="seg"${!stdCapable(k)?` title="${esc(t.stdDisabledTip)}"`:""}>
+      <button data-std="0" class="${S.std?"":"on"}"${!stdCapable(k)?" disabled":""}>${esc(t.crude)}</button>
+      <button data-std="1" class="${S.std?"on":""}"${!stdCapable(k)?" disabled":""}>${esc(t.std)}</button>
     </div>
     <div class="f slide">
       <label>${esc(t.lblYear)}</label>
@@ -1181,6 +1211,65 @@ function viewVantetider(){
       </div>
     </div>
   </div>`;
+}
+
+// HBSC (Skolbarns hälsovanor) — its own dedicated view, same "not
+// IND-shaped" precedent as viewSammanhang/viewVantetider above: a SINGLE
+// snapshot (one survey window, HBSC.window), own age keys (11/13/15, not
+// AGES), no "total" sex. See HBSC's own docstring (data.js) for why.
+function viewHbsc(){
+  if(!HBSC.active)return viewComing();
+  const unit="%";
+  const col=INST_COLOR.survey;
+  const age=S.hbscAge, sex=S.hbscSex;
+
+  const rows=REGIONS.map(r=>{
+    const v=hbscCell(r[0],age,sex);
+    return v!=null&&{code:r[0],name:r[1],value:v,lo:v,hi:v};
+  }).filter(Boolean);
+  const nat=hbscCell("SE",age,sex);
+  const R=RBY[S.region];
+  const mine=hbscCell(S.region,age,sex);
+
+  return `
+  <div class="hero">
+    <p>${esc(t.hbscLead)}</p>
+  </div>
+  <div class="note mt-fig"><div class="l">${esc(t.hbscNoteL)}</div><p>${esc(t.hbscCaveat)}</p></div>
+  <div class="ctrl mt-fig">
+    <div class="f"><label>${esc(t.lblAge)}</label><select id="c-hbscage">
+      ${HBSC_AGES.map(a=>`<option value="${a}"${a===age?" selected":""}>${a} ${S.lang==="sv"?"år":"years"}</option>`).join("")}</select></div>
+    <div class="f"><label>${esc(t.lblSex)}</label><select id="c-hbscsex">
+      <option value="K"${sex==="K"?" selected":""}>${esc(t.sexK)}</option>
+      <option value="M"${sex==="M"?" selected":""}>${esc(t.sexM)}</option></select></div>
+  </div>
+  <div class="grid-ex mt-fig">
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.hbscInd)} (${esc(unit)}) · ${esc(HBSC.window)}</div></div>
+      <div class="card-b">
+        ${mapZoomWrap(chorMap(rows,{color:col,nat,unit,aria:"Map of Sweden's 21 regions for HBSC self-reported feeling low, click a region to see its figures"}),"hbsc")}
+        ${mapLegend(rows,col,unit,nat)}
+      </div>
+      <div class="src"><b>${S.lang==="sv"?"Gränser":"Borders"}</b> © OpenStreetMap-bidragsgivare, ODbL.</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-b">
+          <div class="rstats" style="grid-template-columns:1fr">
+            <div class="rstat" style="border-top-color:${col}">
+              <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.hbscInd)}</div>
+              <div class="rv tnum">${fmt(mine,1,unit)}</div>
+              <div class="rci tnum">${esc(unit)} · ${esc(HBSC.window)}</div>
+              ${mine!=null?`<div class="rvs">${esc(t.statSentence.hbsc_felt_low(fmt(mine,1)))}</div>`:""}
+            </div>
+          </div>
+          <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="src mt-fig">${esc(t.notNum)} ${esc(t.hbscNotNumB)}<br>Folkhälsomyndigheten (Skolbarns hälsovanor / HBSC).</div>`;
 }
 
 function viewPolicyNews() {

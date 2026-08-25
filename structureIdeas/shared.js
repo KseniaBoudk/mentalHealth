@@ -1,9 +1,12 @@
 "use strict";
 
 /* Shared data-prep for the three overview-structure sketches in this folder.
-   Loaded after real_mh_data.js/data.js/lang.js/state.js/charts.js/views.js
-   (same load order as kurvan.html, minus shell.js — these pages don't want
-   shell.js's own render()/wire() bootstrap, just its dependencies). Reuses
+   Loaded after js/data/*.js (nine small per-source files, statically — see
+   pipeline/build_kurvan_data.py's module docstring for why kurvan.html
+   itself loads these lazily instead)/data.js/lang.js/state.js/charts.js/
+   views.js (same load order as kurvan.html, minus shell.js — these pages
+   don't want shell.js's own render()/wire() bootstrap, or its lazy-loader,
+   just its other dependencies). Reuses
    the app's real functions (total(), validYears(), unitLabel(), isRealActive(),
    INST_COLOR, INST_NAME, t.notNumB, srcLine) rather than re-deriving anything
    — these are sketches of STRUCTURE, not a separate data pipeline. */

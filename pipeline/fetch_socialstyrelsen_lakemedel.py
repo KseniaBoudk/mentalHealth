@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Socialstyrelsen: antidepressants dispensed (ATC N06A), at REGION grain.
+"""Socialstyrelsen: psychiatric medication dispensed, at REGION grain — five
+ATC classes (antidepressants, ADHD medication, antipsychotics, anxiety
+medication, sleep medication).
 
 Same API and municipality-privacy reasoning as fetch_socialstyrelsen_mh.py —
 read that file's docstring first, this one only documents what's different.
@@ -27,6 +29,27 @@ are not necessarily the same.
     a different count / etc.), not the yttreorsak-style silent-passthrough
     trap fetch_socialstyrelsen_mh.py warns about on a different dataset.
     N06A = "Antidepressiva medel", confirmed via /lakemedel/atc/N06A.
+  - ATC_GROUPS below (five classes, not just N06A) all verified live
+    2026-08-25 against /lakemedel/atc: N06BA = "Centralt verkande
+    sympatomimetika" (ADHD medication in practice — methylphenidate/
+    amphetamine-class stimulants and atomoxetine are the drugs actually in
+    this class, but that's not what WHO's ATC label literally says, so
+    js/lang.js's caveat text says both), N05A = "Neuroleptika"
+    (antipsychotics), N05B = "Lugnande medel, ataraktika" (anxiolytics —
+    "anxiety medication"), N05C = "Sömnmedel och lugnande medel"
+    (hypnotics/sedatives — "sleep medication"; note N05B's Swedish name
+    ALSO contains "lugnande medel" — they are still two distinct `atc`
+    dimension ids with materially different values, not a naming
+    collision in the data itself, just in how Swedish glosses both
+    classes).
+  - A dataset quirk specific to lakemedel, not psych: an (atc, alder,
+    kon, ar, region) combination with truly ZERO matching rows returns
+    HTTP 404, not `{"data":[]}` with 200 (confirmed live: N06BA — ADHD
+    medication — at alder=1, ages 0-4, in Gotland, 2023 — essentially
+    never prescribed to toddlers). get() below already treats a non-200
+    status as "no rows" and moves on, so this doesn't need a code change,
+    just documenting: a 404 in this script's log output for a young/rare
+    age-band combination is expected, not a sign anything is broken.
   - MATT: 1 = "Antal patienter" (count), 2 = "Patienter/1000 invånare"
     (rate) — DIFFERENT ids from psych's 6/7, don't reuse those. There are
     also 3 ("Antal expedieringar") and 4 ("Expedieringar/1000 invånare") —
@@ -58,12 +81,19 @@ are not necessarily the same.
     psych's own docstring; re-check per dataset.
   - Years 2006-2025 are all present (confirmed via /lakemedel/ar).
   - No suppression flag or disclosure floor is published on this dataset,
-    same as psych — read as given.
+    same as psych — read as given. RE-VERIFIED for the four new ATC
+    classes specifically (same concern as psych's docstring: a five-way
+    split has much smaller cells than N06A alone did) — live-checked
+    2026-08-25, Gotland x sleep medication (N05C) x ages 0-4 x women:
+    counts of exactly 1 published unsuppressed for two separate years
+    (2021, 2022). No floor found down to a true single-digit cell here
+    either.
 
 A single 22-region x 3-sex x 20-year request for one age band and one matt
 value is ~1,320 rows, safely under the API's 5,000-per-page limit. This
 script requests one age band at a time (like fetch_socialstyrelsen_psych.py
-does), x2 for count/rate — 36 requests total.
+does), x2 for count/rate — 36 requests per ATC class, x5 classes = 180
+requests total (was 36, single-class, before ATC_GROUPS existed).
 
 Output: ../data/processed/socialstyrelsen_lakemedel.json
 Run:    python prototype/pipeline/fetch_socialstyrelsen_lakemedel.py
@@ -92,7 +122,15 @@ REGION_IDS = ",".join(str(i) for i in REGION_ID_TO_COUNTY)
 SEX = {1: "M", 2: "K", 3: "T"}
 KON_IDS = "1,2,3"
 
-ATC = "N06A"            # Antidepressiva medel. See docstring.
+# ATC N06A alone -> five classes, each its own indicator series. See
+# docstring for the id -> label verification and the N06BA caveat.
+ATC_GROUPS = {
+    "N06A": "antidepressants",
+    "N06BA": "adhd_med",
+    "N05A": "antipsychotics",
+    "N05B": "anxiety_med",
+    "N05C": "sleep_med",
+}
 MATT_COUNT = 1
 MATT_RATE = 2
 YEARS = list(range(2006, datetime.now().year + 1))
@@ -121,6 +159,13 @@ def get(path, description="", retries=3):
                 print(f"    failed after {retries} attempts for {description}: {e}")
                 return []
             time.sleep(5 * (attempt + 1))
+    if resp is not None and resp.status_code == 404:
+        # A real, benign quirk of THIS dataset (not the psych/self-harm
+        # ones) — a query with truly zero matching rows 404s instead of
+        # returning {"data":[]} with 200 (confirmed live: ADHD medication,
+        # ages 0-4 — see module docstring). Not suppression, not an error.
+        print(f"    (no rows — 404, empty combination) for {description}")
+        return []
     if resp is None or resp.status_code != 200:
         print(f"    error {getattr(resp, 'status_code', '?')} for {description}")
         return []
@@ -144,27 +189,43 @@ def num(val):
 
 
 def assert_atc_filter():
-    """Trap check: N06A must read differently from an unrelated ATC class at
-    the same cell. If it doesn't, the filter has stopped filtering — the
-    same failure mode fetch_socialstyrelsen_mh.py's diagnos/yttreorsak trap
-    warns about, on a different dataset."""
-    antidep = get(f"/{DATASET}/resultat/atc/{ATC}/alder/9/kon/3/matt/{MATT_RATE}"
-                  f"/ar/2023/region/0", "trap check (N06A)")
-    other = get(f"/{DATASET}/resultat/atc/N05A/alder/9/kon/3/matt/{MATT_RATE}"
-                f"/ar/2023/region/0", "trap check (N05A)")
-    av = num(antidep[0]["varde"]) if antidep else None
-    ov = num(other[0]["varde"]) if other else None
-    print(f"  trap check: N06A -> {av}, N05A -> {ov}")
-    if av is None or ov is None or av == ov:
-        raise SystemExit(
-            "FATAL: N06A and N05A read identically (or one is missing) for "
-            "2023 national data, ages 40-44. The atc filter or the codes "
-            "have changed. Stop and re-verify against the API before "
-            "publishing anything from this script."
-        )
+    """Trap check, extended from the original single N06A-vs-N05A
+    comparison to all five ATC_GROUPS: every class must read a genuinely
+    DIFFERENT rate from every other one at the same cell (2023 national,
+    ages 40-44). If any two match, either a code was copy-pasted wrong or
+    the atc filter has stopped filtering — the same failure mode
+    fetch_socialstyrelsen_mh.py's diagnos/yttreorsak trap warns about, on
+    a different dataset."""
+    values = {}
+    for code, name in ATC_GROUPS.items():
+        rows = get(f"/{DATASET}/resultat/atc/{code}/alder/9/kon/3/matt/{MATT_RATE}"
+                   f"/ar/2023/region/0", f"trap check ({code} {name})")
+        values[code] = num(rows[0]["varde"]) if rows else None
+    for code, name in ATC_GROUPS.items():
+        print(f"  trap check: {code} ({name}) -> {values[code]}")
+
+    for code, v in values.items():
+        if v is None:
+            raise SystemExit(
+                f"FATAL: atc={code} ({ATC_GROUPS[code]}) returned no value for "
+                f"2023 national data, ages 40-44. Stop and re-verify against "
+                f"the API before publishing anything from this script."
+            )
+    seen = {}
+    for code, v in values.items():
+        dup = seen.get(v)
+        if dup is not None:
+            raise SystemExit(
+                f"FATAL: atc={code} ({ATC_GROUPS[code]}) read identically ({v}) "
+                f"to atc={dup} ({ATC_GROUPS[dup]}) for 2023 national data, ages "
+                f"40-44. The atc filter or the codes have changed. Stop and "
+                f"re-verify against the API before publishing anything from "
+                f"this script."
+            )
+        seen[v] = code
 
 
-def fetch_age_bands():
+def fetch_age_bands(atc, label):
     """One request pair (count, rate) per 5-year age band, kept under the
     5,000-row page limit — same shape as fetch_socialstyrelsen_psych.py's
     fetch_age_bands(), reused here for all 18 bands (there's no separate
@@ -173,13 +234,13 @@ def fetch_age_bands():
     for age_id in ALL_AGE_IDS:
         for matt in (MATT_COUNT, MATT_RATE):
             batch = get(
-                f"/{DATASET}/resultat/atc/{ATC}/alder/{age_id}"
+                f"/{DATASET}/resultat/atc/{atc}/alder/{age_id}"
                 f"/kon/{KON_IDS}/matt/{matt}/ar/{YEARS_CSV}/region/{REGION_IDS}",
-                f"age {age_id} matt{matt}",
+                f"{label} age {age_id} matt{matt}",
             )
             rows.extend(batch)
             time.sleep(0.8)
-        print(f"    age band {age_id}: cumulative {len(rows)} rows")
+        print(f"    {label} age band {age_id}: cumulative {len(rows)} rows")
     return rows
 
 
@@ -197,11 +258,13 @@ def _split(rows):
     return counts, rates
 
 
-def pool_bands(rows, county_names):
+def pool_bands(rows, county_names, indicator):
     """One record per (county, Kurvan age band, sex, year) — population
     recovered as count / rate * 1e3 (this table's rate is per 1,000, not
     per 100,000 like psych's) wherever both are published, same trick
-    fetch_socialstyrelsen_psych.py's pool() uses for its nine bands."""
+    fetch_socialstyrelsen_psych.py's pool() uses for its nine bands.
+    `indicator` tags which of the five ATC_GROUPS this batch is — js/data.js
+    sums all five back into an "all" pseudo-type (same as psych's six)."""
     counts, rates = _split(rows)
     out = []
     for band_name, age_ids in AGE_GROUPS.items():
@@ -223,7 +286,7 @@ def pool_bands(rows, county_names):
                     out.append({
                         "region": county_names.get(county, county) if county != "00" else "Sverige",
                         "county_code": county,
-                        "indicator": "antidep_per_1000",
+                        "indicator": indicator,
                         "year": year,
                         "age_group": band_name,
                         "sex": sex,
@@ -233,7 +296,7 @@ def pool_bands(rows, county_names):
     return out
 
 
-def pool_all_ages(rows, county_names):
+def pool_all_ages(rows, county_names, indicator):
     """Same pooling as pool_bands(), but across all eighteen 5-year bands
     at once, for the '0-85+' total — psych gets this from a directly-
     published id, this dataset doesn't have one so it's reconstructed."""
@@ -257,7 +320,7 @@ def pool_all_ages(rows, county_names):
                 out.append({
                     "region": county_names.get(county, county) if county != "00" else "Sverige",
                     "county_code": county,
-                    "indicator": "antidep_per_1000",
+                    "indicator": indicator,
                     "year": year,
                     "age_group": "0-85+",
                     "sex": sex,
@@ -277,22 +340,36 @@ def load_county_names():
 
 
 def main():
-    print("[socialstyrelsen-lakemedel] region-grain antidepressant dispensing (ATC N06A)")
+    print("[socialstyrelsen-lakemedel] region-grain psychiatric medication dispensing, "
+          f"by ATC class ({len(ATC_GROUPS)} classes)")
     assert_atc_filter()
     county_names = load_county_names()
 
-    print("  fetching 5-year age bands...")
-    band_raw = fetch_age_bands()
+    band_raw_by_group = {}
+    records = []
+    for code, name in ATC_GROUPS.items():
+        indicator = f"{name}_per_1000"
+        label = f"{code} ({name})"
+        print(f"  --- {label} ---")
+        print("  fetching 5-year age bands...")
+        band_raw = fetch_age_bands(code, label)
+        band_raw_by_group[code] = band_raw
+        records += pool_all_ages(band_raw, county_names, indicator)
+        records += pool_bands(band_raw, county_names, indicator)
 
     with open(os.path.join(RAW_DIR, "socialstyrelsen_lakemedel_raw.json"), "w", encoding="utf-8") as f:
-        json.dump({"age_bands": band_raw}, f, ensure_ascii=False, indent=1)
+        json.dump({"age_bands": band_raw_by_group}, f, ensure_ascii=False, indent=1)
 
-    records = pool_all_ages(band_raw, county_names) + pool_bands(band_raw, county_names)
     out_path = os.path.join(PROCESSED_DIR, "socialstyrelsen_lakemedel.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=1)
 
-    print(f"\n[socialstyrelsen-lakemedel] wrote {out_path}  ({len(records)} records)")
+    by_indicator = {}
+    for r in records:
+        by_indicator[r["indicator"]] = by_indicator.get(r["indicator"], 0) + 1
+    print(f"\n[socialstyrelsen-lakemedel] wrote {out_path}  ({len(records)} records total)")
+    for ind, n in sorted(by_indicator.items()):
+        print(f"    {ind}: {n} rows")
     print("[socialstyrelsen-lakemedel] now run:  python prototype/pipeline/build_kurvan_data.py")
 
 

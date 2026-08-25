@@ -7,7 +7,7 @@
 const T={
 sv:{
   word:"Kurvan", sub:"Psykisk hälsa i Sverige",
-  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",policy_news:"Nyheter & Policy",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",vantetider:"Väntetider, BUP",metod:"Metod",regioner:"Länsprofil"},
+  tabs:{laget:"Läget",over_tid:"Över tid",karta:"Karta",behov:"Behov & vård",sjukskrivning:"Sjukskrivning",policy_news:"Nyheter & Policy",kon:"Jämförelse efter kön",alder:"Jämförelse efter ålder",sammanhang:"Sammanhang",vantetider:"Väntetider, BUP",hbsc:"Skolbarns hälsovanor",metod:"Metod",regioner:"Länsprofil"},
   comingT:"Under uppbyggnad",
   comingB:"Den här sidan är beskriven i observatoriets plan men inte byggd än i den här prototypen.",
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
@@ -27,6 +27,11 @@ sv:{
   // partialYearNote the full sentence (srcStrip's extra slot).
   partialTag:"(delår)",
   partialYearNote:(y,m)=>`<b>${y} är ett delår.</b> Bara ${m} av 12 månader publicerade hittills av Försäkringskassan — jämför inte rakt av med hela tidigare år.`,
+  hbscLead:"Andel 11-, 13- och 15-åringar som uppger att de känt sig nere minst en gång i veckan de senaste sex månaderna. Ett enda mått bland flera i enkäten Skolbarns hälsovanor (HBSC) — inte ett samlat mått på psykisk hälsa hos barn.",
+  hbscNoteL:"Läs detta först",
+  hbscCaveat:"Ett enda mätvärde, inte en trend — källan har hittills bara en regional mätperiod publicerad (2021–2022). Skolbarns hälsovanor frågar om åtta olika besvär; det här visar bara ett av dem (\"känt sig nere\"). Ingen totalsiffra för båda könen finns i källan.",
+  hbscInd:"Känt sig nere minst en gång i veckan",
+  hbscNotNumB:"Självrapporterat i en enkät bland 11-, 13- och 15-åringar, inte en klinisk diagnos eller kontakt med vården. Räknar andelen som svarat \"nästan varje dag\" eller \"mer än en gång i veckan\" på en enda fråga.",
   monthsShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],
   legendRankNote:"Regionerna delas in i fem lika stora grupper efter värde — inte jämnstora intervall.",
   legendTiers:["Lägst","Lägre","Mitten","Högre","Högst"],
@@ -48,10 +53,10 @@ sv:{
   realCaveat:{
     selfharm:"Verkliga siffror gäller endast 12–17 år, femårsfönster.",
     suicide:"Verkliga siffror gäller endast 15–19 år, femårsfönster.",
-    psych:"Alla F00–F99-diagnoser samlat, årsvis, alla åldrar och kön — men bara specialistvård.",
+    psych:"Uppdelat på sex diagnostyper, årsvis, alla åldrar och kön — men bara specialistvård. \"Ätstörningar m.fl.\" och \"ADHD och barndomsdebut\" är bredare ICD-10-kapitel än namnen antyder — se typväljaren och not nedan.",
     distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
     sjukfranvaro:"Verkliga siffror sedan 2005, månadsvis genomsnitt per år. Ingen åldersuppdelning.",
-    antidep:"Alla åldrar och kön, årsvis sedan 2006 — men mäter uthämtade recept, inte diagnos; se not nedan."
+    antidep:"Uppdelat på fem läkemedelsklasser, alla åldrar och kön, årsvis sedan 2006 — men mäter uthämtade recept, inte diagnos; se typväljaren och not nedan."
   },
   // Turns a bare "value + unit" .rstat number into a full sentence — only
   // used on the low-density, often-orphaned side-panel numbers (Karta,
@@ -74,6 +79,7 @@ sv:{
     antidep:(n)=>`${n} per 1 000 hämtade ut antidepressiva.`,
     sjukfranvaro:(n)=>`${n} % av pågående sjukfall hade diagnosen stressreaktion.`,
     bup_vantetid:(n)=>`Medianväntetiden till första besök var ${n} dagar.`,
+    hbsc_felt_low:(n)=>`${n} % uppgav att de känt sig nere minst en gång i veckan.`,
     // Context indicators deliberately phrased plainly, not in the same
     // clinical-sounding shape as the mental-health sentences above — see
     // CONTEXT's own docstring in js/data.js on why these aren't shaped
@@ -136,7 +142,40 @@ sv:{
   ageChild:"Barn (0–14)",ageAdult:"Vuxna (15–64)",ageElderly:"Äldre (65+)",
   lblInd:"Indikator",lblAge:"Åldersgrupp",lblSex:"Kön",lblYear:"År",lblReg:"Region",
   allAges:"Alla åldrar",sexT:"Totalt",sexM:"Män",sexK:"Kvinnor",
+  // Diagnosis-type (psych) / medication-class (antidep) selector —
+  // viewOverTid()/viewKarta() (js/views.js), only shown for those two
+  // indicators. typeAll is the default ("all six/five summed" — see
+  // PSYCH_TYPES/MED_TYPES and rebuildREAL_PSYCH()'s docstring, js/data.js).
+  // psychMedTypes is one shared dictionary (keys never collide — psych's
+  // six and antidep's five are each their own distinct set of names) so
+  // views.js doesn't need to know which of two objects to read from.
+  lblType:"Typ",
+  typeAll:"Alla typer",
+  psychMedTypes:{
+    substance_use:"Missbruk och beroende",
+    psychosis:"Psykos",
+    depression_mood:"Depression och förstämning",
+    anxiety_stress:"Ångest och stress",
+    eating_disorders:"Ätstörningar m.fl.",
+    adhd_childhood:"ADHD och barndomsdebut",
+    antidepressants:"Antidepressiva",
+    adhd_med:"ADHD-läkemedel",
+    antipsychotics:"Antipsykotika",
+    anxiety_med:"Ångestdämpande",
+    sleep_med:"Sömnmedel",
+  },
   crude:"Ojusterat",std:"Åldersstandardiserat",
+  // Shown only when real data is active AND stdCapable(k) is false
+  // (js/data.js) — psych/antidep are real-active and DO standardise once
+  // SCB population data is loaded; every other real indicator's own
+  // source doesn't cover enough age bands for it regardless.
+  stdDisabledTip:"Verkliga siffror saknar tillräcklig åldersuppdelning för att åldersstandardiseras.",
+  // Shown on viewOverTid specifically (not Karta, which has no age
+  // selector) when the indicator COULD standardise but a single age band
+  // is picked instead of "Alla åldrar" — standardising one band against
+  // itself is meaningless, so the toggle would otherwise silently do
+  // nothing while still looking clickable.
+  stdAgeOnlyTip:"Åldersstandardisering gäller bara ”Alla åldrar” — välj det för att se effekten.",
   dotTitle:"Alla 21 regioner",dotSub:"Sorterat · 95 % konfidensintervall. Överlappande intervall är ingen rangordning.",
   ageTitle:"Genom livet",ageSub:"mot rikets band",
   noAgeData:"Ingen åldersuppdelning finns för den här indikatorn — se noten nedan.",
@@ -151,8 +190,8 @@ sv:{
   spreadNote:(s,mode)=>`Spridningen mellan högsta och lägsta region är <b>${s} %</b> av rikets nivå. ${mode?"Byt till ojusterat och se hur mycket ålderstrukturen lägger till.":"Byt till åldersstandardiserat och se hur mycket som är ålderstruktur."}`,
   notNum:"Vad talet inte är.",
   notNumB:{
-    antidep:"Räknar personer som hämtat ut ett recept, oavsett förskrivare. Ingen diagnos, och det stiger både när behandlingen förbättras och när hälsan försämras.",
-    psych:"Räknar endast specialistvård. Det mesta av vanlig depression sköts i primärvården och syns inte här alls.",
+    antidep:"Räknar personer som hämtat ut ett recept, oavsett förskrivare. Ingen diagnos, och det stiger både när behandlingen förbättras och när hälsan försämras. \"ADHD-läkemedel\" är läkemedelsklassen \"centralt verkande sympatomimetika\" (ATC N06BA) — i praktiken det som skrivs ut vid ADHD i Sverige, men inte det WHO:s klassificering kallar den.",
+    psych:"Räknar endast specialistvård. Det mesta av vanlig depression sköts i primärvården och syns inte här alls. \"Ätstörningar m.fl.\" är ICD-10-kapitlet F50–F59 (beteendestörningar med fysiologiska orsaker) — ätstörningar är den största delen, men kapitlet omfattar även bl.a. sömnstörningar. \"ADHD och barndomsdebut\" är kapitlet F90–F98 — ADHD är den största delen, men kapitlet omfattar även bl.a. uppförandestörningar och tics.",
     selfharm:"Räknar vårdtillfällen, inte personer. Y10–Y34 redovisas tillsammans med X60–X84 eftersom kodning av avsikt driver mellan regioner.",
     suicide:"Femårsfönster. Antal under 10 per fönster redovisas inte; talet publiceras ändå.",
     distress:"Självrapporterat, 16–84 år. Redovisas i fyraårsfönster (två sammanslagna enkätomgångar) för regional tillförlitlighet; ingen åldersuppdelning finns i regiontabellen.",
@@ -221,7 +260,7 @@ sv:{
 },
 en:{
   word:"Kurvan", sub:"Mental health in Sweden",
-  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",policy_news:"Policy & News",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",vantetider:"Waiting times, BUP",metod:"Method",regioner:"County profile"},
+  tabs:{laget:"The picture",over_tid:"Over time",karta:"Map",behov:"Need & care",sjukskrivning:"Sickness absence",policy_news:"Policy & News",kon:"Comparison by sex",alder:"Comparison by age",sammanhang:"Context",vantetider:"Waiting times, BUP",hbsc:"School health habits",metod:"Method",regioner:"County profile"},
   comingT:"Under construction",
   comingB:"This page is described in the observatory's plan but not built yet in this prototype.",
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
@@ -234,6 +273,11 @@ en:{
   vantetiderNoData:name=>`${name}: no figure this month — too few completed visits to publish.`,
   partialTag:"(partial year)",
   partialYearNote:(y,m)=>`<b>${y} is a partial year.</b> Only ${m} of 12 months published so far by Försäkringskassan — don't compare it straight against a full prior year.`,
+  hbscLead:"Share of 11-, 13- and 15-year-olds who report feeling low at least once a week over the past six months. One measure among several in the Health Behaviour in School-aged Children (HBSC) survey — not a combined measure of children's mental health.",
+  hbscNoteL:"Read this first",
+  hbscCaveat:"A single reading, not a trend — the source has only one regional survey window published so far (2021–2022). Skolbarns hälsovanor asks about eight different complaints; this shows only one of them (\"felt low\"). No combined-sex figure exists in the source.",
+  hbscInd:"Felt low at least weekly",
+  hbscNotNumB:"Self-reported in a survey of 11-, 13- and 15-year-olds, not a clinical diagnosis or contact with care. Counts the share who answered \"almost every day\" or \"more than once a week\" to a single question.",
   monthsShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
   legendRankNote:"Regions are split into five equal-sized groups by value — not equal-width ranges.",
   legendTiers:["Lowest","Lower","Middle","Higher","Highest"],
@@ -257,10 +301,10 @@ en:{
   realCaveat:{
     selfharm:"Real figures cover ages 12–17 only, five-year windows.",
     suicide:"Real figures cover ages 15–19 only, five-year windows.",
-    psych:"All F00–F99 diagnoses pooled, annual, every age and sex — specialist care only.",
+    psych:"Split into six diagnosis types, annual, every age and sex — specialist care only. \"Eating disorders etc.\" and \"ADHD and childhood-onset\" are broader ICD-10 chapters than their names suggest — see the type picker and the note below.",
     distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
     sjukfranvaro:"Real figures since 2005, monthly average per year. No age breakdown.",
-    antidep:"Every age and sex, annual since 2006 — but measures dispensed prescriptions, not diagnosis; see the note below."
+    antidep:"Split into five medication classes, every age and sex, annual since 2006 — but measures dispensed prescriptions, not diagnosis; see the type picker and the note below."
   },
   statSentence:{
     selfharm:(n)=>`${n} per 100,000 were hospitalised for self-harm.`,
@@ -270,6 +314,7 @@ en:{
     antidep:(n)=>`${n} per 1,000 were dispensed antidepressants.`,
     sjukfranvaro:(n)=>`${n}% of ongoing sickness-benefit cases had a stress-reaction diagnosis.`,
     bup_vantetid:(n)=>`The median wait for a first visit was ${n} days.`,
+    hbsc_felt_low:(n)=>`${n}% reported feeling low at least once a week.`,
     pop_density:(n)=>`This region has ${n} residents per km².`,
     education_low_pct:(n)=>`${n}% of residents 25–64 have a low education level.`
   },
@@ -321,7 +366,24 @@ en:{
   ageChild:"Children (0–14)",ageAdult:"Adults (15–64)",ageElderly:"Elderly (65+)",
   lblInd:"Indicator",lblAge:"Age band",lblSex:"Sex",lblYear:"Year",lblReg:"Region",
   allAges:"All ages",sexT:"Total",sexM:"Men",sexK:"Women",
+  lblType:"Type",
+  typeAll:"All types",
+  psychMedTypes:{
+    substance_use:"Substance use",
+    psychosis:"Psychosis",
+    depression_mood:"Depression and mood",
+    anxiety_stress:"Anxiety and stress",
+    eating_disorders:"Eating disorders etc.",
+    adhd_childhood:"ADHD and childhood-onset",
+    antidepressants:"Antidepressants",
+    adhd_med:"ADHD medication",
+    antipsychotics:"Antipsychotics",
+    anxiety_med:"Anxiety medication",
+    sleep_med:"Sleep medication",
+  },
   crude:"Crude",std:"Age-standardised",
+  stdDisabledTip:"Real figures don't cover enough age bands to be age-standardised.",
+  stdAgeOnlyTip:"Age-standardisation only applies to “All ages” — pick that to see the effect.",
   dotTitle:"All 21 regions",dotSub:"Sorted · 95% confidence intervals. Overlapping intervals are not a ranking.",
   ageTitle:"Across the life course",ageSub:"against the national band",
   noAgeData:"No age breakdown exists for this indicator — see the note below.",
@@ -336,8 +398,8 @@ en:{
   spreadNote:(s,mode)=>`The spread between the highest and lowest region is <b>${s}%</b> of the national level. ${mode?"Switch to crude and see how much age structure adds.":"Switch to age-standardised and see how much of it is age structure."}`,
   notNum:"What this number is not.",
   notNumB:{
-    antidep:"Counts people who collected a prescription, from any prescriber. Not a diagnosis, and it rises when treatment improves as well as when health worsens.",
-    psych:"Counts specialist care only. Most ordinary depression is managed in primary care and does not appear here at all.",
+    antidep:"Counts people who collected a prescription, from any prescriber. Not a diagnosis, and it rises when treatment improves as well as when health worsens. \"ADHD medication\" is the drug class \"centrally acting sympathomimetics\" (ATC N06BA) — in practice what's prescribed for ADHD in Sweden, but not what WHO's own classification calls it.",
+    psych:"Counts specialist care only. Most ordinary depression is managed in primary care and does not appear here at all. \"Eating disorders etc.\" is ICD-10 chapter F50-F59 (behavioural syndromes with physiological disturbance) — eating disorders are the largest part, but the chapter also covers sleep disorders and others. \"ADHD and childhood-onset\" is chapter F90-F98 — ADHD is the largest part, but the chapter also covers conduct disorders, tics and others.",
     selfharm:"Counts admissions, not people. Y10–Y34 is carried alongside X60–X84 because coding of intent drifts between regions.",
     suicide:"Five-year windows. Counts below 10 per window are withheld; the rate is still published.",
     distress:"Self-reported, ages 16–84. Published in four-year windows (two survey waves pooled for regional reliability); the region table has no age breakdown at all.",

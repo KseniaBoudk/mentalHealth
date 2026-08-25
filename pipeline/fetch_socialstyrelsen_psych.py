@@ -22,13 +22,34 @@ quirks are not the same ones.
   - The filtering segment IS named `diagnos` here (confirmed against
     /api/v1/sv/diagnoserislutenoppenvard: the dimension list literally names
     it "diagnos"). No yttreorsak-style trap on this dataset.
-  - DIAGNOS = "05" is the ICD-10 chapter grouping "F00-F99: Psykiska
-    sjukdomar och syndrom samt beteendestörningar" — the whole chapter, not
-    a sub-diagnosis. Confirmed via /diagnos: id "05" sits above eleven
-    sub-groups (0501 F00-F09 ... 0511 F99-F99). Sanity check: national 2023
-    rate for "05" (4556.2/100k) is a proper subset of "99" (all diagnoses,
-    42219.6/100k) — about a ninth, plausible for "any psychiatric contact"
-    against "any specialist contact at all".
+  - DIAGNOS "05" is the ICD-10 chapter grouping "F00-F99: Psykiska
+    sjukdomar och syndrom samt beteendestörningar" — the whole chapter.
+    This script no longer fetches "05" itself: it fetches six of its
+    eleven real sub-groups instead (DIAGNOS_GROUPS below), confirmed live
+    2026-08-25 via /diagnos — every one of the six has `grupp:"05"` (a
+    real child of the F00-F99 chapter, not a sibling or typo) and a label
+    matching what was asked for:
+      0502 substance use     (F10-F19, "orsakade av psykoaktiva substanser")
+      0503 psychosis         (F20-F29, "Schizofreni, schizotypa störningar...")
+      0504 depression/mood   (F30-F39, "Förstämningssyndrom")
+      0505 anxiety/stress    (F40-F48, "Neurotiska, stressrelaterade...")
+      0506 eating disorders  (F50-F59 — the label is really "behavioural
+                               syndromes with physiological disturbance";
+                               eating disorders are the largest piece, not
+                               the only one — also sleep, sexual
+                               dysfunction, postpartum. Kept the requested
+                               name in DIAGNOS_GROUPS' key for readability,
+                               but js/lang.js's caveat text says the real
+                               scope, not just "eating disorders")
+      0510 ADHD/childhood    (F90-F98 — same caveat: really "behavioural
+                               and emotional disorders with onset in
+                               childhood", ADHD is the largest piece, not
+                               the only one — also conduct disorders, tics,
+                               enuresis)
+    Kurvan's own "all psychiatric care" figure is no longer fetched
+    directly either — js/data.js reconstructs it by summing these six
+    real series (same pattern the age-band pooling below already uses),
+    not by an extra API call for "05" itself.
   - MATT: 6 = "Antal patienter" (count), 7 = "Antal patienter/100 000 inv"
     (rate). `matt` accepts ONE value per request — a comma returns 404,
     same trap as the self-harm dataset. `diagnos`, `kon`, `alder`, `ar` and
@@ -57,11 +78,24 @@ quirks are not the same ones.
   - No suppression flag or disclosure floor is published on this dataset
     (unlike the self-harm/suicide one). It is read as given; Socialstyrelsen
     applies its own disclosure control before anything reaches this API.
+    RE-VERIFIED for the new, finer-grained sub-diagnosis series specifically
+    (a real concern: six-way-split cells are much smaller than the "05"
+    aggregate's, and a floor that never triggered on the aggregate could
+    start triggering here) — live-checked 2026-08-25, Gotland (smallest
+    county) x substance use (0502) x ages 0-4 x men, 2023: a raw count of
+    ONE person, published unsuppressed (`"varde":"1"`). Every other
+    year/sex combination in that same narrow slice was simply absent
+    (zero cases, not withheld — same "absent county-year means zero, not
+    missing" rule fetch_socialstyrelsen_mh.py's docstring already
+    documents for self-harm/suicide). No disclosure floor found anywhere
+    down to a true single-digit cell.
 
 A single 22-region x 3-sex x 18-year request for one age band is ~1,200
 rows, safely under the API's 5,000-per-page limit that fetch_socialstyrelsen_mh.py's
 get() does not paginate past (it only warns). So this script requests one age
-band at a time rather than teach get() to follow nasta_sida.
+band at a time rather than teach get() to follow nasta_sida — now six times
+over, once per DIAGNOS_GROUPS entry (~40 requests before -> ~240 now; several
+minutes, not one).
 
 Output: ../data/processed/socialstyrelsen_psych.json
 Run:    python prototype/pipeline/fetch_socialstyrelsen_psych.py
@@ -90,7 +124,17 @@ REGION_IDS = ",".join(str(i) for i in REGION_ID_TO_COUNTY)
 SEX = {1: "M", 2: "K", 3: "T"}
 KON_IDS = "1,2,3"
 
-DIAGNOS = "05"          # F00-F99, all psychiatric diagnoses. See docstring.
+# DIAGNOS "05" (F00-F99, all psychiatric diagnoses) -> six of its real
+# sub-groups, each its own indicator series. See docstring for the id ->
+# label verification and the two labelling caveats (0506, 0510).
+DIAGNOS_GROUPS = {
+    "0502": "substance_use",
+    "0503": "psychosis",
+    "0504": "depression_mood",
+    "0505": "anxiety_stress",
+    "0506": "eating_disorders",
+    "0510": "adhd_childhood",
+}
 MATT_COUNT = 6
 MATT_RATE = 7
 YEARS = list(range(2008, datetime.now().year + 1))
@@ -141,65 +185,95 @@ def num(val):
 
 
 def assert_diagnos_filters():
-    """Trap check: diagnos=05 must be a proper, smaller subset of diagnos=99
-    (all diagnoses combined). If it isn't, the filter has stopped filtering —
-    the exact failure mode fetch_socialstyrelsen_mh.py's diagnos/yttreorsak
-    trap warns about, on a different dataset."""
-    psych = get(f"/{DATASET}/resultat/diagnos/{DIAGNOS}/alder/{ALL_AGES_ID}"
-                f"/kon/3/matt/{MATT_RATE}/ar/2023/region/0", "trap check (05)")
+    """Two trap checks, both on 2023 national all-ages data:
+
+    1. Each of the six DIAGNOS_GROUPS sub-codes must return a DIFFERENT
+       rate from every other one. If any two match, either a code was
+       copy-pasted wrong or the diagnos filter has stopped filtering (the
+       exact failure mode fetch_socialstyrelsen_mh.py's diagnos/yttreorsak
+       trap already warns about, on a different dataset).
+    2. Each sub-code must be a proper, smaller-than, positive subset of
+       diagnos=99 (all diagnoses combined) — same sanity bound the old
+       single-DIAGNOS="05" version of this check used.
+    """
     total = get(f"/{DATASET}/resultat/diagnos/99/alder/{ALL_AGES_ID}"
-                f"/kon/3/matt/{MATT_RATE}/ar/2023/region/0", "trap check (99)")
-    pv = num(psych[0]["varde"]) if psych else None
+                f"/kon/3/matt/{MATT_RATE}/ar/2023/region/0", "trap check (99, all diagnoses)")
     tv = num(total[0]["varde"]) if total else None
-    print(f"  trap check: diagnos=05 -> {pv}, diagnos=99 (all) -> {tv}")
-    if pv is None or tv is None or not (0 < pv < tv):
-        raise SystemExit(
-            "FATAL: diagnos=05 is not a smaller positive subset of diagnos=99 "
-            "for 2023 national data. The filter or the ids have changed. Stop "
-            "and re-verify against the API before publishing anything from "
-            "this script."
-        )
+    values = {}
+    for code, name in DIAGNOS_GROUPS.items():
+        rows = get(f"/{DATASET}/resultat/diagnos/{code}/alder/{ALL_AGES_ID}"
+                    f"/kon/3/matt/{MATT_RATE}/ar/2023/region/0", f"trap check ({code} {name})")
+        values[code] = num(rows[0]["varde"]) if rows else None
+    print(f"  trap check: diagnos=99 (all) -> {tv}")
+    for code, name in DIAGNOS_GROUPS.items():
+        print(f"    diagnos={code} ({name}) -> {values[code]}")
+
+    if tv is None:
+        raise SystemExit("FATAL: could not read diagnos=99 (all diagnoses) reference value.")
+    for code, v in values.items():
+        if v is None or not (0 < v < tv):
+            raise SystemExit(
+                f"FATAL: diagnos={code} ({DIAGNOS_GROUPS[code]}) is not a smaller "
+                f"positive subset of diagnos=99 for 2023 national data. Stop and "
+                f"re-verify against the API before publishing anything from this "
+                f"script."
+            )
+    seen = {}
+    for code, v in values.items():
+        dup = seen.get(v)
+        if dup is not None:
+            raise SystemExit(
+                f"FATAL: diagnos={code} ({DIAGNOS_GROUPS[code]}) returned the exact "
+                f"same rate ({v}) as diagnos={dup} ({DIAGNOS_GROUPS[dup]}) — the "
+                f"filter has very likely stopped distinguishing between codes. Stop "
+                f"and re-verify against the API before publishing anything from "
+                f"this script."
+            )
+        seen[v] = code
 
 
-def fetch_all_ages():
+def fetch_all_ages(diagnos, label):
     """One row per region/sex/year at the API's own '0-85+' age value —
     used directly for the 'all ages' total, no pooling needed."""
     rows = []
     for matt in (MATT_COUNT, MATT_RATE):
         batch = get(
-            f"/{DATASET}/resultat/diagnos/{DIAGNOS}/alder/{ALL_AGES_ID}"
+            f"/{DATASET}/resultat/diagnos/{diagnos}/alder/{ALL_AGES_ID}"
             f"/kon/{KON_IDS}/matt/{matt}/ar/{YEARS_CSV}/region/{REGION_IDS}",
-            f"all-ages matt{matt}",
+            f"{label} all-ages matt{matt}",
         )
         rows.extend(batch)
         time.sleep(1.0)
-    print(f"    all-ages: {len(rows)} rows")
+    print(f"    {label} all-ages: {len(rows)} rows")
     return rows
 
 
-def fetch_age_bands():
+def fetch_age_bands(diagnos, label):
     """One request pair (count, rate) per 5-year age band, kept under the
     5,000-row page limit. See the docstring's row-count arithmetic."""
     rows = []
     for age_id in range(1, 19):
         for matt in (MATT_COUNT, MATT_RATE):
             batch = get(
-                f"/{DATASET}/resultat/diagnos/{DIAGNOS}/alder/{age_id}"
+                f"/{DATASET}/resultat/diagnos/{diagnos}/alder/{age_id}"
                 f"/kon/{KON_IDS}/matt/{matt}/ar/{YEARS_CSV}/region/{REGION_IDS}",
-                f"age {age_id} matt{matt}",
+                f"{label} age {age_id} matt{matt}",
             )
             rows.extend(batch)
             time.sleep(0.8)
-        print(f"    age band {age_id}: cumulative {len(rows)} rows")
+        print(f"    {label} age band {age_id}: cumulative {len(rows)} rows")
     return rows
 
 
-def pool(rows, county_names):
+def pool(rows, county_names, indicator):
     """rows -> tidy long records, one per (county, kurvan age band, sex, year).
 
     Splits into counts and rates first, same shape roll_suicide() in
     fetch_socialstyrelsen_mh.py uses, then recovers population as
     count / rate * 1e5 to pool two 5-year bands into one Kurvan band.
+    `indicator` tags which of the six DIAGNOS_GROUPS this batch is —
+    js/data.js sums all six back into an "all" pseudo-type rather than
+    this script fetching diagnos=05 separately (see module docstring).
     """
     counts, rates = {}, {}
     for r in rows:
@@ -232,7 +306,7 @@ def pool(rows, county_names):
                     out.append({
                         "region": county_names.get(county, county) if county != "00" else "Sverige",
                         "county_code": county,
-                        "indicator": "psych_per_100k",
+                        "indicator": indicator,
                         "year": year,
                         "age_group": band_name,
                         "sex": sex,
@@ -242,7 +316,7 @@ def pool(rows, county_names):
     return out
 
 
-def all_ages_records(rows, county_names):
+def all_ages_records(rows, county_names, indicator):
     counts, rates = {}, {}
     for r in rows:
         county = REGION_ID_TO_COUNTY.get(r.get("regionId"))
@@ -260,7 +334,7 @@ def all_ages_records(rows, county_names):
             out.append({
                 "region": county_names.get(county, county) if county != "00" else "Sverige",
                 "county_code": county,
-                "indicator": "psych_per_100k",
+                "indicator": indicator,
                 "year": year,
                 "age_group": "0-85+",
                 "sex": sex,
@@ -280,24 +354,40 @@ def load_county_names():
 
 
 def main():
-    print("[socialstyrelsen-psych] region-grain specialist psychiatric care")
+    print("[socialstyrelsen-psych] region-grain specialist psychiatric care, "
+          f"by diagnosis type ({len(DIAGNOS_GROUPS)} groups)")
     assert_diagnos_filters()
     county_names = load_county_names()
 
-    print("  fetching 'all ages' (0-85+)...")
-    all_ages_raw = fetch_all_ages()
-    print("  fetching 5-year age bands (for Kurvan's nine wider bands)...")
-    band_raw = fetch_age_bands()
+    all_ages_raw_by_group = {}
+    band_raw_by_group = {}
+    records = []
+    for code, name in DIAGNOS_GROUPS.items():
+        indicator = f"psych_{name}_per_100k"
+        label = f"{code} ({name})"
+        print(f"  --- {label} ---")
+        print(f"  fetching 'all ages' (0-85+)...")
+        all_ages_raw = fetch_all_ages(code, label)
+        print("  fetching 5-year age bands (for Kurvan's nine wider bands)...")
+        band_raw = fetch_age_bands(code, label)
+        all_ages_raw_by_group[code] = all_ages_raw
+        band_raw_by_group[code] = band_raw
+        records += all_ages_records(all_ages_raw, county_names, indicator)
+        records += pool(band_raw, county_names, indicator)
 
     with open(os.path.join(RAW_DIR, "socialstyrelsen_psych_raw.json"), "w", encoding="utf-8") as f:
-        json.dump({"all_ages": all_ages_raw, "age_bands": band_raw}, f, ensure_ascii=False, indent=1)
+        json.dump({"all_ages": all_ages_raw_by_group, "age_bands": band_raw_by_group}, f, ensure_ascii=False, indent=1)
 
-    records = all_ages_records(all_ages_raw, county_names) + pool(band_raw, county_names)
     out_path = os.path.join(PROCESSED_DIR, "socialstyrelsen_psych.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=1)
 
-    print(f"\n[socialstyrelsen-psych] wrote {out_path}  ({len(records)} records)")
+    by_indicator = {}
+    for r in records:
+        by_indicator[r["indicator"]] = by_indicator.get(r["indicator"], 0) + 1
+    print(f"\n[socialstyrelsen-psych] wrote {out_path}  ({len(records)} records total)")
+    for ind, n in sorted(by_indicator.items()):
+        print(f"    {ind}: {n} rows")
     print("[socialstyrelsen-psych] now run:  python prototype/pipeline/build_kurvan_data.py")
 
 
