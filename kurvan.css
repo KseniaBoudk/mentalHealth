@@ -343,6 +343,11 @@ select option:disabled{color:var(--ink-3)}
 .tile:hover{filter:brightness(1.15)}
 .tile:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
 .tile.on{stroke:var(--violet);stroke-width:2.2}
+/* chorMap()'s "region known, nothing to show this period" tile (charts.js) —
+   flat and colorless on purpose, so it never gets mistaken for the lightest
+   real quintile band, which is always a tint of the indicator's own color. */
+.tile.nodata{fill:var(--ink-3);fill-opacity:.22}
+.tile.nodata:hover{fill-opacity:.34;filter:none}
 /* lineChart()'s per-point hover targets (charts.js) — invisible at rest so
    the chart looks unchanged, revealed on hover/focus so the cursor can find
    them. A dedicated class, not a generic [data-tip] rule, so it can't touch

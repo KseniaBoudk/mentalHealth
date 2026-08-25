@@ -107,10 +107,29 @@ def load(filename):
         with open(path, encoding="utf-8") as f:
             rows = json.load(f)
         print(f"[build_kurvan_data] read {len(rows)} rows from {path}")
-        return rows
+        return [strip_dead_fields(r) for r in rows]
     print(f"[build_kurvan_data] {path} not found — this source stays empty "
           f"(its indicator(s) fall back to the labelled-synthetic generator).")
     return []
+
+
+# Fields some fetchers include (for their own debugging, or because the
+# upstream/shared script that produced them carries it) that js/data.js
+# never reads — grepped for `.region` across every js/*.js file that
+# touches a real-data row before adding this, zero hits outside
+# `S.region`/`RBY`/etc., which are unrelated (region lookups keyed off
+# county_code, not this field). Dropped here, not at the fetch scripts,
+# so data/processed/*.json stays the fuller, more debuggable shape and
+# only the page-weight-sensitive compiled output ../js/real_mh_data.js
+# (loaded as a blocking <script> on every page load, see module
+# docstring above) shrinks. "region" is the county's full display name —
+# already recoverable from county_code via REGIONS/RBY in js/data.js, so
+# repeating it on every one of ~31,500 rows was pure duplication.
+DEAD_ROW_FIELDS = {"region"}
+
+
+def strip_dead_fields(row):
+    return {k: v for k, v in row.items() if k not in DEAD_ROW_FIELDS}
 
 
 def main():

@@ -64,9 +64,13 @@ the capture).
     meta.json description) — not a population rate, not comparable to the
     register-based per-100k/per-1000 indicators elsewhere in this project.
 
-Output: ../data/processed/forsakringskassan_f43.json — SAME shape as
-        before ({county_code, indicator, year, value, count, sex}), so
-        js/data.js's REAL_FK reader needs no changes for this swap.
+Output: ../data/processed/forsakringskassan_f43.json — same shape as
+        before ({county_code, indicator, year, value, count, sex}) plus one
+        new field, `months` (how many distinct calendar months of that year
+        went into `value`'s average — under 12 means a partial year; see
+        to_records()'s docstring). js/data.js's REAL_FK reader does need a
+        change for this one, to carry `months` through and let the UI flag
+        an in-progress year.
 Run:    python prototype/pipeline/fetch_forsakringskassan.py
 """
 import json
@@ -123,7 +127,17 @@ def to_records(raw_rows):
     """Monthly rows -> one record per county/sex/year: average the share
     (andel) across that year's months, sum the case count (antal). Kurvan's
     cell()/total() are year-keyed, not month-keyed — annual is the grain
-    every other indicator already uses."""
+    every other indicator already uses.
+
+    The current calendar year is necessarily incomplete when this runs
+    (there's no "wait for December" here — it fetches whatever's published
+    so far) and averaging 5 published months the same way as a full 12
+    silently passes off a partial-year figure as a finished one, with
+    nothing distinguishing it from every prior closed year. `months` below
+    is the actual count of distinct calendar months that went into each
+    record's average, carried all the way through to js/data.js/lang.js so
+    the UI can say so wherever this year's figure is shown, not just note
+    it once somewhere easy to miss."""
     groups = {}
     dropped_suppressed = 0
     for row in raw_rows:
@@ -131,7 +145,8 @@ def to_records(raw_rows):
         county_code = "00" if d["lan_kod"] == "ALL" else d["lan_kod"]
         sex = KON.get(d["kon_kod"])
         year = num(d.get("ar"))
-        if sex is None or year is None:
+        month = d.get("manad")
+        if sex is None or year is None or month is None:
             continue
         andel, antal = row["observations"]["andel"], row["observations"]["antal"]
         if andel.get("rojd") or antal.get("rojd"):
@@ -141,16 +156,21 @@ def to_records(raw_rows):
         if share is None:
             continue
         key = (county_code, sex, int(year))
-        g = groups.setdefault(key, {"shares": [], "count": 0})
+        g = groups.setdefault(key, {"shares": [], "count": 0, "months": set()})
         g["shares"].append(share)
         g["count"] += count or 0
+        g["months"].add(month)
 
     if dropped_suppressed:
         print(f"    note: {dropped_suppressed} row(s) flagged rojd=true, dropped "
               f"(see docstring — none were expected)")
 
     out = []
+    partial_years = set()
     for (county_code, sex, year), g in groups.items():
+        n_months = len(g["months"])
+        if n_months < 12:
+            partial_years.add(year)
         out.append({
             "county_code": county_code,
             "indicator": "sjukfranvaro_f43_pct",
@@ -158,7 +178,11 @@ def to_records(raw_rows):
             "value": sum(g["shares"]) / len(g["shares"]),
             "count": int(g["count"]) if g["count"] else None,
             "sex": sex,
+            "months": n_months,
         })
+    if partial_years:
+        print(f"    note: partial year(s) {sorted(partial_years)} — fewer than 12 "
+              f"months published yet; each record says how many via `months`")
     return out
 
 

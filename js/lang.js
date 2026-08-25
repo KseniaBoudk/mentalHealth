@@ -17,6 +17,16 @@ sv:{
   vantetiderNoteL:"Läs detta först",
   vantetiderCaveat:"Rullande tolvmånadersfönster, inte en flerårig trend — källan sparar bara den senaste perioden. Uppdaterat för hand, inte automatiskt, så siffrorna kan ligga efter. Medianen gäller bara avslutade första besök — ett lågt värde kan betyda korta väntetider, eller bara att de enklaste fallen hunnit avslutas än så länge.",
   vantetiderInd:"Väntetid till första besök",
+  // chorMap()'s no-data tile tooltip for a region suppressed THIS month
+  // specifically (see viewVantetider) — distinct from suppLbl, which is
+  // about a whole withheld count next to an otherwise-published rate.
+  vantetiderNoData:name=>`${name}: ingen siffra denna månad — för få avslutade besök för att publiceras.`,
+  // viewSjukskrivning's latest year, when Försäkringskassan hasn't published
+  // a full 12 months of it yet (see REAL_FK's `partial`/`months`, data.js) —
+  // partialTag is the short inline form (map year label, region card),
+  // partialYearNote the full sentence (srcStrip's extra slot).
+  partialTag:"(delår)",
+  partialYearNote:(y,m)=>`<b>${y} är ett delår.</b> Bara ${m} av 12 månader publicerade hittills av Försäkringskassan — jämför inte rakt av med hela tidigare år.`,
   monthsShort:["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],
   legendRankNote:"Regionerna delas in i fem lika stora grupper efter värde — inte jämnstora intervall.",
   legendTiers:["Lägst","Lägre","Mitten","Högre","Högst"],
@@ -221,6 +231,9 @@ en:{
   vantetiderNoteL:"Read this first",
   vantetiderCaveat:"A rolling twelve-month window, not a multi-year trend — the source only keeps the most recent period. Updated by hand, not automatically, so figures can lag. The median covers only completed first visits — a low value can mean short waits, or just that the easiest cases have finished so far.",
   vantetiderInd:"Waiting time to first visit",
+  vantetiderNoData:name=>`${name}: no figure this month — too few completed visits to publish.`,
+  partialTag:"(partial year)",
+  partialYearNote:(y,m)=>`<b>${y} is a partial year.</b> Only ${m} of 12 months published so far by Försäkringskassan — don't compare it straight against a full prior year.`,
   monthsShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
   legendRankNote:"Regions are split into five equal-sized groups by value — not equal-width ranges.",
   legendTiers:["Lowest","Lower","Middle","Higher","Highest"],

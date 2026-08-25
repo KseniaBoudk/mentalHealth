@@ -353,18 +353,28 @@ const REAL_HLV = (() => {
    1e. REAL DATA — share of ongoing sickness-benefit cases with a stress-
    reaction (F43) diagnosis, from js/real_mh_data.js's REAL_FK_MH
    (fetch_forsakringskassan.py). County grain (plus a national row), all
-   three sexes, annual (averaged from quarterly), 2005-2019 ONLY — this
-   source does not extend into the 2020s, unlike every other real
-   indicator here. No age dimension, same situation as REAL_HLV.
+   three sexes, annual (averaged from monthly), 2005 through the current
+   year — unlike every other real indicator here, this one keeps extending
+   into the current, still-unfinished year rather than stopping at the
+   last fully closed one.
+
+   That means the latest year is usually a PARTIAL year: whatever months
+   Försäkringskassan has published so far, averaged the same way a full
+   12 would be, with nothing about the number itself distinguishing it
+   from a finished year. `months` on each REAL_FK_MH row (fetcher's own
+   to_records() docstring) carries how many calendar months actually went
+   into that average; `partial` below is just `months < 12`, computed once
+   here so every caller checks the same thing the same way instead of
+   re-deriving it. No age dimension, same situation as REAL_HLV.
    ===================================================================== */
 const REAL_FK = (() => {
   const rows = (typeof REAL_FK_MH !== "undefined" && Array.isArray(REAL_FK_MH.rows)) ? REAL_FK_MH.rows : [];
   const active = rows.length > 0;
-  const idx = {};   // idx[county][sex][year] = {value,count}
+  const idx = {};   // idx[county][sex][year] = {value,count,months}
   for (const row of rows) {
     const byCounty = idx[row.county_code] || (idx[row.county_code] = {});
     const bySex = byCounty[row.sex] || (byCounty[row.sex] = {});
-    bySex[row.year] = { value: row.value, count: row.count };
+    bySex[row.year] = { value: row.value, count: row.count, months: row.months };
   }
   const years = new Set(rows.map(r => r.year));
   return { active, idx, years: [...years].sort((a, b) => a - b),
@@ -374,7 +384,8 @@ function realTotalFK(regionCode, year, sex) {
   if (!REAL_FK.active) return undefined;
   const county = regionCode === "SE" ? "00" : regionCode;
   const row = REAL_FK.idx[county] && REAL_FK.idx[county][sex] && REAL_FK.idx[county][sex][year];
-  return row ? realRowToCell(row) : null;
+  if (!row) return null;
+  return { ...realRowToCell(row), months: row.months, partial: row.months != null && row.months < 12 };
 }
 // No age dimension in the source table — always null once real, same as distress/HLV.
 function realCellFK() { return REAL_FK.active ? null : undefined; }

@@ -862,6 +862,13 @@ function viewSjukskrivning(){
   const{years,ts}=sexTimeSeries(k,false);
   const latest=years[years.length-1];
   const nat=total(k,"SE",latest,"T",false);
+  // F43 keeps extending into the current, still-open year instead of
+  // stopping at the last closed one (see REAL_FK's docstring, data.js) —
+  // so `latest` is often a partial year. nat.partial is that year's flag;
+  // checked on the national total since map/line-chart headers below are
+  // both keyed to the national "latest", not any one region's own coverage.
+  const latestPartial=nat&&nat.partial;
+  const yearTag=latestPartial?` ${esc(t.partialTag)}`:"";
   // Same shape as viewKarta's single (non-compare) map branch, trimmed down
   // to this one indicator — no year slider or trend arrows, just the
   // latest year, since this page is about one indicator, not a picker.
@@ -879,14 +886,14 @@ function viewSjukskrivning(){
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
     <div class="card-b">${lineChart(sexSeries,
       {aria:"Sickness absence trend, women and men",
-       xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+       xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])+(latestPartial?`\n${t.partialTag}`:"")]],
        marks:eventMarks(k,years),h:200,unit:unitLabel(k)})}
       ${lineLegend(sexSeries)}</div>
-    ${srcStrip(k)}
+    ${srcStrip(k,latestPartial?t.partialYearNote(latest,nat.months):undefined)}
   </div>
   <div class="grid-ex mt-fig">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}</div></div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}${yearTag}</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"}),"sjukskrivning")}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
@@ -901,7 +908,7 @@ function viewSjukskrivning(){
             <div class="rstat" style="border-top-color:${col}">
               <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.ind[k])}</div>
               <div class="rv tnum">${fmt(mine?mine.value:null,1,unitLabel(k))}</div>
-              <div class="rci tnum">${esc(unitLabel(k))} · ${ciRange(mine?mine.lo:null,mine?mine.hi:null)}</div>
+              <div class="rci tnum">${esc(unitLabel(k))} · ${ciRange(mine?mine.lo:null,mine?mine.hi:null)}${mine&&mine.partial?` · ${esc(t.partialTag)}`:""}</div>
               ${mine?`<div class="rvs">${esc(t.statSentence.sjukfranvaro(fmt(mine.value,1)))}</div>`:""}
             </div>
           </div>
@@ -1107,10 +1114,18 @@ function viewVantetider(){
   const latest=months[months.length-1];
   const monthLabel=([y,m])=>`${t.monthsShort[m-1]} ${y}`;
 
+  // Not .filter(Boolean)ing out the regions with no figure this month:
+  // unlike self-harm/suicide's count-suppression (a rate is still
+  // published there), a suppressed BUP region-month has no value at all
+  // to fall back to. chorMap()/quintileBands() know how to take a
+  // value:null row and draw it as a real, clickable "no data" tile
+  // instead of leaving a hole in the map where that county should be —
+  // see chorMap's own docstring in charts.js.
   const rows=REGIONS.map(r=>{
     const v=bupWaitCell(r[0],latest[0],latest[1]);
-    return v!=null&&{code:r[0],name:r[1],value:v,lo:v,hi:v};
-  }).filter(Boolean);
+    return v!=null?{code:r[0],name:r[1],value:v,lo:v,hi:v}
+                  :{code:r[0],name:r[1],value:null,tip:t.vantetiderNoData(r[1])};
+  });
   const nat=bupWaitCell("SE",latest[0],latest[1]);
   const R=RBY[S.region];
   const mine=bupWaitCell(S.region,latest[0],latest[1]);

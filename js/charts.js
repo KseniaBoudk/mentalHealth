@@ -207,7 +207,18 @@ function lineChart(series,opts){
   // edges (e.g. an intermediate age-band tick) still centers as before.
   (opts.xlabels||[]).forEach(l=>{
     const anchor=l[0]===x1?"end":l[0]===x0?"start":"middle";
-    s+=`<text x="${X(l[0]).toFixed(1)}" y="${H-9}" text-anchor="${anchor}" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${esc(l[1])}</text>`;});
+    const x=X(l[0]).toFixed(1);
+    // A label may carry a "\n" to stack a short qualifier (e.g. "2026" /
+    // "(partial year)") on its own line below the main text instead of
+    // appended inline — appending it inline roughly doubles the label's
+    // horizontal footprint on an axis that's often only a few characters
+    // wide to begin with. Single-line labels (every caller but
+    // viewSjukskrivning's partial-year case) render exactly as before:
+    // one tspan at the same baseline y=H-9 this used to hardcode directly.
+    const lines=String(l[1]).split("\n");
+    s+=`<text x="${x}" text-anchor="${anchor}" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">`
+      +lines.map((ln,i)=>`<tspan x="${x}" y="${H-9-(lines.length-1-i)*9}">${esc(ln)}</tspan>`).join("")
+      +`</text>`;});
   return s+"</svg>";
 }
 
@@ -217,9 +228,13 @@ function lineChart(series,opts){
    raw value on a gradient. Shared by chorMap (fill) and viewKarta's legend
    (swatches), so the two never disagree about where a band boundary falls. */
 const BAND_OP=[0.16,0.34,0.52,0.72,0.92];
+// rows may include no-data entries (value:null, chorMap's "known region,
+// nothing to show" tile — see chorMap below); those get no band and no
+// rank, same as if they weren't passed at all, so a caller can hand this
+// (and chorMap/mapLegend) its full 21-region list without pre-filtering.
 function quintileBands(rows,n){
   n=n||BAND_OP.length;
-  const sorted=rows.slice().sort((a,b)=>a.value-b.value);
+  const sorted=rows.filter(r=>r.value!=null).sort((a,b)=>a.value-b.value);
   const size=sorted.length;
   const bands=Array.from({length:n},()=>[]);
   sorted.forEach((r,i)=>bands[Math.min(n-1,Math.floor(i/size*n))].push(r));
@@ -233,7 +248,17 @@ function quintileBands(rows,n){
    from REGION_PATH (data.js). Fill opacity encodes the region's quintile
    band, not its raw value — see quintileBands() — and the selected region
    gets a heavier outline. Regions are real <path> elements, clickable and
-   focusable like the other controls. */
+   focusable like the other controls.
+
+   A row may instead be {code,name,value:null,tip} — a region Kurvan knows
+   about (it's still in REGIONS) but with nothing to show for the period on
+   screen, e.g. BUP's per-month disclosure floor withholding a whole
+   region's figure rather than just a count next to a published rate (see
+   viewVantetider). That still draws a real, clickable/focusable <path> —
+   a plain flat "no data" fill instead of an omitted shape — because a
+   missing county on an actual map of Sweden reads as broken, not as
+   "nothing to report here" the way a missing row in a list or dot plot
+   does. It carries no value into quintileBands()/the fill-opacity scale. */
 function chorMap(rows,opts){
   const col=opts.color||"var(--violet)";
   const nat=opts.nat;
@@ -242,8 +267,14 @@ function chorMap(rows,opts){
   // shared-edge stroke, instead of a random one covering half its outline.
   const paths=[...rows].sort((a,b)=>(a.code===S.region)-(b.code===S.region)).map(r=>{
     const g=REGION_PATH[r.code];
-    const op=BAND_OP[idxByCode[r.code]];
     const sel=r.code===S.region;
+    if(r.value==null){
+      const tip=r.tip||r.name;
+      const card=dataCard({title:r.name,color:col,rows:[{value:fmt(null),unit:"",ci:""}]});
+      return `<path class="tile nodata${sel?" on":""}" data-region="${r.code}" data-tip="${esc(tip)}" data-card="${card}" tabindex="0" role="button"
+        aria-label="${esc(tip)}" d="${g.d}"${sel?` filter="url(#tileglow)" style="stroke:var(--ink-3)"`:""}></path>`;
+    }
+    const op=BAND_OP[idxByCode[r.code]];
     const vsNat=nat!=null?` · ${t.natLine} ${fmt(nat,1)}`:"";
     const trendTxt=r.trend?` · ${r.trend.arrow}${r.trend.rel?` (${r.trend.rel==="with"?t.trendWith:t.trendAgainst})`:""}`:"";
     // Omit the range when lo===hi — a real confidence interval always
