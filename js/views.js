@@ -200,8 +200,8 @@ function viewLaget(){
   const suPeak=suM.filter(Boolean)[suM.filter(Boolean).length-1];
   const shSeries=[{pts:shK,color:"var(--violet)",w:2.5,label:t.women,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
                    {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men}];
-  const suSeries=[{pts:suM,color:"var(--oxblood)",w:2.6,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
-                   {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women}];
+  const suSeries=[{pts:suK,color:"var(--oxblood)",w:2.5,label:t.women},
+                   {pts:suM,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}}];
   const oldMen=fakeCell("suicide","SE",2024,8,"M",false);
   const yw06=cell("antidep","SE",2006,1,"K",false),yw24=cell("antidep","SE",2024,1,"K",false);
   const growth=Math.round((yw24.value/yw06.value-1)*100);
