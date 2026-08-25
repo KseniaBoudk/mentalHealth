@@ -164,6 +164,37 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape")unpinTip();
 });
+// Left/Right steps Karta's year slider — but only while focus is actually
+// on it (.slidewrap or its own prev/next buttons), not globally on the
+// whole page: arrow keys already mean something native and expected
+// inside a <select> (cycle its own options) or anywhere else focus might
+// legitimately be, and blindly hijacking them page-wide would break that.
+// Reuses c-yprev/c-ynext's own existing onclick (wire(), below) via a
+// plain .click() rather than re-deriving the step-year logic here — a
+// disabled button (already-first/-last year, same rule that already
+// disables it visually) just no-ops on .click(), so the boundary is
+// handled for free, nothing extra to check.
+document.addEventListener("keydown",e=>{
+  if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;
+  const active=document.activeElement;
+  if(!active||!active.closest(".slidewrap"))return;
+  e.preventDefault();
+  const id=e.key==="ArrowLeft"?"c-yprev":"c-ynext";
+  document.getElementById(id)?.click();
+  // .click() ran stepYear() -> render(), which just rebuilt #app from
+  // scratch — the button that was focused a moment ago is now a detached
+  // node, so focus has silently fallen back to <body>. Without re-focusing
+  // a FRESH button (render() already finished by the time .click() returns
+  // — synchronous, no awaits in that path), the very next arrow-key press
+  // would find nothing inside .slidewrap focused any more and silently do
+  // nothing: one step per press instead of the rapid repeated-stepping
+  // this is actually for. Prefer the one just clicked, but a disabled
+  // button (just-reached year boundary) can't take focus at all — fall
+  // back to the OTHER one so the reverse direction still works right
+  // away, instead of needing a manual re-tab just to turn back around.
+  const fresh=document.getElementById(id);
+  (fresh&&!fresh.disabled?fresh:document.getElementById(id==="c-yprev"?"c-ynext":"c-yprev"))?.focus();
+});
 
 // Shareable/bookmarkable URL — reflects a chosen subset of S (js/state.js)
 // into the address bar (stateFromUrl() reads it back on load, before the
