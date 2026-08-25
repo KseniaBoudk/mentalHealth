@@ -88,6 +88,14 @@ button{font:inherit}
 }
 #synth b{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:var(--fs-4)}
 #synth span{opacity:.92}
+/* Shown only while loadRealSourcesLazily() (shell.js) still has one or more
+   of the 9 js/data/*.js files in flight — a visually distinct sub-line
+   (italic, pulsing) so the banner's main message doesn't read as a
+   finished, stable fact while it's still actively changing underneath it.
+   The pulse is real animation, not a JS-driven interval, so the site-wide
+   prefers-reduced-motion rule below already neutralises it for free. */
+#synth .loadingsub{opacity:.7;font-style:italic;animation:synthpulse 1.6s ease-in-out infinite}
+@keyframes synthpulse{0%,100%{opacity:.5}50%{opacity:.95}}
 
 /* 22px literal — no exact --sp-* step (nearest are 20/24), same rounding
    issue as #synth above. */
@@ -493,6 +501,15 @@ select option:disabled{color:var(--ink-3)}
 }
 .fsbtn-head:hover,.fsbtn-head:focus-visible{background:var(--ink);color:var(--paper)}
 .fsbtn-head:focus-visible{outline:2px solid var(--violet);outline-offset:1px}
+/* PNG/CSV export (wireFullscreen(), shell.js) — pushed to the far right of
+   #chartFsHead (already display:flex) opposite the close button/title,
+   same toolbar-right convention as most apps. Text labels, not a single
+   glyph, since "PNG"/"CSV" isn't something a symbol reads as unambiguously
+   the way ✕ does for close — so these get the wider pill variant below
+   instead of .fsbtn-head's plain 30px circle, while still inheriting its
+   border/background/hover behaviour (both classes together on one button). */
+.chartFsActions{margin-left:auto;display:flex;gap:8px}
+.fsbtn-head-text{width:auto;border-radius:14px;padding:0 12px;font-size:11.5px;font-weight:650;letter-spacing:.02em}
 #chartFsBody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
 /* Charts are already width:100%;height:auto (svg{}, above) — sized
    against #chartFsBody instead of the bare viewport so the title bar and

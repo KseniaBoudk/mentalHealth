@@ -36,7 +36,12 @@ sv:{
   legendRankNote:"Regionerna delas in i fem lika stora grupper efter värde — inte jämnstora intervall.",
   legendTiers:["Lägst","Lägre","Mitten","Högre","Högst"],
   langBtn:"EN", themeD:"Mörkt", themeL:"Ljust",
+  copyLink:"Kopiera länk", linkCopied:"Länk kopierad", linkCopyFailed:"Kunde inte kopiera",
   stamp:"Data t.o.m. 2024 · uppdaterad aug 2026",
+  // loadRealSourcesLazily() (shell.js): shown next to the #synth banner's
+  // own message only while some of the 9 js/data/*.js files are still in
+  // flight — pending is how many of the 9 haven't landed yet.
+  loadingRemaining:pending=>`Laddar återstående datakällor… (${pending} av 9 kvar)`,
   synthT:"Syntetiska data", synthB:"Alla siffror på den här sidan är genererade. Panelen innehåller ingen verklig statistik.",
   synthPartialT:"Mestadels verkliga data",
   // Computed from IND/isRealActive() via realSummary() (views.js), not
@@ -249,6 +254,8 @@ sv:{
   chartFullscreen:"Visa diagrammet i helskärm",
   chartFsClose:"Stäng helskärm",
   chartFsHint:"Klicka på en punkt, region eller stapel för dess siffror",
+  chartFsPng:"Ladda ner PNG", chartFsPngLbl:"PNG",
+  chartFsCsv:"Ladda ner CSV", chartFsCsvLbl:"CSV",
   histTitle:"Fördelning mellan regioner",
   histSub:"Antal regioner per nivåband. Visar spridningen, inte vilken region som är vilken.",
   histCount:"antal regioner",
@@ -282,7 +289,9 @@ en:{
   legendRankNote:"Regions are split into five equal-sized groups by value — not equal-width ranges.",
   legendTiers:["Lowest","Lower","Middle","Higher","Highest"],
   langBtn:"SV", themeD:"Dark", themeL:"Light",
+  copyLink:"Copy link", linkCopied:"Link copied", linkCopyFailed:"Couldn't copy",
   stamp:"Data to 2024 · updated Aug 2026",
+  loadingRemaining:pending=>`Loading remaining data sources… (${pending} of 9 left)`,
   synthT:"Synthetic data", synthB:"Every figure on this page is generated. It contains no real statistics.",
   synthPartialT:"Mostly real data",
   // n/total/realNames/synthNames/synthN come from realSummary() (views.js),
@@ -457,6 +466,8 @@ en:{
   chartFullscreen:"View chart full screen",
   chartFsClose:"Close full screen",
   chartFsHint:"Click a point, region, or bar for its figures",
+  chartFsPng:"Download PNG", chartFsPngLbl:"PNG",
+  chartFsCsv:"Download CSV", chartFsCsvLbl:"CSV",
   histTitle:"Distribution across regions",
   histSub:"Number of regions per value band. Shows the spread, not which region is which.",
   histCount:"number of regions",

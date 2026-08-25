@@ -21,6 +21,28 @@ const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBe
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
   vantetider:viewVantetider,hbsc:viewHbsc,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
 
+// The 9 real-data sources (js/data/*.js), lazy-loaded by loadRealSourcesLazily()
+// near the bottom of this file — declared here, not there, purely so its
+// .length is available for realSourcesPending below BEFORE the very first
+// render() runs (loadRealSourcesLazily() itself is still only ever CALLED
+// after that first render, unchanged — see that function's own comment).
+const REAL_SOURCES=[
+  {file:"js/data/real_mh.js",         rebuild:()=>{REAL=rebuildREAL();}},
+  {file:"js/data/real_psych.js",      rebuild:()=>{REAL_PSYCH=rebuildREAL_PSYCH();}},
+  {file:"js/data/real_hlv.js",        rebuild:()=>{REAL_HLV=rebuildREAL_HLV();}},
+  {file:"js/data/real_lakemedel.js",  rebuild:()=>{REAL_ANTIDEP=rebuildREAL_ANTIDEP();}},
+  {file:"js/data/real_fk.js",         rebuild:()=>{REAL_FK=rebuildREAL_FK();}},
+  {file:"js/data/real_context.js",    rebuild:()=>{CONTEXT=rebuildCONTEXT();}},
+  {file:"js/data/real_bup.js",        rebuild:()=>{BUP_WAIT=rebuildBUP_WAIT();}},
+  {file:"js/data/real_hbsc.js",       rebuild:()=>{HBSC=rebuildHBSC();}},
+  {file:"js/data/real_pop.js",        rebuild:()=>{REAL_POP=rebuildREAL_POP();NATIONAL_AGE_WEIGHTS=rebuildNATIONAL_AGE_WEIGHTS();}},
+];
+// How many of the 9 are still in flight — render()'s #synth banner shows a
+// "still loading" sub-line while this is above 0 (see t.loadingRemaining,
+// js/lang.js). Starts at the full count so it's accurate on the very first
+// paint, before loadRealSourcesLazily() has even run once.
+let realSourcesPending=REAL_SOURCES.length;
+
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
 // as the initial load, recreating <main> as a brand-new DOM node each time.
@@ -134,6 +156,62 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape")unpinTip();
 });
+
+// Shareable/bookmarkable URL — reflects a chosen subset of S (js/state.js)
+// into the address bar (stateFromUrl() reads it back on load, before the
+// very first render() — see the bottom of this file) so a specific view
+// can be linked or bookmarked instead of only ever describable in words.
+// Every incoming value is checked through the same helpers the rest of the
+// app already uses to keep a selection sane (ageAvailable()/sexAvailable()/
+// IND/SECTIONS/REGIONS membership, js/data.js) — an invalid or stale value
+// (a hand-edited URL, or an old link whose psychType no longer exists) is
+// just left at S's own default rather than applied. Real-data-dependent
+// bounds (ageAvailable() etc.) are checked against whatever REAL_X.active
+// is at THIS moment — before loadRealSourcesLazily() has loaded anything —
+// so this is necessarily a looser check than once real data lands; that's
+// fine, the app already renders "no real data for this cell" gracefully
+// rather than crashing (isRealActive()/cell(), js/data.js), same as it
+// always has for any state that predates a source finishing its load.
+const URL_STATE_KEYS=["tab","ind","age","sex","region","year","std","mapYear","cmpOn","cmpInd","ctxInd","psychType","medType","hbscAge","hbscSex","lang"];
+function stateFromUrl(){
+  const p=new URLSearchParams(location.search);
+  if(![...p.keys()].length)return;
+  // ind/tab first — several of the checks below (ageAvailable, sexAvailable)
+  // read S.ind, so it has to already reflect the URL's own value, not
+  // whatever S started at, by the time they run.
+  if(p.has("lang")){const v=p.get("lang");if(v==="sv"||v==="en")S.lang=v;}
+  if(p.has("ind")&&IND[p.get("ind")])S.ind=p.get("ind");
+  if(p.has("tab")&&SECTIONS.includes(p.get("tab")))S.tab=p.get("tab");
+  if(p.has("age")){const v=+p.get("age");if(Number.isInteger(v)&&v>=-1&&v<=8&&ageAvailable(S.ind,v))S.age=v;}
+  if(p.has("sex")){const v=p.get("sex");if((v==="M"||v==="K"||v==="T")&&sexAvailable(S.ind,v))S.sex=v;}
+  if(p.has("region")){const v=p.get("region");if(v==="SE"||REGIONS.some(r=>r[0]===v))S.region=v;}
+  if(p.has("year")){const v=+p.get("year");if(Number.isInteger(v)&&v>1990&&v<2100)S.year=v;}
+  if(p.has("std"))S.std=p.get("std")==="1";
+  if(p.has("mapYear")){const v=+p.get("mapYear");S.mapYear=Number.isInteger(v)?v:null;}
+  if(p.has("cmpOn"))S.cmpOn=p.get("cmpOn")==="1";
+  if(p.has("cmpInd")&&IND[p.get("cmpInd")])S.cmpInd=p.get("cmpInd");
+  if(p.has("ctxInd")&&CONTEXT_META[p.get("ctxInd")])S.ctxInd=p.get("ctxInd");
+  if(p.has("psychType")){const v=p.get("psychType");if(v==="all"||PSYCH_TYPES.includes(v))S.psychType=v;}
+  if(p.has("medType")){const v=p.get("medType");if(v==="all"||MED_TYPES.includes(v))S.medType=v;}
+  if(p.has("hbscAge")){const v=p.get("hbscAge");if(v==="11"||v==="13"||v==="15")S.hbscAge=v;}
+  if(p.has("hbscSex")){const v=p.get("hbscSex");if(v==="K"||v==="M")S.hbscSex=v;}
+}
+// Called at the end of every render() — history.replaceState, not
+// pushState, so nudging a selector doesn't spam the browser's back button;
+// only an actual navigation (or the explicit "Copy link" button) is meant
+// to be a shareable moment, not every intermediate state on the way there.
+function syncUrlFromState(){
+  const p=new URLSearchParams();
+  URL_STATE_KEYS.forEach(k=>{
+    const v=S[k];
+    if(v===null||v===undefined||v==="")return;
+    p.set(k,typeof v==="boolean"?(v?"1":"0"):String(v));
+  });
+  const qs="?"+p.toString();
+  if(location.search!==qs)history.replaceState(null,"",qs+location.hash);
+}
+let urlTabScrolled=false;
+
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -148,11 +226,12 @@ function render(){
   // name in synthNames — with that empty, they used to read "Only  is
   // still generated". synthAllB/footBAll/realNoteAll are the versions
   // without that clause, for exactly this case.
-  document.getElementById("synth").innerHTML = rs.synthN===0
+  document.getElementById("synth").innerHTML = (rs.synthN===0
     ? `<b>${esc(t.synthAllT)}</b><span>${esc(t.synthAllB(rs.total,rs.realNames))}</span>`
     : rs.n>0
     ? `<b>${esc(t.synthPartialT)}</b><span>${esc(t.synthPartialB(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN))}</span>`
-    : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`;
+    : `<b>${esc(t.synthT)}</b><span>${esc(t.synthB)}</span>`)
+    + (realSourcesPending>0?`<span class="loadingsub">${esc(t.loadingRemaining(realSourcesPending))}</span>`:"");
 
   // Every section gets the same landmark heading (its sidebar label) above
   // its own content, regardless of whether that view already has an
@@ -170,6 +249,7 @@ function render(){
           <div><div class="word">${esc(t.word)}</div><div class="sub">${esc(t.sub)}</div></div>
         </div>
         <div class="tools">
+          <button id="b-copylink">${esc(t.copyLink)}</button>
           <button id="b-theme">${esc(S.theme==="light"?t.themeD:t.themeL)}</button>
           <button id="b-lang">${esc(t.langBtn)}</button>
         </div>
@@ -188,6 +268,21 @@ function render(){
     <footer><div class="wrap"><p>${esc(t.footA)}</p><p>${esc(rs.synthN===0?t.footBAll(rs.total,rs.realNames):rs.n>0?t.footBPartial(rs.n,rs.total,rs.realNames,rs.synthNames,rs.synthN):t.footB)}</p></div></footer>`;
   firstRender=false;
   wire();
+  syncUrlFromState();
+  // A tab named in the incoming URL means "open on this section" — scroll
+  // to it once, right after the very first render (every section already
+  // exists on the page by then; this is the same scrollIntoView() idiom
+  // scrollToRegion()/b-openbehov already use elsewhere in wire()). Only
+  // ever fires once: urlTabScrolled guards against a later render (a real
+  // source landing, a selector change) re-triggering the jump and yanking
+  // the reader back to that section mid-scroll on their own.
+  if(!urlTabScrolled){
+    urlTabScrolled=true;
+    if(new URLSearchParams(location.search).has("tab")){
+      const el=document.getElementById(`sec-${S.tab}`);
+      if(el)el.scrollIntoView({behavior:"smooth"});
+    }
+  }
 }
 
 // #synth wraps to a different number of lines depending on content and
@@ -254,6 +349,25 @@ function wire(){
     });
   },{rootMargin:"-15% 0px -70% 0px"});
   document.querySelectorAll('section[id^="sec-"]').forEach(s=>currentIo.observe(s));
+  // Explicit affordance for the URL syncUrlFromState() already keeps
+  // current (render(), above) — most people won't notice a query string
+  // silently changing in the address bar, so this is the actual "share
+  // this view" action, with visible confirmation rather than a silent
+  // clipboard write. navigator.clipboard needs a secure context; file:
+  // origins count as one in Chromium, which is what this app is built
+  // for (CLAUDE.md), so no fallback path here.
+  const cl=document.getElementById("b-copylink");
+  if(cl)cl.onclick=()=>{
+    const prev=cl.textContent;
+    const flash=label=>{cl.textContent=label;setTimeout(()=>{cl.textContent=prev;},1500);};
+    // .catch(), not just .then(): a rejected clipboard write (permission
+    // denied, or a browser/context that doesn't grant it at all) is a real
+    // possibility, not a hypothetical — surfaced as an actual uncaught
+    // page error during this session's own Playwright verification before
+    // this existed. Fails visibly (brief "failed" flash) rather than
+    // silently or as a console error either way.
+    navigator.clipboard.writeText(location.href).then(()=>flash(t.linkCopied)).catch(()=>flash(t.linkCopyFailed));
+  };
   const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";render();};
   const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";render();};
   const bind=(id,fn)=>{const e=document.getElementById(id);if(e)e.onchange=()=>{fn(e.value);render();};};
@@ -431,6 +545,112 @@ function renderReadoutCard(mark){
   document.getElementById("chartFsReadout").innerHTML=readoutCardHTML(mark);
 }
 
+// PNG/CSV export (wireFullscreen()'s #chartFsPng/#chartFsCsv, below) — both
+// act on whichever chart is CURRENTLY in #chartFsBody, so neither needs to
+// know which chart type it is.
+function downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+// S.tab, not the chart's own title: stable and filesystem-safe (tab keys
+// are plain ascii identifiers, e.g. "over_tid" — a title string can carry
+// Swedish characters/punctuation a filename would rather not have to deal
+// with) and still tells the reader which page they exported from.
+function fsFilenameBase(){
+  return `kurvan-${S.tab}-${new Date().toISOString().replace(/[:.]/g,"-").slice(0,19)}`;
+}
+// Copies every relevant *computed* style (not the custom-property-laden
+// attributes/classes charts.js actually writes, e.g. fill="var(--violet)")
+// from each element in the live, on-page SVG onto the matching element in
+// its detached clone, as a plain inline style. Needed because the clone
+// gets serialized and handed to an <img> as a standalone blob: URL with no
+// linked stylesheet and no access to :root's custom properties — without
+// this, every var(--x) color and any kurvan.css rule (.chart-svg text{...}
+// etc.) would simply fail to resolve in that context and the exported
+// image would render wrong (missing colors/text sizing) or not at all.
+// getComputedStyle() on the STILL-ATTACHED original always returns fully
+// resolved values regardless of how the color was originally specified, so
+// walking both trees in parallel (cloneNode(true) preserves structure and
+// therefore querySelectorAll("*") order 1:1) is enough to bake the current
+// theme's actual rendering into the clone.
+const SVG_EXPORT_PROPS=["fill","stroke","stroke-width","stroke-dasharray","stroke-linecap","stroke-linejoin","opacity","font-family","font-size","font-weight","text-anchor","letter-spacing"];
+function bakeComputedStyles(liveRoot,cloneRoot){
+  const liveEls=[liveRoot,...liveRoot.querySelectorAll("*")];
+  const cloneEls=[cloneRoot,...cloneRoot.querySelectorAll("*")];
+  liveEls.forEach((el,i)=>{
+    const ce=cloneEls[i];
+    if(!ce)return;
+    const cs=getComputedStyle(el);
+    let style="";
+    SVG_EXPORT_PROPS.forEach(p=>{const v=cs.getPropertyValue(p);if(v)style+=`${p}:${v};`;});
+    ce.setAttribute("style",style);
+  });
+}
+function exportChartPng(){
+  const svg=document.querySelector("#chartFsBody svg.chart-svg");
+  if(!svg)return;
+  const clone=svg.cloneNode(true);
+  bakeComputedStyles(svg,clone);
+  clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
+  const vb=(svg.getAttribute("viewBox")||"0 0 600 400").split(/\s+/).map(Number);
+  const w=vb[2]||600,h=vb[3]||400;
+  clone.setAttribute("width",w);
+  clone.setAttribute("height",h);
+  const svgBlob=new Blob([new XMLSerializer().serializeToString(clone)],{type:"image/svg+xml;charset=utf-8"});
+  const url=URL.createObjectURL(svgBlob);
+  const img=new Image();
+  img.onload=()=>{
+    const scale=2; // sharper than 1:1 on a high-DPI screen without going overboard
+    const canvas=document.createElement("canvas");
+    canvas.width=w*scale;canvas.height=h*scale;
+    const ctx=canvas.getContext("2d");
+    // #chartFs's own background (var(--surface)) — light or dark depending
+    // on the CURRENT theme — not a hardcoded white, since the SVG itself
+    // has no background and light text on a forced-white backdrop would be
+    // unreadable in dark mode.
+    ctx.fillStyle=getComputedStyle(document.getElementById("chartFs")).backgroundColor||"#fff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(blob=>{if(blob)downloadBlob(blob,fsFilenameBase()+".png");},"image/png");
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);console.warn("[kurvan] PNG export failed to render the chart.");};
+  img.src=url;
+}
+// Every mark on every chart type (line points, dot-plot rows, map tiles,
+// histogram bars, scatter points) already carries a data-card JSON payload
+// — dataCard({title,color,rows:[{label,value,unit,ci}]}), js/charts.js —
+// built for the click-to-pin/full-screen readout card. Reading it back out
+// here makes CSV export chart-type-agnostic for free: no per-chart-type
+// code, just whatever marks happen to be in the currently full-screened
+// svg. mark.dataset.card is already HTML-entity-decoded by the DOM itself
+// (readoutCardHTML() above reads it exactly the same way) — no manual
+// unescaping needed before JSON.parse().
+function csvField(v){
+  const s=String(v??"");
+  return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+}
+function exportChartCsv(){
+  const svg=document.querySelector("#chartFsBody svg.chart-svg");
+  if(!svg)return;
+  const marks=[...svg.querySelectorAll("[data-card]")];
+  if(!marks.length)return;
+  const out=[["Series","Label","Value","Unit","95% CI"]];
+  marks.forEach(m=>{
+    let card=null;
+    try{card=JSON.parse(m.dataset.card||"null");}catch(e){/* skip a malformed one, keep the rest */}
+    if(!card)return;
+    (card.rows||[]).forEach(r=>out.push([card.title||"",r.label||"",r.value??"",r.unit||"",r.ci||""]));
+  });
+  const csv=out.map(row=>row.map(csvField).join(",")).join("\r\n");
+  downloadBlob(new Blob([csv],{type:"text/csv;charset=utf-8"}),fsFilenameBase()+".csv");
+}
+
 // Every chart primitive (charts.js) marks its root <svg> with a shared
 // chart-svg class — one generic pass here wires an expand trigger onto
 // each, rather than hand-adding it per view function. A single persistent
@@ -449,6 +669,10 @@ function wireFullscreen(){
     fs.innerHTML=`<div id="chartFsHead">
         <button type="button" id="chartFsClose" class="fsbtn-head" aria-label="${esc(t.chartFsClose)}">✕</button>
         <h3 id="chartFsTitle"></h3>
+        <div class="chartFsActions">
+          <button type="button" id="chartFsPng" class="fsbtn-head fsbtn-head-text" aria-label="${esc(t.chartFsPng)}">${esc(t.chartFsPngLbl)}</button>
+          <button type="button" id="chartFsCsv" class="fsbtn-head fsbtn-head-text" aria-label="${esc(t.chartFsCsv)}">${esc(t.chartFsCsvLbl)}</button>
+        </div>
       </div>
       <div id="chartFsBody"></div>
       <div id="chartFsReadout"></div>`;
@@ -461,6 +685,8 @@ function wireFullscreen(){
     // of chart size, reads more like "the corner of the screen" than "the
     // corner of whatever's currently showing".
     document.getElementById("chartFsClose").onclick=()=>(document.exitFullscreen||document.webkitExitFullscreen)?.call(document);
+    document.getElementById("chartFsPng").onclick=exportChartPng;
+    document.getElementById("chartFsCsv").onclick=exportChartCsv;
     // Delegated: one listener for every chart ever shown here, not one per
     // mark.
     document.getElementById("chartFsBody").onclick=e=>{
@@ -714,6 +940,7 @@ function paintTrendArrows(){
   });
 }
 
+stateFromUrl();
 render();
 
 // =========================================================================
@@ -732,19 +959,11 @@ render();
 // silently, the moment its own file lands and this fires a fresh
 // render(). Fired all at once, not staggered/prioritised by scroll
 // position: local file:// reads are fast enough that the difference isn't
-// worth a priority queue's added complexity.
-// =========================================================================
-const REAL_SOURCES=[
-  {file:"js/data/real_mh.js",         rebuild:()=>{REAL=rebuildREAL();}},
-  {file:"js/data/real_psych.js",      rebuild:()=>{REAL_PSYCH=rebuildREAL_PSYCH();}},
-  {file:"js/data/real_hlv.js",        rebuild:()=>{REAL_HLV=rebuildREAL_HLV();}},
-  {file:"js/data/real_lakemedel.js",  rebuild:()=>{REAL_ANTIDEP=rebuildREAL_ANTIDEP();}},
-  {file:"js/data/real_fk.js",         rebuild:()=>{REAL_FK=rebuildREAL_FK();}},
-  {file:"js/data/real_context.js",    rebuild:()=>{CONTEXT=rebuildCONTEXT();}},
-  {file:"js/data/real_bup.js",        rebuild:()=>{BUP_WAIT=rebuildBUP_WAIT();}},
-  {file:"js/data/real_hbsc.js",       rebuild:()=>{HBSC=rebuildHBSC();}},
-  {file:"js/data/real_pop.js",        rebuild:()=>{REAL_POP=rebuildREAL_POP();NATIONAL_AGE_WEIGHTS=rebuildNATIONAL_AGE_WEIGHTS();}},
-];
+// worth a priority queue's added complexity. realSourcesPending (declared
+// with REAL_SOURCES near the top of this file, not here — render()'s
+// banner needs an accurate count from the very first paint, before this
+// function has even run once) is what drives the #synth banner's "still
+// loading" sub-line while any of these nine are still in flight.
 function loadRealSourcesLazily(){
   // Reuses kurvan.html's own cache-busting query string (e.g. "?v=38") off
   // this very <script> tag rather than hardcoding it a second time here —
@@ -756,8 +975,8 @@ function loadRealSourcesLazily(){
   REAL_SOURCES.forEach(src=>{
     const s=document.createElement("script");
     s.src=qs?`${src.file}?${qs}`:src.file;
-    s.onload=()=>{src.rebuild();render();};
-    s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);};
+    s.onload=()=>{src.rebuild();realSourcesPending--;render();};
+    s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);realSourcesPending--;render();};
     document.head.appendChild(s);
   });
 }
