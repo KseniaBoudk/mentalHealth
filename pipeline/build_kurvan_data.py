@@ -48,6 +48,31 @@ than blocking the other. js/data.js checks each row count independently and
 falls back to the labelled-synthetic generator per indicator, not per file:
 run only fetch_socialstyrelsen_mh.py and self-harm/suicide go real while
 psych stays synthetic, or vice versa.
+
+===============================================================================
+COMPACT TUPLE ROWS FOR REAL_PSYCH_MH/REAL_LAKEMEDEL_MH — READ BEFORE "FIXING"
+===============================================================================
+These are the two sources with a real diagnosis/medication-type split (six
+groups, five groups — see fetch_socialstyrelsen_psych.py/
+fetch_socialstyrelsen_lakemedel.py's own docstrings), and it shows: at one
+row per region/age-band/sex/year/type, the plain-object-per-row shape every
+other source here still uses put them at 8.6MB/7.8MB — repeating seven full
+key names, and a long spelled-out `indicator` string like
+"psych_substance_use_per_100k", on every single one of ~66,000 rows apiece.
+
+encode_type_age_rows() rewrites just these two sources' rows into
+`[county_code, type_idx, year, age_idx, sex, value, count]` tuples, with
+`type_idx`/`age_idx` pointing into two small dictionaries (`"types"`,
+`"ages"`) added to the payload alongside `"rows"` — built FROM the data
+itself (distinct `indicator`/`age_group` values seen), not copy-pasted from
+PSYCH_TYPES/MED_TYPES/AGES in js/data.js, so the file stays self-describing
+rather than silently depending on two lists in different languages staying
+in the same order forever. `rebuildREAL_PSYCH()`/`rebuildREAL_ANTIDEP()`
+(js/data.js) decode a row by indexing into those two arrays; everything
+downstream of that (the idx/idxAll construction) is unchanged — this is a
+read-format change, not a data or logic change. Cuts both files roughly 4x.
+Every other source here is already small (under 1MB) and stays plain
+objects — not worth the same churn.
 """
 import json
 import os
@@ -74,7 +99,12 @@ SOURCES = [
         "note": "Real, region-grain rates for specialist psychiatric care, all nine of\n"
                 "   Kurvan's age bands and all three sexes, annual, split into six\n"
                 "   diagnosis-type series plus a synthesised \"all\" total. Fetched by\n"
-                "   fetch_socialstyrelsen_psych.py.",
+                "   fetch_socialstyrelsen_psych.py. Rows are compact tuples, not objects —\n"
+                "   see this module's own docstring (\"COMPACT TUPLE ROWS\").",
+        # indicator strings look like "psych_substance_use_per_100k" —
+        # strip this prefix/suffix to recover the short type name
+        # ("substance_use") that becomes an idx[type] key in js/data.js.
+        "compact_types": {"prefix": "psych_", "suffix": "_per_100k"},
     },
     {
         "var": "REAL_HLV_MH",
@@ -100,7 +130,13 @@ SOURCES = [
                 "   synthesised \"all\" total. Fetched by fetch_socialstyrelsen_lakemedel.py.\n"
                 "   Was assumed to need a multi-gigabyte bulk download (the microdata\n"
                 "   register does) — this is a separate, small aggregate table on the same\n"
-                "   API as the other real Socialstyrelsen indicators here.",
+                "   API as the other real Socialstyrelsen indicators here. Rows are compact\n"
+                "   tuples, not objects — see this module's own docstring (\"COMPACT TUPLE\n"
+                "   ROWS\").",
+        # indicator strings look like "antidepressants_per_1000" — strip
+        # this suffix to recover the short type name ("antidepressants")
+        # that becomes an idx[type] key in js/data.js.
+        "compact_types": {"prefix": "", "suffix": "_per_1000"},
     },
     {
         "var": "REAL_FK_MH",
@@ -189,13 +225,45 @@ def strip_dead_fields(row):
     return {k: v for k, v in row.items() if k not in DEAD_ROW_FIELDS}
 
 
+def encode_type_age_rows(rows, prefix, suffix):
+    """Rewrite object rows into compact [county_code, type_idx, year,
+    age_idx, sex, value, count] tuples for REAL_PSYCH_MH/REAL_LAKEMEDEL_MH —
+    see this module's own "COMPACT TUPLE ROWS" docstring section for why.
+    Returns (tuple_rows, types, ages); types/ages are built from the data
+    itself, not any hardcoded list, so the output stays self-describing.
+    """
+    def short_type(indicator):
+        s = indicator
+        if prefix and s.startswith(prefix):
+            s = s[len(prefix):]
+        if suffix and s.endswith(suffix):
+            s = s[:-len(suffix)]
+        return s
+
+    types = sorted({short_type(r["indicator"]) for r in rows})
+    type_idx = {t: i for i, t in enumerate(types)}
+    ages = sorted({r["age_group"] for r in rows})
+    age_idx = {a: i for i, a in enumerate(ages)}
+    tuple_rows = [
+        [r["county_code"], type_idx[short_type(r["indicator"])], r["year"],
+         age_idx[r["age_group"]], r["sex"], r["value"], r["count"]]
+        for r in rows
+    ]
+    return tuple_rows, types, ages
+
+
 def main():
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     os.makedirs(OUT_DIR, exist_ok=True)
     written = []
     for spec in SOURCES:
         rows = load(spec["file"])
-        payload = {"generated_at": now, "source": spec["source"], "rows": rows}
+        compact = spec.get("compact_types")
+        if compact and rows:
+            rows, types, ages = encode_type_age_rows(rows, compact["prefix"], compact["suffix"])
+            payload = {"generated_at": now, "source": spec["source"], "types": types, "ages": ages, "rows": rows}
+        else:
+            payload = {"generated_at": now, "source": spec["source"], "rows": rows}
         out_path = os.path.join(OUT_DIR, spec["out"])
         with open(out_path, "w", encoding="utf-8") as f:
             f.write('"use strict";\n\n')

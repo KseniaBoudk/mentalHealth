@@ -303,6 +303,10 @@ let REAL = rebuildREAL();
    summing real per-type rates already gives the correct combined rate.
    Only viewOverTid()/viewKarta() (js/views.js) — the two views with an
    actual type selector — ever pass a specific type through.
+
+   REAL_PSYCH_MH's rows are compact tuples, not objects — see
+   build_kurvan_data.py's "COMPACT TUPLE ROWS" docstring section and
+   rebuildREAL_PSYCH()'s own comment below for the decode.
    ===================================================================== */
 const PSYCH_TYPES = ["substance_use", "psychosis", "depression_mood", "anxiety_stress", "eating_disorders", "adhd_childhood"];
 // See rebuildREAL()'s comment above — same lazy-rebuild pattern, callable
@@ -310,8 +314,19 @@ const PSYCH_TYPES = ["substance_use", "psychosis", "depression_mood", "anxiety_s
 function rebuildREAL_PSYCH() {
   const rows = (typeof REAL_PSYCH_MH !== "undefined" && Array.isArray(REAL_PSYCH_MH.rows)) ? REAL_PSYCH_MH.rows : [];
   const active = rows.length > 0;
+  // types/ages: the two small dictionaries build_kurvan_data.py's
+  // encode_type_age_rows() emits alongside `rows` (see that function's own
+  // comment) — each row below is `[county_code, type_idx, year, age_idx,
+  // sex, value, count]`, a positional tuple rather than a named-key object,
+  // decoded back into the same shape this loop always worked with by
+  // indexing into these two arrays. Cuts real_psych.js roughly 4x (was
+  // repeating seven full key names, and a spelled-out "psych_x_per_100k"
+  // string, on every one of ~68,000 rows) with no change to anything past
+  // the decode step below — idx/idxAll and every reader of them are
+  // unchanged.
+  const types = active ? REAL_PSYCH_MH.types : [];
+  const ages = active ? REAL_PSYCH_MH.ages : [];
   const ageIdxOf = {}; AGES.forEach((a, i) => { ageIdxOf[a] = i; });
-  const typeOf = {}; PSYCH_TYPES.forEach(ty => { typeOf[`psych_${ty}_per_100k`] = ty; });
 
   const idx = {};     // idx[type|"all"][county][ageIdx][sex][year] = {value,count}
   const idxAll = {};  // idxAll[type|"all"][county][sex][year] = {value,count} -- the register's own "0-85+"
@@ -337,18 +352,20 @@ function rebuildREAL_PSYCH() {
   };
 
   for (const row of rows) {
-    const type = typeOf[row.indicator];
+    const [county, typeIdx, year, ageIdx, sex, value, count] = row;
+    const type = types[typeIdx];
     if (!type) continue;
-    if (row.age_group === "0-85+") {
-      addToAll(idxAll, type, [row.county_code, row.sex, row.year], row.value, row.count);
+    const ageGroup = ages[ageIdx];
+    if (ageGroup === "0-85+") {
+      addToAll(idxAll, type, [county, sex, year], value, count);
       continue;
     }
-    const ai = ageIdxOf[row.age_group];
+    const ai = ageIdxOf[ageGroup];
     if (ai === undefined) continue;
-    addToAll(idx, type, [row.county_code, ai, row.sex, row.year], row.value, row.count);
+    addToAll(idx, type, [county, ai, sex, year], value, count);
   }
 
-  const years = new Set(rows.filter(r => r.age_group === "0-85+").map(r => r.year));
+  const years = new Set(rows.filter(r => ages[r[3]] === "0-85+").map(r => r[2]));
   return { active, idx, idxAll, years: [...years].sort((a, b) => a - b),
            generatedAt: active ? REAL_PSYCH_MH.generated_at : null };
 }
@@ -471,14 +488,20 @@ function realCellFK() { return REAL_FK.active ? null : undefined; }
    whole "distance from the average association" story depends on both
    values coming from the same internally-correlated fabricated
    generator. Nothing here changes that; leave it be.
+
+   REAL_LAKEMEDEL_MH's rows are compact tuples, not objects — same as
+   REAL_PSYCH_MH above, see rebuildREAL_ANTIDEP()'s own comment below.
    ===================================================================== */
 const MED_TYPES = ["antidepressants", "adhd_med", "antipsychotics", "anxiety_med", "sleep_med"];
 // See rebuildREAL()'s comment above — same lazy-rebuild pattern.
 function rebuildREAL_ANTIDEP() {
   const rows = (typeof REAL_LAKEMEDEL_MH !== "undefined" && Array.isArray(REAL_LAKEMEDEL_MH.rows)) ? REAL_LAKEMEDEL_MH.rows : [];
   const active = rows.length > 0;
+  // types/ages: see rebuildREAL_PSYCH()'s own comment on these — same
+  // encode_type_age_rows() tuple format, same decode-by-index here.
+  const types = active ? REAL_LAKEMEDEL_MH.types : [];
+  const ages = active ? REAL_LAKEMEDEL_MH.ages : [];
   const ageIdxOf = {}; AGES.forEach((a, i) => { ageIdxOf[a] = i; });
-  const typeOf = {}; MED_TYPES.forEach(ty => { typeOf[`${ty}_per_1000`] = ty; });
 
   const idx = {};     // idx[type|"all"][county][ageIdx][sex][year] = {value,count}
   const idxAll = {};  // idxAll[type|"all"][county][sex][year] = {value,count} -- reconstructed "0-85+"
@@ -501,18 +524,20 @@ function rebuildREAL_ANTIDEP() {
   };
 
   for (const row of rows) {
-    const type = typeOf[row.indicator];
+    const [county, typeIdx, year, ageIdx, sex, value, count] = row;
+    const type = types[typeIdx];
     if (!type) continue;
-    if (row.age_group === "0-85+") {
-      addToAll(idxAll, type, [row.county_code, row.sex, row.year], row.value, row.count);
+    const ageGroup = ages[ageIdx];
+    if (ageGroup === "0-85+") {
+      addToAll(idxAll, type, [county, sex, year], value, count);
       continue;
     }
-    const ai = ageIdxOf[row.age_group];
+    const ai = ageIdxOf[ageGroup];
     if (ai === undefined) continue;
-    addToAll(idx, type, [row.county_code, ai, row.sex, row.year], row.value, row.count);
+    addToAll(idx, type, [county, ai, sex, year], value, count);
   }
 
-  const years = new Set(rows.filter(r => r.age_group === "0-85+").map(r => r.year));
+  const years = new Set(rows.filter(r => ages[r[3]] === "0-85+").map(r => r[2]));
   return { active, idx, idxAll, years: [...years].sort((a, b) => a - b),
            generatedAt: active ? REAL_LAKEMEDEL_MH.generated_at : null };
 }
