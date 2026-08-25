@@ -528,6 +528,14 @@ select option:disabled{color:var(--ink-3)}
    stopping at a bound sized for a much smaller one. */
 #chartFsBody svg.chart-svg{width:min(96vw,1900px);height:auto;max-height:100%}
 #chartFsBody svg.mapsvg.chart-svg{width:auto;height:min(84vh,1100px);max-width:96vw;max-height:100%}
+/* Karta's compare-two-maps mode fullscreens as a pair (.mapcmp — both
+   mini-maps together, wireFullscreen()'s cmpPair handling, js/shell.js),
+   not the lone-map case the rule above sizes for. .mapcmp is still its
+   own 2-column grid here (unchanged from the normal page, kurvan.css's
+   own .mapcmp rule) — these are just each half's own max bounds, roughly
+   halved from the lone-map rule above, so both fit side by side without
+   overflowing #chartFsBody's padding. */
+#chartFsBody .mapcmp svg.mapsvg.chart-svg{width:auto;height:min(70vh,760px);max-width:44vw;max-height:100%}
 /* .mapzoom{overflow:hidden} (base rule, above) is correct on the normal
    page — it keeps the CARD's own size stable while zoomed, cropping
    whatever's panned past the map's own edge instead of reflowing the rest

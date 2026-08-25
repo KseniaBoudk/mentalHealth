@@ -66,10 +66,18 @@ const ZOOM_MIN=1,ZOOM_MAX=3,ZOOM_STEP=0.5;
 // would silently select that region.
 let dragMoved=false;
 let currentIo = null;
-// data-mapid of whichever map is currently shown full-screen, if any (see
-// wireFullscreen()) — lets a render() that happens WHILE still fullscreen
-// (a map click's S.region update, e.g., still runs pick()'s render() same
-// as always) swap the freshly-rebuilt copy of THAT SAME map into view.
+// A #app CSS selector for whatever map content is currently shown full-
+// screen, if any (see wireFullscreen()) — lets a render() that happens
+// WHILE still fullscreen (a map click's S.region update, e.g., still runs
+// pick()'s render() same as always) swap the freshly-rebuilt copy of THAT
+// SAME content into view. `.mapzoom[data-mapid="..."]` for a lone map
+// (the original, single-map case); `.mapcmp` for Karta's compare-two-maps
+// mode, where full-screening either mini-map's own expand button pulls
+// BOTH into view together, not just the one that was clicked — matches
+// what "full-screen a comparison" should mean. Was literally just a bare
+// data-mapid string before compare mode needed this same mechanism to
+// re-sync a two-map PAIR, not one map — a selector covers both shapes
+// with the same re-sync code below, unchanged either way.
 let fsMapId=null;
 // Whichever [data-tip] mark is currently click-pinned open in #tiletip, if
 // any (see wire()'s click handling below) — module scope, same "survives
@@ -591,14 +599,32 @@ function bakeComputedStyles(liveRoot,cloneRoot){
     ce.setAttribute("style",style);
   });
 }
+// document.querySelector, singular, deliberately — Karta's compare-two-
+// maps mode can fullscreen a .mapcmp holding TWO svg.chart-svg (see
+// wireFullscreen()'s cmpPair handling). PNG/CSV export both just take
+// whichever one this finds first, i.e. the left/first map of the pair —
+// a reasonable, non-crashing default (not silently wrong data, just
+// "half the comparison"), not extended into a two-chart export here.
 function exportChartPng(){
   const svg=document.querySelector("#chartFsBody svg.chart-svg");
   if(!svg)return;
   const clone=svg.cloneNode(true);
   bakeComputedStyles(svg,clone);
   clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
+  // Aspect ratio from the viewBox (needed — that's the svg's own internal
+  // coordinate system), but the actual export RESOLUTION from a fixed
+  // target width, not the viewBox's own units directly: chorMap()'s
+  // MAP_VIEWBOX (charts.js) is a tiny fractional geographic unit like
+  // "0 0 6.09 13.69", nothing like the ~600x400-ish pixel-scale viewBox
+  // every other chart type happens to use. Setting width/height straight
+  // from THAT would make the exported image's intrinsic size ~6x14px —
+  // technically valid, but a near-blank sliver once actually opened.
+  // Decoupling resolution from viewBox units entirely fixes the map case
+  // and is no worse for every other chart type either.
   const vb=(svg.getAttribute("viewBox")||"0 0 600 400").split(/\s+/).map(Number);
-  const w=vb[2]||600,h=vb[3]||400;
+  const vbW=vb[2]||600,vbH=vb[3]||400;
+  const targetW=1200;
+  const w=targetW,h=Math.round(targetW*(vbH/vbW));
   clone.setAttribute("width",w);
   clone.setAttribute("height",h);
   const svgBlob=new Blob([new XMLSerializer().serializeToString(clone)],{type:"image/svg+xml;charset=utf-8"});
@@ -719,6 +745,15 @@ function wireFullscreen(){
     // gets a fresh, minimal wrap around just the svg instead, so a heading
     // elsewhere in its holder doesn't travel along redundantly.
     const isMap=holder.classList.contains("mapzoom");
+    // Karta's compare-two-maps mode (S.cmpOn, viewKarta()) renders two
+    // independent .mapzoom wrappers side by side inside one .mapcmp grid,
+    // each getting its own expand button via this very loop (two svg.chart-
+    // svg on the page, two iterations). Without this, clicking either
+    // one only pulled THAT map's own .mapzoom into full screen — never
+    // the comparison as a whole. cmpPair is truthy only for a map that's
+    // actually inside a compare-mode pair; a lone map's holder.closest()
+    // finds nothing, same as always.
+    const cmpPair=isMap?holder.closest(".mapcmp"):null;
     const wrap=isMap?holder:document.createElement("div");
     if(!isMap){
       wrap.className="fswrap";
@@ -756,26 +791,36 @@ function wireFullscreen(){
       // The trigger button itself doesn't move — only the chart does. A
       // second "expand" button sitting uselessly at the chart's corner
       // inside full-screen (where #chartFsClose already handles closing)
-      // would just be visual clutter.
+      // would just be visual clutter. In compare mode BOTH mini-maps'
+      // buttons need removing here, not just the one clicked — cmpPair
+      // still has its own (the other mini-map's) expand button sitting in
+      // it otherwise, equally uselessly, once the whole pair is fullscreen.
       wrap.removeChild(btn);
+      if(cmpPair)cmpPair.querySelectorAll(".fsbtn").forEach(b=>b.remove());
       // MOVE, not clone — a clone would carry the svg's data-tip/tabindex
       // attributes but none of the onclick/onmouseenter/etc. listeners
       // already attached to it (map click-to-select, hover tooltips,
       // zoom/pan), since those aren't part of the DOM the way attributes
-      // are. Moving keeps all of it working with nothing to re-wire.
+      // are. Moving keeps all of it working with nothing to re-wire. In
+      // compare mode this moves the WHOLE .mapcmp (both mini-maps, their
+      // .mapcmphead labels, their legends) as one unit — wireMapZoomPan()
+      // (wire(), below) already wires zoom/pan generically across every
+      // .mapzoom on the page by its own data-mapid, so nothing extra is
+      // needed for both to keep working side by side once moved.
       // #tiletip moves in too: while fs is the fullscreen element, only
       // ITS subtree renders at all — a hover card left behind on <body>
       // (a sibling of fs, not a descendant) would simply never be visible,
       // not just hidden behind something.
-      document.getElementById("chartFsBody").appendChild(wrap);
+      document.getElementById("chartFsBody").appendChild(cmpPair||wrap);
       const tip=document.getElementById("tiletip");
       if(tip)fs.appendChild(tip);
       // Only the map ever changes ITSELF from inside full-screen (a tile
       // click runs the exact same S.region-setting pick() it always has,
       // still wired on this very svg — see the MOVE-not-clone comment
-      // above) — remembered so the re-sync block below knows to go
-      // looking for a fresh copy of this one specifically.
-      fsMapId=isMap?wrap.dataset.mapid:null;
+      // above) — remembered as a #app selector so the re-sync block below
+      // knows what to go looking for a fresh copy of: the whole pair
+      // (.mapcmp) in compare mode, just this one map otherwise.
+      fsMapId=cmpPair?".mapcmp":isMap?`.mapzoom[data-mapid="${wrap.dataset.mapid}"]`:null;
       fs.classList.add("on");
       (fs.requestFullscreen||fs.webkitRequestFullscreen).call(fs);
     };
@@ -784,25 +829,27 @@ function wireFullscreen(){
 
   // Re-sync: a tile click on the fullscreened map runs pick() same as
   // ever (S.region=code; render()) — which rebuilds #app, including a
-  // FRESH .mapzoom with the same data-mapid, correct new selection glow
-  // (baked into chorMap()'s own SVG string at generation time, not
-  // something a class toggle on the old node could update) and its own
-  // freshly-wired zoom buttons. Without swapping it in, the stale copy
-  // stays on screen AND a second element now shares its data-mapid —
-  // wireMapZoomPan()'s document.querySelector(`.mapzoom[data-mapid=...]`)
-  // lookups (below) would start resolving to whichever of the two comes
-  // first in the document, not necessarily the one actually visible,
-  // breaking the zoom buttons too. Runs every wire() call (cheap no-op
-  // when nothing's fullscreen or the fullscreened chart isn't the map).
+  // FRESH .mapzoom (or, in compare mode, a fresh .mapcmp holding two)
+  // with the same data-mapid(s), correct new selection glow (baked into
+  // chorMap()'s own SVG string at generation time, not something a class
+  // toggle on the old node could update) and its own freshly-wired zoom
+  // buttons. Without swapping it in, the stale copy stays on screen AND
+  // a second element now shares its data-mapid — wireMapZoomPan()'s
+  // document.querySelector(`.mapzoom[data-mapid=...]`) lookups (below)
+  // would start resolving to whichever of the two comes first in the
+  // document, not necessarily the one actually visible, breaking the
+  // zoom buttons too. Runs every wire() call (cheap no-op when nothing's
+  // fullscreen or the fullscreened chart isn't the map).
   if(fsMapId&&document.fullscreenElement===fs){
-    const fresh=document.querySelector(`#app .mapzoom[data-mapid="${fsMapId}"]`);
+    const fresh=document.querySelector(`#app ${fsMapId}`);
     if(fresh){
-      // The loop above already gave this fresh copy its own new .fsbtn
-      // (it's still svg.chart-svg, inside #app, at that point) — pull it
-      // back off, same reasoning as the original open: nothing to expand
-      // further, already full-screen.
-      const freshBtn=fresh.querySelector(":scope > .fsbtn");
-      if(freshBtn)freshBtn.remove();
+      // The loop above already gave this fresh copy its own new .fsbtn(s)
+      // (it's still svg.chart-svg, inside #app, at that point) — pull
+      // them back off, same reasoning as the original open: nothing to
+      // expand further, already full-screen. querySelectorAll, not
+      // querySelector: one button for a lone map, two for a compare pair
+      // (fsMapId==".mapcmp") — same cleanup either way.
+      fresh.querySelectorAll(".fsbtn").forEach(b=>b.remove());
       const body=document.getElementById("chartFsBody");
       body.innerHTML="";
       body.appendChild(fresh);
