@@ -3,7 +3,17 @@
 /* =====================================================================
    4. CHART PRIMITIVES
    ===================================================================== */
+const chartCache = new Map();
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function memoizedChart(fnName, fn) {
+  return function(data, opts) {
+    const key = `${fnName}:${S.lang}:${S.region}:${S.theme}:${JSON.stringify(data)}:${JSON.stringify(opts||{})}`;
+    if (chartCache.has(key)) return chartCache.get(key);
+    const res = fn(data, opts);
+    chartCache.set(key, res);
+    return res;
+  };
+}
 const fmt=(v,d,u)=>v==null||!isFinite(v)?"—":(S.lang==="sv"?v.toFixed(d).replace(".",","):v.toFixed(d))+(u?` ${u}`:"");
 // data-card: a small JSON payload alongside every mark's existing data-tip
 // (hover), read by shell.js's fullscreen click-readout to render the SAME
@@ -451,3 +461,9 @@ function scatter(pts,opts){
   s+=`<text x="14" y="${((Tp+B)/2).toFixed(0)}" transform="rotate(-90 14 ${((Tp+B)/2).toFixed(0)})" text-anchor="middle" font-family="var(--sans)" font-size="10.5" font-weight="650" fill="var(--violet)">${esc(opts.yLabel||t.gapY)}</text>`;
   return s+"</svg>";
 }
+
+dotPlot = memoizedChart("dotPlot", dotPlot);
+lineChart = memoizedChart("lineChart", lineChart);
+chorMap = memoizedChart("chorMap", chorMap);
+histogram = memoizedChart("histogram", histogram);
+scatter = memoizedChart("scatter", scatter);

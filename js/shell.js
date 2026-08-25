@@ -143,7 +143,11 @@ function measureBanner(){
   const el=document.getElementById("synth");
   if(el)document.documentElement.style.setProperty("--banner-h",el.offsetHeight+"px");
 }
-window.onresize=measureBanner;
+let resizeTimer=null;
+window.onresize=()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(measureBanner,150);
+};
 
 // Exiting full-screen (Esc or #chartFsClose, both funnel through the
 // browser's one fullscreenchange event) puts the page back to normal:
