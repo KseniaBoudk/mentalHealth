@@ -37,10 +37,15 @@ quirks are not the same ones.
     assume it elsewhere without checking again.
   - ALDER: 1-18 are 5-year bands (1="0-4" ... 18="85+"); 19 is "0-85+" (all
     ages) as its own directly-published value, not something to reconstruct.
-    Kurvan's nine wider bands (see AGE_GROUPS below) are each two 5-year
-    bands pooled, using the same population-recovery trick roll_suicide()
-    uses in fetch_socialstyrelsen_mh.py: population = count / rate * 1e5,
-    pooled rate = summed count / summed population. "85+" needs no pooling.
+    Kurvan's nine wider bands (see AGE_GROUPS below) are each built from
+    5-year bands pooled, using the same population-recovery trick
+    roll_suicide() uses in fetch_socialstyrelsen_mh.py: population =
+    count / rate * 1e5, pooled rate = summed count / summed population.
+    Most bands pool a pair of 5-year bands, but "0-14" pools THREE
+    (0-4, 5-9, 10-14 — it's a 15-year band, not 10) and "85+" needs no
+    pooling at all. Live-verified 2026-08-25 against
+    /api/v1/sv/diagnoserislutenoppenvard/alder: ids 1-18 are exactly the
+    5-year bands assumed above, confirming AGE_GROUPS' id lists are right.
   - REGION ids are the SAME scheme as fetch_socialstyrelsen_mh.py's
     REGION_ID_TO_COUNTY (0=Riket, 1=01 Stockholm, ... no id 2, 11, 15, 16 —
     verified against /api/v1/sv/diagnoserislutenoppenvard/region).

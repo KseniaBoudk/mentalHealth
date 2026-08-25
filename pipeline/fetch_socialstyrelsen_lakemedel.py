@@ -39,11 +39,14 @@ are not necessarily the same.
     `matt` accepts ONE value per request — a comma 404s, same trap as the
     other two datasets on this API.
   - ALDER: 1-18 are the same 5-year bands as psych's (1="0-4" ... 18="85+"),
-    confirmed via /lakemedel/alder. UNLIKE psych, there is no pre-aggregated
-    "all ages" id here (psych has id 19 = "0-85+" published directly) — the
-    all-ages total below is pooled from all 18 bands ourselves, same
-    population-recovery trick pool() already uses for psych's nine bands,
-    just applied across all eighteen instead of pairs of two.
+    confirmed via /lakemedel/alder (re-verified live 2026-08-25 — ids 1-18
+    still line up with AGE_GROUPS below exactly, including "0-14" pooling
+    three bands, not two — see fetch_socialstyrelsen_psych.py's docstring).
+    UNLIKE psych, there is no pre-aggregated "all ages" id here (psych has
+    id 19 = "0-85+" published directly) — the all-ages total below is
+    pooled from all 18 bands ourselves, same population-recovery trick
+    pool() already uses for psych's nine bands, just applied across all
+    eighteen instead of nine.
   - REGION ids are the SAME scheme as fetch_socialstyrelsen_mh.py's
     REGION_ID_TO_COUNTY — confirmed via /lakemedel/region (0=Riket, 1=01
     Stockholm, ... same set, no id 2/11/15/16).

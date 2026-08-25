@@ -104,6 +104,8 @@ SEX = {1: "M", 2: "K", 3: "T"}
 
 SELF_HARM_DATASET = "yttreorsakertillskadorochforgiftningarbarn"
 SELF_HARM_CAUSES = {"VXY2": "self_harm", "VXY4": "undetermined_intent"}
+# Live-verified 2026-08-25 against /api/v1/sv/{SELF_HARM_DATASET}/alder:
+# id 5 = "12-14", id 6 = "15-17" — exactly what's assumed below.
 SELF_HARM_AGES = {5: "12_14", 6: "15_17"}
 SELF_HARM_MATT = 7          # patients per 100 000
 SELF_HARM_VARDFORM = "SVOV"  # see the docstring before changing this
@@ -111,6 +113,8 @@ SELF_HARM_YEARS = list(range(2008, datetime.now().year + 1))
 
 SUICIDE_DATASET = "dodsorsaker"
 SUICIDE_CAUSES = {"2026": "suicide", "2028": "undetermined_intent"}
+# Live-verified 2026-08-25 against /api/v1/sv/{SUICIDE_DATASET}/alder:
+# id 4 = "15-19" — exactly what's assumed below.
 SUICIDE_AGE = 4              # 15-19
 SUICIDE_YEARS = list(range(1997, datetime.now().year + 1))
 
