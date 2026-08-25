@@ -4,11 +4,20 @@
    3. STATE
    ===================================================================== */
 function initLang(){
-  try{const n=(navigator.languages&&navigator.languages[0])||navigator.language||"";return String(n).toLowerCase().startsWith("sv")?"sv":"en";}
+  try{
+    const saved=localStorage.getItem("kurvan_lang");
+    if(saved==="sv"||saved==="en")return saved;
+    const n=(navigator.languages&&navigator.languages[0])||navigator.language||"";
+    return String(n).toLowerCase().startsWith("sv")?"sv":"en";
+  }
   catch(e){return "en";}
 }
 function initTheme(){
-  try{return (window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
+  try{
+    const saved=localStorage.getItem("kurvan_theme");
+    if(saved==="light"||saved==="dark")return saved;
+    return (window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
+  }
   catch(e){return "light";}
 }
 const S={lang:initLang(),theme:initTheme(),tab:"laget",ind:"antidep",age:6,sex:"T",year:2024,std:true,region:"24",mapYear:null,cmpOn:false,cmpInd:null,ctxInd:"pop_density",policyFilter:"all",policySort:"desc"};

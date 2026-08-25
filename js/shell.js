@@ -192,8 +192,8 @@ function wire(){
     });
   },{rootMargin:"-15% 0px -70% 0px"});
   document.querySelectorAll('section[id^="sec-"]').forEach(s=>currentIo.observe(s));
-  const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";render();};
-  const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";render();};
+  const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";try{localStorage.setItem("kurvan_theme",S.theme);}catch(e){}render();};
+  const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";try{localStorage.setItem("kurvan_lang",S.lang);}catch(e){}render();};
   const bind=(id,fn)=>{const e=document.getElementById(id);if(e)e.onchange=()=>{fn(e.value);render();};};
   const pickInd=v=>{S.ind=v;if(!ageAvailable(v,S.age))S.age=-1;if(!sexAvailable(v,S.sex))S.sex="T";S.mapYear=null;};
   bind("c-ind",pickInd);
