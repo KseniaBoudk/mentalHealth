@@ -16,10 +16,37 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","metod","regioner","policy_news"];
+const VIEW_STATE_KEYS = {
+  laget: ["ind", "age", "sex", "year", "region", "std"],
+  over_tid: ["ind", "region", "age", "sex", "std"],
+  karta: ["ind", "mapYear", "cmpOn", "cmpInd", "region"],
+  behov: ["region"],
+  sjukskrivning: ["region"],
+  kon: [],
+  alder: [],
+  sammanhang: ["ctxInd", "region"],
+  vantetider: ["region"],
+  metod: [],
+  regioner: ["region", "ind", "age", "sex", "year", "std"],
+  policy_news: ["policyFilter", "policySort"]
+};
+const SECTIONS = Object.keys(VIEW_STATE_KEYS);
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
   vantetider:viewVantetider,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
+
+const viewCache = {};
+function getCachedSectionHtml(x) {
+  const keys = VIEW_STATE_KEYS[x] || [];
+  const vals = keys.map(k => S[k]).join("|");
+  const cacheKey = `${x}:${S.lang}:${S.theme}:${vals}`;
+  if (viewCache[cacheKey]) {
+    return viewCache[cacheKey];
+  }
+  const html = VIEW_FN[x]();
+  viewCache[cacheKey] = html;
+  return html;
+}
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
@@ -75,7 +102,7 @@ function render(){
   // long scroll-through page needs an unambiguous title per section more
   // than it needs to avoid that small bit of redundancy.
   const sections=SECTIONS.map(x=>
-    `<section id="sec-${x}"><h2 class="section-h">${esc(t.tabs[x])}</h2>${VIEW_FN[x]()}</section>`
+    `<section id="sec-${x}"><h2 class="section-h">${esc(t.tabs[x])}</h2>${getCachedSectionHtml(x)}</section>`
   ).join("");
 
   document.getElementById("app").innerHTML=`

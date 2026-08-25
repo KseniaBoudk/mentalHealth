@@ -759,7 +759,7 @@ function fakeCell(k, regionCode, year, ageIdx, sex, standardised){
     For every other indicator this is exactly fakeCell(). views.js reads
     `.real` on the returned cell (and isRealActive(k)) to label which mode
     produced a number — never blend the two under one label. */
-function cell(k, regionCode, year, ageIdx, sex, standardised){
+const _cell = (k, regionCode, year, ageIdx, sex, standardised) => {
   if (k === "psych") {
     const r = realCellPsych(regionCode, year, ageIdx, sex);
     if (r !== undefined) return r;
@@ -777,9 +777,17 @@ function cell(k, regionCode, year, ageIdx, sex, standardised){
     if (r !== undefined) return r;   // real data loaded: real result wins, even if null
   }
   return fakeCell(k, regionCode, year, ageIdx, sex, standardised);
+};
+const cellCache = new Map();
+function cell(k, regionCode, year, ageIdx, sex, standardised){
+  const key = `${k}|${regionCode}|${year}|${ageIdx}|${sex}|${standardised}`;
+  if (cellCache.has(key)) return cellCache.get(key);
+  const res = _cell(k, regionCode, year, ageIdx, sex, standardised);
+  cellCache.set(key, res);
+  return res;
 }
 
-function total(k, regionCode, year, sex, standardised){
+const _total = (k, regionCode, year, sex, standardised) => {
   const R=regionCode==="SE"?NAT:RBY[regionCode];
   if (k === "psych") {
     const r = realTotalPsych(regionCode, year, sex);
@@ -812,6 +820,14 @@ function total(k, regionCode, year, sex, standardised){
     return null;   // real data loaded, but genuinely nothing for this region/year/sex
   }
   return fakeTotal(k, regionCode, year, sex, standardised);
+};
+const totalCache = new Map();
+function total(k, regionCode, year, sex, standardised){
+  const key = `${k}|${regionCode}|${year}|${sex}|${standardised}`;
+  if (totalCache.has(key)) return totalCache.get(key);
+  const res = _total(k, regionCode, year, sex, standardised);
+  totalCache.set(key, res);
+  return res;
 }
 
 /** Combines cell()'s per-age-band figures across a subset of AGES indices
