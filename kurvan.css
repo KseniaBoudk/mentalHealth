@@ -59,7 +59,8 @@
    via button{font:inherit} below) by 22%. No existing step equals 16px, so
    restoring the original value here rather than adding a token nothing
    else needs yet. */
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html,body{width:100%;margin:0;padding:0;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .tnum{font-variant-numeric:tabular-nums}
 svg{display:block;width:100%;height:auto}
 button{font:inherit}
@@ -72,7 +73,7 @@ button{font:inherit}
    match --sp-6 exactly — the sweep used --sp-7 (24px) instead, not just a
    rounding but a wrong-token pick. */
 #synth{
-  position:sticky;top:0;z-index:100;background:var(--oxblood);color:var(--synth-text);
+  position:sticky;top:0;width:100%;box-sizing:border-box;z-index:100;background:var(--oxblood);color:var(--synth-text);
   padding:7px var(--sp-6);font-size:var(--fs-5);letter-spacing:.03em;
   display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;
 }
@@ -117,7 +118,7 @@ button{font:inherit}
    spacing value worth adding to the shared scale just for one asset. The
    two paddings that *do* have an exact match (16px, the second number in
    each pair) stay tokenized. */
-header.top{background:var(--surface);border-bottom:3px solid var(--ink);border-top:3px solid var(--violet)}
+header.top{width:100%;box-sizing:border-box;background:var(--surface);border-bottom:3px solid var(--ink);border-top:3px solid var(--violet)}
 .mast{display:flex;align-items:flex-end;gap:18px;padding:22px 0 0;flex-wrap:wrap}
 .brand{display:flex;align-items:flex-start;gap:13px}
 .mark{width:var(--sp-9);height:34px;flex:none;margin-top:var(--sp-1)}
@@ -162,6 +163,24 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
   .layout{flex-direction:column;gap:18px}
   .sidebar{position:static;width:100%;flex-direction:row;flex-wrap:wrap;gap:14px;padding-right:0;border-right:0;border-bottom:3px solid var(--ink);padding-bottom:14px}
   .sidebar a.active::before{content:none}
+}
+@media (max-width:600px){
+  .sidebar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:12px;padding-bottom:10px;scrollbar-width:none}
+  .sidebar::-webkit-scrollbar{display:none}
+  .sidebar a{flex:none;padding:6px 2px;font-size:13px}
+  .wrap{padding:0 14px}
+  .mast{padding:14px 0 0;gap:12px}
+  .word{font-size:32px}
+  .hero h1{font-size:28px}
+  .rname{font-size:26px}
+  .card-h{padding:12px 14px 10px}
+  .card-b{padding:14px 14px 10px}
+  .inner2>div{padding:14px 14px 8px}
+  .piece{padding:14px 14px 16px}
+  .rstat{padding:14px 14px 16px}
+  .ctrl{gap:6px}
+  .f{padding:4px 8px 5px}
+  #synth{padding:6px 12px;font-size:11px}
 }
 
 /* --- instrument legend --- */
@@ -490,7 +509,7 @@ table.m .lim{color:var(--ink-3);font-size:11.5px;max-width:34ch}
 .modechip{display:inline-block;margin-left:7px;padding:1px 6px;border-radius:9px;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;vertical-align:1px}
 .modechip.real{background:var(--violet-soft);color:var(--violet)}
 .modechip.synth{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--hair)}
-.mwrap{overflow-x:auto;margin-top:18px;border:1px solid var(--hair);border-radius:4px}
+.mwrap{overflow-x:auto;margin-top:18px;border:1px solid var(--hair);border-radius:4px;-webkit-overflow-scrolling:touch}
 .prose{max-width:66ch}
 .prose h2{font-family:var(--serif);font-size:26px;margin:0 0 8px;font-weight:600;letter-spacing:-.02em}
 .prose h3{font-size:14px;font-weight:700;margin:30px 0 6px}
