@@ -16,10 +16,10 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","metod","regioner"];
+const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","metod","regioner","policy_news"];
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
-  vantetider:viewVantetider,metod:viewMetod,regioner:viewRegioner};
+  vantetider:viewVantetider,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
@@ -174,6 +174,8 @@ function wire(){
   bind("c-mapind",pickInd);
   bind("c-cmpind",v=>S.cmpInd=v);
   bind("c-ctxind",v=>S.ctxInd=v);
+  bind("c-policy-filter",v=>S.policyFilter=v);
+  bind("c-policy-sort",v=>S.policySort=v);
   const ct=document.getElementById("c-cmptoggle");
   if(ct)ct.onclick=()=>{S.cmpOn=!S.cmpOn;render();};
   const stepYear=d=>{

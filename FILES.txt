@@ -30,6 +30,10 @@ js/real_mh_data.js
     by the pipeline/ scripts. If this file is empty, the app falls back to
     fabricated (fake) numbers instead.
 
+js/real_policy_news.js
+    Generated data file holding fetched policy and mental health news items
+    and updates.
+
 js/data.js
     The data engine. Defines the fabricated ("synthetic") data generator
     that invents plausible-looking numbers for all 21 Swedish regions, ages,
@@ -88,6 +92,12 @@ pipeline/requirements.txt
     Python dependencies needed to run the fetch scripts (just the
     `requests` HTTP library).
 
+pipeline/manifest.py
+    Orchestrator script that runs all pipeline fetchers and data building steps in order.
+
+pipeline/build_kurvan_data.py
+    Pipeline script that compiles cleaned raw/processed data into js/real_mh_data.js.
+
 pipeline/kommuner.csv
     A reference table mapping Swedish municipality codes to names and
     regions (used to translate API codes to readable names).
@@ -127,6 +137,9 @@ pipeline/fetch_kolada_context.py
     the Sammanhang tab's two context layers — not one of Kurvan's six
     mental-health indicators. Saves straight to
     data/processed/kolada_context.json, no separate raw step.
+
+pipeline/fetch_policy_news.py
+    Downloads policy and mental health news updates for real policy tracking.
 
 data/ — FETCHED DATA
 ---------------------
