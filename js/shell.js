@@ -169,31 +169,19 @@ document.addEventListener("keydown",e=>{
 // whole page: arrow keys already mean something native and expected
 // inside a <select> (cycle its own options) or anywhere else focus might
 // legitimately be, and blindly hijacking them page-wide would break that.
-// Reuses c-yprev/c-ynext's own existing onclick (wire(), below) via a
-// plain .click() rather than re-deriving the step-year logic here — a
-// disabled button (already-first/-last year, same rule that already
-// disables it visually) just no-ops on .click(), so the boundary is
-// handled for free, nothing extra to check.
+// Reuses c-yprev/c-ynext's own existing onclick (stepYear(), wire()
+// below) via a plain .click() rather than re-deriving the step-year logic
+// here — a disabled button (already-first/-last year, same rule that
+// already disables it visually) just no-ops on .click(), so the boundary
+// is handled for free. stepYear() itself re-focuses the fresh button
+// after every step (mouse click OR this), so repeated arrow presses keep
+// working — nothing extra needed here for that.
 document.addEventListener("keydown",e=>{
   if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;
   const active=document.activeElement;
   if(!active||!active.closest(".slidewrap"))return;
   e.preventDefault();
-  const id=e.key==="ArrowLeft"?"c-yprev":"c-ynext";
-  document.getElementById(id)?.click();
-  // .click() ran stepYear() -> render(), which just rebuilt #app from
-  // scratch — the button that was focused a moment ago is now a detached
-  // node, so focus has silently fallen back to <body>. Without re-focusing
-  // a FRESH button (render() already finished by the time .click() returns
-  // — synchronous, no awaits in that path), the very next arrow-key press
-  // would find nothing inside .slidewrap focused any more and silently do
-  // nothing: one step per press instead of the rapid repeated-stepping
-  // this is actually for. Prefer the one just clicked, but a disabled
-  // button (just-reached year boundary) can't take focus at all — fall
-  // back to the OTHER one so the reverse direction still works right
-  // away, instead of needing a manual re-tab just to turn back around.
-  const fresh=document.getElementById(id);
-  (fresh&&!fresh.disabled?fresh:document.getElementById(id==="c-yprev"?"c-ynext":"c-yprev"))?.focus();
+  document.getElementById(e.key==="ArrowLeft"?"c-yprev":"c-ynext")?.click();
 });
 
 // Shareable/bookmarkable URL — reflects a chosen subset of S (js/state.js)
@@ -439,6 +427,20 @@ function wire(){
     const idx=years.includes(S.mapYear)?years.indexOf(S.mapYear):years.length-1;
     S.mapYear=years[Math.max(0,Math.min(years.length-1,idx+d))];
     render();
+    // render() just rebuilt #app from scratch, detaching whichever
+    // c-yprev/c-ynext button triggered this step (a plain mouse click
+    // focuses it same as any button — confirmed live: activeElement was
+    // <body> right after a real click, not the button, because the node
+    // it had just focused no longer exists once render() finishes).
+    // Without re-focusing a FRESH one here, the natural next move — click
+    // again, or the arrow-key listener below — lands on nothing. Prefer
+    // the button matching this step's own direction, falling back to the
+    // other one if THAT one is now disabled (a year boundary just
+    // reached) so the reverse direction stays usable immediately, no
+    // manual re-tab needed.
+    const id=d<0?"c-yprev":"c-ynext";
+    const fresh=document.getElementById(id);
+    (fresh&&!fresh.disabled?fresh:document.getElementById(d<0?"c-ynext":"c-yprev"))?.focus();
   };
   const yp=document.getElementById("c-yprev"),yn=document.getElementById("c-ynext");
   if(yp)yp.onclick=()=>stepYear(-1);
