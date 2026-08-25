@@ -89,6 +89,7 @@ function gauss(s){ const u1=Math.max(hash("a"+s),1e-9), u2=hash("b"+s); return M
 const IND = {
   distress: {
     inst:"survey", start:2006, step:2, window:4, real:true,
+    coverage: "Region", years: "2006–2024", ageSplit: false, sexSplit: true,
     scale:100, dec:1,
     age:[null,28,22,18,16,14,10,11,null],
     mMul:[null,.72,.74,.76,.78,.80,.84,.86,null],
@@ -98,6 +99,7 @@ const IND = {
   },
   antidep: {
     inst:"reg", start:2006, real:true,
+    coverage: "Region", years: "2006–2024", ageSplit: true, sexSplit: true,
     scale:1000, dec:1,
     age:[8,62,78,92,108,118,124,138,152],
     mMul:[.62,.60,.60,.62,.64,.68,.72,.78,.84],
@@ -107,6 +109,7 @@ const IND = {
   },
   psych: {
     inst:"reg", start:2008, real:true,
+    coverage: "Region", years: "2008–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:1,
     age:[14,58,46,38,32,26,20,17,13],
     mMul:[1.24,.82,.86,.88,.90,.92,.94,.96,.98],
@@ -116,6 +119,7 @@ const IND = {
   },
   selfharm: {
     inst:"reg", start:2008, window:5, real:true,
+    coverage: "Region", years: "2008–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:0,
     age:[18,285,165,120,95,62,38,30,26],
     mMul:[.72,.52,.72,.80,.86,.92,.98,1.02,1.06],
@@ -125,6 +129,7 @@ const IND = {
   },
   suicide: {
     inst:"mort", start:2001, window:5, real:true,
+    coverage: "Region", years: "2001–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:1,
     age:[0.6,11,16,19,22,23,22,27,38],
     mMul:[1.30,1.42,1.48,1.52,1.55,1.58,1.62,1.72,1.86],
@@ -138,6 +143,7 @@ const IND = {
     // healthcare register or a population rate) — conflating it with the
     // register colour would misrepresent what it counts. See IND docstring.
     inst:"fk", start:2005, real:true,
+    coverage: "Region", years: "2005–2024", ageSplit: false, sexSplit: true,
     scale:100, dec:1,
     // Fabricated fallback only (no real per-age curve exists — see
     // REAL_FK below); nulled at both ends like distress's, since sickness
