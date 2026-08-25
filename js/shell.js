@@ -16,10 +16,10 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","metod","regioner","policy_news"];
+const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","hbsc","metod","regioner","policy_news"];
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
-  vantetider:viewVantetider,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
+  vantetider:viewVantetider,hbsc:viewHbsc,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
@@ -49,6 +49,91 @@ let currentIo = null;
 // (a map click's S.region update, e.g., still runs pick()'s render() same
 // as always) swap the freshly-rebuilt copy of THAT SAME map into view.
 let fsMapId=null;
+// Whichever [data-tip] mark is currently click-pinned open in #tiletip, if
+// any (see wire()'s click handling below) — module scope, same "survives
+// individual event handlers, reset explicitly on the next render" pattern
+// as mapView/fsMapId above, for the same reason: render() rebuilds the DOM
+// from scratch, so a pinned reference from before a render is a dangling
+// node, not a real pin any more.
+let pinnedMark=null;
+// #tiletip itself — module scope too (not re-declared inside wire() every
+// call): it's created once and reused for the whole page's lifetime
+// (wire() below just fetches-or-creates it), so the functions that read
+// and write it don't need to be recreated on every render either. Doing
+// this once also lets the document-level click/keydown listeners further
+// down attach once at module load, the same way document.onfullscreenchange
+// above already does, rather than piling up a fresh listener on every
+// render() the way anything registered inside wire() itself would.
+let tip=null;
+// pinned=true for the click-pinned card (kurvan.css gives #tiletip.pinned
+// position:absolute, i.e. document-relative, instead of the hover tip's
+// position:fixed/viewport-relative) — clamping still uses the viewport
+// bounds at the moment of pinning (so it never opens off-screen), but the
+// stored left/top then get the current scroll offset added on top, which
+// is what makes it a document coordinate. Scrolling afterwards moves the
+// whole document including this element, exactly like every other mark on
+// the page, so the card travels with the point it's pinned to instead of
+// either freezing over the viewport or having to be re-positioned by a
+// scroll handler on every frame.
+const positionTip=(x,y,pinned)=>{
+  const m=10,vw=innerWidth,vh=innerHeight,tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left=x+14,top=y+14;
+  if(left+tw>vw-m)left=x-14-tw;
+  if(top+th>vh-m)top=y-14-th;
+  left=Math.max(m,Math.min(left,vw-tw-m));
+  top=Math.max(m,Math.min(top,vh-th-m));
+  if(pinned){left+=window.scrollX;top+=window.scrollY;}
+  tip.style.left=left+"px";
+  tip.style.top=top+"px";
+};
+// Hover/focus card — a no-op while something is click-pinned (below), so
+// moving the mouse over a different mark doesn't yank the pinned card away
+// out from under someone who clicked specifically to keep it in place.
+const showTip=(text,x,y)=>{
+  if(pinnedMark||!tip)return;
+  tip.textContent=text;tip.style.display="block";
+  positionTip(x,y);
+};
+const hideTip=()=>{
+  if(pinnedMark||!tip)return;
+  tip.style.display="none";
+};
+// Click-to-pin: the same richer .rstat readout full-screen mode already
+// shows on click (readoutCardHTML(), below) — kept open regardless of the
+// mouse moving away, until explicitly unpinned. Gives line-chart points
+// and histogram bars (the two mark types with no other click behavior —
+// see wire()'s [data-tip] loop) a real "tap for the number" on touch
+// devices too, which they had nothing for before (a tap fires no
+// mouseenter to fall back on).
+const pinTip=(mark,x,y)=>{
+  if(!tip)return;
+  pinnedMark=mark;
+  tip.innerHTML=readoutCardHTML(mark);
+  tip.classList.add("pinned");
+  tip.style.display="block";
+  positionTip(x,y,true);
+};
+const unpinTip=()=>{
+  if(!pinnedMark)return;
+  pinnedMark=null;
+  if(!tip)return;
+  tip.classList.remove("pinned");
+  tip.style.display="none";
+};
+// Click anywhere that isn't a [data-tip] mark unpins — #tiletip itself is
+// pointer-events:none (kurvan.css), so a click can never actually land ON
+// the pinned card, only ever on whatever's underneath it or elsewhere on
+// the page; either way, if it didn't land on a mark, it means "done with
+// this". Escape unpins too, the same key full-screen mode's own Esc
+// already closes on (though that's the browser's native Fullscreen API,
+// unrelated to this listener). All three registered once, here, not
+// inside wire() — see the `tip` declaration's own comment above for why.
+document.addEventListener("click",e=>{
+  if(pinnedMark&&!e.target.closest("[data-tip]"))unpinTip();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")unpinTip();
+});
 function render(){
   t=T[S.lang];
   document.documentElement.setAttribute("data-theme",S.theme);
@@ -137,14 +222,22 @@ document.onfullscreenchange=()=>{
   fsMapId=null;
   // #tiletip moved in alongside the chart (see wireFullscreen()) so hover
   // still shows a card while fullscreened — move it back to <body> now, or
-  // the normal page's own hover cards stop working after exiting.
-  const tip=document.getElementById("tiletip");
-  if(tip)document.body.appendChild(tip);
+  // the normal page's own hover cards stop working after exiting. Local
+  // name (not the module-scope `tip`, deliberately) — this is just a
+  // one-off DOM move, not a reason to touch the shared tip/pin machinery.
+  const tipEl=document.getElementById("tiletip");
+  if(tipEl)document.body.appendChild(tipEl);
   render();
 };
 
 function wire(){
   measureBanner();
+  // A pinned mark from before this render is a dangling reference to a DOM
+  // node render() just discarded (#app was rebuilt from scratch) — not a
+  // real pin any more. Same reasoning as mapView/fsMapId's own module-scope
+  // comment above; unpinTip() itself also no-ops safely if nothing was
+  // pinned, so this is harmless on the very first call too.
+  unpinTip();
   // Sidebar links are plain #anchors — the browser handles the actual
   // jump (html{scroll-behavior:smooth} in kurvan.css). This only needs to
   // track which section is active for the highlight, via IntersectionObserver
@@ -172,8 +265,18 @@ function wire(){
   bind("c-reg2",v=>S.region=v);
   bind("c-year",v=>S.year=+v);
   bind("c-mapind",pickInd);
+  // c-type (viewOverTid)/c-maptype (viewKarta) — same one selector's worth
+  // of options either way (PSYCH_TYPES or MED_TYPES, js/data.js), routed to
+  // whichever of S.psychType/S.medType actually applies to the CURRENT
+  // S.ind — the control only ever renders when S.ind is "psych"/"antidep"
+  // in the first place (views.js's hasType), so this is never ambiguous.
+  const pickType=v=>{if(S.ind==="psych")S.psychType=v;else if(S.ind==="antidep")S.medType=v;};
+  bind("c-type",pickType);
+  bind("c-maptype",pickType);
   bind("c-cmpind",v=>S.cmpInd=v);
   bind("c-ctxind",v=>S.ctxInd=v);
+  bind("c-hbscage",v=>S.hbscAge=v);
+  bind("c-hbscsex",v=>S.hbscSex=v);
   bind("c-policy-filter",v=>S.policyFilter=v);
   bind("c-policy-sort",v=>S.policySort=v);
   const ct=document.getElementById("c-cmptoggle");
@@ -191,27 +294,14 @@ function wire(){
     b.onclick=()=>{S.std=b.dataset.std==="1";render();});
   // Single tooltip element, created once and reused — it lives outside
   // #app (on <body>) specifically so render()'s full innerHTML rebuild on
-  // every state change doesn't destroy and recreate it.
-  let tip=document.getElementById("tiletip");
+  // every state change doesn't destroy and recreate it. Assigns the
+  // module-scope `tip` (declared above render()) rather than a local, so
+  // showTip()/hideTip()/pinTip()/unpinTip() — also module-scope, for the
+  // same reason — keep working on the one true element across renders.
+  tip=document.getElementById("tiletip");
   if(!tip){tip=document.createElement("div");tip.id="tiletip";document.body.appendChild(tip);}
-  // Clamped to the viewport: near the right/bottom edge, the default
-  // cursor-relative offset would otherwise push the card partly off
-  // screen. Flip to the other side of the cursor first, then clamp — a
-  // card wider/taller than the remaining space still ends up fully inside
-  // the viewport margin instead of just less-wrong.
-  const showTip=(text,x,y)=>{
-    tip.textContent=text;tip.style.display="block";
-    const m=10,vw=innerWidth,vh=innerHeight,tw=tip.offsetWidth,th=tip.offsetHeight;
-    let left=x+14,top=y+14;
-    if(left+tw>vw-m)left=x-14-tw;
-    if(top+th>vh-m)top=y-14-th;
-    tip.style.left=Math.max(m,Math.min(left,vw-tw-m))+"px";
-    tip.style.top=Math.max(m,Math.min(top,vh-th-m))+"px";
-  };
-  const hideTip=()=>{tip.style.display="none";};
   // .tile is the map's regions — clickable/keyboard-selectable, same as
-  // .spt (scatter points) and .dotrow (dot-plot rows) below; histogram
-  // bars are the one mark type left that only ever shows info. hideTip()
+  // .spt (scatter points) and .dotrow (dot-plot rows) below. hideTip()
   // first: render() rebuilds #app (including this very tile) without ever
   // firing this tile's mouseleave, so without this the card from the tile
   // under a still-stationary cursor was left stuck on screen until the
@@ -245,8 +335,9 @@ function wire(){
   });
   // Every mark that carries data-tip gets the same hover card — map tiles
   // (data-tip set alongside the click handling above), dot-plot rows,
-  // histogram bars and scatter points (charts.js) all use it, so one loop
-  // wires all four chart types instead of repeating this per chart type.
+  // histogram bars, scatter points, and line-chart points (charts.js) all
+  // use it, so one loop wires all five chart types instead of repeating
+  // this per chart type.
   document.querySelectorAll("[data-tip]").forEach(b=>{
     b.onmouseenter=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
     b.onmousemove=e=>showTip(b.dataset.tip,e.clientX,e.clientY);
@@ -257,10 +348,46 @@ function wire(){
     // uses, kurvan.css) so a mouse click on a .tile — which also moves
     // focus, but has already positioned the card at the cursor via
     // onmouseenter/onmousemove above — doesn't yank it down to the mark's
-    // bottom edge right after. Dot-plot/histogram/scatter marks carry no
-    // tabindex, so onfocus/onblur are simply inert for them.
+    // bottom edge right after.
     b.onfocus=()=>{if(b.matches(":focus-visible")){const r=b.getBoundingClientRect();showTip(b.dataset.tip,r.left,r.bottom);}};
     b.onblur=hideTip;
+    // Click-to-pin the richer readout card (pinTip(), module scope above),
+    // but only for marks that don't already have their OWN click handler —
+    // .tile/.spt/.dotrow above all repurpose click for region-select
+    // instead, and keep doing exactly that; this only reaches line-chart
+    // points and histogram bars, which had no click reaction at all before
+    // (and so, no reaction to a touch tap either — a tap fires no
+    // mouseenter to fall back on). Clicking the currently-pinned mark
+    // again unpins; clicking a different one re-pins to that one instead.
+    if(!b.onclick){
+      b.onclick=e=>{
+        // Full-screen moves the whole chart (MOVE not clone, see
+        // wireFullscreen()'s own comment) — this listener comes along with
+        // it, still attached to the same mark. Without this branch,
+        // e.stopPropagation() below would swallow the click before it could
+        // ever bubble up to #chartFsBody's OWN delegated handler
+        // (wireFullscreen()), which is what actually writes full-screen's
+        // always-visible readout strip at the bottom. A floating pinned
+        // card doesn't make sense on top of that strip anyway, so write
+        // straight into it instead and skip the pin path entirely — the
+        // same thing map tiles/dot-plot rows already get here for free,
+        // since their own pre-existing onclick (region-select, above) means
+        // they never picked up this handler, and their clicks always
+        // reached #chartFsBody's listener untouched.
+        if(b.closest("#chartFs")){renderReadoutCard(b);return;}
+        e.stopPropagation();
+        if(pinnedMark===b){unpinTip();return;}
+        pinTip(b,e.clientX,e.clientY);
+      };
+      b.onkeydown=e=>{
+        if(e.key!=="Enter"&&e.key!==" ")return;
+        e.preventDefault();
+        if(b.closest("#chartFs")){renderReadoutCard(b);return;}
+        if(pinnedMark===b){unpinTip();return;}
+        const r=b.getBoundingClientRect();
+        pinTip(b,r.left,r.bottom);
+      };
+    }
   });
   // Used to switch tabs; every section already exists on the page now
   // (already showing the current S.region — that was set by the map click
@@ -276,28 +403,32 @@ function wire(){
   wireFullscreen();
 }
 
-// Renders one mark's data-card payload (charts.js's dataCard(), attached
-// to every hoverable mark alongside its data-tip) as the SAME .rstat card
+// Builds one mark's data-card payload (charts.js's dataCard(), attached to
+// every hoverable mark alongside its data-tip) into the SAME .rstat card
 // markup the rest of the app already uses for a region/value figure
 // (viewKarta's side card, viewKon's women/men pair, ...) — reusing those
-// existing classes/CSS rather than a plain data-tip sentence, so a click
-// inside full-screen reads exactly like the normal page does. Falls back
-// to the plain tip text if a mark somehow has no data-card (defensive; every
-// primitive sets one).
-function renderReadoutCard(mark){
-  const out=document.getElementById("chartFsReadout");
+// existing classes/CSS rather than a plain data-tip sentence. Falls back to
+// the plain tip text (still HTML-escaped — this return value is assigned
+// via innerHTML) if a mark somehow has no data-card (defensive; every
+// primitive sets one). Pure string builder, no DOM writes of its own, so
+// both the full-screen readout strip AND the inline click-pinned #tiletip
+// (wire(), below) can each drop it into whichever element they own.
+function readoutCardHTML(mark){
   let data=null;
   try{data=JSON.parse(mark.dataset.card||"null");}catch(e){/* fall through to plain text below */}
-  if(!data){out.textContent=mark.dataset.tip||"";return;}
+  if(!data)return esc(mark.dataset.tip||"");
   const col=data.color||"var(--ink)";
   const rows=(data.rows||[]).map(r=>`
     ${r.label?`<div class="rk" style="margin-top:10px;color:var(--ink-2)">${esc(r.label)}</div>`:""}
     <div class="rv tnum">${esc(r.value)}${r.unit?` <span style="font-size:13px;color:var(--ink-3)">${esc(r.unit)}</span>`:""}</div>
     ${r.ci?`<div class="rci tnum">95% ${ciWord()} ${esc(r.ci)}</div>`:""}`).join("");
-  out.innerHTML=`<div class="rstat" style="border-top-color:${col}">
+  return `<div class="rstat" style="border-top-color:${col}">
     <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(data.title)}</div>
     ${rows}
   </div>`;
+}
+function renderReadoutCard(mark){
+  document.getElementById("chartFsReadout").innerHTML=readoutCardHTML(mark);
 }
 
 // Every chart primitive (charts.js) marks its root <svg> with a shared
@@ -584,3 +715,50 @@ function paintTrendArrows(){
 }
 
 render();
+
+// =========================================================================
+// LAZY REAL-DATA LOADING — one indicator's worth of JSON per <script>,
+// loaded AFTER the page has already painted once (the render() call just
+// above), instead of one multi-megabyte js/real_mh_data.js blocking the
+// very first paint the way it used to (pipeline/build_kurvan_data.py's own
+// module docstring has the full "why", js/data.js's rebuildREAL() etc.
+// have the "how" — every REAL_X here is reassignable, not a one-shot
+// const, for exactly this).
+//
+// Every indicator starts out exactly like a fresh checkout that's never
+// run the Python pipeline at all: REAL_X.active is false, cell()/total()
+// fall back to the labelled-synthetic generator (already a first-class,
+// honestly-labelled state, not an error) — and each one flips to real,
+// silently, the moment its own file lands and this fires a fresh
+// render(). Fired all at once, not staggered/prioritised by scroll
+// position: local file:// reads are fast enough that the difference isn't
+// worth a priority queue's added complexity.
+// =========================================================================
+const REAL_SOURCES=[
+  {file:"js/data/real_mh.js",         rebuild:()=>{REAL=rebuildREAL();}},
+  {file:"js/data/real_psych.js",      rebuild:()=>{REAL_PSYCH=rebuildREAL_PSYCH();}},
+  {file:"js/data/real_hlv.js",        rebuild:()=>{REAL_HLV=rebuildREAL_HLV();}},
+  {file:"js/data/real_lakemedel.js",  rebuild:()=>{REAL_ANTIDEP=rebuildREAL_ANTIDEP();}},
+  {file:"js/data/real_fk.js",         rebuild:()=>{REAL_FK=rebuildREAL_FK();}},
+  {file:"js/data/real_context.js",    rebuild:()=>{CONTEXT=rebuildCONTEXT();}},
+  {file:"js/data/real_bup.js",        rebuild:()=>{BUP_WAIT=rebuildBUP_WAIT();}},
+  {file:"js/data/real_hbsc.js",       rebuild:()=>{HBSC=rebuildHBSC();}},
+  {file:"js/data/real_pop.js",        rebuild:()=>{REAL_POP=rebuildREAL_POP();NATIONAL_AGE_WEIGHTS=rebuildNATIONAL_AGE_WEIGHTS();}},
+];
+function loadRealSourcesLazily(){
+  // Reuses kurvan.html's own cache-busting query string (e.g. "?v=38") off
+  // this very <script> tag rather than hardcoding it a second time here —
+  // stays correct automatically whenever that version marker is bumped.
+  // document.currentScript is only valid during this script's own
+  // synchronous run, which is exactly where this executes (called at
+  // load time, not from inside a later callback).
+  const qs=(document.currentScript&&document.currentScript.src.split("?")[1])||"";
+  REAL_SOURCES.forEach(src=>{
+    const s=document.createElement("script");
+    s.src=qs?`${src.file}?${qs}`:src.file;
+    s.onload=()=>{src.rebuild();render();};
+    s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);};
+    document.head.appendChild(s);
+  });
+}
+loadRealSourcesLazily();

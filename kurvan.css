@@ -59,7 +59,16 @@
    via button{font:inherit} below) by 22%. No existing step equals 16px, so
    restoring the original value here rather than adding a token nothing
    else needs yet. */
-html,body{width:100%;margin:0;padding:0;overflow-x:hidden}
+/* overflow-x:CLIP, not hidden: `hidden` on html/body makes the browser treat
+   that element as its own scroll container, which is a well-documented way
+   to silently break position:sticky on every descendant (.sidebar below,
+   the sticky #synth banner too) — the sticky containing-block calculation
+   gets computed against the wrong scroller. `clip` prevents the same
+   horizontal overflow visually without establishing a scroll container, so
+   it doesn't have that side effect. This whole html,body rule (and its
+   overflow-x:hidden) didn't exist before the mobile-view branch merged in
+   — it's new, not a design choice worth preserving as-is. */
+html,body{width:100%;margin:0;padding:0;overflow-x:clip}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .tnum{font-variant-numeric:tabular-nums}
 svg{display:block;width:100%;height:auto}
@@ -397,6 +406,31 @@ select option:disabled{color:var(--ink-3)}
   border-radius:4px;padding:7px 10px;font-family:var(--sans);font-size:11.5px;
   line-height:1.5;box-shadow:var(--shadow);max-width:240px;
 }
+/* Click-pinned state (shell.js's pinTip()) — holds a full .rstat card
+   (readoutCardHTML(), same markup full-screen mode's own click readout
+   already uses) instead of #tiletip's own plain hover sentence. .rstat
+   already draws its own background/border/padding, so #tiletip's outer
+   box is reset to a bare positioning wrapper here — without this, a card
+   would sit inside a second, redundant card. max-width widened to match
+   #chartFsReadout .rstat's own 280px (kurvan.css, full-screen section) —
+   240px was sized for a short hover sentence, not a title/value/CI stack. */
+/* position:absolute (document-relative) instead of the base rule's fixed
+   (viewport-relative) — shell.js's positionTip() bakes the scroll offset
+   at pin time into left/top for exactly this reason, so the card scrolls
+   along with the page and the point it's about, rather than staying
+   frozen over the viewport or having to be re-positioned on every scroll
+   event. Still safe from a card's own overflow clipping it the same way
+   the base rule's comment above already explains: #tiletip is appended
+   straight to <body>, never nested inside a chart card, so it's never
+   actually a descendant of anything that could clip it.
+   z-index dropped below #synth's sticky banner (100): the base rule's 200
+   only ever had to clear ordinary page content, because the hover tip
+   never leaves the neighbourhood of the mouse. The pinned card now
+   travels with the document, so scrolling can carry it up underneath
+   the banner's fixed on-screen position — it should duck behind the
+   banner there like every other bit of page content does, not paint
+   over it. */
+#tiletip.pinned{position:absolute;z-index:90;background:none;border:none;box-shadow:none;padding:0;max-width:280px}
 /* Five-tier map legend, matching chorMap()'s own 5-step fill exactly —
    each row is a plain word ("Lowest"..."Highest") plus its real number
    range, not bare numbers alone. Swatches sized up from the old 11x11px
