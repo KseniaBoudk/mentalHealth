@@ -237,7 +237,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .src b{color:var(--ink-2);font-weight:650}
 
 /* --- läget --- */
-.hero{max-width:72ch}
+.hero{max-width:100%}
 .kick{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);font-weight:700}
 .hero h1{font-family:var(--serif);font-size:clamp(30px,5.4vw,56px);line-height:.99;margin:14px 0 0;letter-spacing:-.035em;font-weight:600;text-wrap:balance}
 .hero p{font-size:16.5px;color:var(--ink-2);margin:16px 0 0;line-height:1.58}
