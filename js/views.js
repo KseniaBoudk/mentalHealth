@@ -431,7 +431,17 @@ function viewRegioner(){
   const ctxDensity=contextCell("pop_density",S.region);
   const ctxLowEdu=contextCell("education_low_pct",S.region);
 
-  const gapLatest=REAL.active?REAL.latestYear:2024;
+  // Pre-existing bug, surfaced while verifying the suicide age-standardisation
+  // change (not caused by it): gapLatest was fed straight into fakeTotal()
+  // for BOTH axes, but distress's fabricated curve is biennial (IND.distress.
+  // step===2) — any odd gapLatest (whatever year REAL.latestYear, i.e.
+  // selfharm/suicide's real data, happens to land on) made fakeCell() return
+  // null for every age band, fakeTotal() return null, and `d.value` below
+  // throw. Snap down to the nearest year distress's step actually supports,
+  // same rule fakeCell()/fakeTotal() themselves apply.
+  const gapLatestRaw=REAL.active?REAL.latestYear:2024;
+  const gapStep=IND.distress.step||1;
+  const gapLatest=gapLatestRaw-(((gapLatestRaw-IND.distress.start)%gapStep)+gapStep)%gapStep;
   const gap=REGIONS.map(r=>{
     const d=fakeTotal("distress",r[0],gapLatest,"T",false),a=fakeTotal("antidep",r[0],gapLatest,"T",false);
     return {x:d.value,y:a.value,code:r[0],name:r[1]};

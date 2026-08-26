@@ -199,9 +199,15 @@ const EVENTS = [
 
    What the real source actually publishes, and what it does not:
      - county grain only (plus one national row) — never municipality
-     - self-harm: ages 12-14 and 15-17 ONLY. suicide: ages 15-19 ONLY.
-       Nothing for 25-84+. Real teenage-suicide registers do not cover
-       pensioners, however much the synthetic curve below does.
+     - self-harm: ages 12-14 and 15-17 ONLY. Nothing for 18+ — Sweden's
+       self-harm hospitalisation register this project reaches is child/
+       adolescent-only, unlike synthetic's full curve below.
+     - suicide: ALL nine of Kurvan's AGES bands (widened from 15-19-only —
+       dodsorsaker's own age dimension always covered every age, that was
+       this project's own scope choice, not a source limit; see
+       fetch_socialstyrelsen_mh.py's "KURVAN CHANGE 2" for the pooling that
+       makes this possible), so suicide is standardisable the same way
+       psych/antidep are — see STD_CAPABLE_REAL below.
      - all three sexes (M/K/T) — fetch_socialstyrelsen_mh.py requests
        kon/1,2,3, confirmed live to work on both underlying datasets.
      - five-year rolling windows plotted at the midpoint year, not annual
@@ -233,7 +239,14 @@ function rebuildREAL() {
   // Kurvan's ageIdx (into AGES) -> the real age_group label that stands in
   // for it. Every other ageIdx (25-34 through 85+) has no real counterpart
   // and stays null on purpose: see the docstring above.
-  const AGE_MAP = { selfharm: { 0: "12_14", 1: "15_17" }, suicide: { 1: "15_19" } };
+  // suicide's age_group values ARE Kurvan's own AGES labels directly now
+  // (fetch_socialstyrelsen_mh.py's pool_suicide_age_bands() pools every raw
+  // dodsorsaker age id straight into Kurvan's nine bands, unlike self-harm
+  // which stays on its narrower 12-14/15-17 sub-labels) — this map is just
+  // AGES itself, kept explicit rather than special-cased away below so
+  // rebuildREAL()'s ageOf/idx-building loop needs no per-indicator branch.
+  const AGE_MAP = { selfharm: { 0: "12_14", 1: "15_17" },
+                     suicide: Object.fromEntries(AGES.map((a, i) => [i, a])) };
   // X60-X84 alone for suicide (matches IND.suicide's cited source); X60-X84
   // + Y10-Y34 combined for self-harm (matches IND.selfharm's cited source
   // and notNumB.selfharm's caveat about carrying undetermined intent along).
@@ -692,14 +705,14 @@ function hbscCell(regionCode, age, sex) {
        script stops there on purpose — see ITS docstring for why
        BefolkningCKM, which would extend to 2025, isn't also fetched).
      - STD_CAPABLE_REAL below is the complete list of indicators this can
-       actually standardise: psych and antidep are the only two real
+       actually standardise: psych, antidep and suicide are the three real
        indicators with full nine-band age coverage (REAL_AGE_LIMIT above
-       has no entry for either) — selfharm/suicide's 2-band real coverage
+       has no entry for any of the three) — selfharm's 2-band real coverage
        and distress/sjukfranvaro's zero real age coverage can't be
        standardised regardless of having a population denominator; that
        gap is in the numerator, not here.
    ===================================================================== */
-const STD_CAPABLE_REAL = ["psych", "antidep"];
+const STD_CAPABLE_REAL = ["psych", "antidep", "suicide"];
 // See rebuildREAL()'s comment above — same lazy-rebuild pattern, except
 // this one has a dependant (NATIONAL_AGE_WEIGHTS, below) that also needs
 // recomputing once real_pop.js lands — js/shell.js's loader calls both in
@@ -758,7 +771,9 @@ function standardRate(k, regionCode, year, sex, type) {
   if (!isRealActive(k)) return undefined;
   const parts = [];
   for (let i = 0; i < AGES.length; i++) {
-    const c = k === "psych" ? realCellPsych(regionCode, year, i, sex, type) : realCellAntidep(regionCode, year, i, sex, type);
+    const c = k === "psych" ? realCellPsych(regionCode, year, i, sex, type)
+             : k === "antidep" ? realCellAntidep(regionCode, year, i, sex, type)
+             : realCell(k, regionCode, year, i, sex);   // suicide: already generic, no type param
     if (c && c.value != null) parts.push({ c, w: NATIONAL_AGE_WEIGHTS[i] });
   }
   if (!parts.length) return null;
@@ -826,7 +841,10 @@ function getManifestRows() {
   return rows;
 }
 
-const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [], sjukfranvaro: [] };
+// suicide dropped from here (widened to full 9-band real coverage — see
+// AGE_MAP.suicide and STD_CAPABLE_REAL above); absent from this map means
+// "no restriction", same as psych/antidep.
+const REAL_AGE_LIMIT = { selfharm: [0, 1], distress: [], sjukfranvaro: [] };
 function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;
   return IND[k].age[ageIdx] != null;
@@ -844,10 +862,10 @@ function stdCapable(k) {
 // lands exactly on an AGES boundary (65-74 starts cleanly), but 18 does not
 // -- AGES[1] ("15-24") mixes 15-17-year-olds in with 18-24-year-olds, so
 // "adult" here really means 15-64, not a clean 18-64 (see viewAlder's
-// caveat note, which says so). psych and antidep are the only indicators
-// with real data across every AGES band (REAL_AGE_LIMIT above has no entry
-// for either), so those are the only ones that can honestly use all three
-// groups today.
+// caveat note, which says so). psych, antidep and suicide are the only
+// indicators with real data across every AGES band (REAL_AGE_LIMIT above
+// has no entry for any of the three), so those are the only ones that can
+// honestly use all three groups today.
 const AGE_GROUPS = [
   { key: "child",   idxs: [0] },         // 0-14
   { key: "adult",   idxs: [1,2,3,4,5] }, // 15-64
@@ -1061,7 +1079,7 @@ function total(k, regionCode, year, sex, standardised, type){
   // when any of those don't hold, so this only intercepts the cases it
   // can actually serve — everything else falls through to the crude
   // real branches below exactly as before.
-  if (standardised && (k === "psych" || k === "antidep")) {
+  if (standardised && (k === "psych" || k === "antidep" || k === "suicide")) {
     const r = standardRate(k, regionCode, year, sex, type);
     if (r !== undefined) return r;
   }

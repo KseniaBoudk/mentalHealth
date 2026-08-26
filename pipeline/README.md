@@ -9,7 +9,12 @@ This folder now pulls real numbers for **all five of those**:
 
 - **Self-harm hospitalisation** and **suicide** — `fetch_socialstyrelsen_mh.py`,
   Socialstyrelsen Statistikdatabasen (Patientregistret / Dödsorsaksregistret),
-  county grain, ages 12–19 only, all three sexes, five-year windows.
+  county grain, all three sexes, five-year windows. Self-harm stays ages
+  12–19 only (that register is child/adolescent-specific); suicide covers
+  all nine of Kurvan's age bands (widened from 15-19-only — see "KURVAN
+  CHANGE 2" in that script's docstring), which is what makes it
+  age-standardisable the same way psych/antidep are (`STD_CAPABLE_REAL` in
+  `js/data.js`).
 - **Specialist psychiatric care** — `fetch_socialstyrelsen_psych.py`, same API,
   dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99 — split into
   **six diagnosis-type series** (DIAGNOS_GROUPS: substance use, psychosis,
@@ -152,15 +157,24 @@ short version of what each hands back:
 
 **Self-harm / suicide** (`fetch_socialstyrelsen_mh.py`):
 - County grain, plus one national row per indicator (this copy keeps the
-  national row the upstream script computes and discards; see "KURVAN CHANGE"
-  in its docstring for why).
-- Self-harm: ages 12–14 and 15–17 only. Suicide: ages 15–19 only. Nothing for
-  anyone older — Kurvan's fabricated generator draws a full 0–14-through-85+
-  curve for both; the real registers this project can reach never do.
-- Sex "T" (total) only. No real male/female split.
+  national row the upstream script computes and discards; see "KURVAN CHANGE
+  1" in its docstring for why).
+- Self-harm: ages 12–14 and 15–17 only — Kurvan's fabricated generator draws
+  a full 0–14-through-85+ curve, but the real hospitalisation register this
+  project reaches is child/adolescent-only. Suicide: all nine of Kurvan's
+  age bands (widened from 15-19-only — dodsorsaker's own age dimension
+  always covered every age; see "KURVAN CHANGE 2" in that script's
+  docstring for the pooling that unlocked it), so suicide (unlike
+  self-harm) is age-standardisable, same as psych/antidep.
+- All three sexes (M/K/T) — `kon/1,2,3`, confirmed live to work on both
+  underlying datasets.
 - Five-year rolling windows, plotted at the midpoint year, not annual.
-- Self-harm rates are never suppressed. Suicide counts below 10 per window are
-  withheld — the rate is still published.
+- Self-harm rates are never suppressed. Suicide counts below 10 per
+  county/age-band/sex window are withheld — the rate is still published.
+  Widening suicide to nine age bands means materially more suppressed
+  cells than before (thin cells at the youngest and oldest bands
+  especially), which is the disclosure floor working as intended on
+  genuinely smaller sub-populations, not a regression.
 
 **Psychiatric care** (`fetch_socialstyrelsen_psych.py`), the best fit:
 - County grain plus a national row, published directly this time, not
