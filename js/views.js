@@ -1201,6 +1201,12 @@ function viewVantetider(){
   const nat=bupWaitCell("SE",latest[0],latest[1]);
   const R=RBY[S.region];
   const mine=bupWaitCell(S.region,latest[0],latest[1]);
+  // BUP_FACILITIES loads independently/lazily from BUP_WAIT (js/shell.js's
+  // REAL_SOURCES) — undefined here means that source specifically hasn't
+  // landed yet (omit the new stat/list below, same as any other lazy
+  // source's not-yet-loaded state elsewhere in this app), not that BUP_WAIT
+  // itself is inactive (already handled by the early return above).
+  const facilities=bupFacilityCell(S.region);
 
   // Two series: the national line always shown for reference, the picked
   // region dashed alongside it — same shape as self-harm/suicide's
@@ -1247,12 +1253,32 @@ function viewVantetider(){
               <div class="rci tnum">${esc(unit)} · ${esc(monthLabel(latest))}</div>
               ${mine!=null?`<div class="rvs">${esc(t.statSentence.bup_vantetid(fmt(mine,1)))}</div>`:""}
             </div>
+            ${facilities!==undefined?`
+            <div class="rstat" style="border-top-color:${col}">
+              <div class="rk" style="color:${col}"><span class="dot" style="background:${col}"></span>${esc(t.vantetiderClinicsInd)}</div>
+              <div class="rv tnum">${facilities?facilities.count:0}</div>
+              <div class="rvs">${esc(t.vantetiderClinicsSentence(facilities?facilities.count:0))}</div>
+            </div>`:""}
           </div>
           <button class="mapopen btn-openregion">${esc(t.mapOpen)} →</button>
         </div>
       </div>
     </div>
-  </div>`;
+  </div>
+  ${facilities!==undefined?`
+  <div class="card mt-fig">
+    <div class="card-h"><h3>${esc(t.vantetiderClinicsListH)}</h3><div class="u">${esc(R[1])}</div></div>
+    <div class="card-b">
+      <div class="feed">
+        ${facilities&&facilities.clinics.length?facilities.clinics.map(c=>`
+        <div class="feed-item">
+          <div class="feed-meta"><span>${esc(c.address||t.vantetiderClinicsNoAddr)}</span>${c.phone?`<span>${esc(c.phone)}</span>`:""}</div>
+          <h4>${c.url_1177?`<a href="${esc(c.url_1177)}" target="_blank" rel="noopener">${esc(c.name)}</a>`:esc(c.name)}</h4>
+        </div>`).join(""):`<p style="color:var(--ink-3)">${esc(t.vantetiderClinicsEmpty)}</p>`}
+      </div>
+    </div>
+    <div class="src">${esc(t.vantetiderClinicsSrc)}</div>
+  </div>`:""}`;
 }
 
 // HBSC (Skolbarns hälsovanor) — its own dedicated view, same "not

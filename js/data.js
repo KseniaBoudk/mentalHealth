@@ -252,8 +252,31 @@ const EVENTS = [
 // by name at call time, not at definition time, so this needs no other
 // changes anywhere else in this file.
 function rebuildREAL() {
-  const rows = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.rows)) ? REAL_MH.rows : [];
-  const active = rows.length > 0;
+  const rawRows = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.rows)) ? REAL_MH.rows : [];
+  const active = rawRows.length > 0;
+
+  // REAL_MH.rows are compact tuples, not objects — see
+  // pipeline/build_kurvan_data.py's encode_mh_rows() for the encode side
+  // and its own docstring for why (this file went from smallest-in-folder
+  // to largest once suicide's real age coverage widened from one band to
+  // nine, per fetch_socialstyrelsen_mh.py's "KURVAN CHANGE 2"). Decoded
+  // back into the same {county_code, indicator, age_group, sex,
+  // midpoint_year, value, count, suppressed, window} shape the loop below
+  // always worked with, so nothing past this point needs to change —
+  // same "decode once, unchanged reader" pattern rebuildREAL_PSYCH() and
+  // rebuildREAL_ANTIDEP() already use for their own compact rows.
+  // `window` isn't stored on the wire at all (verified 100% derivable from
+  // midpoint_year — see encode_mh_rows()'s docstring); reconstructed here.
+  const indicators = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.indicators)) ? REAL_MH.indicators : [];
+  const mhAgeLabels = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.ages)) ? REAL_MH.ages : [];
+  const rows = rawRows.map(r => {
+    const [county_code, indIdx, midpoint_year, ageIdx, sex, value, count, suppressed] = r;
+    return {
+      county_code, indicator: indicators[indIdx], age_group: mhAgeLabels[ageIdx],
+      sex, midpoint_year, value, count, suppressed,
+      window: `${midpoint_year - 2}-${midpoint_year + 2}`,
+    };
+  });
 
   // Kurvan's ageIdx (into AGES) -> the real age_group label that stands in
   // for it. Every other ageIdx (25-34 through 85+) has no real counterpart
@@ -682,6 +705,49 @@ function bupWaitCell(regionCode, year, month) {
   const county = regionCode === "SE" ? "00" : regionCode;
   const v = BUP_WAIT.idx[county] && BUP_WAIT.idx[county][year] && BUP_WAIT.idx[county][year][month];
   return v == null ? null : v;
+}
+
+/* =====================================================================
+   1h-bis. BUP FACILITIES — every individual BUP clinic listed on 1177.se
+   (name, address, phone, coordinates), from js/data/real_bup_facilities.js's
+   REAL_BUP_FACILITIES (../BUPS/fetch_bup_facilities.py + build_kurvan_data.py
+   — see ../BUPS/README.md for the full standalone deliverable this is one
+   output of). Deliberately NOT shaped like IND/REAL_* — same reasoning as
+   CONTEXT/BUP_WAIT above, plus its own:
+
+     - FACILITY-grain, not region-grain — every other real source here is
+       one number per county; this is a whole list of clinics per county,
+       county grain only in the sense that clinics are grouped by which
+       county they're in.
+     - No year/age/sex dimension at all — this is "what exists right now",
+       a snapshot as of generatedAt, not a time series.
+     - A handful of clinics (phone-triage "En väg in" lines, digital-only
+       programs — see ../BUPS/fetch_bup_facilities.py's own docstring)
+       have no address/coordinates; those still count toward a county's
+       total but are naturally absent from anything that needs a location.
+   ===================================================================== */
+// See rebuildREAL()'s comment above — same lazy-rebuild pattern.
+function rebuildBUP_FACILITIES() {
+  const rows = (typeof REAL_BUP_FACILITIES !== "undefined" && Array.isArray(REAL_BUP_FACILITIES.rows)) ? REAL_BUP_FACILITIES.rows : [];
+  const active = rows.length > 0;
+  const idx = {};   // idx[county] = { count, clinics: [row, ...] }
+  for (const row of rows) {
+    if (!row.county_code) continue;   // the few rows reverse-geocoding couldn't place
+    const bucket = idx[row.county_code] || (idx[row.county_code] = { count: 0, clinics: [] });
+    bucket.count++;
+    bucket.clinics.push(row);
+  }
+  return { active, idx, generatedAt: active ? REAL_BUP_FACILITIES.generated_at : null };
+}
+let BUP_FACILITIES = rebuildBUP_FACILITIES();
+// Returns undefined (source not loaded yet) or null (loaded, but this
+// county genuinely has zero listed clinics — same contract as every real*
+// function above) or { count, clinics }. No "SE" national rollup — a
+// national clinic list isn't a meaningful single "county" the way a
+// national rate average is elsewhere in this file.
+function bupFacilityCell(regionCode) {
+  if (!BUP_FACILITIES.active) return undefined;
+  return BUP_FACILITIES.idx[regionCode] || null;
 }
 
 /* =====================================================================

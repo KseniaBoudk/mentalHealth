@@ -36,8 +36,10 @@ Reads:  ../data/processed/socialstyrelsen_mh.json         (fetch_socialstyrelsen
                                                  see that script's own docstring)
         ../data/processed/hbsc.json             (fetch_hbsc.py)
         ../data/processed/scb_population.json   (fetch_scb_population.py)
+        ../data/processed/bup_facilities.json   (../BUPS/fetch_bup_facilities.py)
 Writes: ../js/data/real_mh.js, real_psych.js, real_hlv.js, real_lakemedel.js,
-        real_fk.js, real_context.js, real_bup.js, real_hbsc.js, real_pop.js
+        real_fk.js, real_context.js, real_bup.js, real_hbsc.js, real_pop.js,
+        real_bup_facilities.js
         (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_BUP_WAIT,
          REAL_HBSC_MH, REAL_POP_MH, ... — one const per file)
 
@@ -90,6 +92,7 @@ SOURCES = [
         "source": "Socialstyrelsen Statistikdatabasen (Patientregistret + Dödsorsaksregistret)",
         "note": "Real, region-grain rates for self-harm hospitalisation and suicide.\n"
                 "   Fetched by fetch_socialstyrelsen_mh.py.",
+        "compact_mh": True,   # see encode_mh_rows()'s own docstring for why
     },
     {
         "var": "REAL_PSYCH_MH",
@@ -191,6 +194,19 @@ SOURCES = [
                 "   age-standardisation for psych/antidep (js/data.js's standardRate()).\n"
                 "   Fetched by fetch_scb_population.py.",
     },
+    {
+        "var": "REAL_BUP_FACILITIES",
+        "file": "bup_facilities.json",
+        "out": "real_bup_facilities.js",
+        "source": "1177.se Hitta vård API (/api/hjv/search), caretype=Psykiatri, barn och ungdom",
+        "note": "Real, FACILITY-grain (not region-grain like everything else here) list of\n"
+                "   every BUP clinic 1177.se lists — name, address, phone, coordinates,\n"
+                "   county code. Backs the clinic-count stat and clinic directory on the\n"
+                "   Väntetider (BUP) tab (js/data.js's rebuildBUP_FACILITIES()). Not an\n"
+                "   IND indicator — same deliberately-outside-IND shape as CONTEXT/BUP_WAIT/\n"
+                "   HBSC. Fetched by ../BUPS/fetch_bup_facilities.py (that folder's own\n"
+                "   README explains the full standalone deliverable this is one output of).",
+    },
 ]
 
 
@@ -252,6 +268,44 @@ def encode_type_age_rows(rows, prefix, suffix):
     return tuple_rows, types, ages
 
 
+def encode_mh_rows(rows):
+    """Rewrite REAL_MH's (self-harm/suicide) object rows into compact
+    [county_code, indicator_idx, midpoint_year, age_idx, sex, value, count,
+    suppressed] tuples — same "why" as encode_type_age_rows() above
+    (COMPACT TUPLE ROWS docstring section), a separate function because
+    this source's own fields don't fit that one's fixed shape: `year` there
+    vs `midpoint_year` here, and two fields that one never sees at all —
+    `suppressed` (a real per-row disclosure flag, must survive) and
+    `window` (a string like "2008-2012", which does NOT need to survive:
+    verified against every row in data/processed/socialstyrelsen_mh.json
+    that window == f"{midpoint_year-2}-{midpoint_year+2}" with zero
+    exceptions, so js/data.js's rebuildREAL() reconstructs it instead of
+    storing it a second time).
+
+    This source went from "already small, not worth the churn" (this
+    module's own COMPACT TUPLE ROWS docstring section, written when this
+    was true) to the single largest file in js/data/ — 5.47MB, bigger than
+    real_psych.js despite half the row count — once suicide's real age
+    coverage widened from one band to all nine (fetch_socialstyrelsen_mh.py,
+    "KURVAN CHANGE 2"), roughly 9x-ing this source's row count. Worth the
+    same treatment now for the same reason psych/lakemedel got it.
+
+    Returns (tuple_rows, indicators, ages); both built from the data
+    itself, not hardcoded, same self-describing convention as
+    encode_type_age_rows().
+    """
+    indicators = sorted({r["indicator"] for r in rows})
+    ind_idx = {s: i for i, s in enumerate(indicators)}
+    ages = sorted({r["age_group"] for r in rows})
+    age_idx = {a: i for i, a in enumerate(ages)}
+    tuple_rows = [
+        [r["county_code"], ind_idx[r["indicator"]], r["midpoint_year"],
+         age_idx[r["age_group"]], r["sex"], r["value"], r["count"], r["suppressed"]]
+        for r in rows
+    ]
+    return tuple_rows, indicators, ages
+
+
 def main():
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     os.makedirs(OUT_DIR, exist_ok=True)
@@ -262,6 +316,9 @@ def main():
         if compact and rows:
             rows, types, ages = encode_type_age_rows(rows, compact["prefix"], compact["suffix"])
             payload = {"generated_at": now, "source": spec["source"], "types": types, "ages": ages, "rows": rows}
+        elif spec.get("compact_mh") and rows:
+            rows, indicators, ages = encode_mh_rows(rows)
+            payload = {"generated_at": now, "source": spec["source"], "indicators": indicators, "ages": ages, "rows": rows}
         else:
             payload = {"generated_at": now, "source": spec["source"], "rows": rows}
         out_path = os.path.join(OUT_DIR, spec["out"])
