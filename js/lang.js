@@ -57,7 +57,7 @@ sv:{
   realLbl:"verkliga data", synthLbl:"syntetiska data",
   realCaveat:{
     selfharm:"Verkliga siffror gäller endast 12–17 år, femårsfönster.",
-    suicide:"Verkliga siffror gäller endast 15–19 år, femårsfönster.",
+    suicide:"Verkliga siffror gäller nu alla åldrar, femårsfönster. Antal under 10 per fönster hålls tillbaka oftare i de yngsta och äldsta åldersgrupperna, där dödsfall är sällsynta — själva andelen (per 100 000) visas ändå.",
     psych:"Uppdelat på sex diagnostyper, årsvis, alla åldrar och kön — men bara specialistvård. \"Ätstörningar m.fl.\" och \"ADHD och barndomsdebut\" är bredare ICD-10-kapitel än namnen antyder — se typväljaren och not nedan.",
     distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
     sjukfranvaro:"Verkliga siffror sedan 2005, månadsvis genomsnitt per år. Ingen åldersuppdelning.",
@@ -309,7 +309,7 @@ en:{
   realLbl:"real data", synthLbl:"synthetic data",
   realCaveat:{
     selfharm:"Real figures cover ages 12–17 only, five-year windows.",
-    suicide:"Real figures cover ages 15–19 only, five-year windows.",
+    suicide:"Real figures now cover every age, five-year windows. Counts under 10 per window are withheld more often at the youngest and oldest age bands, where deaths are rare — the rate (per 100,000) is still shown either way.",
     psych:"Split into six diagnosis types, annual, every age and sex — specialist care only. \"Eating disorders etc.\" and \"ADHD and childhood-onset\" are broader ICD-10 chapters than their names suggest — see the type picker and the note below.",
     distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
     sjukfranvaro:"Real figures since 2005, monthly average per year. No age breakdown.",

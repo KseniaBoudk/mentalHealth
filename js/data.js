@@ -780,8 +780,30 @@ function standardRate(k, regionCode, year, sex, type) {
   const wSum = parts.reduce((s, p) => s + p.w, 0);
   if (wSum <= 0) return null;
   const value = parts.reduce((s, p) => s + p.c.value * p.w, 0) / wSum;
-  const count = parts.every(p => p.c.count != null) ? parts.reduce((s, p) => s + p.c.count, 0) : null;
-  const suppressed = parts.some(p => p.c.suppressed);
+  // Suppression here is about the COMBINED figure's own disclosure risk,
+  // not any one band's. `parts.some(suppressed)` (the old rule) marks the
+  // WHOLE standardised total suppressed the moment a single contributing
+  // band is — fine for psych/antidep, whose per-band counts are almost
+  // never that thin, but for suicide the near-always-suppressed 0-14 band
+  // (and often-suppressed 85+) meant nearly every region/year came back
+  // suppressed, emptying the Over-time trend and All-regions comparison
+  // (js/views.js's viewOverTid excludes anything .suppressed) even though
+  // the pooled ~9-band rate is a real, safely-publishable number — see
+  // fetch_socialstyrelsen_mh.py's own disclosure-rule docstring: "the
+  // window RATE is always published ... the window COUNT is published
+  // only at or above SUPPRESS_BELOW". `knownCount` sums whatever per-band
+  // counts ARE published (undercounting whenever a band withheld its own
+  // — which only makes this check MORE conservative, never less) and
+  // suppression is judged against THAT combined total, the same floor
+  // every other real count in this file uses. A pooled total across ~9
+  // bands clears SUPPRESS_BELOW in the large majority of region/years even
+  // when one thin band alone didn't; the genuinely small regions still do
+  // trip it. No-op for psych/antidep, whose combined counts are always far
+  // past the floor regardless of which rule is used.
+  const knownCount = parts.reduce((s, p) => s + (p.c.count != null ? p.c.count : 0), 0);
+  const anyBandSuppressed = parts.some(p => p.c.suppressed);
+  const suppressed = knownCount < SUPPRESS_BELOW;
+  const count = anyBandSuppressed ? null : knownCount;   // exact headcount still withheld whenever any contributor withheld its own
   const se = (count != null && count > 0) ? value / Math.sqrt(count) : null;
   return {
     value, count, denom: null,
