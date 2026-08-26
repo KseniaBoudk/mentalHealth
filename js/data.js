@@ -813,7 +813,18 @@ function standardRate(k, regionCode, year, sex, type) {
   if (anyBandSuppressed) {
     const knownCount = parts.reduce((s, p) => s + (p.c.count != null ? p.c.count : 0), 0);
     suppressed = knownCount < SUPPRESS_BELOW;
-    count = null;   // exact headcount still withheld whenever any contributor withheld its own
+    // knownCount sums only the bands that DID publish a count — it says
+    // nothing about the suppressed band's own value, so showing it (and
+    // deriving a real confidence interval from it) whenever the combined
+    // total itself clears the floor isn't a disclosure risk; it's an
+    // honest undercount, never an exact reveal. Only null it out — same
+    // as a genuinely suppressed cell anywhere else in this file — when the
+    // combined total is ITSELF below the floor. Previously nulled
+    // unconditionally here, which flattened the confidence interval to a
+    // single point for nearly every region once one band was suppressed
+    // (near-universal for suicide's 0-14 band) — reported by the user via
+    // screenshot: barely any region showed error bars.
+    count = suppressed ? null : knownCount;
   } else {
     suppressed = false;
     count = parts.every(p => p.c.count != null) ? parts.reduce((s, p) => s + p.c.count, 0) : null;
@@ -1159,7 +1170,13 @@ function total(k, regionCode, year, sex, standardised, type){
       if (anyCellSuppressed) {
         const knownCount=cells.reduce((s,c)=>s+(c.count!=null?c.count:0),0);
         suppressed=knownCount<SUPPRESS_BELOW;
-        count=null;   // still withhold the exact (undercounted) headcount whenever any contributor withheld its own
+        // Same reasoning as standardRate()'s identical fix: knownCount only
+        // sums bands that DID publish a count, so showing it (and deriving
+        // a real CI from it) once the combined total clears the floor
+        // isn't a disclosure risk — nulling it unconditionally here
+        // flattened the CI to a point for nearly every region (reported by
+        // the user via screenshot: barely any region showed error bars).
+        count=suppressed?null:knownCount;
       } else {
         suppressed=false;
         count=cells.every(c=>c.count!=null)?cells.reduce((s,c)=>s+c.count,0):null;
