@@ -214,6 +214,10 @@ function viewLaget(){
     <h1>${esc(t.h1)}</h1>
     <p>${esc(t.hp)}</p>
   </div>
+  <div class="note mt-fig">
+    <div class="l">${esc(t.observationNoteL)}</div>
+    <p>${esc(t.observationNoteB)}</p>
+  </div>
 
   <div class="card" style="margin-top:26px">
     <div class="card-h"><h3>${esc(t.twinT)}</h3><div class="u">${esc(t.perK)}</div></div>
