@@ -201,8 +201,8 @@ function viewLaget(){
   const suPeak=suM.filter(Boolean)[suM.filter(Boolean).length-1];
   const shSeries=[{pts:shK,color:"var(--violet)",w:2.5,label:t.women,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
                    {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men}];
-  const suSeries=[{pts:suM,color:"var(--oxblood)",w:2.6,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
-                   {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women}];
+  const suSeries=[{pts:suK,color:"var(--oxblood)",w:2.5,label:t.women},
+                   {pts:suM,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}}];
   const oldMen=fakeCell("suicide","SE",2024,8,"M",false);
   const yw06=cell("antidep","SE",2006,1,"K",false),yw24=cell("antidep","SE",2024,1,"K",false);
   const growth=Math.round((yw24.value/yw06.value-1)*100);
@@ -213,6 +213,10 @@ function viewLaget(){
     <div class="kick">${esc(t.kick)}</div>
     <h1>${esc(t.h1)}</h1>
     <p>${esc(t.hp)}</p>
+  </div>
+  <div class="note mt-fig">
+    <div class="l">${esc(t.observationNoteL)}</div>
+    <p>${esc(t.observationNoteB)}</p>
   </div>
 
   <div class="card" style="margin-top:26px">
@@ -713,6 +717,21 @@ function viewMetod(){
   const P=t.mProse;
   const rs=realSummary();
 
+  // Coverage table
+  const coverageRows=Object.keys(IND).map(x=>{
+    const I=IND[x];
+    const real=isRealActive(x);
+    const ageTxt=I.ageSplit?t.yes:t.no;
+    const sexTxt=I.sexSplit?t.yes:t.no;
+    return `<tr>
+      <td class="in" style="border-left:3px solid ${INST_COLOR[I.inst]}">${esc(t.ind[x])}
+        <span class="modechip ${real?"real":"synth"}">${esc(real?t.realLbl:t.synthLbl)}</span></td>
+      <td>${esc(I.coverage||"Region")}</td>
+      <td class="mono">${esc(I.years||I.start)}</td>
+      <td class="mono">${esc(t.splitSex)}: ${sexTxt} &nbsp;|&nbsp; ${esc(t.splitAge)}: ${ageTxt}</td>
+    </tr>`;
+  }).join("");
+
   // Original indicator-caveats table (unchanged)
   const rows=Object.keys(IND).map(x=>{
     const I=IND[x],[grain,limit]=t.mRows[x];
@@ -771,6 +790,19 @@ function viewMetod(){
       <th>${esc(t.mColStatus)}</th>
     </tr></thead>
     <tbody>${manifestRows}</tbody>
+  </table></div>
+
+  <div class="prose" style="margin-top:30px">
+    <h3>${esc(S.lang==="sv"?"Dataseriernas täckning":"Indicator coverage")}</h3>
+  </div>
+  <div class="mwrap"><table class="m">
+    <thead><tr>
+      <th>${esc(t.mColInd)}</th>
+      <th>${esc(t.mColGeo)}</th>
+      <th>${esc(t.mColYears)}</th>
+      <th>${esc(t.mColSplits)}</th>
+    </tr></thead>
+    <tbody>${coverageRows}</tbody>
   </table></div>
 
   <div class="prose" style="margin-top:30px">

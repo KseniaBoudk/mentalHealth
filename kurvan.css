@@ -67,7 +67,9 @@
    horizontal overflow visually without establishing a scroll container, so
    it doesn't have that side effect. This whole html,body rule (and its
    overflow-x:hidden) didn't exist before the mobile-view branch merged in
-   — it's new, not a design choice worth preserving as-is. */
+   — it's new, not a design choice worth preserving as-is. code-optimisation
+   independently made the same clip fix with no comment; master's landed
+   first and is kept as-is. */
 html,body{width:100%;margin:0;padding:0;overflow-x:clip}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .tnum{font-variant-numeric:tabular-nums}
@@ -254,7 +256,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 .src b{color:var(--ink-2);font-weight:650}
 
 /* --- läget --- */
-.hero{max-width:72ch}
+.hero{max-width:100%}
 .kick{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--oxblood);font-weight:700}
 .hero h1{font-family:var(--serif);font-size:clamp(30px,5.4vw,56px);line-height:.99;margin:14px 0 0;letter-spacing:-.035em;font-weight:600;text-wrap:balance}
 .hero p{font-size:16.5px;color:var(--ink-2);margin:16px 0 0;line-height:1.58}

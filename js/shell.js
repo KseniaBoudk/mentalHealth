@@ -16,7 +16,29 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // All nine sections render every time, in this order — the sidebar's
 // links and scroll-spy (in wire()) both walk this same list, so adding a
 // section here is the only place that needs touching.
-const SECTIONS=["laget","over_tid","karta","behov","sjukskrivning","kon","alder","sammanhang","vantetider","hbsc","metod","regioner","policy_news"];
+// Per-section state-key list for getCachedSectionHtml() below: which S.*
+// fields a section's own view function actually reads, so its cache key
+// only changes when something it cares about does. hbsc added here to
+// match master's SECTIONS list (grew a tenth "hbsc" section after this
+// list was first written) — hbscAge/hbscSex are the two S fields
+// viewHbsc() reads beyond region (see its own S.region/S.hbscAge/S.hbscSex
+// reads in js/views.js).
+const VIEW_STATE_KEYS = {
+  laget: ["ind", "age", "sex", "year", "region", "std"],
+  over_tid: ["ind", "region", "age", "sex", "std"],
+  karta: ["ind", "mapYear", "cmpOn", "cmpInd", "region"],
+  behov: ["region"],
+  sjukskrivning: ["region"],
+  kon: [],
+  alder: [],
+  sammanhang: ["ctxInd", "region"],
+  vantetider: ["region"],
+  hbsc: ["region", "hbscAge", "hbscSex"],
+  metod: [],
+  regioner: ["region", "ind", "age", "sex", "year", "std"],
+  policy_news: ["policyFilter", "policySort"]
+};
+const SECTIONS = Object.keys(VIEW_STATE_KEYS);
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
   vantetider:viewVantetider,hbsc:viewHbsc,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
@@ -42,6 +64,41 @@ const REAL_SOURCES=[
 // js/lang.js). Starts at the full count so it's accurate on the very first
 // paint, before loadRealSourcesLazily() has even run once.
 let realSourcesPending=REAL_SOURCES.length;
+
+// viewCache's key is built purely from S.* fields (VIEW_STATE_KEYS) plus
+// lang/theme — it has no way to notice that the underlying REAL_X data a
+// section reads just changed out from under it. That's exactly what
+// happens on every one of loadRealSourcesLazily()'s onload callbacks below
+// (a REAL_X global gets reassigned, then render() runs again with S
+// unchanged) — without clearing these caches there too, a section drawn
+// once before its source loaded would stay on its pre-real reading for the
+// rest of the session, silently defeating the "flip to real, silently"
+// design this file's own module docstring describes. See
+// clearMemoCaches() below, called from every onload/onerror.
+const viewCache = new Map();
+function getCachedSectionHtml(x) {
+  const keys = VIEW_STATE_KEYS[x] || [];
+  const vals = keys.map(k => S[k]).join("|");
+  const cacheKey = `${x}:${S.lang}:${S.theme}:${vals}`;
+  if (viewCache.has(cacheKey)) {
+    return viewCache.get(cacheKey);
+  }
+  const html = VIEW_FN[x]();
+  viewCache.set(cacheKey, html);
+  return html;
+}
+// Cross-file memoization caches added by the code-optimisation merge:
+// viewCache (above), cellCache/totalCache (js/data.js), chartCache
+// (js/charts.js) — all keyed only on UI state, none aware that a REAL_X
+// source can flip live mid-session (see viewCache's own comment above).
+// Cleared together wherever that can happen, so a cached read from before
+// a source loaded never outlives the load.
+function clearMemoCaches(){
+  viewCache.clear();
+  cellCache.clear();
+  totalCache.clear();
+  chartCache.clear();
+}
 
 // render() rebuilds the whole #app innerHTML from scratch on every state
 // change — a map click or a filter change goes through the exact same path
@@ -266,7 +323,7 @@ function render(){
   // long scroll-through page needs an unambiguous title per section more
   // than it needs to avoid that small bit of redundancy.
   const sections=SECTIONS.map(x=>
-    `<section id="sec-${x}"><h2 class="section-h">${esc(t.tabs[x])}</h2>${VIEW_FN[x]()}</section>`
+    `<section id="sec-${x}"><h2 class="section-h">${esc(t.tabs[x])}</h2>${getCachedSectionHtml(x)}</section>`
   ).join("");
 
   document.getElementById("app").innerHTML=`
@@ -323,7 +380,11 @@ function measureBanner(){
   const el=document.getElementById("synth");
   if(el)document.documentElement.style.setProperty("--banner-h",el.offsetHeight+"px");
 }
-window.onresize=measureBanner;
+let resizeTimer=null;
+window.onresize=()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(measureBanner,150);
+};
 
 // Exiting full-screen (Esc or #chartFsClose, both funnel through the
 // browser's one fullscreenchange event) puts the page back to normal:
@@ -395,8 +456,12 @@ function wire(){
     // silently or as a console error either way.
     navigator.clipboard.writeText(location.href).then(()=>flash(t.linkCopied)).catch(()=>flash(t.linkCopyFailed));
   };
-  const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";render();};
-  const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";render();};
+  // localStorage persistence (code-optimisation): remembers the reader's
+  // theme/language choice across visits — initLang()/initTheme() in
+  // js/state.js already check the same two keys first, before falling
+  // back to navigator.language/prefers-color-scheme.
+  const th=document.getElementById("b-theme");if(th)th.onclick=()=>{S.theme=S.theme==="light"?"dark":"light";try{localStorage.setItem("kurvan_theme",S.theme);}catch(e){}render();};
+  const lg=document.getElementById("b-lang");if(lg)lg.onclick=()=>{S.lang=S.lang==="sv"?"en":"sv";try{localStorage.setItem("kurvan_lang",S.lang);}catch(e){}render();};
   const bind=(id,fn)=>{const e=document.getElementById(id);if(e)e.onchange=()=>{fn(e.value);render();};};
   const pickInd=v=>{S.ind=v;if(!ageAvailable(v,S.age))S.age=-1;if(!sexAvailable(v,S.sex))S.sex="T";S.mapYear=null;};
   bind("c-ind",pickInd);
@@ -1085,8 +1150,8 @@ function loadRealSourcesLazily(){
   REAL_SOURCES.forEach(src=>{
     const s=document.createElement("script");
     s.src=qs?`${src.file}?${qs}`:src.file;
-    s.onload=()=>{src.rebuild();realSourcesPending--;render();};
-    s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);realSourcesPending--;render();};
+    s.onload=()=>{src.rebuild();clearMemoCaches();realSourcesPending--;render();};
+    s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);clearMemoCaches();realSourcesPending--;render();};
     document.head.appendChild(s);
   });
 }
