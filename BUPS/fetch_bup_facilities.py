@@ -1,0 +1,290 @@
+# -*- coding: utf-8 -*-
+"""Every BUP (barn- och ungdomspsykiatri / child & adolescent psychiatry)
+clinic listed on 1177.se, with name, address, phone, and precise
+geocoordinates.
+
+STANDALONE — not part of Kurvan's own pipeline/ (that folder's real
+sources are all region-grain; this is facility-grain and untested against
+that folder's conventions). Lives here in BUPS/ on its own.
+
+SOURCE: 1177.se's "Hitta vård" (find care) search, filtered to care type
+"Psykiatri, barn och ungdom" (1177's own internal tag: "Bup"), national
+scope. Confirmed live 2026-08-26: clicking "Visa 10 till" on
+https://www.1177.se/hitta-vard/?caretype=Psykiatri%2C+barn+och+ungdom&s=name&region=00
+fires a GET to /api/hjv/search?...&p=<page>&batchsize=<n>&... — a plain
+JSON API, no auth/session needed. batchsize=500 (> the 298 total hits)
+returns every result in ONE call, no pagination loop required.
+
+COORDINATES: 1177's own API already returns precise Latitude/Longitude
+per clinic (its own source, unknown to us beyond that — it's what
+spark.barnhalsovard.se also keys its own BVC facility coordinates on, per
+that tool's "coord_source":"1177_hsa_..." field, independently confirming
+this is a sound source for this exact class of problem). 21 of 298 hits
+have no Latitude/Longitude at all — mostly "En väg in" (single-point-of-
+contact) phone triage lines and digital-only programs with no physical
+clinic to place on a map, which is correct, not a bug. A handful of those
+21 DO have a real street address but no coordinates from the API; for
+those specifically (and ONLY those), this script falls back to geocoding
+the address via OpenStreetMap's free Nominatim API (no key required),
+clearly tagged with a different coord_source so the two provenances are
+never confused.
+
+LÄN (COUNTY) CODE: 1177's API does not tag a result with a county code.
+First attempt (fetch_bup_facilities.py's first version) derived it from
+the address's postal code — but most of 1177's own `Address` strings don't
+actually include a postal code at all ("Vindrosvägen 4, Halmstad", no
+code), which left ~77% of records with no county at all. Replaced with
+reverse-geocoding each record's own (lat, lon) — already fetched from
+1177, or geocoded as a fallback above — via Nominatim's reverse-geocode
+endpoint, reading the county out of its address breakdown and mapping the
+Swedish name to Kurvan's own two-digit codes. Only the 16 records with no
+coordinates at all fall back to the postal-code guess (and stay null if
+even that's unavailable).
+
+CARE TYPE SCOPE: only "Psykiatri, barn och ungdom" (core BUP outpatient
+clinics), NOT 1177's three related-but-distinct categories (Neuropsykiatri
+barn och ungdom, Akutverksamhet vid sjukhus barn- och ungdomspsykiatri,
+Psykoterapi barn och ungdom) — a deliberate scope choice, not an omission.
+
+Run:  python fetch_bup_facilities.py
+Output: bup_kliniker_sverige.json, bup_kliniker_sverige.csv (this folder)
+"""
+import csv
+import json
+import os
+import re
+import time
+import urllib.parse
+import urllib.request
+from datetime import datetime, timezone
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+TODAY = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+SEARCH_API = "https://www.1177.se/api/hjv/search"
+CARETYPE = "Psykiatri, barn och ungdom"
+
+# Sweden's 5-digit postal code -> two-digit län (county) code, by the
+# code's first two digits. Standard postal-routing convention, an
+# approximation (routing districts don't follow county borders exactly) —
+# same two-digit codes Kurvan's own REGIONS/js/data.js already use.
+POSTAL_PREFIX_TO_LAN = {
+    "10": "01", "11": "01", "12": "01", "13": "01", "14": "01", "15": "01",
+    "16": "01", "17": "01", "18": "01", "19": "01",
+    "20": "12", "21": "12", "22": "12", "23": "12", "24": "12", "25": "12",
+    "26": "12", "27": "12", "28": "12", "29": "12",
+    "30": "13", "31": "13", "32": "06", "33": "06", "34": "06", "35": "07",
+    "36": "07", "37": "10", "38": "08", "39": "08",
+    "40": "14", "41": "14", "42": "14", "43": "14", "44": "14", "45": "14",
+    "46": "14", "47": "14", "49": "14",
+    "50": "14", "51": "14", "52": "14", "53": "14",
+    "54": "14", "55": "05", "56": "05", "57": "05", "58": "05", "59": "05",
+    "60": "04", "61": "04", "62": "09", "63": "04", "64": "04",
+    "65": "17", "66": "14", "67": "17", "68": "18", "69": "18",
+    "70": "18", "71": "18", "72": "19", "73": "19", "74": "03", "75": "03",
+    "76": "03", "77": "20", "78": "20",
+    "79": "20", "80": "21", "81": "21", "82": "21", "83": "23",
+    "84": "23", "85": "22", "86": "22", "87": "22", "88": "22", "89": "22",
+    "90": "24", "91": "24", "92": "24", "93": "24", "94": "25", "95": "25",
+    "96": "25", "97": "25", "98": "25",
+}
+
+POSTAL_RE = re.compile(r"(\d{3})\s?(\d{2})")
+
+
+def api_get(page=1, batchsize=500, retries=3):
+    params = {
+        "caretype": CARETYPE, "s": "name", "region": "00",
+        "p": page, "componentname": "", "batchsize": batchsize,
+        "sortorder": "name",
+    }
+    url = f"{SEARCH_API}?{urllib.parse.urlencode(params)}"
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except Exception as e:
+            if attempt == retries - 1:
+                raise
+            print(f"    retry after error: {e}")
+            time.sleep(2)
+
+
+def parse_address(addr):
+    """'Vindrosvägen 4, Halmstad' or 'Lasarettsvägen 14 D, 941 50 Piteå'
+    -> (street, postal_code, city). Postal code is often absent from this
+    field (only present on some rows); city is always the last comma-
+    separated segment when present."""
+    if not addr:
+        return None, None, None
+    parts = [p.strip() for p in addr.split(",")]
+    city = parts[-1] if parts else None
+    postal = None
+    m = POSTAL_RE.search(addr)
+    if m:
+        postal = f"{m.group(1)} {m.group(2)}"
+        # city segment sometimes IS "941 50 Piteå" - strip the code back off
+        city = POSTAL_RE.sub("", city).strip() or city
+    street = parts[0] if parts else None
+    return street, postal, city
+
+
+def lan_from_postal(postal):
+    if not postal:
+        return None
+    digits = postal.replace(" ", "")
+    return POSTAL_PREFIX_TO_LAN.get(digits[:2])
+
+
+# Swedish county name (as Nominatim/OSM spells it) -> Kurvan's own
+# two-digit county code (same codes as js/data.js's REGIONS).
+LAN_NAME_TO_CODE = {
+    "Stockholms län": "01", "Uppsala län": "03", "Södermanlands län": "04",
+    "Östergötlands län": "05", "Jönköpings län": "06", "Kronobergs län": "07",
+    "Kalmar län": "08", "Gotlands län": "09", "Blekinge län": "10",
+    "Skåne län": "12", "Hallands län": "13", "Västra Götalands län": "14",
+    "Värmlands län": "17", "Örebro län": "18", "Västmanlands län": "19",
+    "Dalarnas län": "20", "Gävleborgs län": "21", "Västernorrlands län": "22",
+    "Jämtlands län": "23", "Västerbottens län": "24", "Norrbottens län": "25",
+}
+
+
+def reverse_geocode_lan(lat, lon, cache):
+    """(lat, lon) -> Kurvan two-digit county code, via Nominatim's reverse
+    endpoint. Only called for records that already have coordinates (see
+    module docstring) — this is a lookup on data already fetched, not a
+    second independent geocode."""
+    key = (round(lat, 4), round(lon, 4))
+    if key in cache:
+        return cache[key]
+    q = urllib.parse.urlencode({"lat": lat, "lon": lon, "format": "json", "zoom": 8, "addressdetails": 1})
+    url = f"https://nominatim.openstreetmap.org/reverse?{q}"
+    req = urllib.request.Request(url, headers={"User-Agent": "kurvan-bup-list-research/1.0 (one-off, low-volume)"})
+    code = None
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+        addr = result.get("address", {})
+        county_name = addr.get("county") or addr.get("state")
+        code = LAN_NAME_TO_CODE.get(county_name)
+        if county_name and not code:
+            print(f"    unrecognised county name from Nominatim: {county_name!r}")
+    except Exception as e:
+        print(f"    reverse geocode failed for ({lat},{lon}): {e}")
+    time.sleep(1.1)  # Nominatim usage policy: max 1 req/sec
+    cache[key] = code
+    return code
+
+
+def geocode_nominatim(address, cache):
+    """Best-effort fallback ONLY for records with a real address but no
+    lat/lon from 1177's own API (~8 of 298, see module docstring). Free,
+    no key, rate-limited to Nominatim's own 1 req/sec usage policy."""
+    if address in cache:
+        return cache[address]
+    q = urllib.parse.urlencode({"q": f"{address}, Sweden", "format": "json", "limit": 1})
+    url = f"https://nominatim.openstreetmap.org/search?{q}"
+    req = urllib.request.Request(url, headers={"User-Agent": "kurvan-bup-list-research/1.0 (one-off, low-volume)"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            results = json.loads(resp.read().decode("utf-8"))
+        time.sleep(1.1)  # Nominatim usage policy: max 1 req/sec
+        if results:
+            latlon = (float(results[0]["lat"]), float(results[0]["lon"]))
+            cache[address] = latlon
+            return latlon
+    except Exception as e:
+        print(f"    geocode failed for {address!r}: {e}")
+    cache[address] = (None, None)
+    time.sleep(1.1)
+    return (None, None)
+
+
+def main():
+    print("[bup-facilities] fetching all BUP clinics from 1177.se ...")
+    data = api_get()
+    hits = data["SearchHits"]
+    total = data["TotalHits"]
+    print(f"[bup-facilities] API reports {total} total hits, got {len(hits)}")
+    if len(hits) != total:
+        print(f"    WARNING: got fewer than TotalHits — batchsize may need raising above 500")
+
+    geocode_cache = {}
+    lan_cache = {}
+    rows = []
+    n_geocoded = 0
+    n_reverse = 0
+    print(f"[bup-facilities] reverse-geocoding counties for ~{sum(1 for h in hits if h.get('Latitude'))} "
+          f"records with coordinates (~1/sec, a few minutes) ...")
+    for i, h in enumerate(hits):
+        street, postal, city = parse_address(h.get("Address"))
+        lat, lon = h.get("Latitude"), h.get("Longitude")
+        coord_source = f"1177_api_{TODAY}" if (lat and lon) else None
+
+        if not (lat and lon) and h.get("Address"):
+            lat, lon = geocode_nominatim(h["Address"], geocode_cache)
+            if lat:
+                coord_source = f"nominatim_fallback_{TODAY}"
+                n_geocoded += 1
+
+        lan_code = None
+        if lat and lon:
+            lan_code = reverse_geocode_lan(lat, lon, lan_cache)
+            n_reverse += 1
+            if (i + 1) % 50 == 0:
+                print(f"    ... {i+1}/{len(hits)}")
+        if not lan_code:
+            lan_code = lan_from_postal(postal)   # fallback for the no-coordinate records
+
+        rows.append({
+            "hsa_id": h.get("HsaId"),
+            "name": h.get("Heading"),
+            "ownership": h.get("OwnerTypeText"),
+            "address": h.get("Address"),
+            "street": street,
+            "postal_code": postal,
+            "city": city,
+            "lan_code": lan_code,
+            "lat": lat,
+            "lon": lon,
+            "has_coordinates": lat is not None and lon is not None,
+            "phone": h.get("PhoneNumber"),
+            "phone_international": h.get("InternationalPhoneNumber"),
+            "care_type_tags": ";".join(h.get("CaretypeCategoriesWithCodes") or []),
+            "url_1177": ("https://www.1177.se" + h["Url"]) if h.get("Url") else None,
+            "coord_source": coord_source,
+            "fetched_at": TODAY,
+        })
+    print(f"[bup-facilities] geocoded {n_geocoded} address-only records via Nominatim fallback")
+    print(f"[bup-facilities] reverse-geocoded {n_reverse} counties from coordinates")
+
+    ids = [r["hsa_id"] for r in rows]
+    assert len(ids) == len(set(ids)), "duplicate HsaId found — investigate before publishing"
+
+    out_json = os.path.join(HERE, "bup_kliniker_sverige.json")
+    with open(out_json, "w", encoding="utf-8") as f:
+        json.dump({
+            "source": "1177.se Hitta vård API (/api/hjv/search), caretype=Psykiatri, barn och ungdom",
+            "fetched_at": TODAY,
+            "total_records": len(rows),
+            "records_with_coordinates": sum(1 for r in rows if r["has_coordinates"]),
+            "note": "Core BUP outpatient clinics only. lan_code is reverse-geocoded from each clinic's own coordinates via OpenStreetMap Nominatim (postal-code guess used only as a fallback for the few records with no coordinates at all) - not authoritative, but should be accurate for the large majority of records. 'En väg in' phone-triage entries and digital-only programs legitimately have no physical address/coordinates.",
+            "clinics": rows,
+        }, f, ensure_ascii=False, indent=1)
+
+    out_csv = os.path.join(HERE, "bup_kliniker_sverige.csv")
+    with open(out_csv, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+
+    n_with_coords = sum(1 for r in rows if r["has_coordinates"])
+    print(f"[bup-facilities] wrote {out_json}")
+    print(f"[bup-facilities] wrote {out_csv}")
+    print(f"[bup-facilities] {len(rows)} clinics total, {n_with_coords} with coordinates, "
+          f"{len(rows) - n_with_coords} without (mostly phone-triage/digital-only services)")
+
+
+if __name__ == "__main__":
+    main()
