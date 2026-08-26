@@ -56,8 +56,8 @@ sv:{
   synthAllB:(total,realNames)=>`Alla ${total} indikatorer bygger nu på verklig, öppen statistik: ${realNames}.`,
   realLbl:"verkliga data", synthLbl:"syntetiska data",
   realCaveat:{
-    selfharm:"Verkliga siffror gäller endast 12–17 år, femårsfönster.",
-    suicide:"Verkliga siffror gäller endast 15–19 år, femårsfönster.",
+    selfharm:"Alla åldrar, femårsfönster. \"Alla åldrar\" är beräknad genom att slå ihop registrets egna åldersband, inte ett snitt av Kurvans nio.",
+    suicide:"Alla åldrar, femårsfönster. \"Alla åldrar\" är beräknad genom att slå ihop registrets egna åldersband, inte ett snitt av Kurvans nio.",
     psych:"Uppdelat på sex diagnostyper, årsvis, alla åldrar och kön — men bara specialistvård. \"Ätstörningar m.fl.\" och \"ADHD och barndomsdebut\" är bredare ICD-10-kapitel än namnen antyder — se typväljaren och not nedan.",
     distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
     sjukfranvaro:"Verkliga siffror sedan 2005, månadsvis genomsnitt per år. Ingen åldersuppdelning.",
@@ -308,8 +308,8 @@ en:{
   synthAllB:(total,realNames)=>`All ${total} indicators now draw on real, open statistics: ${realNames}.`,
   realLbl:"real data", synthLbl:"synthetic data",
   realCaveat:{
-    selfharm:"Real figures cover ages 12–17 only, five-year windows.",
-    suicide:"Real figures cover ages 15–19 only, five-year windows.",
+    selfharm:"All ages, five-year windows. \"All ages\" is pooled from the register's own age bands, not an average of Kurvan's nine.",
+    suicide:"All ages, five-year windows. \"All ages\" is pooled from the register's own age bands, not an average of Kurvan's nine.",
     psych:"Split into six diagnosis types, annual, every age and sex — specialist care only. \"Eating disorders etc.\" and \"ADHD and childhood-onset\" are broader ICD-10 chapters than their names suggest — see the type picker and the note below.",
     distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
     sjukfranvaro:"Real figures since 2005, monthly average per year. No age breakdown.",

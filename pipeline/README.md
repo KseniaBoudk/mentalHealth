@@ -154,10 +154,19 @@ short version of what each hands back:
 - County grain, plus one national row per indicator (this copy keeps the
   national row the upstream script computes and discards; see "KURVAN CHANGE"
   in its docstring for why).
-- Self-harm: ages 12–14 and 15–17 only. Suicide: ages 15–19 only. Nothing for
-  anyone older — Kurvan's fabricated generator draws a full 0–14-through-85+
-  curve for both; the real registers this project can reach never do.
-- Sex "T" (total) only. No real male/female split.
+- All nine of Kurvan's age bands, 0-14 through 85+, for both — pooled from
+  the registers' own finer 5-year (self-harm) / 5-year-up-to-95+ (suicide)
+  bands using the same population-recovery trick psychiatric care and
+  antidepressants use.
+- A real "0-85+" all-ages row too, alongside the nine bands — neither
+  register publishes its own pre-aggregated all-ages figure the way
+  psychiatric care's does (no such `alder` id exists on either, live-checked
+  2026-08-26), so this script builds one itself with the SAME
+  population-recovery pooling applied across every register age id at once,
+  rather than leaving `js/data.js` to approximate it as an average of the
+  nine bands at render time. See `SELF_HARM_AGE_GROUPS`/`SUICIDE_AGE_GROUPS`'s
+  `"0-85+"` entry.
+- All three sexes (M/K/T).
 - Five-year rolling windows, plotted at the midpoint year, not annual.
 - Self-harm rates are never suppressed. Suicide counts below 10 per window are
   withheld — the rate is still published.

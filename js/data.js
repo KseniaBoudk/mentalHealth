@@ -199,9 +199,22 @@ const EVENTS = [
 
    What the real source actually publishes, and what it does not:
      - county grain only (plus one national row) — never municipality
-     - self-harm: ages 12-14 and 15-17 ONLY. suicide: ages 15-19 ONLY.
-       Nothing for 25-84+. Real teenage-suicide registers do not cover
-       pensioners, however much the synthetic curve below does.
+     - all nine of Kurvan's age bands, 0-14 through 85+, for both self-harm
+       and suicide — fetch_socialstyrelsen_mh.py pools the registers' own
+       5-year bands into them via population-recovery (see that script's
+       docstring). Older versions of this file only had two teenage bands;
+       both registers cover the full lifespan.
+     - a real "0-85+" all-ages row too, alongside the nine age bands — NOT
+       a client-side average of them (that would be a crude, differently-
+       weighted variant of the real per-band rates, not a real figure in
+       its own right). Neither underlying register publishes its own
+       pre-aggregated all-ages figure the way psych's does (live-checked:
+       no such `alder` id on either), so fetch_socialstyrelsen_mh.py builds
+       one itself with the exact same population-recovery pooling the nine
+       age bands already get, just applied across every register age id at
+       once — see SELF_HARM_AGE_GROUPS/SUICIDE_AGE_GROUPS's "0-85+" entry
+       there. idxAll below reads that row directly, same shape as
+       REAL_PSYCH.idxAll/REAL_ANTIDEP.idxAll.
      - all three sexes (M/K/T) — fetch_socialstyrelsen_mh.py requests
        kon/1,2,3, confirmed live to work on both underlying datasets.
      - five-year rolling windows plotted at the midpoint year, not annual
@@ -243,26 +256,34 @@ function rebuildREAL() {
   const CAUSES = { selfharm: ["self_harm_hosp_per_100k", "undetermined_intent_hosp_per_100k"],
                     suicide: ["suicide_per_100k"] };
 
-  const idx = { selfharm: {}, suicide: {} };  // idx[k][county][ageIdx][sex][midpoint_year]
+  const idx = { selfharm: {}, suicide: {} };     // idx[k][county][ageIdx][sex][midpoint_year]
+  const idxAll = { selfharm: {}, suicide: {} };  // idxAll[k][county][sex][midpoint_year] -- the real "0-85+" row, not a derived average
+  const addRow = (bucket, path, row) => {
+    let node = bucket;
+    for (let i = 0; i < path.length - 1; i++) node = node[path[i]] || (node[path[i]] = {});
+    const leafKey = path[path.length - 1];
+    const cur = node[leafKey];
+    if (!cur) {
+      node[leafKey] = { value: row.value, count: row.count, suppressed: row.suppressed, window: row.window };
+    } else {
+      // Two causes (X60-X84 and Y10-Y34) landing on the same county/age/sex/window: sum the rates.
+      cur.value += row.value;
+      cur.count = (cur.count != null && row.count != null) ? cur.count + row.count : null;
+      cur.suppressed = cur.suppressed || row.suppressed;
+    }
+  };
   for (const k of Object.keys(idx)) {
     const ageOf = {};
     for (const ai in AGE_MAP[k]) ageOf[AGE_MAP[k][ai]] = ai;
     for (const row of rows) {
       if (!CAUSES[k].includes(row.indicator)) continue;
+      if (row.age_group === "0-85+") {
+        addRow(idxAll[k], [row.county_code, row.sex, row.midpoint_year], row);
+        continue;
+      }
       const ageIdx = ageOf[row.age_group];
       if (ageIdx === undefined) continue;
-      const byCounty = idx[k][row.county_code] || (idx[k][row.county_code] = {});
-      const byAge = byCounty[ageIdx] || (byCounty[ageIdx] = {});
-      const bySex = byAge[row.sex] || (byAge[row.sex] = {});
-      const cur = bySex[row.midpoint_year];
-      if (!cur) {
-        bySex[row.midpoint_year] = { value: row.value, count: row.count, suppressed: row.suppressed, window: row.window };
-      } else {
-        // Two causes (X60-X84 and Y10-Y34) landing on the same county/age/sex/window: sum the rates.
-        cur.value += row.value;
-        cur.count = (cur.count != null && row.count != null) ? cur.count + row.count : null;
-        cur.suppressed = cur.suppressed || row.suppressed;
-      }
+      addRow(idx[k], [row.county_code, ageIdx, row.sex, row.midpoint_year], row);
     }
   }
 
@@ -277,7 +298,7 @@ function rebuildREAL() {
     ? Math.min(...["selfharm", "suicide"].map(maxYear).filter(y => y != null))
     : null;
 
-  return { active, idx, latestYear, generatedAt: active ? REAL_MH.generated_at : null };
+  return { active, idx, idxAll, latestYear, generatedAt: active ? REAL_MH.generated_at : null };
 }
 let REAL = rebuildREAL();
 
@@ -894,6 +915,22 @@ function realCell(k, regionCode, year, ageIdx, sex) {
   return { ...realRowToCell(row), suppressed: row.suppressed, window: row.window };
 }
 
+/** "All ages" total for selfharm/suicide — the real "0-85+" row
+    fetch_socialstyrelsen_mh.py builds via population-recovery pooling
+    (REAL.idxAll, rebuildREAL()'s own comment above), read here exactly
+    like realCell() reads a single age band. total() checks this BEFORE
+    falling back to averaging the nine per-band cells, so "all ages" is a
+    real published-shaped figure of its own, not a variant reconstructed
+    at render time. */
+function realTotalMH(k, regionCode, year, sex) {
+  if (!REAL.active) return undefined;
+  const county = regionCode === "SE" ? "00" : regionCode;
+  const bySex = REAL.idxAll[k][county];
+  const row = bySex && bySex[sex] && bySex[sex][year];
+  if (!row) return null;
+  return { ...realRowToCell(row), suppressed: row.suppressed, window: row.window };
+}
+
 function realRowToCell(row) {
   const se = (row.count != null && row.count > 0) ? row.value / Math.sqrt(row.count) : null;
   return {
@@ -1080,7 +1117,17 @@ function total(k, regionCode, year, sex, standardised, type){
   } else if (k === "antidep") {
     const r = realTotalAntidep(regionCode, year, sex, type);
     if (r !== undefined) return r;
+  } else if (k === "selfharm" || k === "suicide") {
+    const r = realTotalMH(k, regionCode, year, sex);
+    if (r !== undefined) return r;   // real data loaded: use the pipeline's own pooled "0-85+" figure
   } else if (IND[k].real && REAL.active) {
+    // Generic real-indicator fallback: an unweighted mean across whatever
+    // age bands are present. Kept for any future real source that lands
+    // here without its own realTotalX() — selfharm/suicide/psych/distress/
+    // sjukfranvaro/antidep are all intercepted above before reaching this,
+    // each with a real "all ages" figure of its own rather than this crude
+    // average (see realTotalMH()'s docstring for why that distinction
+    // matters).
     const cells=[];
     for(let i=0;i<AGES.length;i++){
       const c=realCell(k,regionCode,year,i,sex);

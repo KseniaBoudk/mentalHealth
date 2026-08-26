@@ -61,6 +61,19 @@ DISCLOSURE RULE, implemented below:
   - the window COUNT is published only at or above SUPPRESS_BELOW, so a small
     county contributes a rate without a headcount
 
+ALL-AGES ROW: neither dataset here has an "0-85+" alder id the way
+diagnoserislutenoppenvard (psychiatric care) does — live-checked 2026-08-26,
+`/alder` tops out at 18 ("85+") for yttreorsakertillskadorochforgiftningar
+and at 20 ("95+") for dodsorsaker. So "0-85+" is added as an extra entry in
+SELF_HARM_AGE_GROUPS/SUICIDE_AGE_GROUPS below, pooling ACROSS EVERY register
+age id with the same population-recovery trick the nine narrower Kurvan
+bands already use. That makes it a genuine additional row this script
+publishes — its own real figure, fetched and pooled the same way as
+everything else here — not something js/data.js derives afterwards by
+averaging the nine age-band rates together (a different, cruder number: an
+unweighted mean across bands of very different sizes, not a true
+population-weighted all-ages rate).
+
 ===============================================================================
 KURVAN CHANGE (this copy only — not present in ../../pipeline's original)
 ===============================================================================
@@ -118,11 +131,24 @@ SELF_HARM_AGE_GROUPS = {
     "0-14": [1, 2, 3], "15-24": [4, 5], "25-34": [6, 7], "35-44": [8, 9],
     "45-54": [10, 11], "55-64": [12, 13], "65-74": [14, 15], "75-84": [16, 17],
     "85+": [18],
+    # Neither this dataset nor dodsorsaker publishes a pre-aggregated
+    # "all ages" alder id the way psych's diagnoserislutenoppenvard does
+    # (live-checked 2026-08-26: /alder tops out at 18 = "85+" here, at
+    # 20 = "95+" for suicide — no id 19/21 for "0-85+"). Rather than derive
+    # "all ages" as a post-hoc average of the nine band rates at read time
+    # (what js/data.js's total() used to do — a crude, unweighted variant
+    # of real data, not itself a real figure), this extra "0-85+" entry
+    # runs it through the SAME population-recovery pooling the nine bands
+    # above already get, across every register age id, so the all-ages
+    # figure is a genuine additional row in the output — its own real
+    # number, not a client-side approximation.
+    "0-85+": list(range(1, 19)),
 }
 SUICIDE_AGE_GROUPS = {
     "0-14": [1, 2, 3], "15-24": [4, 5], "25-34": [6, 7], "35-44": [8, 9],
     "45-54": [10, 11], "55-64": [12, 13], "65-74": [14, 15], "75-84": [16, 17],
     "85+": [18, 19, 20],
+    "0-85+": list(range(1, 21)),
 }
 
 WINDOW = 5
@@ -251,7 +277,15 @@ def roll_self_harm(rows, county_names):
     for cause in set(SELF_HARM_CAUSES.values()):
         for sex in SEX.values():
             for band_name, age_ids in SELF_HARM_AGE_GROUPS.items():
-                grid = sorted(counts.get(("00", cause, sex, age_ids[0]), {}))
+                # Union of years across every age id in the band, not just
+                # age_ids[0] — a single sub-request 404ing (the API returns
+                # 404, not an empty 200, when a whole age/cause/region slice
+                # has no rows at all — confirmed live on the "0-4" suicide
+                # slice below) must not silently zero out a whole band that
+                # still has real data on its OTHER age ids.
+                grid = sorted(set().union(*(
+                    counts.get(("00", cause, sex, aid), {}) for aid in age_ids
+                )))
                 if not grid:
                     continue
 
@@ -311,7 +345,14 @@ def roll_suicide(rows, county_names):
     for cause in set(SUICIDE_CAUSES.values()):
         for sex in SEX.values():
             for band_name, age_ids in SUICIDE_AGE_GROUPS.items():
-                grid = sorted(counts.get(("00", cause, sex, age_ids[0]), {}))
+                # See roll_self_harm()'s matching comment: union across the
+                # whole band, not just age_ids[0] — dodsorsaker 404s (rather
+                # than returning an empty 200) on ages 0-4 x suicide x every
+                # region/year, which would otherwise zero out "0-14" and
+                # "0-85+" entirely even though ages 5-14 do have real deaths.
+                grid = sorted(set().union(*(
+                    counts.get(("00", cause, sex, aid), {}) for aid in age_ids
+                )))
                 if not grid:
                     continue
 
