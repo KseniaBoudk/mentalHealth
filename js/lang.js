@@ -23,6 +23,15 @@ sv:{
   // specifically (see viewVantetider) — distinct from suppLbl, which is
   // about a whole withheld count next to an otherwise-published rate.
   vantetiderNoData:name=>`${name}: ingen siffra denna månad — för få avslutade besök för att publiceras.`,
+  // BUP_FACILITIES (data.js) — the real clinic-count stat and clinic
+  // directory list added to viewVantetider()'s sidebar, alongside the
+  // wait-time stat above. See ../BUPS/README.md for the source.
+  vantetiderClinicsInd:"BUP-mottagningar",
+  vantetiderClinicsSentence:n=>n===1?"1 BUP-mottagning listad i länet.":`${n} BUP-mottagningar listade i länet.`,
+  vantetiderClinicsListH:"Mottagningar i länet",
+  vantetiderClinicsEmpty:"Inga BUP-mottagningar listade för den här regionen på 1177.se.",
+  vantetiderClinicsSrc:"1177.se, Hitta vård. En ögonblicksbild — inte en direktuppdaterad källa; mottagningar öppnar, stänger och byter adress.",
+  vantetiderClinicsNoAddr:"Ingen adress listad",
   // viewSjukskrivning's latest year, when Försäkringskassan hasn't published
   // a full 12 months of it yet (see REAL_FK's `partial`/`months`, data.js) —
   // partialTag is the short inline form (map year label, region card),
@@ -41,9 +50,9 @@ sv:{
   copyLink:"Kopiera länk", linkCopied:"Länk kopierad", linkCopyFailed:"Kunde inte kopiera",
   stamp:"Data t.o.m. 2024 · uppdaterad aug 2026",
   // loadRealSourcesLazily() (shell.js): shown next to the #synth banner's
-  // own message only while some of the 9 js/data/*.js files are still in
-  // flight — pending is how many of the 9 haven't landed yet.
-  loadingRemaining:pending=>`Laddar återstående datakällor… (${pending} av 9 kvar)`,
+  // own message only while some of the 10 js/data/*.js files are still in
+  // flight — pending is how many of the 10 haven't landed yet.
+  loadingRemaining:pending=>`Laddar återstående datakällor… (${pending} av 10 kvar)`,
   synthT:"Syntetiska data", synthB:"Alla siffror på den här sidan är genererade. Panelen innehåller ingen verklig statistik.",
   synthPartialT:"Mestadels verkliga data",
   // Computed from IND/isRealActive() via realSummary() (views.js), not
@@ -283,6 +292,12 @@ en:{
   vantetiderCaveat:"A rolling twelve-month window, not a multi-year trend — the source only keeps the most recent period. Updated by hand, not automatically, so figures can lag. The median covers only completed first visits — a low value can mean short waits, or just that the easiest cases have finished so far.",
   vantetiderInd:"Waiting time to first visit",
   vantetiderNoData:name=>`${name}: no figure this month — too few completed visits to publish.`,
+  vantetiderClinicsInd:"BUP clinics",
+  vantetiderClinicsSentence:n=>n===1?"1 BUP clinic listed in this county.":`${n} BUP clinics listed in this county.`,
+  vantetiderClinicsListH:"Clinics in this county",
+  vantetiderClinicsEmpty:"No BUP clinics listed for this region on 1177.se.",
+  vantetiderClinicsSrc:"1177.se, Hitta vård (find care). A snapshot — not a live-updating source; clinics open, close, and change address.",
+  vantetiderClinicsNoAddr:"No address listed",
   partialTag:"(partial year)",
   partialYearNote:(y,m)=>`<b>${y} is a partial year.</b> Only ${m} of 12 months published so far by Försäkringskassan — don't compare it straight against a full prior year.`,
   hbscLead:"Share of 11-, 13- and 15-year-olds who report feeling low at least once a week over the past six months. One measure among several in the Health Behaviour in School-aged Children (HBSC) survey — not a combined measure of children's mental health.",
@@ -296,7 +311,7 @@ en:{
   langBtn:"SV", themeD:"Dark", themeL:"Light",
   copyLink:"Copy link", linkCopied:"Link copied", linkCopyFailed:"Couldn't copy",
   stamp:"Data to 2024 · updated Aug 2026",
-  loadingRemaining:pending=>`Loading remaining data sources… (${pending} of 9 left)`,
+  loadingRemaining:pending=>`Loading remaining data sources… (${pending} of 10 left)`,
   synthT:"Synthetic data", synthB:"Every figure on this page is generated. It contains no real statistics.",
   synthPartialT:"Mostly real data",
   // n/total/realNames/synthNames/synthN come from realSummary() (views.js),

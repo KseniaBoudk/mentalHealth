@@ -43,7 +43,7 @@ const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBe
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
   vantetider:viewVantetider,hbsc:viewHbsc,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
 
-// The 9 real-data sources (js/data/*.js), lazy-loaded by loadRealSourcesLazily()
+// The 10 real-data sources (js/data/*.js), lazy-loaded by loadRealSourcesLazily()
 // near the bottom of this file — declared here, not there, purely so its
 // .length is available for realSourcesPending below BEFORE the very first
 // render() runs (loadRealSourcesLazily() itself is still only ever CALLED
@@ -58,8 +58,9 @@ const REAL_SOURCES=[
   {file:"js/data/real_bup.js",        rebuild:()=>{BUP_WAIT=rebuildBUP_WAIT();}},
   {file:"js/data/real_hbsc.js",       rebuild:()=>{HBSC=rebuildHBSC();}},
   {file:"js/data/real_pop.js",        rebuild:()=>{REAL_POP=rebuildREAL_POP();NATIONAL_AGE_WEIGHTS=rebuildNATIONAL_AGE_WEIGHTS();}},
+  {file:"js/data/real_bup_facilities.js", rebuild:()=>{BUP_FACILITIES=rebuildBUP_FACILITIES();}},
 ];
-// How many of the 9 are still in flight — render()'s #synth banner shows a
+// How many of the 10 are still in flight — render()'s #synth banner shows a
 // "still loading" sub-line while this is above 0 (see t.loadingRemaining,
 // js/lang.js). Starts at the full count so it's accurate on the very first
 // paint, before loadRealSourcesLazily() has even run once.

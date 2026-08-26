@@ -36,8 +36,10 @@ Reads:  ../data/processed/socialstyrelsen_mh.json         (fetch_socialstyrelsen
                                                  see that script's own docstring)
         ../data/processed/hbsc.json             (fetch_hbsc.py)
         ../data/processed/scb_population.json   (fetch_scb_population.py)
+        ../data/processed/bup_facilities.json   (../BUPS/fetch_bup_facilities.py)
 Writes: ../js/data/real_mh.js, real_psych.js, real_hlv.js, real_lakemedel.js,
-        real_fk.js, real_context.js, real_bup.js, real_hbsc.js, real_pop.js
+        real_fk.js, real_context.js, real_bup.js, real_hbsc.js, real_pop.js,
+        real_bup_facilities.js
         (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_BUP_WAIT,
          REAL_HBSC_MH, REAL_POP_MH, ... — one const per file)
 
@@ -190,6 +192,19 @@ SOURCES = [
                 "   nine age bands and both sexes, annual — the denominator behind real\n"
                 "   age-standardisation for psych/antidep (js/data.js's standardRate()).\n"
                 "   Fetched by fetch_scb_population.py.",
+    },
+    {
+        "var": "REAL_BUP_FACILITIES",
+        "file": "bup_facilities.json",
+        "out": "real_bup_facilities.js",
+        "source": "1177.se Hitta vård API (/api/hjv/search), caretype=Psykiatri, barn och ungdom",
+        "note": "Real, FACILITY-grain (not region-grain like everything else here) list of\n"
+                "   every BUP clinic 1177.se lists — name, address, phone, coordinates,\n"
+                "   county code. Backs the clinic-count stat and clinic directory on the\n"
+                "   Väntetider (BUP) tab (js/data.js's rebuildBUP_FACILITIES()). Not an\n"
+                "   IND indicator — same deliberately-outside-IND shape as CONTEXT/BUP_WAIT/\n"
+                "   HBSC. Fetched by ../BUPS/fetch_bup_facilities.py (that folder's own\n"
+                "   README explains the full standalone deliverable this is one output of).",
     },
 ]
 

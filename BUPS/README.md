@@ -1,16 +1,26 @@
-# BUP clinics in Sweden — a standalone facility list
+# BUP clinics in Sweden — facility list, and Kurvan's own data source
 
 Every BUP (barn- och ungdomspsykiatri / child & adolescent psychiatry)
 outpatient clinic listed on **1177.se**, with name, address, phone, and
-precise coordinates. **Not part of Kurvan's own app** — this is a separate
-research deliverable, kept in its own folder.
+precise coordinates. Started as a standalone research deliverable, kept in
+its own folder — **it now also feeds Kurvan itself**: the Väntetider (BUP)
+tab's clinic-count stat and clinic directory (via `pipeline/
+build_kurvan_data.py` → `js/data/real_bup_facilities.js` → `js/data.js`'s
+`rebuildBUP_FACILITIES()`), so this folder is no longer purely standalone —
+re-running the fetch script here and then `pipeline/build_kurvan_data.py`
+refreshes both this folder's own files AND what the live app shows.
 
 ## Files
 
-- `bup_kliniker_sverige.csv` / `.json` — the actual data, 298 clinics.
-- `fetch_bup_facilities.py` — the script that produced them. Re-run it any
-  time with `python fetch_bup_facilities.py` to refresh (takes a few
-  minutes — most of that is the rate-limited county lookup, see below).
+- `bup_kliniker_sverige.csv` / `.json` — the full standalone data, 298
+  clinics, every field.
+- `fetch_bup_facilities.py` — the script that produced them, and also
+  writes `../data/processed/bup_facilities.json` (a trimmed plain-array
+  copy, just the fields the app reads) for Kurvan's own pipeline. Re-run
+  it any time with `python fetch_bup_facilities.py` to refresh both (takes
+  a few minutes — most of that is the rate-limited county lookup, see
+  below); then run `python ../pipeline/build_kurvan_data.py` to get the
+  refresh into the live app too.
 
 ## What's in it
 

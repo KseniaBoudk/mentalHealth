@@ -664,6 +664,49 @@ function bupWaitCell(regionCode, year, month) {
 }
 
 /* =====================================================================
+   1h-bis. BUP FACILITIES — every individual BUP clinic listed on 1177.se
+   (name, address, phone, coordinates), from js/data/real_bup_facilities.js's
+   REAL_BUP_FACILITIES (../BUPS/fetch_bup_facilities.py + build_kurvan_data.py
+   — see ../BUPS/README.md for the full standalone deliverable this is one
+   output of). Deliberately NOT shaped like IND/REAL_* — same reasoning as
+   CONTEXT/BUP_WAIT above, plus its own:
+
+     - FACILITY-grain, not region-grain — every other real source here is
+       one number per county; this is a whole list of clinics per county,
+       county grain only in the sense that clinics are grouped by which
+       county they're in.
+     - No year/age/sex dimension at all — this is "what exists right now",
+       a snapshot as of generatedAt, not a time series.
+     - A handful of clinics (phone-triage "En väg in" lines, digital-only
+       programs — see ../BUPS/fetch_bup_facilities.py's own docstring)
+       have no address/coordinates; those still count toward a county's
+       total but are naturally absent from anything that needs a location.
+   ===================================================================== */
+// See rebuildREAL()'s comment above — same lazy-rebuild pattern.
+function rebuildBUP_FACILITIES() {
+  const rows = (typeof REAL_BUP_FACILITIES !== "undefined" && Array.isArray(REAL_BUP_FACILITIES.rows)) ? REAL_BUP_FACILITIES.rows : [];
+  const active = rows.length > 0;
+  const idx = {};   // idx[county] = { count, clinics: [row, ...] }
+  for (const row of rows) {
+    if (!row.county_code) continue;   // the few rows reverse-geocoding couldn't place
+    const bucket = idx[row.county_code] || (idx[row.county_code] = { count: 0, clinics: [] });
+    bucket.count++;
+    bucket.clinics.push(row);
+  }
+  return { active, idx, generatedAt: active ? REAL_BUP_FACILITIES.generated_at : null };
+}
+let BUP_FACILITIES = rebuildBUP_FACILITIES();
+// Returns undefined (source not loaded yet) or null (loaded, but this
+// county genuinely has zero listed clinics — same contract as every real*
+// function above) or { count, clinics }. No "SE" national rollup — a
+// national clinic list isn't a meaningful single "county" the way a
+// national rate average is elsewhere in this file.
+function bupFacilityCell(regionCode) {
+  if (!BUP_FACILITIES.active) return undefined;
+  return BUP_FACILITIES.idx[regionCode] || null;
+}
+
+/* =====================================================================
    1i. HBSC — Skolbarns hälsovanor, share of 11/13/15-year-olds reporting
    feeling low at least weekly, from js/data/real_hbsc.js's REAL_HBSC_MH
    (fetch_hbsc.py). Deliberately NOT shaped like IND/REAL_* — same
