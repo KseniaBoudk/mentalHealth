@@ -75,16 +75,37 @@ unweighted mean across bands of very different sizes, not a true
 population-weighted all-ages rate).
 
 ===============================================================================
-KURVAN CHANGE (this copy only — not present in ../../pipeline's original)
+KURVAN CHANGES (this copy only — not present in ../../pipeline's original)
 ===============================================================================
-The original discards the national ("Riket", county "00") row after using it as
-the complete year grid, because the parent project's regional_series.json is
-about comparing regions and a national row there would be redundant with
-time_series.json. Kurvan has no national time series file and needs a national
-reference line on every chart, so this copy keeps that row instead of dropping
-it. Nothing about the disclosure rule changes: the national row is a real
-sum/rate the original script already computed, just no longer thrown away.
-Search for "KURVAN CHANGE" below to find the two lines this touches.
+Two behavioural changes from the original now, both marked "KURVAN CHANGE"
+at the lines they touch:
+
+  1. The original discards the national ("Riket", county "00") row after
+     using it as the complete year grid, because the parent project's
+     regional_series.json is about comparing regions and a national row
+     there would be redundant with time_series.json. Kurvan has no national
+     time series file and needs a national reference line on every chart, so
+     this copy keeps that row instead of dropping it. Nothing about the
+     disclosure rule changes: the national row is a real sum/rate the
+     original script already computed, just no longer thrown away.
+
+  2. The original (and, until now, this copy too) only ever requests suicide
+     deaths for age 15-19 (SUICIDE_AGE = 4) — self-harm/suicide's real
+     source has always been treated as youth-only. Kurvan added an
+     age-standardised suicide chart (matching the standardisation psych and
+     antidepressants already had) that needs a real death count in every one
+     of Kurvan's nine AGES bands, not just one. dodsorsaker's `/alder`
+     dimension actually publishes ALL ages in 5-year bands (ids 1-20,
+     "0-4" through "95+", live-verified 2026-08-26 — see SUICIDE_AGE_GROUPS
+     below) — the 15-19-only restriction was this project's own scope
+     choice, not a limit of the source. fetch_suicide()/roll_suicide() below
+     now fetch and pool every age id into Kurvan's nine bands, the same
+     population-recovery pooling fetch_socialstyrelsen_psych.py's pool()
+     already uses to combine 5-year bands into Kurvan's wider ones. Expect
+     materially more suppressed cells than before: a given county/age-band/
+     sex/window slice of suicide deaths is small, and this project's own
+     disclosure floor (SUPPRESS_BELOW) is working as intended when it
+     withholds those counts — not a bug to route around.
 
 Output: ../data/processed/socialstyrelsen_mh.json, in the tidy long shape that
         ../../docs/DATA_CONTRACT.md specifies for regional_series.json (plus the
@@ -117,14 +138,23 @@ SEX = {1: "M", 2: "K", 3: "T"}
 
 SELF_HARM_DATASET = "yttreorsakertillskadorochforgiftningar"
 SELF_HARM_CAUSES = {"VXY2": "self_harm", "VXY4": "undetermined_intent"}
-SELF_HARM_AGE_IDS = ",".join(str(i) for i in range(1, 19))
 SELF_HARM_MATT = 7          # patients per 100 000
 SELF_HARM_VARDFORM = "SVOV"  # see the docstring before changing this
 SELF_HARM_YEARS = list(range(2008, datetime.now().year + 1))
 
 SUICIDE_DATASET = "dodsorsaker"
 SUICIDE_CAUSES = {"2026": "suicide", "2028": "undetermined_intent"}
-SUICIDE_AGE_IDS = ",".join(str(i) for i in range(1, 21))
+# Live-verified 2026-08-26 against /api/v1/sv/{SUICIDE_DATASET}/alder: ids
+# 1-20 are 5-year bands, "0-4" through "95+", covering every age with no
+# gap and no combined "all ages" id (unlike fetch_socialstyrelsen_psych.py's
+# id 19 = "0-85+" — see this file's own "ALL-AGES ROW" docstring section for
+# how "0-85+" is produced here instead: SUICIDE_AGE_GROUPS's own entry below,
+# not a client-side average).
+# KURVAN CHANGE 2 (see docstring above): Kurvan's nine AGES bands -> the
+# dodsorsaker 5-year ids that pool into each one. Same band boundaries as
+# fetch_socialstyrelsen_psych.py's AGE_GROUPS; "85+" pools three ids here
+# (85-89/90-94/95+) instead of psych's one, because this dataset splits
+# that tail further than the psychiatric-care register does.
 SUICIDE_YEARS = list(range(1997, datetime.now().year + 1))
 
 SELF_HARM_AGE_GROUPS = {
@@ -148,7 +178,7 @@ SUICIDE_AGE_GROUPS = {
     "0-14": [1, 2, 3], "15-24": [4, 5], "25-34": [6, 7], "35-44": [8, 9],
     "45-54": [10, 11], "55-64": [12, 13], "65-74": [14, 15], "75-84": [16, 17],
     "85+": [18, 19, 20],
-    "0-85+": list(range(1, 21)),
+    "0-85+": list(range(1, 21)),   # see SELF_HARM_AGE_GROUPS's matching comment above
 }
 
 WINDOW = 5
@@ -233,20 +263,32 @@ def fetch_self_harm():
 
 
 def fetch_suicide():
-    print("  suicide and undetermined-intent deaths, by sex (all age bands)")
+    # KURVAN CHANGE 2 (see docstring above): every dodsorsaker age id, not
+    # just 15-19 — one request per (cause, age id, matt), same shape as
+    # fetch_socialstyrelsen_psych.py's fetch_age_bands(), so each response
+    # stays well under the 5,000-row page cap (30 years x 1 age x 22 regions
+    # x 3 sexes = 1,980 rows) instead of requesting alder as one comma list
+    # (which self-harm's 2-age fetch can get away with; 20 ages here can't).
+    # age_ids is derived from SUICIDE_AGE_GROUPS (deduplicated) rather than a
+    # hardcoded range so it can't drift out of sync with the bands below —
+    # includes 1-20 either way, since "0-85+" is just those same 20 ids.
+    print("  suicide and undetermined-intent deaths, all ages, by sex")
     years = ",".join(str(y) for y in SUICIDE_YEARS)
+    age_ids = sorted({aid for ids in SUICIDE_AGE_GROUPS.values() for aid in ids})
     rows = []
     for cause in SUICIDE_CAUSES:
-        for age_id in range(1, 21):
+        for age_id in age_ids:
             for matt in (1, 2):   # 1 = deaths, 2 = deaths per 100 000
+                # kon/1,2,3, not kon/3 alone — confirmed live 2026-08-24 this
+                # dataset's kon also accepts a comma list.
                 batch = get(
                     f"/{SUICIDE_DATASET}/resultat/diagnos/{cause}/alder/{age_id}"
                     f"/kon/1,2,3/matt/{matt}/ar/{years}/region/{REGION_IDS}",
-                    f"suicide {cause} age {age_id} matt{matt}",
+                    f"suicide {cause} age{age_id} matt{matt}",
                 )
                 rows.extend(batch)
                 time.sleep(0.8)
-        print(f"    {cause}: cumulative {len(rows)} rows")
+            print(f"    {cause} age {age_id}: cumulative {len(rows)} rows")
     return rows
 
 
@@ -327,9 +369,47 @@ def roll_self_harm(rows, county_names):
     return out
 
 
-def roll_suicide(rows, county_names):
-    """Rolling windows over suicide counts and rates across Kurvan's nine age bands."""
-    counts, rates = {}, {}
+def pool_suicide_age_bands(rows):
+    """KURVAN CHANGE 2 (see docstring above): raw per-age-id rows -> one
+    (deaths, recovered-population) pair per (county, cause, sex, Kurvan age
+    band, year), before roll_suicide() ever sees them. SUICIDE_AGE_GROUPS'
+    "0-85+" entry (see its own comment above) runs through this exact same
+    path — it's just another band, pooling all 20 register ids instead of a
+    handful.
+
+    Deaths sum directly across the raw age ids in a band (a count is a
+    count). Population does not — it's recovered per raw age id as
+    count / rate x 100,000 (same trick fetch_socialstyrelsen_psych.py's
+    pool() uses) and summed across ages, wherever a given age/year actually
+    has a recoverable rate. TRAP 2 (an absent county-year means zero deaths,
+    not missing) is applied per raw age id here, at the same granularity the
+    original discovered it at for the whole (county, cause, sex) series —
+    the API's "no row = no deaths" behaviour has no reason to stop applying
+    once age is added as another filter dimension. This is also what makes
+    a single age id 404ing outright (confirmed live: ages 0-4 x suicide,
+    every region/year) harmless rather than silently zeroing out any band
+    that contains it: the zero-fill loop below runs over every year that HAS
+    been published somewhere in the response, not "whatever years happened
+    to show up for this one age id", so a wholly-absent age id just
+    contributes 0 deaths for every published year, same as one with real
+    but sparse gaps.
+
+    TRAP 2 does NOT extend to a year the register hasn't reached yet, though
+    — dodsorsaker runs roughly two years behind (live-checked 2026-08-26:
+    nothing published for 2025 or 2026 on any region/age/sex/cause). The
+    fill loop below stops at the latest year actually present in the raw
+    response rather than SUICIDE_YEARS' full range through the current
+    year, so an unpublished recent year is left OUT of every window instead
+    of silently reading as "zero suicides" and dragging the rate down —
+    caught by the "2022-2026" window showing an implausible mid-single-
+    digit rate before this fix.
+
+    Returns counts/pops keyed by (county, cause, sex, band) -> {year: value},
+    in exactly the shape roll_suicide() already expects from its own
+    counts/rates dicts, so its windowing/suppression logic below is
+    otherwise unchanged.
+    """
+    raw_counts, raw_rates = {}, {}
     for r in rows:
         county = REGION_ID_TO_COUNTY.get(r.get("regionId"))
         cause = SUICIDE_CAUSES.get(str(r.get("diagnosId")))
@@ -338,51 +418,99 @@ def roll_suicide(rows, county_names):
         val = num(r.get("varde"))
         if not (county and cause and sex and age_id) or val is None:
             continue
-        target = counts if r.get("mattId") == 1 else rates
+        target = raw_counts if r.get("mattId") == 1 else raw_rates
         target.setdefault((county, cause, sex, age_id), {})[int(r["ar"])] = val
+
+    # TRAP 2 ("absent means zero") only holds for a year the register has
+    # actually reached — dodsorsaker runs roughly two years behind (live-
+    # checked 2026-08-26: nothing published for 2025 or 2026 yet, on ANY
+    # region/age/sex/cause). SUICIDE_YEARS itself runs through the current
+    # calendar year so fetch_suicide() doesn't have to guess the cutoff in
+    # advance; the zero-fill loop below stops at the latest year that
+    # actually has at least one published row instead, so an unpublished
+    # recent year is left OUT of every window rather than silently read as
+    # "zero suicides" and dragging the rate down.
+    years_published = {y for series in raw_counts.values() for y in series}
+    last_year = max(years_published) if years_published else SUICIDE_YEARS[-1]
+    fill_years = [y for y in SUICIDE_YEARS if y <= last_year]
+
+    counts, pops = {}, {}
+    for band_name, age_ids in SUICIDE_AGE_GROUPS.items():
+        for cause in set(SUICIDE_CAUSES.values()):
+            for sex in SEX.values():
+                for county in REGION_ID_TO_COUNTY.values():
+                    if not any((county, cause, sex, aid) in raw_counts for aid in age_ids):
+                        continue   # nothing fetched for this county/cause/sex at all
+                    deaths_by_year, pop_by_year = {}, {}
+                    for y in fill_years:
+                        deaths_y, pop_y = 0.0, 0.0
+                        for aid in age_ids:
+                            d = raw_counts.get((county, cause, sex, aid), {}).get(y, 0.0)  # TRAP 2
+                            rt = raw_rates.get((county, cause, sex, aid), {}).get(y)
+                            deaths_y += d
+                            if d > 0 and rt:
+                                pop_y += d / rt * 1e5
+                        deaths_by_year[y] = deaths_y
+                        if pop_y > 0:
+                            pop_by_year[y] = pop_y
+                    counts[(county, cause, sex, band_name)] = deaths_by_year
+                    pops[(county, cause, sex, band_name)] = pop_by_year
+    return counts, pops
+
+
+def roll_suicide(rows, county_names):
+    """Rolling windows over COUNTS, with the disclosure floor applied.
+
+    Trap 2 lives here (now inside pool_suicide_age_bands() above, since age
+    banding happens before this function ever sees the data). The year grid
+    comes from the national series, which is complete, and a county-year
+    missing from that grid is filled with 0 rather than treated as unknown.
+    Keyed by sex now (fetch_suicide() requests kon/1,2,3) and by Kurvan age
+    band (KURVAN CHANGE 2, including the "0-85+" all-ages band), so the
+    grid/deaths/population are all computed per sex per band — a smaller
+    county's single-sex, single-band count hits the disclosure floor far
+    more often than an unsplit count did, which is the floor working as
+    intended on genuinely smaller sub-populations, not a bug.
+
+    The window rate is POOLED, not a mean of annual rates: the annual
+    population is recovered as count / rate x 100,000 wherever both are
+    published (now band-level, from pool_suicide_age_bands()), and the
+    window rate is summed deaths over summed population. Years with no
+    recoverable population are filled from the nearest year in the same
+    county/band. A county/band's population moves a per cent or two a year,
+    which is nothing beside the Poisson noise the windowing exists to damp.
+    """
+    counts, rates_pop = pool_suicide_age_bands(rows)
 
     out = []
     for cause in set(SUICIDE_CAUSES.values()):
         for sex in SEX.values():
-            for band_name, age_ids in SUICIDE_AGE_GROUPS.items():
-                # See roll_self_harm()'s matching comment: union across the
-                # whole band, not just age_ids[0] — dodsorsaker 404s (rather
-                # than returning an empty 200) on ages 0-4 x suicide x every
-                # region/year, which would otherwise zero out "0-14" and
-                # "0-85+" entirely even though ages 5-14 do have real deaths.
-                grid = sorted(set().union(*(
-                    counts.get(("00", cause, sex, aid), {}) for aid in age_ids
-                )))
+            for band in SUICIDE_AGE_GROUPS:
+                grid = sorted(counts.get(("00", cause, sex, band), {}))
                 if not grid:
+                    print(f"    note: no national series for {cause}/{sex}/{band}; windows skipped")
                     continue
 
-                for county in REGION_ID_TO_COUNTY.values():
-                    deaths_by_year = {}
-                    pop_by_year = {}
-                    for y in grid:
-                        total_deaths, total_pop, any_data = 0.0, 0.0, False
-                        for aid in age_ids:
-                            d = counts.get((county, cause, sex, aid), {}).get(y, 0.0)
-                            rt = rates.get((county, cause, sex, aid), {}).get(y)
-                            total_deaths += d
-                            if d > 0 and rt and rt > 0:
-                                any_data = True
-                                total_pop += d / rt * 1e5
-                        deaths_by_year[y] = total_deaths
-                        if total_pop > 0:
-                            pop_by_year[y] = total_pop
-
-                    if not pop_by_year:
+                for (county, c, s, b), by_year in sorted(counts.items()):
+                    if c != cause or s != sex or b != band:
                         continue
+                    # KURVAN CHANGE 1: the original also excludes county == "00" here.
+                    # county's own count series (including "00" = Riket) is kept below.
 
-                    for y in grid:
-                        if y not in pop_by_year and pop_by_year:
-                            nearest = min(pop_by_year, key=lambda k: abs(k - y))
-                            pop_by_year[y] = pop_by_year[nearest]
+                    deaths = {y: by_year.get(y, 0.0) for y in grid}
+                    pop = dict(rates_pop.get((county, cause, sex, band), {}))
+                    pop = {y: v for y, v in pop.items() if y in grid}
+                    if not pop:
+                        print(f"    note: no recoverable population for county {county} / {cause} / {sex} / {band}; skipped")
+                        continue
+                    for y in grid:                                     # nearest-year fill
+                        if y not in pop:
+                            nearest = min(pop, key=lambda k: abs(k - y))
+                            pop[y] = pop[nearest]
 
                     for span in windows_from(grid):
-                        total_deaths = sum(deaths_by_year.get(y, 0.0) for y in span)
-                        total_pop = sum(pop_by_year.get(y, 0.0) for y in span)
+                        total_deaths = sum(deaths[y] for y in span)
+                        total_pop = sum(pop[y] for y in span)
                         if total_pop <= 0:
                             continue
                         suppressed = total_deaths < SUPPRESS_BELOW and county != "00"
@@ -392,10 +520,12 @@ def roll_suicide(rows, county_names):
                             "indicator": f"{cause}_per_100k",
                             "window": f"{span[0]}-{span[-1]}",
                             "midpoint_year": span[WINDOW // 2],
+                            # The rate is ALWAYS published.
                             "value": round(total_deaths / total_pop * 1e5, 1),
+                            # The count is not, below the floor.
                             "count": None if suppressed else int(total_deaths),
                             "suppressed": suppressed,
-                            "age_group": band_name,
+                            "age_group": band,
                             "sex": sex,
                         })
     return out

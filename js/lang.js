@@ -13,6 +13,8 @@ sv:{
   ctxLead:"Befolknings- och samhällsdata vid sidan av de psykiska hälsomåtten — inte sammanslaget till ett mått. Ett samband här visar inte orsak.",
   ctxInd:{pop_density:"Invånare per kvadratkilometer",education_low_pct:"Andel med låg utbildningsnivå"},
   ctxCaveat:"Regionens värde är ett ovägt medelvärde av dess kommuner, inte befolkningsviktat. Källa: Kolada, 2023.",
+  observationNoteL:"Fyra fönster mot samma verklighet",
+  observationNoteB:"När enkäterna visar att den självrapporterade oron ökar, följer specialistvårdens besök inte i takt; samtidigt rör sig sjukskrivningarna för syndromet och de svåraste utfallen efter helt egna banor. Att kurvorna divergerar visar att befolkningens upplevda ohälsa, vårdens tillgänglighet, det förebyggande skyddsnätet och arbetslivets belastning mäter fyra skilda dimensioner av samma samhällsfråga.",
   vantetiderLead:"Väntetid till första besök inom barn- och ungdomspsykiatrin (BUP), median antal dagar bland avslutade besök. Ett smalt mått på tillgänglighet — inte på vårdens kvalitet eller hur stort behovet är.",
   vantetiderNoteL:"Läs detta först",
   vantetiderCaveat:"Rullande tolvmånadersfönster, inte en flerårig trend — källan sparar bara den senaste perioden. Uppdaterat för hand, inte automatiskt, så siffrorna kan ligga efter. Medianen gäller bara avslutade första besök — ett lågt värde kan betyda korta väntetider, eller bara att de enklaste fallen hunnit avslutas än så länge.",
@@ -57,7 +59,7 @@ sv:{
   realLbl:"verkliga data", synthLbl:"syntetiska data",
   realCaveat:{
     selfharm:"Alla åldrar, femårsfönster. \"Alla åldrar\" är beräknad genom att slå ihop registrets egna åldersband, inte ett snitt av Kurvans nio.",
-    suicide:"Alla åldrar, femårsfönster. \"Alla åldrar\" är beräknad genom att slå ihop registrets egna åldersband, inte ett snitt av Kurvans nio.",
+    suicide:"Alla åldrar, femårsfönster. \"Alla åldrar\" är beräknad genom att slå ihop registrets egna åldersband, inte ett snitt av Kurvans nio. Antal under 10 per fönster hålls tillbaka oftare i de yngsta och äldsta åldersgrupperna, där dödsfall är sällsynta — själva andelen (per 100 000) visas ändå.",
     psych:"Uppdelat på sex diagnostyper, årsvis, alla åldrar och kön — men bara specialistvård. \"Ätstörningar m.fl.\" och \"ADHD och barndomsdebut\" är bredare ICD-10-kapitel än namnen antyder — se typväljaren och not nedan.",
     distress:"Ingen åldersuppdelning finns i källan; \"Alla åldrar\" är enda valet. Bytte namn från \"Nedsatt psykiskt välbefinnande\" — den kategorin slutade publiceras efter 2015–2018.",
     sjukfranvaro:"Verkliga siffror sedan 2005, månadsvis genomsnitt per år. Ingen åldersuppdelning.",
@@ -216,11 +218,12 @@ sv:{
   behovOpen:"Öppna Behov & vård →",
   changed:"Vad har rört sig",changedU:(a,b)=>`${a} → ${b} · förändring med intervall`,
   withinCI:"inom intervallet",
-  chgNote:(n,total)=>`<b>${n} av ${total||4} förändringar är inte förändringar.</b> De ligger inom intervallet och visas nedtonade.`,
+  chgNote:(n,total)=>`<b>${n} av ${total||4} förändringar ligger inom konfidensintervallet</b> och kan bero på slumpmässig variation (visas nedtonade).`,
   methodH:"Så är siffrorna framtagna",
   mManifestH:"Källornas aktualitet och hämtningsdatum (Data Vintage)",
   mManifestLead:"Varje hämtskript i pipelinen registrerar automatiskt sitt hämtningsdatum, ursprung och täckning i manifestet. Här framgår exakt hur färsk varje siffra är och hur den har hämtats.",
   mColInd:"Dataserie / Mått",mColSource:"Ursprungskälla & register",mColFetched:"Hämtad (UTC)",mColCoverage:"Tidsperiod i data",mColScript:"Hämtskript",mColStatus:"Status",
+  mColGeo:"Geografi",mColYears:"Tidsperiod",mColSplits:"Uppdelning",yes:"Ja",no:"Nej",splitAge:"Ålder",splitSex:"Kön",
   mStatusReal:"Verklig data",mStatusSynth:"Syntetisk fallback",mStatusNoFetch:"Saknar öppet API",
   mRecordsCount:n=>`${n.toLocaleString("sv-SE")} rader`,
   mIndicator:"Indikator",mSource:"Källa",mFrom:"Serie från",mGrain:"Nivå",mLimit:"Det viktigaste förbehållet",
@@ -244,7 +247,7 @@ sv:{
   },
   mapTitle:"Regionkarta",
   mapNote:(real)=>real
-    ?"Färgstyrkan visar nivå för vald indikator. Kartan är verklig geografi — värdena är verkliga Socialstyrelsen-data också; se förbehållet nedan."
+    ?"Färgstyrkan visar nivå för vald indikator. Kartan visar verklig geografi — värdena är härledda direkt från regionala registerdata."
     :"Färgstyrkan visar nivå för vald indikator, 2024. Kartan är själva geografin — värdena är fortfarande syntetiska.",
   mapPicked:"vald region",mapOpen:"Öppna länsprofilen",
   trendWith:"följer riket",trendAgainst:"mot rikets riktning",
@@ -273,6 +276,8 @@ en:{
   ctxLead:"Population and societal data alongside the mental-health measures — not merged into one score. A relationship shown here does not establish a cause.",
   ctxInd:{pop_density:"Residents per square kilometre",education_low_pct:"Share with low education level"},
   ctxCaveat:"A region's value is an unweighted mean of its municipalities, not population-weighted. Source: Kolada, 2023.",
+  observationNoteL:"Four windows on the same reality",
+  observationNoteB:"When surveys show rising self-reported distress, specialist care volumes do not track in lockstep; meanwhile, stress-related sickness absence and the most severe outcomes follow entirely distinct trajectories. These divergences reflect how lived experience, healthcare capacity, preventive safety nets, and workplace strain capture four separate dimensions of the same societal challenge.",
   vantetiderLead:"Waiting time to a first visit in child and adolescent psychiatry (BUP), median days among completed visits. A narrow measure of accessibility — not of care quality, or of how large the need is.",
   vantetiderNoteL:"Read this first",
   vantetiderCaveat:"A rolling twelve-month window, not a multi-year trend — the source only keeps the most recent period. Updated by hand, not automatically, so figures can lag. The median covers only completed first visits — a low value can mean short waits, or just that the easiest cases have finished so far.",
@@ -309,7 +314,7 @@ en:{
   realLbl:"real data", synthLbl:"synthetic data",
   realCaveat:{
     selfharm:"All ages, five-year windows. \"All ages\" is pooled from the register's own age bands, not an average of Kurvan's nine.",
-    suicide:"All ages, five-year windows. \"All ages\" is pooled from the register's own age bands, not an average of Kurvan's nine.",
+    suicide:"All ages, five-year windows. \"All ages\" is pooled from the register's own age bands, not an average of Kurvan's nine. Counts under 10 per window are withheld more often at the youngest and oldest age bands, where deaths are rare — the rate (per 100,000) is still shown either way.",
     psych:"Split into six diagnosis types, annual, every age and sex — specialist care only. \"Eating disorders etc.\" and \"ADHD and childhood-onset\" are broader ICD-10 chapters than their names suggest — see the type picker and the note below.",
     distress:"The source has no age breakdown at all; \"All ages\" is the only option. Renamed from \"Poor mental wellbeing\" — that category stopped being published after 2015-2018.",
     sjukfranvaro:"Real figures since 2005, monthly average per year. No age breakdown.",
@@ -428,11 +433,12 @@ en:{
   behovOpen:"Open Need & care →",
   changed:"What moved",changedU:(a,b)=>`${a} → ${b} · change with intervals`,
   withinCI:"within interval",
-  chgNote:(n,total)=>`<b>${n} of ${total||4} changes are not changes.</b> They sit inside the interval and are shown greyed.`,
+  chgNote:(n,total)=>`<b>${n} of ${total||4} changes are within the confidence interval</b> and may be due to statistical noise (shown greyed).`,
   methodH:"How these figures were made",
   mManifestH:"Data Vintage & Fetch Manifest",
   mManifestLead:"Each pipeline fetcher automatically records its fetch timestamp, origin, and coverage directly to the manifest. This shows exactly how current every number is without asking.",
   mColInd:"Dataset / Measure",mColSource:"Source registry & Agency",mColFetched:"Fetched (UTC)",mColCoverage:"Time coverage",mColScript:"Fetcher script",mColStatus:"Status",
+  mColGeo:"Geography",mColYears:"Time period",mColSplits:"Breakdowns",yes:"Yes",no:"No",splitAge:"Age",splitSex:"Sex",
   mStatusReal:"Real data",mStatusSynth:"Synthetic fallback",mStatusNoFetch:"No open API",
   mRecordsCount:n=>`${n.toLocaleString("en-US")} rows`,
   mIndicator:"Indicator",mSource:"Source",mFrom:"Series from",mGrain:"Grain",mLimit:"The caveat that matters most",
@@ -456,7 +462,7 @@ en:{
   },
   mapTitle:"Region map",
   mapNote:(real)=>real
-    ?"Colour strength shows the level of the selected indicator. The map is real geography — the values are real Socialstyrelsen data too; see the caveat below."
+    ?"Colour strength shows the level of the selected indicator. The map shows real geography — values are derived directly from regional register data."
     :"Colour strength shows the level of the selected indicator, 2024. The map itself is real geography — the values are still synthetic.",
   mapPicked:"selected region",mapOpen:"Open the county profile",
   trendWith:"tracking the national trend",trendAgainst:"against the national trend",

@@ -9,7 +9,14 @@ This folder now pulls real numbers for **all five of those**:
 
 - **Self-harm hospitalisation** and **suicide** — `fetch_socialstyrelsen_mh.py`,
   Socialstyrelsen Statistikdatabasen (Patientregistret / Dödsorsaksregistret),
-  county grain, ages 12–19 only, all three sexes, five-year windows.
+  county grain, all three sexes, five-year windows, all nine of Kurvan's age
+  bands for both (self-harm now reads from the general all-ages injury
+  register rather than a child/adolescent-only one; suicide was widened from
+  15-19-only — see "KURVAN CHANGE 2" in that script's docstring) plus a real
+  pooled "0-85+" all-ages row for both. Suicide is wired into age-
+  standardisation the same way psych/antidep are (`STD_CAPABLE_REAL` in
+  `js/data.js`); self-harm has the same age coverage now but isn't wired in
+  yet.
 - **Specialist psychiatric care** — `fetch_socialstyrelsen_psych.py`, same API,
   dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99 — split into
   **six diagnosis-type series** (DIAGNOS_GROUPS: substance use, psychosis,
@@ -98,8 +105,9 @@ regional survey window is published so far (2021-2022), not a trend.
 
 A tenth script, `fetch_scb_population.py`, is not a mental-health fetcher
 at all — it backs `standardRate()` in `js/data.js`, real age-
-standardisation for `psych`/`antidep` (the only two real indicators with
-full nine-band age coverage). SCB (Statistics Sweden)'s `BE0101A`
+standardisation for `psych`/`antidep`/`suicide` (`STD_CAPABLE_REAL`; the
+only real indicators actually wired into it, though self-harm now has the
+same full nine-band age coverage too). SCB (Statistics Sweden)'s `BE0101A`
 population table, county grain, Kurvan's nine age bands (pooled from
 SCB's own single-year ages), both sexes, annual 2006-2024 — deliberately
 NOT extended to 2025 via the sibling `BefolkningCKM` table, which turns
@@ -152,12 +160,19 @@ short version of what each hands back:
 
 **Self-harm / suicide** (`fetch_socialstyrelsen_mh.py`):
 - County grain, plus one national row per indicator (this copy keeps the
-  national row the upstream script computes and discards; see "KURVAN CHANGE"
-  in its docstring for why).
-- All nine of Kurvan's age bands, 0-14 through 85+, for both — pooled from
+  national row the upstream script computes and discards; see "KURVAN CHANGE
+  1" in its docstring for why).
+- All nine of Kurvan's age bands, 0-14 through 85+, for BOTH — pooled from
   the registers' own finer 5-year (self-harm) / 5-year-up-to-95+ (suicide)
   bands using the same population-recovery trick psychiatric care and
-  antidepressants use.
+  antidepressants use. Self-harm used to be limited to ages 12-14/15-17 (a
+  child/adolescent-only register); it now reads from the general all-ages
+  injury register instead. Suicide used to be limited to 15-19 only, widened
+  the same way (dodsorsaker's own age dimension always covered every age;
+  see "KURVAN CHANGE 2" in that script's docstring for the pooling that
+  unlocked it). Suicide is wired into age-standardisation (`STD_CAPABLE_REAL`
+  in `js/data.js`), same as psych/antidep; self-harm has the same nine-band
+  coverage now but isn't wired in yet.
 - A real "0-85+" all-ages row too, alongside the nine bands — neither
   register publishes its own pre-aggregated all-ages figure the way
   psychiatric care's does (no such `alder` id exists on either, live-checked
@@ -166,10 +181,15 @@ short version of what each hands back:
   rather than leaving `js/data.js` to approximate it as an average of the
   nine bands at render time. See `SELF_HARM_AGE_GROUPS`/`SUICIDE_AGE_GROUPS`'s
   `"0-85+"` entry.
-- All three sexes (M/K/T).
+- All three sexes (M/K/T) — `kon/1,2,3`, confirmed live to work on both
+  underlying datasets.
 - Five-year rolling windows, plotted at the midpoint year, not annual.
-- Self-harm rates are never suppressed. Suicide counts below 10 per window are
-  withheld — the rate is still published.
+- Self-harm rates are never suppressed. Suicide counts below 10 per
+  county/age-band/sex window are withheld — the rate is still published.
+  Widening suicide to nine age bands means materially more suppressed
+  cells than before (thin cells at the youngest and oldest bands
+  especially), which is the disclosure floor working as intended on
+  genuinely smaller sub-populations, not a regression.
 
 **Psychiatric care** (`fetch_socialstyrelsen_psych.py`), the best fit:
 - County grain plus a national row, published directly this time, not

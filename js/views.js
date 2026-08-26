@@ -191,10 +191,10 @@ const scatterKey=()=>`<div class="legend" style="padding:10px 18px 4px">
 
 function viewLaget(){
   const xl=[[1,"15"],[3,"35"],[5,"55"],[8,"85+"]];
-  // fakeAgePts/fakeCell throughout this chart, deliberately: it contrasts
-  // self-harm's youth peak against suicide's old-age peak across the WHOLE
-  // life course, and no real fetcher this project has reaches past age 19
-  // for either series. See fakeCell()'s docstring in data.js.
+  // agePts/cell (real-preferred, not fakeAgePts/fakeCell) throughout this
+  // chart: it contrasts self-harm's youth peak against suicide's old-age
+  // peak across the WHOLE life course, and both real registers now cover
+  // every one of Kurvan's nine age bands (see fetch_socialstyrelsen_mh.py).
   const shK=agePts("selfharm","SE",2024,"K"),shM=agePts("selfharm","SE",2024,"M");
   const suM=agePts("suicide","SE",2024,"M"),suK=agePts("suicide","SE",2024,"K");
   const shPeak=shK.filter(Boolean).reduce((a,p)=>p[1]>a[1]?p:a, [0,0]);
@@ -213,6 +213,10 @@ function viewLaget(){
     <div class="kick">${esc(t.kick)}</div>
     <h1>${esc(t.h1)}</h1>
     <p>${esc(t.hp)}</p>
+  </div>
+  <div class="note mt-fig">
+    <div class="l">${esc(t.observationNoteL)}</div>
+    <p>${esc(t.observationNoteB)}</p>
   </div>
 
   <div class="card" style="margin-top:26px">
@@ -431,7 +435,17 @@ function viewRegioner(){
   const ctxDensity=contextCell("pop_density",S.region);
   const ctxLowEdu=contextCell("education_low_pct",S.region);
 
-  const gapLatest=REAL.active?REAL.latestYear:2024;
+  // Pre-existing bug, surfaced while verifying the suicide age-standardisation
+  // change (not caused by it): gapLatest was fed straight into fakeTotal()
+  // for BOTH axes, but distress's fabricated curve is biennial (IND.distress.
+  // step===2) — any odd gapLatest (whatever year REAL.latestYear, i.e.
+  // selfharm/suicide's real data, happens to land on) made fakeCell() return
+  // null for every age band, fakeTotal() return null, and `d.value` below
+  // throw. Snap down to the nearest year distress's step actually supports,
+  // same rule fakeCell()/fakeTotal() themselves apply.
+  const gapLatestRaw=REAL.active?REAL.latestYear:2024;
+  const gapStep=IND.distress.step||1;
+  const gapLatest=gapLatestRaw-(((gapLatestRaw-IND.distress.start)%gapStep)+gapStep)%gapStep;
   const gap=REGIONS.map(r=>{
     const d=fakeTotal("distress",r[0],gapLatest,"T",false),a=fakeTotal("antidep",r[0],gapLatest,"T",false);
     return {x:d.value,y:a.value,code:r[0],name:r[1]};
@@ -703,6 +717,21 @@ function viewMetod(){
   const P=t.mProse;
   const rs=realSummary();
 
+  // Coverage table
+  const coverageRows=Object.keys(IND).map(x=>{
+    const I=IND[x];
+    const real=isRealActive(x);
+    const ageTxt=I.ageSplit?t.yes:t.no;
+    const sexTxt=I.sexSplit?t.yes:t.no;
+    return `<tr>
+      <td class="in" style="border-left:3px solid ${INST_COLOR[I.inst]}">${esc(t.ind[x])}
+        <span class="modechip ${real?"real":"synth"}">${esc(real?t.realLbl:t.synthLbl)}</span></td>
+      <td>${esc(I.coverage||"Region")}</td>
+      <td class="mono">${esc(I.years||I.start)}</td>
+      <td class="mono">${esc(t.splitSex)}: ${sexTxt} &nbsp;|&nbsp; ${esc(t.splitAge)}: ${ageTxt}</td>
+    </tr>`;
+  }).join("");
+
   // Original indicator-caveats table (unchanged)
   const rows=Object.keys(IND).map(x=>{
     const I=IND[x],[grain,limit]=t.mRows[x];
@@ -761,6 +790,19 @@ function viewMetod(){
       <th>${esc(t.mColStatus)}</th>
     </tr></thead>
     <tbody>${manifestRows}</tbody>
+  </table></div>
+
+  <div class="prose" style="margin-top:30px">
+    <h3>${esc(S.lang==="sv"?"Dataseriernas täckning":"Indicator coverage")}</h3>
+  </div>
+  <div class="mwrap"><table class="m">
+    <thead><tr>
+      <th>${esc(t.mColInd)}</th>
+      <th>${esc(t.mColGeo)}</th>
+      <th>${esc(t.mColYears)}</th>
+      <th>${esc(t.mColSplits)}</th>
+    </tr></thead>
+    <tbody>${coverageRows}</tbody>
   </table></div>
 
   <div class="prose" style="margin-top:30px">

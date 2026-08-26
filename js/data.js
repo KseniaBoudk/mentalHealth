@@ -89,6 +89,7 @@ function gauss(s){ const u1=Math.max(hash("a"+s),1e-9), u2=hash("b"+s); return M
 const IND = {
   distress: {
     inst:"survey", start:2006, step:2, window:4, real:true,
+    coverage: "Region", years: "2006–2024", ageSplit: false, sexSplit: true,
     scale:100, dec:1,
     age:[null,28,22,18,16,14,10,11,null],
     mMul:[null,.72,.74,.76,.78,.80,.84,.86,null],
@@ -98,6 +99,7 @@ const IND = {
   },
   antidep: {
     inst:"reg", start:2006, real:true,
+    coverage: "Region", years: "2006–2024", ageSplit: true, sexSplit: true,
     scale:1000, dec:1,
     age:[8,62,78,92,108,118,124,138,152],
     mMul:[.62,.60,.60,.62,.64,.68,.72,.78,.84],
@@ -107,6 +109,7 @@ const IND = {
   },
   psych: {
     inst:"reg", start:2008, real:true,
+    coverage: "Region", years: "2008–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:1,
     age:[14,58,46,38,32,26,20,17,13],
     mMul:[1.24,.82,.86,.88,.90,.92,.94,.96,.98],
@@ -116,6 +119,7 @@ const IND = {
   },
   selfharm: {
     inst:"reg", start:2008, window:5, real:true,
+    coverage: "Region", years: "2008–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:0,
     age:[18,285,165,120,95,62,38,30,26],
     mMul:[.72,.52,.72,.80,.86,.92,.98,1.02,1.06],
@@ -125,6 +129,7 @@ const IND = {
   },
   suicide: {
     inst:"mort", start:2001, window:5, real:true,
+    coverage: "Region", years: "2001–2024", ageSplit: true, sexSplit: true,
     scale:100000, dec:1,
     age:[0.6,11,16,19,22,23,22,27,38],
     mMul:[1.30,1.42,1.48,1.52,1.55,1.58,1.62,1.72,1.86],
@@ -138,6 +143,7 @@ const IND = {
     // healthcare register or a population rate) — conflating it with the
     // register colour would misrepresent what it counts. See IND docstring.
     inst:"fk", start:2005, real:true,
+    coverage: "Region", years: "2005–2024", ageSplit: false, sexSplit: true,
     scale:100, dec:1,
     // Fabricated fallback only (no real per-age curve exists — see
     // REAL_FK below); nulled at both ends like distress's, since sickness
@@ -199,11 +205,17 @@ const EVENTS = [
 
    What the real source actually publishes, and what it does not:
      - county grain only (plus one national row) — never municipality
-     - all nine of Kurvan's age bands, 0-14 through 85+, for both self-harm
+     - all nine of Kurvan's age bands, 0-14 through 85+, for BOTH self-harm
        and suicide — fetch_socialstyrelsen_mh.py pools the registers' own
        5-year bands into them via population-recovery (see that script's
-       docstring). Older versions of this file only had two teenage bands;
-       both registers cover the full lifespan.
+       docstring). Self-harm used to be limited to ages 12-14/15-17 (a
+       child/adolescent-only register); it now reads from the general
+       all-ages injury register instead (SELF_HARM_DATASET). Suicide used
+       to be limited to 15-19 only, widened the same way (dodsorsaker's own
+       age dimension always covered every age — that was this project's own
+       scope choice, not a source limit; see "KURVAN CHANGE 2" in that
+       script's docstring), which also makes suicide standardisable the
+       same way psych/antidep are — see STD_CAPABLE_REAL below.
      - a real "0-85+" all-ages row too, alongside the nine age bands — NOT
        a client-side average of them (that would be a crude, differently-
        weighted variant of the real per-band rates, not a real figure in
@@ -246,10 +258,14 @@ function rebuildREAL() {
   // Kurvan's ageIdx (into AGES) -> the real age_group label that stands in
   // for it. Every other ageIdx (25-34 through 85+) has no real counterpart
   // and stays null on purpose: see the docstring above.
-  const AGE_MAP = {
-    selfharm: { 0: "0-14", 1: "15-24", 2: "25-34", 3: "35-44", 4: "45-54", 5: "55-64", 6: "65-74", 7: "75-84", 8: "85+" },
-    suicide: { 0: "0-14", 1: "15-24", 2: "25-34", 3: "35-44", 4: "45-54", 5: "55-64", 6: "65-74", 7: "75-84", 8: "85+" }
-  };
+  // Both self-harm and suicide's age_group values ARE Kurvan's own AGES
+  // labels directly now (fetch_socialstyrelsen_mh.py's roll_self_harm()/
+  // pool_suicide_age_bands() each pool every raw register age id straight
+  // into Kurvan's nine bands) — this map is just AGES itself for both, kept
+  // explicit rather than special-cased away below so rebuildREAL()'s
+  // ageOf/idx-building loop needs no per-indicator branch.
+  const AGE_MAP = { selfharm: Object.fromEntries(AGES.map((a, i) => [i, a])),
+                     suicide: Object.fromEntries(AGES.map((a, i) => [i, a])) };
   // X60-X84 alone for suicide (matches IND.suicide's cited source); X60-X84
   // + Y10-Y34 combined for self-harm (matches IND.selfharm's cited source
   // and notNumB.selfharm's caveat about carrying undetermined intent along).
@@ -716,14 +732,14 @@ function hbscCell(regionCode, age, sex) {
        script stops there on purpose — see ITS docstring for why
        BefolkningCKM, which would extend to 2025, isn't also fetched).
      - STD_CAPABLE_REAL below is the complete list of indicators this can
-       actually standardise: psych and antidep are the only two real
+       actually standardise: psych, antidep and suicide are the three real
        indicators with full nine-band age coverage (REAL_AGE_LIMIT above
-       has no entry for either) — selfharm/suicide's 2-band real coverage
+       has no entry for any of the three) — selfharm's 2-band real coverage
        and distress/sjukfranvaro's zero real age coverage can't be
        standardised regardless of having a population denominator; that
        gap is in the numerator, not here.
    ===================================================================== */
-const STD_CAPABLE_REAL = ["psych", "antidep"];
+const STD_CAPABLE_REAL = ["psych", "antidep", "suicide"];
 // See rebuildREAL()'s comment above — same lazy-rebuild pattern, except
 // this one has a dependant (NATIONAL_AGE_WEIGHTS, below) that also needs
 // recomputing once real_pop.js lands — js/shell.js's loader calls both in
@@ -782,15 +798,64 @@ function standardRate(k, regionCode, year, sex, type) {
   if (!isRealActive(k)) return undefined;
   const parts = [];
   for (let i = 0; i < AGES.length; i++) {
-    const c = k === "psych" ? realCellPsych(regionCode, year, i, sex, type) : realCellAntidep(regionCode, year, i, sex, type);
+    const c = k === "psych" ? realCellPsych(regionCode, year, i, sex, type)
+             : k === "antidep" ? realCellAntidep(regionCode, year, i, sex, type)
+             : realCell(k, regionCode, year, i, sex);   // suicide: already generic, no type param
     if (c && c.value != null) parts.push({ c, w: NATIONAL_AGE_WEIGHTS[i] });
   }
   if (!parts.length) return null;
   const wSum = parts.reduce((s, p) => s + p.w, 0);
   if (wSum <= 0) return null;
   const value = parts.reduce((s, p) => s + p.c.value * p.w, 0) / wSum;
-  const count = parts.every(p => p.c.count != null) ? parts.reduce((s, p) => s + p.c.count, 0) : null;
-  const suppressed = parts.some(p => p.c.suppressed);
+  // Suppression here is about the COMBINED figure's own disclosure risk,
+  // not any one band's. `parts.some(suppressed)` (the old rule) marks the
+  // WHOLE standardised total suppressed the moment a single contributing
+  // band is — fine for psych/antidep, whose per-band counts are almost
+  // never that thin, but for suicide the near-always-suppressed 0-14 band
+  // (and often-suppressed 85+) meant nearly every region/year came back
+  // suppressed, emptying the Over-time trend and All-regions comparison
+  // (js/views.js's viewOverTid excludes anything .suppressed) even though
+  // the pooled ~9-band rate is a real, safely-publishable number — see
+  // fetch_socialstyrelsen_mh.py's own disclosure-rule docstring: "the
+  // window RATE is always published ... the window COUNT is published
+  // only at or above SUPPRESS_BELOW". `knownCount` sums whatever per-band
+  // counts ARE published (undercounting whenever a band withheld its own
+  // — which only makes this check MORE conservative, never less) and
+  // suppression is judged against THAT combined total, the same floor
+  // every other real count in this file uses. A pooled total across ~9
+  // bands clears SUPPRESS_BELOW in the large majority of region/years even
+  // when one thin band alone didn't; the genuinely small regions still do
+  // trip it. No-op for psych/antidep, whose combined counts are always far
+  // past the floor regardless of which rule is used. Gated on
+  // anyBandSuppressed first — same defensive reason as total()'s identical
+  // fix just below this function: a hypothetical future STD_CAPABLE_REAL
+  // entry whose source never publishes counts at all (permanent count:null,
+  // suppressed:false, the way selfharm's real cells already are) must not
+  // read as "0 known deaths, therefore suppressed" against a bare
+  // threshold check. No currently-standardisable indicator hits this edge
+  // (psych/antidep/suicide's real cells all carry genuine counts), but the
+  // gate costs nothing and keeps both fixes symmetric.
+  const anyBandSuppressed = parts.some(p => p.c.suppressed);
+  let count, suppressed;
+  if (anyBandSuppressed) {
+    const knownCount = parts.reduce((s, p) => s + (p.c.count != null ? p.c.count : 0), 0);
+    suppressed = knownCount < SUPPRESS_BELOW;
+    // knownCount sums only the bands that DID publish a count — it says
+    // nothing about the suppressed band's own value, so showing it (and
+    // deriving a real confidence interval from it) whenever the combined
+    // total itself clears the floor isn't a disclosure risk; it's an
+    // honest undercount, never an exact reveal. Only null it out — same
+    // as a genuinely suppressed cell anywhere else in this file — when the
+    // combined total is ITSELF below the floor. Previously nulled
+    // unconditionally here, which flattened the confidence interval to a
+    // single point for nearly every region once one band was suppressed
+    // (near-universal for suicide's 0-14 band) — reported by the user via
+    // screenshot: barely any region showed error bars.
+    count = suppressed ? null : knownCount;
+  } else {
+    suppressed = false;
+    count = parts.every(p => p.c.count != null) ? parts.reduce((s, p) => s + p.c.count, 0) : null;
+  }
   const se = (count != null && count > 0) ? value / Math.sqrt(count) : null;
   return {
     value, count, denom: null,
@@ -850,7 +915,10 @@ function getManifestRows() {
   return rows;
 }
 
-const REAL_AGE_LIMIT = { selfharm: [0, 1, 2, 3, 4, 5, 6, 7, 8], suicide: [0, 1, 2, 3, 4, 5, 6, 7, 8], distress: [], sjukfranvaro: [] };
+// selfharm and suicide both dropped from here (both widened to full 9-band
+// real coverage — see AGE_MAP above and STD_CAPABLE_REAL below); absent
+// from this map means "no restriction", same as psych/antidep.
+const REAL_AGE_LIMIT = { distress: [], sjukfranvaro: [] };
 function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;
   return IND[k].age[ageIdx] != null;
@@ -868,10 +936,10 @@ function stdCapable(k) {
 // lands exactly on an AGES boundary (65-74 starts cleanly), but 18 does not
 // -- AGES[1] ("15-24") mixes 15-17-year-olds in with 18-24-year-olds, so
 // "adult" here really means 15-64, not a clean 18-64 (see viewAlder's
-// caveat note, which says so). psych and antidep are the only indicators
-// with real data across every AGES band (REAL_AGE_LIMIT above has no entry
-// for either), so those are the only ones that can honestly use all three
-// groups today.
+// caveat note, which says so). psych, antidep and suicide are the only
+// indicators with real data across every AGES band (REAL_AGE_LIMIT above
+// has no entry for any of the three), so those are the only ones that can
+// honestly use all three groups today.
 const AGE_GROUPS = [
   { key: "child",   idxs: [0] },         // 0-14
   { key: "adult",   idxs: [1,2,3,4,5] }, // 15-64
@@ -1073,7 +1141,7 @@ function fakeCell(k, regionCode, year, ageIdx, sex, standardised){
 // k==="psych"/"antidep" — defaults to "all" inside realCellPsych()/
 // realCellAntidep() themselves, so every caller here that never passes it
 // (i.e. every one of them except viewOverTid()/viewKarta()) is unaffected.
-function cell(k, regionCode, year, ageIdx, sex, standardised, type){
+const _cell = (k, regionCode, year, ageIdx, sex, standardised, type) => {
   if (k === "psych") {
     const r = realCellPsych(regionCode, year, ageIdx, sex, type);
     if (r !== undefined) return r;
@@ -1091,17 +1159,29 @@ function cell(k, regionCode, year, ageIdx, sex, standardised, type){
     if (r !== undefined) return r;   // real data loaded: real result wins, even if null
   }
   return fakeCell(k, regionCode, year, ageIdx, sex, standardised);
+};
+// type included in the cache key (code-optimisation's original wrapper here
+// predates the type param above and dropped it, which would have silently
+// pinned every psych/antidep type-picker read to "all" — fixed by carrying
+// it through both the signature and the key).
+const cellCache = new Map();
+function cell(k, regionCode, year, ageIdx, sex, standardised, type){
+  const key = `${k}|${regionCode}|${year}|${ageIdx}|${sex}|${standardised}|${type}`;
+  if (cellCache.has(key)) return cellCache.get(key);
+  const res = _cell(k, regionCode, year, ageIdx, sex, standardised, type);
+  cellCache.set(key, res);
+  return res;
 }
 
 // type: see cell()'s own comment just above — same convention.
-function total(k, regionCode, year, sex, standardised, type){
+const _total = (k, regionCode, year, sex, standardised, type) => {
   const R=regionCode==="SE"?NAT:RBY[regionCode];
   // Standardised real psych/antidep: standardRate() itself checks
   // STD_CAPABLE_REAL/REAL_POP.active/isRealActive and returns undefined
   // when any of those don't hold, so this only intercepts the cases it
   // can actually serve — everything else falls through to the crude
   // real branches below exactly as before.
-  if (standardised && (k === "psych" || k === "antidep")) {
+  if (standardised && (k === "psych" || k === "antidep" || k === "suicide")) {
     const r = standardRate(k, regionCode, year, sex, type);
     if (r !== undefined) return r;
   }
@@ -1135,8 +1215,37 @@ function total(k, regionCode, year, sex, standardised, type){
     }
     if (cells.length){
       const value=cells.reduce((s,c)=>s+c.value,0)/cells.length;
-      const count=cells.every(c=>c.count!=null) ? cells.reduce((s,c)=>s+c.count,0) : null;
-      const suppressed=cells.some(c=>c.suppressed);
+      // Same fix, same reason as standardRate() above: suppression judged
+      // against the COMBINED total across every age band that has a real
+      // cell here, against the disclosure floor every other real count in
+      // this file uses — not against whether any ONE band was itself
+      // suppressed. Only kicks in when some cell actually IS individually
+      // suppressed: selfharm's cells are always suppressed:false/count:null
+      // (that source only ever publishes rates, never counts — see
+      // rebuildREAL()'s own comment — count:null there isn't a disclosure
+      // signal at all), so gating on anyCellSuppressed first keeps that
+      // permanent "no count published" state from reading as "0 known
+      // deaths, therefore suppressed" the way a bare threshold check would.
+      // For suicide's crude "all ages" total, averaging across all 9 real
+      // bands, one thin band (typically 0-14 or 85+) used to poison the
+      // whole figure even though the combined total across bands clears
+      // the floor in the large majority of region/years.
+      const anyCellSuppressed=cells.some(c=>c.suppressed);
+      let count, suppressed;
+      if (anyCellSuppressed) {
+        const knownCount=cells.reduce((s,c)=>s+(c.count!=null?c.count:0),0);
+        suppressed=knownCount<SUPPRESS_BELOW;
+        // Same reasoning as standardRate()'s identical fix: knownCount only
+        // sums bands that DID publish a count, so showing it (and deriving
+        // a real CI from it) once the combined total clears the floor
+        // isn't a disclosure risk — nulling it unconditionally here
+        // flattened the CI to a point for nearly every region (reported by
+        // the user via screenshot: barely any region showed error bars).
+        count=suppressed?null:knownCount;
+      } else {
+        suppressed=false;
+        count=cells.every(c=>c.count!=null)?cells.reduce((s,c)=>s+c.count,0):null;
+      }
       const se=(count!=null && count>0) ? value/Math.sqrt(count) : null;
       return {value, count, denom:null,
               lo: se!=null?Math.max(0,value-1.96*se):value,
@@ -1146,6 +1255,15 @@ function total(k, regionCode, year, sex, standardised, type){
     return null;   // real data loaded, but genuinely nothing for this region/year/sex
   }
   return fakeTotal(k, regionCode, year, sex, standardised);
+};
+// type included in the cache key — same fix, same reason as cell() above.
+const totalCache = new Map();
+function total(k, regionCode, year, sex, standardised, type){
+  const key = `${k}|${regionCode}|${year}|${sex}|${standardised}|${type}`;
+  if (totalCache.has(key)) return totalCache.get(key);
+  const res = _total(k, regionCode, year, sex, standardised, type);
+  totalCache.set(key, res);
+  return res;
 }
 
 /** Combines cell()'s per-age-band figures across a subset of AGES indices

@@ -70,8 +70,8 @@ worry and, separately, the HBSC child survey), Försäkringskassan (F43
 sickness absence, not PxWeb like the others), and SCB (population by
 region/age/sex, not a mental-health measure — the denominator behind real
 age-standardisation, `standardRate()` in `js/data.js`, available for
-`psych`/`antidep` only: the two real indicators with full nine-band age
-coverage) — into `data/processed/*.json`. Psychiatric care and medication
+`psych`/`antidep`/`suicide`: the three real indicators with full nine-band
+age coverage) — into `data/processed/*.json`. Psychiatric care and medication
 are each split into real sub-type series (six diagnosis types, five ATC
 medication classes — `PSYCH_TYPES`/`MED_TYPES` in `js/data.js`,
 `S.psychType`/`S.medType`, a type picker on Över tid/Karta) rather than one
