@@ -1039,7 +1039,7 @@ function fakeCell(k, regionCode, year, ageIdx, sex, standardised){
 // k==="psych"/"antidep" — defaults to "all" inside realCellPsych()/
 // realCellAntidep() themselves, so every caller here that never passes it
 // (i.e. every one of them except viewOverTid()/viewKarta()) is unaffected.
-function cell(k, regionCode, year, ageIdx, sex, standardised, type){
+const _cell = (k, regionCode, year, ageIdx, sex, standardised, type) => {
   if (k === "psych") {
     const r = realCellPsych(regionCode, year, ageIdx, sex, type);
     if (r !== undefined) return r;
@@ -1057,10 +1057,22 @@ function cell(k, regionCode, year, ageIdx, sex, standardised, type){
     if (r !== undefined) return r;   // real data loaded: real result wins, even if null
   }
   return fakeCell(k, regionCode, year, ageIdx, sex, standardised);
+};
+// type included in the cache key (code-optimisation's original wrapper here
+// predates the type param above and dropped it, which would have silently
+// pinned every psych/antidep type-picker read to "all" — fixed by carrying
+// it through both the signature and the key).
+const cellCache = new Map();
+function cell(k, regionCode, year, ageIdx, sex, standardised, type){
+  const key = `${k}|${regionCode}|${year}|${ageIdx}|${sex}|${standardised}|${type}`;
+  if (cellCache.has(key)) return cellCache.get(key);
+  const res = _cell(k, regionCode, year, ageIdx, sex, standardised, type);
+  cellCache.set(key, res);
+  return res;
 }
 
 // type: see cell()'s own comment just above — same convention.
-function total(k, regionCode, year, sex, standardised, type){
+const _total = (k, regionCode, year, sex, standardised, type) => {
   const R=regionCode==="SE"?NAT:RBY[regionCode];
   // Standardised real psych/antidep: standardRate() itself checks
   // STD_CAPABLE_REAL/REAL_POP.active/isRealActive and returns undefined
@@ -1102,6 +1114,15 @@ function total(k, regionCode, year, sex, standardised, type){
     return null;   // real data loaded, but genuinely nothing for this region/year/sex
   }
   return fakeTotal(k, regionCode, year, sex, standardised);
+};
+// type included in the cache key — same fix, same reason as cell() above.
+const totalCache = new Map();
+function total(k, regionCode, year, sex, standardised, type){
+  const key = `${k}|${regionCode}|${year}|${sex}|${standardised}|${type}`;
+  if (totalCache.has(key)) return totalCache.get(key);
+  const res = _total(k, regionCode, year, sex, standardised, type);
+  totalCache.set(key, res);
+  return res;
 }
 
 /** Combines cell()'s per-age-band figures across a subset of AGES indices
