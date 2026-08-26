@@ -799,11 +799,25 @@ function standardRate(k, regionCode, year, sex, type) {
   // bands clears SUPPRESS_BELOW in the large majority of region/years even
   // when one thin band alone didn't; the genuinely small regions still do
   // trip it. No-op for psych/antidep, whose combined counts are always far
-  // past the floor regardless of which rule is used.
-  const knownCount = parts.reduce((s, p) => s + (p.c.count != null ? p.c.count : 0), 0);
+  // past the floor regardless of which rule is used. Gated on
+  // anyBandSuppressed first — same defensive reason as total()'s identical
+  // fix just below this function: a hypothetical future STD_CAPABLE_REAL
+  // entry whose source never publishes counts at all (permanent count:null,
+  // suppressed:false, the way selfharm's real cells already are) must not
+  // read as "0 known deaths, therefore suppressed" against a bare
+  // threshold check. No currently-standardisable indicator hits this edge
+  // (psych/antidep/suicide's real cells all carry genuine counts), but the
+  // gate costs nothing and keeps both fixes symmetric.
   const anyBandSuppressed = parts.some(p => p.c.suppressed);
-  const suppressed = knownCount < SUPPRESS_BELOW;
-  const count = anyBandSuppressed ? null : knownCount;   // exact headcount still withheld whenever any contributor withheld its own
+  let count, suppressed;
+  if (anyBandSuppressed) {
+    const knownCount = parts.reduce((s, p) => s + (p.c.count != null ? p.c.count : 0), 0);
+    suppressed = knownCount < SUPPRESS_BELOW;
+    count = null;   // exact headcount still withheld whenever any contributor withheld its own
+  } else {
+    suppressed = false;
+    count = parts.every(p => p.c.count != null) ? parts.reduce((s, p) => s + p.c.count, 0) : null;
+  }
   const se = (count != null && count > 0) ? value / Math.sqrt(count) : null;
   return {
     value, count, denom: null,
@@ -1125,8 +1139,31 @@ function total(k, regionCode, year, sex, standardised, type){
     }
     if (cells.length){
       const value=cells.reduce((s,c)=>s+c.value,0)/cells.length;
-      const count=cells.every(c=>c.count!=null) ? cells.reduce((s,c)=>s+c.count,0) : null;
-      const suppressed=cells.some(c=>c.suppressed);
+      // Same fix, same reason as standardRate() above: suppression judged
+      // against the COMBINED total across every age band that has a real
+      // cell here, against the disclosure floor every other real count in
+      // this file uses — not against whether any ONE band was itself
+      // suppressed. Only kicks in when some cell actually IS individually
+      // suppressed: selfharm's cells are always suppressed:false/count:null
+      // (that source only ever publishes rates, never counts — see
+      // rebuildREAL()'s own comment — count:null there isn't a disclosure
+      // signal at all), so gating on anyCellSuppressed first keeps that
+      // permanent "no count published" state from reading as "0 known
+      // deaths, therefore suppressed" the way a bare threshold check would.
+      // For suicide's crude "all ages" total, averaging across all 9 real
+      // bands, one thin band (typically 0-14 or 85+) used to poison the
+      // whole figure even though the combined total across bands clears
+      // the floor in the large majority of region/years.
+      const anyCellSuppressed=cells.some(c=>c.suppressed);
+      let count, suppressed;
+      if (anyCellSuppressed) {
+        const knownCount=cells.reduce((s,c)=>s+(c.count!=null?c.count:0),0);
+        suppressed=knownCount<SUPPRESS_BELOW;
+        count=null;   // still withhold the exact (undercounted) headcount whenever any contributor withheld its own
+      } else {
+        suppressed=false;
+        count=cells.every(c=>c.count!=null)?cells.reduce((s,c)=>s+c.count,0):null;
+      }
       const se=(count!=null && count>0) ? value/Math.sqrt(count) : null;
       return {value, count, denom:null,
               lo: se!=null?Math.max(0,value-1.96*se):value,
