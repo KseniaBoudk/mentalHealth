@@ -92,6 +92,7 @@ SOURCES = [
         "source": "Socialstyrelsen Statistikdatabasen (Patientregistret + Dödsorsaksregistret)",
         "note": "Real, region-grain rates for self-harm hospitalisation and suicide.\n"
                 "   Fetched by fetch_socialstyrelsen_mh.py.",
+        "compact_mh": True,   # see encode_mh_rows()'s own docstring for why
     },
     {
         "var": "REAL_PSYCH_MH",
@@ -267,6 +268,44 @@ def encode_type_age_rows(rows, prefix, suffix):
     return tuple_rows, types, ages
 
 
+def encode_mh_rows(rows):
+    """Rewrite REAL_MH's (self-harm/suicide) object rows into compact
+    [county_code, indicator_idx, midpoint_year, age_idx, sex, value, count,
+    suppressed] tuples — same "why" as encode_type_age_rows() above
+    (COMPACT TUPLE ROWS docstring section), a separate function because
+    this source's own fields don't fit that one's fixed shape: `year` there
+    vs `midpoint_year` here, and two fields that one never sees at all —
+    `suppressed` (a real per-row disclosure flag, must survive) and
+    `window` (a string like "2008-2012", which does NOT need to survive:
+    verified against every row in data/processed/socialstyrelsen_mh.json
+    that window == f"{midpoint_year-2}-{midpoint_year+2}" with zero
+    exceptions, so js/data.js's rebuildREAL() reconstructs it instead of
+    storing it a second time).
+
+    This source went from "already small, not worth the churn" (this
+    module's own COMPACT TUPLE ROWS docstring section, written when this
+    was true) to the single largest file in js/data/ — 5.47MB, bigger than
+    real_psych.js despite half the row count — once suicide's real age
+    coverage widened from one band to all nine (fetch_socialstyrelsen_mh.py,
+    "KURVAN CHANGE 2"), roughly 9x-ing this source's row count. Worth the
+    same treatment now for the same reason psych/lakemedel got it.
+
+    Returns (tuple_rows, indicators, ages); both built from the data
+    itself, not hardcoded, same self-describing convention as
+    encode_type_age_rows().
+    """
+    indicators = sorted({r["indicator"] for r in rows})
+    ind_idx = {s: i for i, s in enumerate(indicators)}
+    ages = sorted({r["age_group"] for r in rows})
+    age_idx = {a: i for i, a in enumerate(ages)}
+    tuple_rows = [
+        [r["county_code"], ind_idx[r["indicator"]], r["midpoint_year"],
+         age_idx[r["age_group"]], r["sex"], r["value"], r["count"], r["suppressed"]]
+        for r in rows
+    ]
+    return tuple_rows, indicators, ages
+
+
 def main():
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     os.makedirs(OUT_DIR, exist_ok=True)
@@ -277,6 +316,9 @@ def main():
         if compact and rows:
             rows, types, ages = encode_type_age_rows(rows, compact["prefix"], compact["suffix"])
             payload = {"generated_at": now, "source": spec["source"], "types": types, "ages": ages, "rows": rows}
+        elif spec.get("compact_mh") and rows:
+            rows, indicators, ages = encode_mh_rows(rows)
+            payload = {"generated_at": now, "source": spec["source"], "indicators": indicators, "ages": ages, "rows": rows}
         else:
             payload = {"generated_at": now, "source": spec["source"], "rows": rows}
         out_path = os.path.join(OUT_DIR, spec["out"])

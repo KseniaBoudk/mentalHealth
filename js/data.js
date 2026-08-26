@@ -239,8 +239,31 @@ const EVENTS = [
 // by name at call time, not at definition time, so this needs no other
 // changes anywhere else in this file.
 function rebuildREAL() {
-  const rows = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.rows)) ? REAL_MH.rows : [];
-  const active = rows.length > 0;
+  const rawRows = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.rows)) ? REAL_MH.rows : [];
+  const active = rawRows.length > 0;
+
+  // REAL_MH.rows are compact tuples, not objects — see
+  // pipeline/build_kurvan_data.py's encode_mh_rows() for the encode side
+  // and its own docstring for why (this file went from smallest-in-folder
+  // to largest once suicide's real age coverage widened from one band to
+  // nine, per fetch_socialstyrelsen_mh.py's "KURVAN CHANGE 2"). Decoded
+  // back into the same {county_code, indicator, age_group, sex,
+  // midpoint_year, value, count, suppressed, window} shape the loop below
+  // always worked with, so nothing past this point needs to change —
+  // same "decode once, unchanged reader" pattern rebuildREAL_PSYCH() and
+  // rebuildREAL_ANTIDEP() already use for their own compact rows.
+  // `window` isn't stored on the wire at all (verified 100% derivable from
+  // midpoint_year — see encode_mh_rows()'s docstring); reconstructed here.
+  const indicators = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.indicators)) ? REAL_MH.indicators : [];
+  const mhAgeLabels = (typeof REAL_MH !== "undefined" && Array.isArray(REAL_MH.ages)) ? REAL_MH.ages : [];
+  const rows = rawRows.map(r => {
+    const [county_code, indIdx, midpoint_year, ageIdx, sex, value, count, suppressed] = r;
+    return {
+      county_code, indicator: indicators[indIdx], age_group: mhAgeLabels[ageIdx],
+      sex, midpoint_year, value, count, suppressed,
+      window: `${midpoint_year - 2}-${midpoint_year + 2}`,
+    };
+  });
 
   // Kurvan's ageIdx (into AGES) -> the real age_group label that stands in
   // for it. Every other ageIdx (25-34 through 85+) has no real counterpart
