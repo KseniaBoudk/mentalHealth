@@ -221,6 +221,7 @@ sv:{
   mManifestH:"Källornas aktualitet och hämtningsdatum (Data Vintage)",
   mManifestLead:"Varje hämtskript i pipelinen registrerar automatiskt sitt hämtningsdatum, ursprung och täckning i manifestet. Här framgår exakt hur färsk varje siffra är och hur den har hämtats.",
   mColInd:"Dataserie / Mått",mColSource:"Ursprungskälla & register",mColFetched:"Hämtad (UTC)",mColCoverage:"Tidsperiod i data",mColScript:"Hämtskript",mColStatus:"Status",
+  mColGeo:"Geografi",mColYears:"Tidsperiod",mColSplits:"Uppdelning",yes:"Ja",no:"Nej",splitAge:"Ålder",splitSex:"Kön",
   mStatusReal:"Verklig data",mStatusSynth:"Syntetisk fallback",mStatusNoFetch:"Saknar öppet API",
   mRecordsCount:n=>`${n.toLocaleString("sv-SE")} rader`,
   mIndicator:"Indikator",mSource:"Källa",mFrom:"Serie från",mGrain:"Nivå",mLimit:"Det viktigaste förbehållet",
@@ -244,7 +245,7 @@ sv:{
   },
   mapTitle:"Regionkarta",
   mapNote:(real)=>real
-    ?"Färgstyrkan visar nivå för vald indikator. Kartan är verklig geografi — värdena är verkliga Socialstyrelsen-data också; se förbehållet nedan."
+    ?"Färgstyrkan visar nivå för vald indikator. Kartan visar verklig geografi — värdena är härledda direkt från regionala registerdata."
     :"Färgstyrkan visar nivå för vald indikator, 2024. Kartan är själva geografin — värdena är fortfarande syntetiska.",
   mapPicked:"vald region",mapOpen:"Öppna länsprofilen",
   trendWith:"följer riket",trendAgainst:"mot rikets riktning",
@@ -433,6 +434,7 @@ en:{
   mManifestH:"Data Vintage & Fetch Manifest",
   mManifestLead:"Each pipeline fetcher automatically records its fetch timestamp, origin, and coverage directly to the manifest. This shows exactly how current every number is without asking.",
   mColInd:"Dataset / Measure",mColSource:"Source registry & Agency",mColFetched:"Fetched (UTC)",mColCoverage:"Time coverage",mColScript:"Fetcher script",mColStatus:"Status",
+  mColGeo:"Geography",mColYears:"Time period",mColSplits:"Breakdowns",yes:"Yes",no:"No",splitAge:"Age",splitSex:"Sex",
   mStatusReal:"Real data",mStatusSynth:"Synthetic fallback",mStatusNoFetch:"No open API",
   mRecordsCount:n=>`${n.toLocaleString("en-US")} rows`,
   mIndicator:"Indicator",mSource:"Source",mFrom:"Series from",mGrain:"Grain",mLimit:"The caveat that matters most",
@@ -456,7 +458,7 @@ en:{
   },
   mapTitle:"Region map",
   mapNote:(real)=>real
-    ?"Colour strength shows the level of the selected indicator. The map is real geography — the values are real Socialstyrelsen data too; see the caveat below."
+    ?"Colour strength shows the level of the selected indicator. The map shows real geography — values are derived directly from regional register data."
     :"Colour strength shows the level of the selected indicator, 2024. The map itself is real geography — the values are still synthetic.",
   mapPicked:"selected region",mapOpen:"Open the county profile",
   trendWith:"tracking the national trend",trendAgainst:"against the national trend",

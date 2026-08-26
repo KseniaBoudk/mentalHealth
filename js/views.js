@@ -703,6 +703,21 @@ function viewMetod(){
   const P=t.mProse;
   const rs=realSummary();
 
+  // Coverage table
+  const coverageRows=Object.keys(IND).map(x=>{
+    const I=IND[x];
+    const real=isRealActive(x);
+    const ageTxt=I.ageSplit?t.yes:t.no;
+    const sexTxt=I.sexSplit?t.yes:t.no;
+    return `<tr>
+      <td class="in" style="border-left:3px solid ${INST_COLOR[I.inst]}">${esc(t.ind[x])}
+        <span class="modechip ${real?"real":"synth"}">${esc(real?t.realLbl:t.synthLbl)}</span></td>
+      <td>${esc(I.coverage||"Region")}</td>
+      <td class="mono">${esc(I.years||I.start)}</td>
+      <td class="mono">${esc(t.splitSex)}: ${sexTxt} &nbsp;|&nbsp; ${esc(t.splitAge)}: ${ageTxt}</td>
+    </tr>`;
+  }).join("");
+
   // Original indicator-caveats table (unchanged)
   const rows=Object.keys(IND).map(x=>{
     const I=IND[x],[grain,limit]=t.mRows[x];
@@ -761,6 +776,19 @@ function viewMetod(){
       <th>${esc(t.mColStatus)}</th>
     </tr></thead>
     <tbody>${manifestRows}</tbody>
+  </table></div>
+
+  <div class="prose" style="margin-top:30px">
+    <h3>${esc(S.lang==="sv"?"Dataseriernas täckning":"Indicator coverage")}</h3>
+  </div>
+  <div class="mwrap"><table class="m">
+    <thead><tr>
+      <th>${esc(t.mColInd)}</th>
+      <th>${esc(t.mColGeo)}</th>
+      <th>${esc(t.mColYears)}</th>
+      <th>${esc(t.mColSplits)}</th>
+    </tr></thead>
+    <tbody>${coverageRows}</tbody>
   </table></div>
 
   <div class="prose" style="margin-top:30px">
