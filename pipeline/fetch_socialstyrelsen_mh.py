@@ -102,21 +102,28 @@ REGION_ID_TO_COUNTY = {
 REGION_IDS = ",".join(str(i) for i in REGION_ID_TO_COUNTY)
 SEX = {1: "M", 2: "K", 3: "T"}
 
-SELF_HARM_DATASET = "yttreorsakertillskadorochforgiftningarbarn"
+SELF_HARM_DATASET = "yttreorsakertillskadorochforgiftningar"
 SELF_HARM_CAUSES = {"VXY2": "self_harm", "VXY4": "undetermined_intent"}
-# Live-verified 2026-08-25 against /api/v1/sv/{SELF_HARM_DATASET}/alder:
-# id 5 = "12-14", id 6 = "15-17" — exactly what's assumed below.
-SELF_HARM_AGES = {5: "12_14", 6: "15_17"}
+SELF_HARM_AGE_IDS = ",".join(str(i) for i in range(1, 19))
 SELF_HARM_MATT = 7          # patients per 100 000
 SELF_HARM_VARDFORM = "SVOV"  # see the docstring before changing this
 SELF_HARM_YEARS = list(range(2008, datetime.now().year + 1))
 
 SUICIDE_DATASET = "dodsorsaker"
 SUICIDE_CAUSES = {"2026": "suicide", "2028": "undetermined_intent"}
-# Live-verified 2026-08-25 against /api/v1/sv/{SUICIDE_DATASET}/alder:
-# id 4 = "15-19" — exactly what's assumed below.
-SUICIDE_AGE = 4              # 15-19
+SUICIDE_AGE_IDS = ",".join(str(i) for i in range(1, 21))
 SUICIDE_YEARS = list(range(1997, datetime.now().year + 1))
+
+SELF_HARM_AGE_GROUPS = {
+    "0-14": [1, 2, 3], "15-24": [4, 5], "25-34": [6, 7], "35-44": [8, 9],
+    "45-54": [10, 11], "55-64": [12, 13], "65-74": [14, 15], "75-84": [16, 17],
+    "85+": [18],
+}
+SUICIDE_AGE_GROUPS = {
+    "0-14": [1, 2, 3], "15-24": [4, 5], "25-34": [6, 7], "35-44": [8, 9],
+    "45-54": [10, 11], "55-64": [12, 13], "65-74": [14, 15], "75-84": [16, 17],
+    "85+": [18, 19, 20],
+}
 
 WINDOW = 5
 SUPPRESS_BELOW = 10          # window counts under this are withheld; the rate is not
@@ -180,49 +187,39 @@ def assert_diagnos_segment():
 
 
 def fetch_self_harm():
-    print("  self-harm and undetermined-intent hospitalisations, by sex")
+    print("  self-harm and undetermined-intent hospitalisations, by sex (all age bands)")
     assert_diagnos_segment()
     years = ",".join(str(y) for y in SELF_HARM_YEARS)
-    ages = ",".join(str(a) for a in SELF_HARM_AGES)
     rows = []
     for cause in SELF_HARM_CAUSES:
-        # kon/1,2,3 (Män/Kvinnor/Båda könen), not kon/3 alone — confirmed
-        # live 2026-08-24 that this dataset's kon accepts a comma list, same
-        # as region/alder/ar do (see docstring: not true of every dataset on
-        # this API, re-checked here specifically). Row count triples but
-        # stays well under the 5,000/page cap (19 years x 2 ages x 22
-        # regions x 3 sexes = 2,508).
-        batch = get(
-            f"/{SELF_HARM_DATASET}/resultat/diagnos/{cause}/alder/{ages}"
-            f"/kon/1,2,3/matt/{SELF_HARM_MATT}/ar/{years}/region/{REGION_IDS}"
-            f"/vardform/{SELF_HARM_VARDFORM}",
-            f"self-harm {cause}",
-        )
-        rows.extend(batch)
-        got = sorted({r["ar"] for r in batch}) if batch else []
-        print(f"    {cause}: {len(batch)} rows, "
-              f"{got[0] if got else '-'}-{got[-1] if got else '-'}, "
-              f"{len({r['regionId'] for r in batch})} regions")
-        time.sleep(1.5)
+        for age_id in range(1, 19):
+            for matt in (6, 7):   # 6 = count (antal patienter), 7 = rate (patienter/100k)
+                batch = get(
+                    f"/{SELF_HARM_DATASET}/resultat/diagnos/{cause}/alder/{age_id}"
+                    f"/kon/1,2,3/matt/{matt}/ar/{years}/region/{REGION_IDS}"
+                    f"/vardform/{SELF_HARM_VARDFORM}",
+                    f"self-harm {cause} age {age_id} matt{matt}",
+                )
+                rows.extend(batch)
+                time.sleep(0.8)
+        print(f"    {cause}: cumulative {len(rows)} rows")
     return rows
 
 
 def fetch_suicide():
-    print("  suicide and undetermined-intent deaths, ages 15-19, by sex")
+    print("  suicide and undetermined-intent deaths, by sex (all age bands)")
     years = ",".join(str(y) for y in SUICIDE_YEARS)
     rows = []
     for cause in SUICIDE_CAUSES:
-        for matt in (1, 2):   # 1 = deaths, 2 = deaths per 100 000
-            # kon/1,2,3, not kon/3 alone — confirmed live 2026-08-24 this
-            # dataset's kon also accepts a comma list. 30 years x 1 age x
-            # 22 regions x 3 sexes = 1,980 rows, still under the page cap.
-            batch = get(
-                f"/{SUICIDE_DATASET}/resultat/diagnos/{cause}/alder/{SUICIDE_AGE}"
-                f"/kon/1,2,3/matt/{matt}/ar/{years}/region/{REGION_IDS}",
-                f"suicide {cause} matt{matt}",
-            )
-            rows.extend(batch)
-            time.sleep(1.5)
+        for age_id in range(1, 21):
+            for matt in (1, 2):   # 1 = deaths, 2 = deaths per 100 000
+                batch = get(
+                    f"/{SUICIDE_DATASET}/resultat/diagnos/{cause}/alder/{age_id}"
+                    f"/kon/1,2,3/matt/{matt}/ar/{years}/region/{REGION_IDS}",
+                    f"suicide {cause} age {age_id} matt{matt}",
+                )
+                rows.extend(batch)
+                time.sleep(0.8)
         print(f"    {cause}: cumulative {len(rows)} rows")
     return rows
 
@@ -237,122 +234,129 @@ def windows_from(years):
 
 
 def roll_self_harm(rows, county_names):
-    """Rolling windows over a RATE series. The window value is the mean of the
-    annual rates, which is right here because the denominator (the age band's
-    population) is close to constant across five years within a county.
-
-    Keyed by sex now, not assumed total — fetch_self_harm() requests
-    kon/1,2,3 (see its own comment for why that's safe on this dataset).
-    """
-    series = {}
+    """Rolling windows over self-harm rates across Kurvan's nine age bands."""
+    counts, rates = {}, {}
     for r in rows:
         county = REGION_ID_TO_COUNTY.get(r.get("regionId"))
         cause = SELF_HARM_CAUSES.get(r.get("diagnosId"))
-        age = SELF_HARM_AGES.get(r.get("alderId"))
         sex = SEX.get(r.get("konId"))
+        age_id = int(r.get("alderId")) if r.get("alderId") is not None else None
         val = num(r.get("varde"))
-        if not (county and cause and age and sex) or val is None:
+        if not (county and cause and sex and age_id) or val is None:
             continue
-        series.setdefault((county, cause, age, sex), {})[int(r["ar"])] = val
+        target = counts if r.get("mattId") == 6 else rates
+        target.setdefault((county, cause, sex, age_id), {})[int(r["ar"])] = val
 
     out = []
-    for (county, cause, age, sex), by_year in sorted(series.items()):
-        # KURVAN CHANGE: the original skips county == "00" (national) here.
-        # Kurvan wants that row for its national reference line, so it stays.
-        for span in windows_from(by_year):
-            vals = [by_year[y] for y in span if y in by_year]
-            if len(vals) < WINDOW:
-                continue
-            out.append({
-                "region": county_names.get(county, county) if county != "00" else "Sverige",
-                "county_code": county,
-                "indicator": f"{cause}_hosp_per_100k",
-                "window": f"{span[0]}-{span[-1]}",
-                "midpoint_year": span[WINDOW // 2],
-                "value": round(sum(vals) / len(vals), 1),
-                "count": None,           # this dataset publishes rates, not counts
-                "suppressed": False,
-                "age_group": age,
-                "sex": sex,
-            })
+    for cause in set(SELF_HARM_CAUSES.values()):
+        for sex in SEX.values():
+            for band_name, age_ids in SELF_HARM_AGE_GROUPS.items():
+                grid = sorted(counts.get(("00", cause, sex, age_ids[0]), {}))
+                if not grid:
+                    continue
+
+                for county in REGION_ID_TO_COUNTY.values():
+                    annual_rates = {}
+                    for y in grid:
+                        total_count, total_pop, any_data = 0.0, 0.0, False
+                        for aid in age_ids:
+                            c = counts.get((county, cause, sex, aid), {}).get(y)
+                            rt = rates.get((county, cause, sex, aid), {}).get(y)
+                            if c is None or rt is None:
+                                continue
+                            any_data = True
+                            total_count += c
+                            if rt > 0:
+                                total_pop += c / rt * 1e5
+                        if any_data and total_pop > 0:
+                            annual_rates[y] = total_count / total_pop * 1e5
+
+                    if not annual_rates:
+                        continue
+
+                    for span in windows_from(grid):
+                        vals = [annual_rates[y] for y in span if y in annual_rates]
+                        if len(vals) < WINDOW:
+                            continue
+                        out.append({
+                            "region": county_names.get(county, county) if county != "00" else "Sverige",
+                            "county_code": county,
+                            "indicator": f"{cause}_hosp_per_100k",
+                            "window": f"{span[0]}-{span[-1]}",
+                            "midpoint_year": span[WINDOW // 2],
+                            "value": round(sum(vals) / len(vals), 1),
+                            "count": None,
+                            "suppressed": False,
+                            "age_group": band_name,
+                            "sex": sex,
+                        })
     return out
 
 
 def roll_suicide(rows, county_names):
-    """Rolling windows over COUNTS, with the disclosure floor applied.
-
-    Trap 2 lives here. The year grid comes from the national series, which is
-    complete, and a county-year missing from that grid is filled with 0 rather
-    than treated as unknown. Keyed by sex now (fetch_suicide() requests
-    kon/1,2,3), so the grid/deaths/population are all computed per sex — a
-    smaller county's single-sex count hits the disclosure floor far more
-    often than its combined-sex count did, which is the floor working as
-    intended on a genuinely smaller sub-population, not a bug.
-
-    The window rate is POOLED, not a mean of annual rates: the annual population
-    is recovered as count / rate x 100,000 wherever both are published, and the
-    window rate is summed deaths over summed population. Years with no deaths
-    carry no recoverable population, so those are filled from the nearest year in
-    the same county. A county's 15-19 population moves a per cent or two a year,
-    which is nothing beside the Poisson noise the windowing exists to damp.
-    """
+    """Rolling windows over suicide counts and rates across Kurvan's nine age bands."""
     counts, rates = {}, {}
     for r in rows:
         county = REGION_ID_TO_COUNTY.get(r.get("regionId"))
         cause = SUICIDE_CAUSES.get(str(r.get("diagnosId")))
         sex = SEX.get(r.get("konId"))
+        age_id = int(r.get("alderId")) if r.get("alderId") is not None else None
         val = num(r.get("varde"))
-        if not (county and cause and sex) or val is None:
+        if not (county and cause and sex and age_id) or val is None:
             continue
         target = counts if r.get("mattId") == 1 else rates
-        target.setdefault((county, cause, sex), {})[int(r["ar"])] = val
+        target.setdefault((county, cause, sex, age_id), {})[int(r["ar"])] = val
 
     out = []
     for cause in set(SUICIDE_CAUSES.values()):
         for sex in SEX.values():
-            grid = sorted(counts.get(("00", cause, sex), {}))
-            if not grid:
-                print(f"    note: no national series for {cause}/{sex}; windows skipped")
-                continue
-
-            for (county, c, s), by_year in sorted(counts.items()):
-                if c != cause or s != sex:
+            for band_name, age_ids in SUICIDE_AGE_GROUPS.items():
+                grid = sorted(counts.get(("00", cause, sex, age_ids[0]), {}))
+                if not grid:
                     continue
-                # KURVAN CHANGE: the original also excludes county == "00" here.
-                # county's own count series (including "00" = Riket) is kept below.
 
-                deaths = {y: by_year.get(y, 0.0) for y in grid}   # TRAP 2: absent means zero
-                rate_by_year = rates.get((county, cause, sex), {})
-                pop = {y: deaths[y] / rate_by_year[y] * 1e5
-                       for y in grid if deaths[y] > 0 and rate_by_year.get(y)}
-                if not pop:
-                    print(f"    note: no recoverable population for county {county} / {cause} / {sex}; skipped")
-                    continue
-                for y in grid:                                     # nearest-year fill
-                    if y not in pop:
-                        nearest = min(pop, key=lambda k: abs(k - y))
-                        pop[y] = pop[nearest]
+                for county in REGION_ID_TO_COUNTY.values():
+                    deaths_by_year = {}
+                    pop_by_year = {}
+                    for y in grid:
+                        total_deaths, total_pop, any_data = 0.0, 0.0, False
+                        for aid in age_ids:
+                            d = counts.get((county, cause, sex, aid), {}).get(y, 0.0)
+                            rt = rates.get((county, cause, sex, aid), {}).get(y)
+                            total_deaths += d
+                            if d > 0 and rt and rt > 0:
+                                any_data = True
+                                total_pop += d / rt * 1e5
+                        deaths_by_year[y] = total_deaths
+                        if total_pop > 0:
+                            pop_by_year[y] = total_pop
 
-                for span in windows_from(grid):
-                    total_deaths = sum(deaths[y] for y in span)
-                    total_pop = sum(pop[y] for y in span)
-                    if total_pop <= 0:
+                    if not pop_by_year:
                         continue
-                    suppressed = total_deaths < SUPPRESS_BELOW and county != "00"
-                    out.append({
-                        "region": county_names.get(county, county) if county != "00" else "Sverige",
-                        "county_code": county,
-                        "indicator": f"{cause}_per_100k",
-                        "window": f"{span[0]}-{span[-1]}",
-                        "midpoint_year": span[WINDOW // 2],
-                        # The rate is ALWAYS published.
-                        "value": round(total_deaths / total_pop * 1e5, 1),
-                        # The count is not, below the floor.
-                        "count": None if suppressed else int(total_deaths),
-                        "suppressed": suppressed,
-                        "age_group": "15_19",
-                        "sex": sex,
-                    })
+
+                    for y in grid:
+                        if y not in pop_by_year and pop_by_year:
+                            nearest = min(pop_by_year, key=lambda k: abs(k - y))
+                            pop_by_year[y] = pop_by_year[nearest]
+
+                    for span in windows_from(grid):
+                        total_deaths = sum(deaths_by_year.get(y, 0.0) for y in span)
+                        total_pop = sum(pop_by_year.get(y, 0.0) for y in span)
+                        if total_pop <= 0:
+                            continue
+                        suppressed = total_deaths < SUPPRESS_BELOW and county != "00"
+                        out.append({
+                            "region": county_names.get(county, county) if county != "00" else "Sverige",
+                            "county_code": county,
+                            "indicator": f"{cause}_per_100k",
+                            "window": f"{span[0]}-{span[-1]}",
+                            "midpoint_year": span[WINDOW // 2],
+                            "value": round(total_deaths / total_pop * 1e5, 1),
+                            "count": None if suppressed else int(total_deaths),
+                            "suppressed": suppressed,
+                            "age_group": band_name,
+                            "sex": sex,
+                        })
     return out
 
 

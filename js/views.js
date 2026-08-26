@@ -195,15 +195,15 @@ function viewLaget(){
   // self-harm's youth peak against suicide's old-age peak across the WHOLE
   // life course, and no real fetcher this project has reaches past age 19
   // for either series. See fakeCell()'s docstring in data.js.
-  const shK=fakeAgePts("selfharm","SE",2024,"K"),shM=fakeAgePts("selfharm","SE",2024,"M");
-  const suM=fakeAgePts("suicide","SE",2024,"M"),suK=fakeAgePts("suicide","SE",2024,"K");
-  const shPeak=shK.filter(Boolean).reduce((a,p)=>p[1]>a[1]?p:a);
-  const suPeak=suM.filter(Boolean)[suM.filter(Boolean).length-1];
-  const shSeries=[{pts:shK,color:"var(--violet)",w:2.5,label:t.women,anno:{at:shPeak,dx:9,dy:-8,text:t.peakSh}},
+  const shK=agePts("selfharm","SE",2024,"K"),shM=agePts("selfharm","SE",2024,"M");
+  const suM=agePts("suicide","SE",2024,"M"),suK=agePts("suicide","SE",2024,"K");
+  const shPeak=shK.filter(Boolean).reduce((a,p)=>p[1]>a[1]?p:a, [0,0]);
+  const suPeak=suM.filter(Boolean).length ? suM.filter(Boolean)[suM.filter(Boolean).length-1] : [0,0];
+  const shSeries=[{pts:shK,color:"var(--violet)",w:2.5,label:t.women,anno:shPeak[1]?{at:shPeak,dx:9,dy:-8,text:t.peakSh}:null},
                    {pts:shM,color:"var(--violet)",dash:"5 3",w:1.9,label:t.men}];
-  const suSeries=[{pts:suM,color:"var(--oxblood)",w:2.6,label:t.men,anno:{at:suPeak,dx:-9,dy:-9,text:t.peakSu}},
+  const suSeries=[{pts:suM,color:"var(--oxblood)",w:2.6,label:t.men,anno:suPeak[1]?{at:suPeak,dx:-9,dy:-9,text:t.peakSu}:null},
                    {pts:suK,color:"var(--oxblood)",dash:"5 3",w:1.9,label:t.women}];
-  const oldMen=fakeCell("suicide","SE",2024,8,"M",false);
+  const oldMen=cell("suicide","SE",2024,8,"M",false);
   const yw06=cell("antidep","SE",2006,1,"K",false),yw24=cell("antidep","SE",2024,1,"K",false);
   const growth=Math.round((yw24.value/yw06.value-1)*100);
 

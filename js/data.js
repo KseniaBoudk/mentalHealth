@@ -233,7 +233,10 @@ function rebuildREAL() {
   // Kurvan's ageIdx (into AGES) -> the real age_group label that stands in
   // for it. Every other ageIdx (25-34 through 85+) has no real counterpart
   // and stays null on purpose: see the docstring above.
-  const AGE_MAP = { selfharm: { 0: "12_14", 1: "15_17" }, suicide: { 1: "15_19" } };
+  const AGE_MAP = {
+    selfharm: { 0: "0-14", 1: "15-24", 2: "25-34", 3: "35-44", 4: "45-54", 5: "55-64", 6: "65-74", 7: "75-84", 8: "85+" },
+    suicide: { 0: "0-14", 1: "15-24", 2: "25-34", 3: "35-44", 4: "45-54", 5: "55-64", 6: "65-74", 7: "75-84", 8: "85+" }
+  };
   // X60-X84 alone for suicide (matches IND.suicide's cited source); X60-X84
   // + Y10-Y34 combined for self-harm (matches IND.selfharm's cited source
   // and notNumB.selfharm's caveat about carrying undetermined intent along).
@@ -826,7 +829,7 @@ function getManifestRows() {
   return rows;
 }
 
-const REAL_AGE_LIMIT = { selfharm: [0, 1], suicide: [1], distress: [], sjukfranvaro: [] };
+const REAL_AGE_LIMIT = { selfharm: [0, 1, 2, 3, 4, 5, 6, 7, 8], suicide: [0, 1, 2, 3, 4, 5, 6, 7, 8], distress: [], sjukfranvaro: [] };
 function ageAvailable(k, ageIdx) {
   if (isRealActive(k)) return REAL_AGE_LIMIT[k] ? REAL_AGE_LIMIT[k].includes(ageIdx) : true;
   return IND[k].age[ageIdx] != null;
