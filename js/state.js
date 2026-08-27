@@ -20,7 +20,7 @@ function initTheme(){
   }
   catch(e){return "light";}
 }
-const S={lang:initLang(),theme:initTheme(),tab:"laget",ind:"antidep",age:6,sex:"T",year:2024,std:true,region:"24",mapYear:null,cmpOn:false,cmpInd:null,ctxInd:"pop_density",policyFilter:"all",policySort:"desc",hbscAge:"15",hbscSex:"K",psychType:"all",medType:"all"};
+const S={lang:initLang(),theme:initTheme(),tab:"laget",ind:"antidep",age:6,sex:"T",year:2024,std:true,region:"SE",mapYear:null,cmpOn:false,cmpInd:null,ctxInd:"pop_density",policyFilter:"all",policySort:"desc",hbscAge:"15",hbscSex:"K",psychType:"all",medType:"all"};
 // hbscAge/hbscSex: viewHbsc's own map picker (js/views.js) — HBSC's source
 // has only 11/13/15 and K/M, neither of which fit S.age/S.sex's own
 // ranges (S.age indexes AGES' nine bands; S.sex has a "T" HBSC doesn't

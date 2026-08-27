@@ -34,6 +34,17 @@ const unitLabel=(k)=>{
 const ciWord=()=>S.lang==="sv"?"KI":"CI";
 const ciRange=(lo,hi)=>`95% ${ciWord()} ${fmt(lo,1)}–${fmt(hi,1)}`;
 
+// Region-code -> display name, handling the "SE"/national pseudo-region the
+// same way viewOverTid always has (RBY has no "SE" key — js/data.js's REGIONS
+// only lists the 21 real counties). Six other view functions used to read
+// RBY[S.region] unguarded and threw the instant S.region was "SE"; they all
+// go through this now instead. Also used to build chart-heading subtitles.
+const regionName=(code)=>code==="SE"?t.natLine:(RBY[code]?RBY[code][1]:"");
+// "21 regioner"/"21 regions" was typed out inline at the Över tid download
+// strip already; chart headings for all-region charts (maps/histograms/
+// scatters showing every county at once) reuse this same label.
+const allRegionsLabel=()=>`21 ${S.lang==="sv"?"regioner":"regions"}`;
+
 // The banner, footer, and Metod tab's "what's actually real" note all used
 // to hand-count "four of five" and hand-list which indicators — the same
 // sentence typed three times, none of them updated when sjukfranvaro went
@@ -220,7 +231,7 @@ function viewLaget(){
   </div>
 
   <div class="card" style="margin-top:26px">
-    <div class="card-h"><h3>${esc(t.twinT)}</h3><div class="u">${esc(t.perK)}</div></div>
+    <div class="card-h"><h3>${esc(t.twinT)}</h3><div class="u">${esc(t.perK)} · ${esc(t.natLine)} · 2024</div></div>
     <div class="inner2">
       <div>
         <h4>${esc(t.shTitle)}</h4><div class="u">${srcLine("selfharm")}</div>
@@ -352,7 +363,7 @@ function viewOverTid(){
 
   <div class="grid-ex">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.dotTitle)}</h3><div class="u">${esc(t.dotSub)}${esc(winNote)}</div></div>
+      <div class="card-h"><h3>${esc(t.dotTitle)}</h3><div class="u">${esc(t.dotSub)} · ${esc(allRegionsLabel())}${esc(winNote)}</div></div>
       <div class="card-b">
         ${shown.length?dotPlot(shown,{nat:nat?nat.value:null,color:col,aria:"All regions with confidence intervals",unit:unitLabel(k)}):""}
         ${suppressed.length?`<div class="suppress"><b>${esc(t.suppLbl)}</b> ${suppressed.map(esc).join(", ")}</div>`:""}
@@ -369,7 +380,7 @@ function viewOverTid(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])}${isNat?"":" "+esc(t.ageSub)}</div></div>
+        <div class="card-h"><h3>${esc(t.ageTitle)}</h3><div class="u">${esc(R[1])}${isNat?"":" "+esc(t.ageSub)} · ${I.window?esc(t.winLbl(yr)):yr}</div></div>
         <div class="card-b">${lineChart(seriesAge,
           {band:isNat?[]:band,aria:isNat?"Age curve for Sweden as a whole":"Age curves for the selected region against the national band",
            xlabels:[[1,"15"],[4,"45"],[6,"65"],[8,"85+"]],x0:0,x1:8,zero:true,h:185,notes:ageNotes,unit:unitLabel(k),xFmt:i=>AGES[i],
@@ -378,7 +389,7 @@ function viewOverTid(){
           ${isRealActive(k)&&t.realCaveat[k]?`<div class="suppress"><b>${esc(t.realLbl)}</b> ${esc(t.realCaveat[k])}</div>`:""}</div>
       </div>
       <div class="card">
-        <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u tnum">${years[0]}–${years[years.length-1]}</div></div>
+        <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(R[1])} · <span class="tnum">${years[0]}–${years[years.length-1]}</span></div></div>
         <div class="card-b">${lineChart([{pts:ts,color:col,w:2.4,dot:true}],
           {aria:"Time series for the selected region with national events marked",
            marks,xlabels:[[years[0],String(years[0])],[Math.round((years[0]+years[years.length-1])/2),String(Math.round((years[0]+years[years.length-1])/2))],[years[years.length-1],String(years[years.length-1])]],h:185,unit:unitLabel(k)})}</div>
@@ -390,8 +401,16 @@ function viewOverTid(){
 }
 
 function viewRegioner(){
-  const R=RBY[S.region];
-  const peers=REGIONS.filter(r=>r[0]!==S.region)
+  // This tab compares one real county against its peers — "Sweden" isn't a
+  // peer-comparable concept (its own #c-reg2 picker below deliberately has
+  // no "SE" option), but the global S.region can still arrive here as "SE"
+  // (e.g. the "open region" buttons on other tabs just scroll here without
+  // touching S.region). Fall back to a real county for THIS TAB'S rendering
+  // only, without mutating global state, so leaving and returning to any
+  // other tab still shows the national view as expected.
+  const regionCode=S.region==="SE"?REGIONS[0][0]:S.region;
+  const R=RBY[regionCode];
+  const peers=REGIONS.filter(r=>r[0]!==regionCode)
     .map(r=>({r,d:Math.abs(r[4]-R[4])*1.4+Math.abs(r[3]-R[3])}))
     .sort((a,b)=>a.d-b.d).slice(0,4).map(p=>p.r);
 
@@ -412,7 +431,7 @@ function viewRegioner(){
     const yrs=validYears(k);
     const lat=yrs[yrs.length-1];
     latestYrs[k]=lat;
-    mine[k]=total(k,S.region,lat,"T",false)||NO_DATA;
+    mine[k]=total(k,regionCode,lat,"T",false)||NO_DATA;
     const vs=peers.map(p=>total(k,p[0],lat,"T",false)).filter(Boolean).filter(c=>!c.suppressed).map(c=>c.value);
     peer[k]=vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null;
   });
@@ -432,8 +451,8 @@ function viewRegioner(){
     return `${u} · ${ciRange(m.lo,m.hi)} · ${lat}`;
   };
 
-  const ctxDensity=contextCell("pop_density",S.region);
-  const ctxLowEdu=contextCell("education_low_pct",S.region);
+  const ctxDensity=contextCell("pop_density",regionCode);
+  const ctxLowEdu=contextCell("education_low_pct",regionCode);
 
   // Pre-existing bug, surfaced while verifying the suicide age-standardisation
   // change (not caused by it): gapLatest was fed straight into fakeTotal()
@@ -464,8 +483,8 @@ function viewRegioner(){
     const lat=yrs[yrs.length-1];
     const pri=yrs.length>1?yrs[yrs.length-2]:null;
     if(!pri)return {x,inst,d:null,within:false,pri,lat};
-    const a=total(x,S.region,lat,"T",false);
-    const b=total(x,S.region,pri,"T",false);
+    const a=total(x,regionCode,lat,"T",false);
+    const b=total(x,regionCode,pri,"T",false);
     if(!a||!b||a.suppressed||b.suppressed||a.value==null||b.value==null){
       return {x,inst,d:null,within:false,pri,lat};
     }
@@ -488,7 +507,7 @@ function viewRegioner(){
       <div class="rpeers">${esc(t.peers)} ${peers.map(p=>`<b>${esc(p[1])}</b>`).join(", ")}</div>
     </div>
     <div class="f" style="margin-left:auto"><label>${esc(t.lblReg)}</label>
-      <select id="c-reg2">${REGIONS.map(r=>`<option value="${r[0]}"${r[0]===S.region?" selected":""}>${esc(r[1])}</option>`).join("")}</select></div>
+      <select id="c-reg2">${REGIONS.map(r=>`<option value="${r[0]}"${r[0]===regionCode?" selected":""}>${esc(r[1])}</option>`).join("")}</select></div>
   </div>
 
   <div class="rcontext-strip">
@@ -552,7 +571,7 @@ function viewRegioner(){
   </div>
 
   <div class="card mt-fig">
-    <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)}</div></div>
+    <div class="card-h"><h3>${esc(t.gapPos)}</h3><div class="u">${esc(t.gapPosU)} · ${esc(allRegionsLabel())} · ${gapLatest}</div></div>
     <div class="card-b">${scatter(gap,{aria:"Region position: reported need against healthcare response",w:620,h:350,
       xName:t.ind.distress,yName:t.ind.antidep,xUnit:unitLabel("distress"),yUnit:unitLabel("antidep")})}</div>
     ${scatterKey()}
@@ -618,7 +637,7 @@ function viewKarta(){
     ({rows:cmpRows,nat:cmpNat}=mapRows(cmpK,cmpYr,cmpYears));
   }
 
-  const R=RBY[S.region];
+  const R=[S.region,regionName(S.region)];
   const NO_DATA={value:null,lo:null,hi:null,suppressed:false};
   const mine={};
   const latest = REAL.active ? REAL.latestYear : 2024;    // see viewRegioner for why
@@ -656,7 +675,7 @@ function viewKarta(){
 
   <div class="grid-ex">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3>${cmpK?"":`<div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${I.window?esc(t.winLbl(yr)):yr}</div>`}</div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3>${cmpK?"":`<div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${esc(allRegionsLabel())} · ${I.window?esc(t.winLbl(yr)):yr}</div>`}</div>
       <div class="card-b">
         ${cmpK?`
         <div class="mapcmp">
@@ -680,7 +699,7 @@ function viewKarta(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)} · ${I.window?esc(t.winLbl(yr)):yr}</div></div>
         <div class="card-b">
           <div class="rstats" style="grid-template-columns:1fr">
             ${stat("distress",t.rDistress,"var(--teal)")}
@@ -691,7 +710,7 @@ function viewKarta(){
         </div>
       </div>
       <div class="card">
-        <div class="card-h"><h3>${esc(t.histTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))})</div></div>
+        <div class="card-h"><h3>${esc(t.histTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${esc(allRegionsLabel())} · ${I.window?esc(t.winLbl(yr)):yr}</div></div>
         <div class="card-b">${histogram(rows,{color:col,aria:"How many regions fall into each value band",unit:unitLabel(k),countLabel:t.histCount})}</div>
         <div class="src">${esc(t.histSub)}</div>
       </div>
@@ -945,7 +964,7 @@ function viewSjukskrivning(){
   // to this one indicator — no year slider or trend arrows, just the
   // latest year, since this page is about one indicator, not a picker.
   const rows=REGIONS.map(r=>{const c=total(k,r[0],latest,"T",false); return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi};}).filter(Boolean);
-  const R=RBY[S.region];
+  const R=[S.region,regionName(S.region)];
   const mine=total(k,S.region,latest,"T",false);
   const sexSeries=[{pts:ts("K"),color:col,w:2.4,label:t.women},
                     {pts:ts("M"),color:col,dash:"5 3",w:1.9,label:t.men}];
@@ -955,7 +974,7 @@ function viewSjukskrivning(){
     <p>${esc(t.fkLead)}</p>
   </div>
   <div class="card mt-fig">
-    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)}</div></div>
+    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)} · <span class="tnum">${years[0]}–${years[years.length-1]}</span></div></div>
     <div class="card-b">${lineChart(sexSeries,
       {aria:"Sickness absence trend, women and men",
        xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])+(latestPartial?`\n${t.partialTag}`:"")]],
@@ -965,7 +984,7 @@ function viewSjukskrivning(){
   </div>
   <div class="grid-ex mt-fig">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${latest}${yearTag}</div></div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ind[k])} (${esc(unitLabel(k))}) · ${esc(allRegionsLabel())} · ${latest}${yearTag}</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,nat:nat?nat.value:null,unit:unitLabel(k),aria:"Map of Sweden's 21 regions for sickness absence, click a region to see its figures"}),"sjukskrivning")}
         ${mapLegend(rows,col,unitLabel(k),nat?nat.value:null)}
@@ -974,7 +993,7 @@ function viewSjukskrivning(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)} · ${latest}${yearTag}</div></div>
         <div class="card-b">
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
@@ -1130,7 +1149,7 @@ function viewSammanhang(){
     return c&&{code:r[0],name:r[1],value:c.value,lo:c.value,hi:c.value,n:c.n_kommuner};
   }).filter(Boolean);
   const col="var(--ink-2)";
-  const R=RBY[S.region];
+  const R=[S.region,regionName(S.region)];
   const mine=contextCell(k,S.region);
 
   return `
@@ -1143,7 +1162,7 @@ function viewSammanhang(){
   </div>
   <div class="grid-ex">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · 2023</div></div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.ctxInd[k])} (${esc(unit)}) · ${esc(allRegionsLabel())} · 2023</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,unit,aria:"Map of Sweden's 21 regions for a context indicator, not a mental-health measure, click a region to see its figures"}),"sammanhang")}
         ${mapLegend(rows,col,unit,null)}
@@ -1152,7 +1171,7 @@ function viewSammanhang(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)} · 2023</div></div>
         <div class="card-b">
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
@@ -1199,7 +1218,7 @@ function viewVantetider(){
                   :{code:r[0],name:r[1],value:null,tip:t.vantetiderNoData(r[1])};
   });
   const nat=bupWaitCell("SE",latest[0],latest[1]);
-  const R=RBY[S.region];
+  const R=[S.region,regionName(S.region)];
   const mine=bupWaitCell(S.region,latest[0],latest[1]);
   // BUP_FACILITIES loads independently/lazily from BUP_WAIT (js/shell.js's
   // REAL_SOURCES) — undefined here means that source specifically hasn't
@@ -1225,7 +1244,7 @@ function viewVantetider(){
   </div>
   <div class="note mt-fig"><div class="l">${esc(t.vantetiderNoteL)}</div><p>${esc(t.vantetiderCaveat)}</p></div>
   <div class="card mt-fig">
-    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(monthLabel(months[0]))}–${esc(monthLabel(latest))}</div></div>
+    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(R[1])} · ${esc(monthLabel(months[0]))}–${esc(monthLabel(latest))}</div></div>
     <div class="card-b">${lineChart(trendSeries,
       {aria:"BUP waiting time trend, national and selected region",
        xlabels:[[0,monthLabel(months[0])],[months.length-1,monthLabel(latest)]],
@@ -1235,7 +1254,7 @@ function viewVantetider(){
   </div>
   <div class="grid-ex mt-fig">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.vantetiderInd)} (${esc(unit)}) · ${esc(monthLabel(latest))}</div></div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.vantetiderInd)} (${esc(unit)}) · ${esc(allRegionsLabel())} · ${esc(monthLabel(latest))}</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,nat,unit,aria:"Map of Sweden's 21 regions for BUP first-visit waiting time, click a region to see its figures"}),"vantetider")}
         ${mapLegend(rows,col,unit,nat)}
@@ -1244,7 +1263,7 @@ function viewVantetider(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)} · ${esc(monthLabel(latest))}</div></div>
         <div class="card-b">
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
@@ -1296,7 +1315,7 @@ function viewHbsc(){
     return v!=null&&{code:r[0],name:r[1],value:v,lo:v,hi:v};
   }).filter(Boolean);
   const nat=hbscCell("SE",age,sex);
-  const R=RBY[S.region];
+  const R=[S.region,regionName(S.region)];
   const mine=hbscCell(S.region,age,sex);
 
   return `
@@ -1313,7 +1332,7 @@ function viewHbsc(){
   </div>
   <div class="grid-ex mt-fig">
     <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.hbscInd)} (${esc(unit)}) · ${esc(HBSC.window)}</div></div>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.hbscInd)} (${esc(unit)}) · ${esc(allRegionsLabel())} · ${esc(HBSC.window)}</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,nat,unit,aria:"Map of Sweden's 21 regions for HBSC self-reported feeling low, click a region to see its figures"}),"hbsc")}
         ${mapLegend(rows,col,unit,nat)}
@@ -1322,7 +1341,7 @@ function viewHbsc(){
     </div>
     <div class="stack">
       <div class="card">
-        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)}</div></div>
+        <div class="card-h"><h3>${esc(R[1])}</h3><div class="u">${esc(t.mapPicked)} · ${esc(HBSC.window)}</div></div>
         <div class="card-b">
           <div class="rstats" style="grid-template-columns:1fr">
             <div class="rstat" style="border-top-color:${col}">
