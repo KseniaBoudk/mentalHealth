@@ -219,6 +219,17 @@ function viewLaget(){
   const growth=Math.round((yw24.value/yw06.value-1)*100);
 
   return `
+  <div class="intro">
+    <div class="l">${esc(t.introLabel)}</div>
+    <p>${esc(t.introLead)}</p>
+    <ul>${t.introHow.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+    <div class="help">
+      <span><b>${esc(t.introCrisisLead)}</b></span>
+      <span><b>${esc(t.helpA)}</b></span>
+      <span>${esc(t.helpB)}</span>
+      <span><b>${esc(t.helpC)}</b></span>
+    </div>
+  </div>
   ${legendStrip()}
   <div class="hero">
     <div class="kick">${esc(t.kick)}</div>
