@@ -116,6 +116,70 @@ docstring for exactly how). A missing population year simply means that
 year can't be standardised, same "no data, not a fabricated number" rule
 every other real source here follows.
 
+## More data, staged in the pipeline but not yet shown (2026-08-27)
+
+Four more sources were added to `build_kurvan_data.py` and compile to their
+own `js/data/real_*.js` files, but **nothing in `js/data.js` reads them yet**
+— no reader function, no `lang.js` strings, no view. They are on disk in
+final form; surfacing them in the UI is a separate later pass. Each one's
+`js/data/real_*.js` sits unused (and not even listed in `js/shell.js`'s
+`REAL_SOURCES`, so it isn't lazy-loaded) until that pass happens.
+
+- **`fetch_folkhalsodata_hlv_psych.py`** — five more HLV self-reported
+  categories beyond the `distress` one `fetch_folkhalsodata_hlv.py` already
+  does: suicidal thoughts, suicide attempts, low psychological wellbeing,
+  and sleep problems (broad/mild/severe). Same PxWeb host, same
+  `dPsykhals/` folder. Writes **two** files: `folkhalsodata_hlv_psych.json`
+  (region grain, pooled windows, from `hlv1psyxreg.px`) and
+  `folkhalsodata_hlv_psych_age.json` (national grain, annual, coarse age
+  bands, from `hlv1psyaald.px` — the only table that carries **loneliness**,
+  and only for 2024 so far). `low_wellbeing_pct` stopped being published
+  after the 2015-2018 window (same story as the original `distress` label —
+  see the next section); it's fetched anyway because it was explicitly
+  asked for. ~15 s, 2 requests.
+- **`fetch_forsakringskassan_diagnos.py`** — ongoing sickness-benefit cases
+  for the whole psychiatric chapter **F00-F99** (not only F43 like
+  `fetch_forsakringskassan.py`), plus the all-diagnoses total it's a share
+  of. `sjp-pagaende-sjukfall-diagnos` dataset, a sibling of the F43 table
+  and identical in shape. County grain, all sexes, annual-from-monthly,
+  2005-present, no age split. ~6 s, batched one request per year.
+- **`fetch_forsakringskassan_aktivitetsersattning.py`** —
+  **aktivitetsersättning** (disability benefit for 19-29-year-olds; ~80 %
+  of recipients have a psychiatric diagnosis) December-snapshot recipient
+  counts, F00-F99 share, and monthly `belopp` (1000s SEK), county grain, all
+  sexes, annual back to 2003. `sa-bestand-diagnos` dataset, `delforman=A`.
+  ~9 s, batched by year. Some small county/sex/chapter cells come back
+  `rojd: true` (suppressed) and are dropped.
+
+### Asked for, but no queryable source — deferred, not built
+
+- **SKR "Psykiatrin i siffror"** (patients, visits, staffing, cost per
+  region, per year, for VUP / BUP / RPV). Published only as annual PDF
+  reports with Excel appendices on uppdragpsykiskhalsa.se — there is no API
+  and no bulk data file. A future `convert_skr_psykiatrin_i_siffror.py`
+  would be a MANUAL-species converter like `convert_vantetider_bup.py`:
+  download the Excel appendix by hand, parse it (would add `openpyxl` to
+  `requirements.txt`). Not built here. (`vardenisiffror.se` has an API and
+  carries a few psychiatry access/activity measures — worth a look as a
+  partial automated substitute for some of this.)
+- **Adult-psychiatry waiting times** and **BUP treatment / assessment
+  goals** (as opposed to BUP first visit, which `convert_vantetider_bup.py`
+  already covers). Socialstyrelsen's Väntetidsdatabasen has no API and no
+  developer data file (checked 2026-08-27 against
+  `socialstyrelsen.se/statistik-och-data/statistik/for-utvecklare/` — only
+  ekonomiskt bistånd, dödsorsaker, graviditeter, yttre orsaker and läkemedel
+  are offered as bulk CSV; väntetider and personnel are not). Both are the
+  same ASP.NET WebForms database `convert_vantetider_bup.py`'s docstring
+  describes; getting the extra phases out means repeating that manual export
+  with more *Phase* / *Status* boxes ticked. Documented there, not
+  automated.
+- **Socialstyrelsen licensed / employed health-care staff** (per region and
+  profession). Lives in `sdb.socialstyrelsen.se/if_per/` and
+  `/if_utfleg/` — both WebForms, no JSON API (the `sdb.socialstyrelsen.se
+  /api/v1/` statistics API that `fetch_socialstyrelsen_*.py` use lists 15
+  datasets, none of them personnel). Same manual-export situation as the
+  väntetider sources above; deferred.
+
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
 That was Kurvan's original label, matching HLV's own category "Nedsatt
@@ -249,8 +313,17 @@ python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, sin
 python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
 python fetch_hbsc.py                   # HBSC "felt low", ~5 seconds, 2 requests
 python fetch_scb_population.py         # population denominator, ~15 seconds, 5 requests
+python fetch_folkhalsodata_hlv_psych.py            # HLV suicidal thoughts/attempts, low wellbeing, sleep, loneliness, ~15 seconds, 2 requests
+python fetch_forsakringskassan_diagnos.py          # sickness absence, whole F00-F99 chapter, ~6 seconds, 22 requests
+python fetch_forsakringskassan_aktivitetsersattning.py  # aktivitetsersättning recipients by diagnosis, ~9 seconds, 24 requests
 python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
+
+> **Careful on a partial checkout:** `build_kurvan_data.py` rewrites *every*
+> `../js/data/real_*.js`, and a source whose `data/processed/*.json` is
+> missing on this machine is rewritten to an empty `rows` list. The
+> committed files hold real data — run every fetcher (or `git checkout --
+> js/data/` the ones you didn't refetch) before committing.
 
 Then reopen `../kurvan.html`. `../js/data/*.js` is checked in with whatever
 was fetched last, so the prototype works without Python on a fresh

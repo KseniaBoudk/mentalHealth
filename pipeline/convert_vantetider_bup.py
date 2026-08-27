@@ -34,6 +34,20 @@ this is fundamentally a CURRENT-SNAPSHOT indicator, not a multi-year
 trend line the way self-harm/suicide/psych/antidep are. Do not build a
 "BUP over time" chart expecting years of history; there isn't any to have.
 
+FUTURE MANUAL PULL — MORE THAN JUST BUP FIRST VISIT: the same database also
+holds the other BUP phases (fördjupad utredning / assessment, and
+behandling / treatment — the "utrednings- och behandlingsgaranti" 30+30-day
+targets), and there is a SEPARATE sibling database for ADULT specialised
+psychiatry waiting times. Neither has a JSON API — same WebForms export as
+below. To bring them in, redo steps 1-5 with Phase set to "Fördjupad
+utredning" and "Behandling" as well as "First visit" (one export per phase,
+or all phases pivoted into the column axis), keep the same
+Region x Month pivot, and extend REGION_CODE / the INDICATOR mapping here to
+tag each phase. The adult-psychiatry database is a different URL
+(sdb.socialstyrelsen.se, "väntetider specialiserad vård") but the same
+export mechanics. Deferred for now — this file still only carries the
+first-visit CSV.
+
 WHAT THE NUMBERS MEAN: "median days waited, among COMPLETED first-visit
 contacts, in that month" — not a count of people, not everyone currently
 waiting (that's the separate "Pending" status this pull didn't request).

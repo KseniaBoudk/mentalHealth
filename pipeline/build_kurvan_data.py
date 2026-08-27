@@ -152,6 +152,60 @@ SOURCES = [
                 "   fetch_forsakringskassan.py.",
     },
     {
+        "var": "REAL_HLV_PSYCH",
+        "file": "folkhalsodata_hlv_psych.json",
+        "out": "real_hlv_psych.js",
+        "source": "Folkhälsomyndigheten Folkhälsodata (HLV, hlv1psyxreg.px — suicidal "
+                  "thoughts / attempts, low wellbeing, sleep problems)",
+        "note": "Real, region-grain shares for five MORE self-reported HLV categories\n"
+                "   beyond the `distress` one real_hlv.js already carries — suicidal\n"
+                "   thoughts, suicide attempts, low psychological wellbeing, and sleep\n"
+                "   problems (broad / mild / severe). All three sexes, no age breakdown,\n"
+                "   ~4-year pooled survey windows. `low_wellbeing_pct` was last published\n"
+                "   in the 2015-2018 window (kept regardless — see the fetcher's docstring).\n"
+                "   Fetched by fetch_folkhalsodata_hlv_psych.py. NOT read by js/data.js\n"
+                "   yet — on disk, not shown.",
+    },
+    {
+        "var": "REAL_HLV_PSYCH_AGE",
+        "file": "folkhalsodata_hlv_psych_age.json",
+        "out": "real_hlv_psych_age.js",
+        "source": "Folkhälsomyndigheten Folkhälsodata (HLV, hlv1psyaald.px — national, "
+                  "annual, coarse age bands)",
+        "note": "Real, NATIONAL-grain (no region dimension) ANNUAL series for the same\n"
+                "   HLV categories as REAL_HLV_PSYCH plus loneliness (68/69) — the only\n"
+                "   table that publishes loneliness, and only for 2024 so far. Coarse own\n"
+                "   age bands (16-29, 30-44, 45-64, 65-84, 85-, plus totals), all three\n"
+                "   sexes. Fetched by fetch_folkhalsodata_hlv_psych.py. NOT read by\n"
+                "   js/data.js yet — on disk, not shown.",
+    },
+    {
+        "var": "REAL_FK_DIAGNOS",
+        "file": "forsakringskassan_diagnos.json",
+        "out": "real_fk_diagnos.js",
+        "source": "Försäkringskassan (ongoing sickness-benefit cases by ICD-10 chapter, "
+                  "sjp-pagaende-sjukfall-diagnos)",
+        "note": "Real, county-grain share (%) and count of ongoing sickness-benefit cases\n"
+                "   in the whole psychiatric chapter F00-F99 (not only F43 as real_fk.js),\n"
+                "   plus the all-diagnoses total it's a share of. All three sexes, annual\n"
+                "   (averaged from monthly), 2005 through the current year, no age\n"
+                "   breakdown. Fetched by fetch_forsakringskassan_diagnos.py. NOT read by\n"
+                "   js/data.js yet — on disk, not shown.",
+    },
+    {
+        "var": "REAL_FK_AE",
+        "file": "forsakringskassan_aktivitetsersattning.json",
+        "out": "real_fk_ae.js",
+        "source": "Försäkringskassan (aktivitetsersättning recipients by ICD-10 chapter, "
+                  "sa-bestand-diagnos)",
+        "note": "Real, county-grain aktivitetsersättning (disability benefit, ages 19-29)\n"
+                "   December-snapshot recipient counts, F00-F99 share, and monthly belopp\n"
+                "   (1000s SEK), split all-diagnoses vs psychiatric. All three sexes,\n"
+                "   annual, 2003 through the current year. Fetched by\n"
+                "   fetch_forsakringskassan_aktivitetsersattning.py. NOT read by js/data.js\n"
+                "   yet — on disk, not shown.",
+    },
+    {
         "var": "REAL_CONTEXT_MH",
         "file": "kolada_context.json",
         "out": "real_context.js",
