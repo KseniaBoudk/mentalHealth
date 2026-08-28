@@ -161,7 +161,10 @@ final form; surfacing them in the UI is a separate later pass. Each one's
   ~9 s, batched by year. Some small county/sex/chapter cells come back
   `rojd: true` (suppressed) and are dropped.
 
-### The four without a plain API — status after a second look (2026-08-28)
+### The four without a plain API — resolved / partly resolved (2026-08-28)
+
+Two of the four now have working fetchers; the other two are as far as they go
+without a manual export.
 
 - **Adult-psychiatry waiting times + BUP treatment / assessment goals** —
   `convert_vantetider_bup.py` was **generalised** to take them. It now
@@ -175,35 +178,40 @@ final form; surfacing them in the UI is a separate later pass. Each one's
   carries `fetched` + `valid_until`; past `valid_until` the Väntetider tab
   greys its charts and says the figure may be out of date
   (`js/data.js` `BUP_WAIT.stale`, `js/views.js` `viewVantetider`).
-- **Socialstyrelsen licensed / employed health-care staff** —
-  `sdb.socialstyrelsen.se/if_per/val.aspx` was inspected: it is NOT standard
-  WebForms — **no `__VIEWSTATE`, no `__EVENTVALIDATION`, no anti-forgery or
-  single-use token**, just a plain `<form method="post" action="resultat.aspx">`.
-  So it IS scriptable (unlike the BUP database, which has session-tied
-  postback tokens). The blocker is only that the ~624 selection checkboxes
-  have no `name` and their value codes are assembled into hidden `vYRKE` /
-  `vOMR_RLK` / `vAR` / `vKON` fields by `val.js`. **One browser Network
-  capture of a submitted `resultat.aspx` POST** (DevTools → "copy as cURL")
-  is enough to write a re-runnable fetcher. Left for that capture (or a
-  manual CSV export) — not marked impossible.
-- **`vardenisiffror.se`** — HAS a public JSON API:
-  `https://api.vardenisiffror.se/webapi/` (e.g. `/api/health/check` returns
-  200 unauthenticated; `/api/measurements/measurementswithmetadata` is a
-  reachable POST endpoint, empty `x-bvo-ticket` accepted). A fetcher is
-  feasible; it needs the POST body schema for a measure query pinned down
-  from one Network capture of the site loading a psychiatry measure. It
-  carries access/activity/tillgänglighet measures — **NOT** the SKR
-  staffing-headcount or cost-per-region breakdown, which is only in the
-  "Psykiatrin i siffror" reports.
-- **SKR "Psykiatrin i siffror"** — **skipped for now** (per instruction:
-  parsing numbers out of PDFs isn't worth it without an AI extraction step).
-  Published only as annual PDF reports (VUP / BUP / RPV) with Excel
-  appendices on uppdragpsykiskhalsa.se — no API, no bulk file. The
-  staffing-per-region and cost-per-region figures asked for are **missing
-  and have no substitute**: `vardenisiffror.se` does not carry them, and
-  Socialstyrelsen's staff database is headcount-by-profession, not the same
-  cut. A future `convert_skr_psykiatrin_i_siffror.py` parsing the Excel
-  appendices (would add `openpyxl`) is the only route.
+- **Socialstyrelsen licensed / employed health-care staff** — **BUILT**:
+  `fetch_socialstyrelsen_personal.py`. `sdb.socialstyrelsen.se/if_per/` turned
+  out NOT to be standard WebForms — no `__VIEWSTATE`, no `__EVENTVALIDATION`,
+  no token, a plain `<form method="post" action="resultat.aspx">` — so it is
+  scriptable from a bare session. The catch: only **one value per dimension
+  per request** works (every multi-select attempt 500s — the form's JS builds
+  a correlated hidden-field cluster the server cross-validates), and the age
+  dimension has no all-ages row, so the script loops
+  profession × region × year × 10 age-bands and sums. That makes it SLOW
+  (~9 000 requests / ~40 min at the widest; the committed defaults are
+  trimmed to 6 psychiatry professions × 22 regions × 3 years). County-grain
+  **headcount** of employed licensed psychologists / psychotherapists /
+  counsellors / psychiatrists / child-&-adolescent psychiatrists / psychiatric
+  specialist nurses. `per 100 000` is deliberately not fetched (it's a
+  per-age-band rate with no all-ages row — can't be summed). A
+  magnitude trap-check (`assert_sane`) fails the run if the recipe drifts.
+- **`vardenisiffror.se` / "Psykiatrin i siffror"** — **BUILT**:
+  `fetch_vardenisiffror_psykiatri.py`. Vården i siffror has a fully public
+  JSON API at `https://api.vardenisiffror.se/webapi/` (empty `x-bvo-ticket`
+  accepted), and one of its information sources is literally
+  "Psykiatrin i siffror" — 18 region-grain annual measures: outpatient
+  visits per capita, share of residents seen, inpatient beds per capita and
+  occupancy, mean length of stay, LPT (compulsory-care) share, and
+  "hyrkostnader" (agency-staff cost as a % of own-staff cost), adult and
+  child/adolescent. **Not** in it: absolute staff headcount/FTE, absolute
+  cost (kr) per region.
+- **SKR "Psykiatrin i siffror" (the PDF reports)** — **still skipped**. VUP /
+  BUP / RPV annual PDFs on skr.se, no API, no Excel appendix (the
+  accessibility-adapted PDFs *do* have a text layer, so a `pdfplumber`/
+  `camelot` converter is feasible but bespoke per report family and needs
+  every extracted number verified). The two figures the API route can't give
+  — **absolute staffing headcount/FTE and absolute cost per region** — live
+  only here. A future `convert_skr_psykiatrin_i_siffror.py` is the only
+  route to them.
 
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
@@ -341,6 +349,8 @@ python fetch_scb_population.py         # population denominator, ~15 seconds, 5 
 python fetch_folkhalsodata_hlv_psych.py            # HLV suicidal thoughts/attempts, low wellbeing, sleep, loneliness, ~15 seconds, 2 requests
 python fetch_forsakringskassan_diagnos.py          # sickness absence, whole F00-F99 chapter, ~6 seconds, 22 requests
 python fetch_forsakringskassan_aktivitetsersattning.py  # aktivitetsersättning recipients by diagnosis, ~9 seconds, 24 requests
+python fetch_vardenisiffror_psykiatri.py           # "Psykiatrin i siffror" via Vården i siffror API — visits/beds/LST/hyrkostnad, ~10 seconds, 3 requests
+python fetch_socialstyrelsen_personal.py           # licensed psychiatry STAFF headcount by region — SLOW, ~10-40 min, thousands of requests (scrapes if_per)
 python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
 

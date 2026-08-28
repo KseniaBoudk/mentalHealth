@@ -206,6 +206,36 @@ SOURCES = [
                 "   yet — on disk, not shown.",
     },
     {
+        "var": "REAL_VIS_PSYKIATRI",
+        "file": "vardenisiffror_psykiatri.json",
+        "out": "real_vis_psykiatri.js",
+        "source": "Vården i siffror (vardenisiffror.se) — information source \"Psykiatrin i siffror\"",
+        "note": "Real, region-grain ANNUAL psychiatry activity/capacity figures surfaced\n"
+                "   from SKR's \"Psykiatrin i siffror\" via Vården i siffror's public JSON\n"
+                "   API (the SKR reports themselves are PDF-only): outpatient visits per\n"
+                "   capita, share of residents seen, inpatient beds per capita and\n"
+                "   occupancy, mean length of stay, LPT (compulsory-care) share, and\n"
+                "   agency-staff cost ratio — adult and child/adolescent psychiatry.\n"
+                "   Does NOT include absolute staff headcount or absolute cost per region\n"
+                "   (still PDF-only). Fetched by fetch_vardenisiffror_psykiatri.py. NOT\n"
+                "   read by js/data.js yet — on disk, not shown.",
+    },
+    {
+        "var": "REAL_PERSONAL",
+        "file": "socialstyrelsen_personal.json",
+        "out": "real_personal.js",
+        "source": "Socialstyrelsen (sdb.socialstyrelsen.se/if_per — legitimerad, sysselsatt "
+                  "hälso- och sjukvårdspersonal)",
+        "note": "Real, county-grain HEADCOUNT of employed licensed staff by psychiatry-\n"
+                "   relevant profession (psychologist, psychotherapist, counsellor,\n"
+                "   psychiatrist, child/adolescent psychiatrist, psychiatric specialist\n"
+                "   nurse) and year, summed across the source's ten 5-year age bands (it\n"
+                "   has no all-ages row). Scraped, not an API — see\n"
+                "   fetch_socialstyrelsen_personal.py's docstring for the legacy-form\n"
+                "   recipe and the single-value-only constraint. NOT read by js/data.js\n"
+                "   yet — on disk, not shown.",
+    },
+    {
         "var": "REAL_CONTEXT_MH",
         "file": "kolada_context.json",
         "out": "real_context.js",

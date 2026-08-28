@@ -147,6 +147,23 @@ pipeline/fetch_forsakringskassan_aktivitetsersattning.py
     data/processed/forsakringskassan_aktivitetsersattning.json. Staged in
     js/data/real_fk_ae.js, not yet shown.
 
+pipeline/fetch_vardenisiffror_psykiatri.py
+    Downloads the "Psykiatrin i siffror" measure set (SKR data surfaced on
+    Vården i siffror) from that site's public JSON API — region-grain annual
+    psychiatry visits, beds, occupancy, length of stay, compulsory-care
+    share and agency-staff cost ratio. Writes
+    data/processed/vardenisiffror_psykiatri.json. Staged in
+    js/data/real_vis_psykiatri.js, not yet shown. Does NOT include absolute
+    staff headcount or cost per region (PDF-only in the SKR reports).
+
+pipeline/fetch_socialstyrelsen_personal.py
+    Scrapes licensed psychiatry STAFF headcount by region, profession and
+    year from sdb.socialstyrelsen.se/if_per/ (a legacy form with no API but,
+    unusually, no __VIEWSTATE/token either). Slow — one request per
+    profession/region/year/age-band. Writes
+    data/processed/socialstyrelsen_personal.json. Staged in
+    js/data/real_personal.js, not yet shown.
+
 pipeline/fetch_forsakringskassan.py
     Downloads the share of ongoing sickness-benefit cases with a
     stress-reaction (F43) diagnosis, by county, from Försäkringskassan's

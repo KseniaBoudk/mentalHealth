@@ -83,8 +83,13 @@ def main():
             else:
                 continue
             code = d.get("county_code", "00")
+            # Most sources are indicator/value shaped; the two staged staffing/
+            # activity sources name their series `profession` / `measure` and
+            # their number `headcount` / `value` — fold those in so panel rows
+            # aren't blank for them.
             row = {
-                "indicator": d.get("indicator"),
+                "indicator": (d.get("indicator") or d.get("profession_label")
+                              or d.get("profession") or d.get("measure")),
                 "county_code": code,
                 "county_name": county_names.get(code, "Sverige"),
                 "year": d.get("year"),
@@ -92,8 +97,8 @@ def main():
                 "month": d.get("month"),
                 "age_group": d.get("age_group"),
                 "sex": d.get("sex"),
-                "value": d.get("value"),
-                "count": d.get("count"),
+                "value": d.get("value") if d.get("value") is not None else d.get("headcount"),
+                "count": d.get("count") if d.get("count") is not None else d.get("headcount"),
                 "suppressed": d.get("suppressed", False),
                 "generated_at": gen,
             }
