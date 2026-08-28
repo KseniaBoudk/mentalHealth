@@ -22,9 +22,17 @@ import publish_panel
 PANEL_JSON = os.path.join(HERE, "..", "data", "published", "kurvan_panel.json")
 
 def time_key(r):
-    if r.get("month"):
-        return (r.get("year"), r.get("month"))
-    return r.get("window") or r.get("year") or 0
+    # Normalise every time shape (year+month, plain year, or a "YYYY-YYYY"
+    # window string) to a comparable (year:int, month:int) tuple. Returning a
+    # bare string for windows and an int for years — as this used to — throws
+    # "'>' not supported between 'int' and 'str'" the moment one indicator has
+    # rows of both shapes (e.g. an HLV category published at region grain as a
+    # pooled window AND nationally as an annual figure).
+    if r.get("window"):
+        yr = int(str(r["window"]).split("-")[-1])
+    else:
+        yr = int(r.get("year") or 0)
+    return (yr, int(r.get("month") or 0))
 
 def latest_by_indicator(rows):
     latest = {}

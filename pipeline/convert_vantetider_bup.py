@@ -1,70 +1,98 @@
 # -*- coding: utf-8 -*-
-"""BUP (barn- och ungdomspsykiatri / child & adolescent psychiatry) waiting
-times, region grain — median days waited for a completed first visit.
+"""BUP (barn- och ungdomspsykiatri) — and now, optionally, ADULT psychiatry —
+waiting times, region grain, median days waited. Converts the MANUAL browser
+CSV export(s) from Socialstyrelsen's väntetider database into tidy JSON.
 
 ===============================================================================
-THIS IS NOT LIKE THE OTHER SCRIPTS IN THIS FOLDER. READ THIS FIRST.
+THIS IS NOT LIKE THE fetch_*.py SCRIPTS. READ THIS FIRST.
 ===============================================================================
-Every other fetch_*.py in this folder calls a small, stable JSON API and can
-be re-run unattended (`python fetch_X.py`) to get fresh data any time. This
-one CANNOT: the source — Socialstyrelsen's väntetider-barn-och-
-ungdomspsykiatrin database (sdb.socialstyrelsen.se) — is a classic ASP.NET
-WebForms page with no JSON API behind it. Getting data out of it means using
-its own built-in "Spara tabellen som: csv" export button in an actual
-browser (its `__VIEWSTATE`/`__PREVIOUSPAGE` postback tokens are single-use
-and session-tied — they can't be scripted the way the other sources'
-plain URL parameters can, short of a much more fragile browser-session
-scraper this project has deliberately chosen not to build).
+Every fetch_*.py in this folder calls a stable JSON API and can be re-run
+unattended. This one CANNOT: the source (sdb.socialstyrelsen.se's väntetider
+databases) is a classic ASP.NET page whose selection is 600+ nameless
+client-side checkboxes assembled into hidden POST fields by its own JS, with
+no documented JSON API. Getting data out means using its built-in
+"Spara tabellen som: csv" export button in a real browser.
 
-So the "fetch" step here is MANUAL, not automated:
+So the "fetch" step here is a MANUAL procedure, and this data GOES STALE — see
+`valid_until` below, which every row now carries so the site can grey the
+figure out once it's old rather than showing a year-old median as current.
+
+-------------------------------------------------------------------------------
+MANUAL EXPORT PROCEDURE
+-------------------------------------------------------------------------------
+BUP first visit (the one that's checked in and always produced):
   1. Open https://sdb.socialstyrelsen.se/vantetider-barn-och-ungdomspsykiatrin/
-  2. Select: Status=Completed, Phase=First visit, Year=select all,
-     Months=select all, Dimensions=Median waiting time (50th percentile),
-     Region=select all, Legal gender=All genders, Age at year-end=All ages.
-  3. On the results page, set the pivot to Region (rows) x Month (columns).
-  4. Export via the "csv" link, save as ../data/raw/vantetider_bup_manual_export.csv
-     (already done once — see that file, exported 2026-08-24).
-  5. Run this script to convert it to ../data/processed/vantetider_bup.json.
+  2. Select: Status=Genomförd (completed), Fas=Första besök (first visit),
+     Year=all, Months=all, Dimension=Medianvärde (50th percentile),
+     Region=all, Kön=Alla, Ålder=Alla åldrar.
+  3. Pivot: Region (rows) x Månad (columns).
+  4. Export CSV -> data/raw/vantetider_bup_manual_export.csv
 
-REFRESH MODEL: this data will go stale and needs a human to repeat steps
-1-5 periodically — there is no `python fetch_....py` that keeps it current.
-Worse, the source itself only holds a ROLLING ~12-MONTH WINDOW (its own
-page said "Last updated: 2026-07-31, monthly data July 2025 - June 2026") —
-this is fundamentally a CURRENT-SNAPSHOT indicator, not a multi-year
-trend line the way self-harm/suicide/psych/antidep are. Do not build a
-"BUP over time" chart expecting years of history; there isn't any to have.
+BUP treatment / assessment goals (the utrednings- & behandlingsgaranti,
+NOT only first visit — asked for, not yet exported):
+  - Repeat steps 1-4 with Fas=Fördjupad utredning  -> save as
+    data/raw/vantetider_bup_assessment_export.csv
+  - Repeat with Fas=Påbörjad behandling            -> save as
+    data/raw/vantetider_bup_treatment_export.csv
 
-WHAT THE NUMBERS MEAN: "median days waited, among COMPLETED first-visit
-contacts, in that month" — not a count of people, not everyone currently
-waiting (that's the separate "Pending" status this pull didn't request).
-A short median can mean short waits OR that only easy/fast cases have
-completed so far that month; a long one can reflect a real backlog. This
-project's "need vs. response" framing (not ranking, not causal language —
-see CLAUDE.md's Interpretation rules) applies here same as everywhere else:
-don't rank regions by this number without that caveat attached wherever
-it's shown.
+Adult specialised psychiatry waiting times (a DIFFERENT database, same export
+mechanics):
+  - Open https://sdb.socialstyrelsen.se/vantetider-specialiserad-vard/
+    (or the "specialiserad vård" waiting-times DB), filter to the psychiatry
+    verksamhetsområde, Fas=Första besök, same other selections, same
+    Region x Månad pivot.
+  - Save as data/raw/vantetider_vuxenpsyk_forstabesok_export.csv
 
-SUPPRESSION: cells with too few contacts to publish a value show as `N` in
-the export (confirmed for the smaller/northern regions — Blekinge,
-Västernorrland, Norrbotten — in the 2026-08-24 pull). Treated as missing
-(no fabricated fallback), same rule as every real indicator in this
-project.
+This script AUTO-DISCOVERS whichever of the files in SOURCES below exist in
+data/raw/ and merges them into one output, tagging each row with its
+`indicator` and `care_area`. Missing files are simply skipped — running it
+with only the first-visit CSV present behaves exactly as before.
+
+  5. python pipeline/convert_vantetider_bup.py
+  6. python pipeline/build_kurvan_data.py
+
+-------------------------------------------------------------------------------
+WHAT THE NUMBERS MEAN
+-------------------------------------------------------------------------------
+"Median days waited, among COMPLETED contacts in that month" — not a count of
+people, not everyone currently waiting. A short median can mean short waits OR
+that only fast cases have completed. Kurvan's "need vs. response" framing (no
+ranking, no causal language) applies here. The source holds only a rolling
+~12-month window — this is a CURRENT-SNAPSHOT indicator, not a trend line.
+
+SUPPRESSION: cells with too few contacts show as `N` in the export and are
+treated as missing (no fabricated fallback).
 
 Output: ../data/processed/vantetider_bup.json
-Run:    python prototype/pipeline/convert_vantetider_bup.py
+Run:    python pipeline/convert_vantetider_bup.py
 """
 import csv
 import json
 import os
+from datetime import date
 
 HERE = os.path.dirname(__file__)
-RAW_PATH = os.path.join(HERE, "..", "data", "raw", "vantetider_bup_manual_export.csv")
+RAW_DIR = os.path.join(HERE, "..", "data", "raw")
 PROCESSED_DIR = os.path.join(HERE, "..", "data", "processed")
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-# Region name (as this export spells it) -> Kurvan's own two-digit county
-# code (js/data.js's REGIONS). Only "Jämtland Härjedalen" differs from
-# Kurvan's own shorter "Jämtland" — every other name matches exactly.
+# raw filename -> how to tag every row it produces. Only the first entry is
+# checked in; the rest are picked up automatically once a human exports them.
+SOURCES = {
+    "vantetider_bup_manual_export.csv": {
+        "indicator": "bup_vantetid_forstabesok_median_dagar", "care_area": "bup", "phase": "first_visit"},
+    "vantetider_bup_assessment_export.csv": {
+        "indicator": "bup_vantetid_utredning_median_dagar", "care_area": "bup", "phase": "assessment"},
+    "vantetider_bup_treatment_export.csv": {
+        "indicator": "bup_vantetid_behandling_median_dagar", "care_area": "bup", "phase": "treatment"},
+    "vantetider_vuxenpsyk_forstabesok_export.csv": {
+        "indicator": "vuxenpsyk_vantetid_forstabesok_median_dagar", "care_area": "vuxenpsyk", "phase": "first_visit"},
+}
+
+# How long after the newest month in an export we still consider it current.
+# Past this the site greys the figure and says it may be out of date.
+VALID_MONTHS = 6
+
 REGION_CODE = {
     "Stockholm": "01", "Uppsala": "03", "Södermanland": "04",
     "Östergötland": "05", "Jönköping": "06", "Kronoberg": "07",
@@ -79,11 +107,10 @@ MONTH_NUM = {
     "Juli": 7, "Augusti": 8, "September": 9, "Oktober": 10,
     "November": 11, "December": 12,
 }
-INDICATOR = "bup_vantetid_forstabesok_median_dagar"
 
 
 def num(val):
-    """Swedish decimal comma; 'N' (and anything else non-numeric) means
+    """Swedish decimal comma; 'N' (and anything non-numeric) means
     suppressed/too-few-to-publish, not zero."""
     val = (val or "").strip()
     if not val:
@@ -94,13 +121,21 @@ def num(val):
         return None  # e.g. "N"
 
 
-def main():
-    with open(RAW_PATH, encoding="utf-8") as f:
-        rows = list(csv.reader(f, delimiter=";"))
+def add_months(y, m, delta):
+    idx = (y * 12 + (m - 1)) + delta
+    return idx // 12, idx % 12 + 1
 
+
+def last_day_of(y, m):
+    ny, nm = add_months(y, m, 1)
+    from datetime import date as _d, timedelta
+    return (_d(ny, nm, 1) - timedelta(days=1)).isoformat()
+
+
+def parse_export(path, tag):
+    with open(path, encoding="utf-8") as f:
+        rows = list(csv.reader(f, delimiter=";"))
     # Row 0: title. Row 1: year per column. Row 2: "Region" + month names.
-    # Last row: source/date footer, not data — skipped via MONTH_NUM lookup
-    # failing on region-name rows that aren't in REGION_CODE (below).
     years = [c.strip() for c in rows[1]]
     months = [c.strip() for c in rows[2]]
 
@@ -113,30 +148,62 @@ def main():
         if county_code is None:
             continue  # footer row ("Socialstyrelsens statistikdatabas ...")
         for i, cell in enumerate(row[1:], start=1):
-            month_name = months[i] if i < len(months) else None
-            month_num = MONTH_NUM.get(month_name)
+            month_num = MONTH_NUM.get(months[i] if i < len(months) else None)
             year = num(years[i]) if i < len(years) else None
             value = num(cell)
             if month_num is None or year is None or value is None:
                 continue
             records.append({
                 "county_code": county_code,
-                "indicator": INDICATOR,
+                "indicator": tag["indicator"],
+                "care_area": tag["care_area"],
+                "phase": tag["phase"],
                 "year": int(year),
                 "month": month_num,
                 "value": value,
-                "sex": "T",  # this pull requested "Alla kön" (all genders combined)
+                "sex": "T",
             })
+    return records
+
+
+def main():
+    all_records = []
+    used = []
+    for fname, tag in SOURCES.items():
+        path = os.path.join(RAW_DIR, fname)
+        if not os.path.exists(path):
+            continue
+        recs = parse_export(path, tag)
+        # per-source freshness, stamped onto every row of that source
+        fetched = date.fromtimestamp(os.path.getmtime(path)).isoformat()
+        newest_y, newest_m = max((r["year"], r["month"]) for r in recs)
+        vy, vm = add_months(newest_y, newest_m, VALID_MONTHS)
+        valid_until = last_day_of(vy, vm)
+        for r in recs:
+            r["fetched"] = fetched
+            r["valid_until"] = valid_until
+        all_records.extend(recs)
+        used.append(f"{fname} ({len(recs)} rows, newest {newest_y}-{newest_m:02d}, "
+                    f"valid_until {valid_until})")
+
+    if not all_records:
+        raise SystemExit(
+            f"FATAL: no väntetider export found in {RAW_DIR}. Expected at least "
+            f"vantetider_bup_manual_export.csv — see this script's docstring for "
+            f"the manual export procedure.")
 
     out_path = os.path.join(PROCESSED_DIR, "vantetider_bup.json")
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(records, f, ensure_ascii=False, indent=1)
+        json.dump(all_records, f, ensure_ascii=False, indent=1)
 
-    months_covered = sorted({(r["year"], r["month"]) for r in records})
-    print(f"[vantetider-bup] wrote {out_path}  ({len(records)} records, "
-          f"{len(months_covered)} months: {months_covered[0]}..{months_covered[-1]})")
-    print("[vantetider-bup] MANUAL SOURCE — see this script's docstring "
-          "before assuming this can just be re-run for fresh data.")
+    print(f"[vantetider-bup] wrote {out_path}  ({len(all_records)} records)")
+    for line in used:
+        print(f"[vantetider-bup]   from {line}")
+    if date.today().isoformat() > min(r["valid_until"] for r in all_records):
+        print("[vantetider-bup] NOTE: at least one export is already past its "
+              "valid_until — re-export before trusting the site's current figure.")
+    print("[vantetider-bup] MANUAL SOURCE — see docstring before assuming this "
+          "can just be re-run for fresh data.")
 
 
 if __name__ == "__main__":
