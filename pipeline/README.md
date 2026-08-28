@@ -113,6 +113,26 @@ docstring for exactly how). A missing population year simply means that
 year can't be standardised, same "no data, not a fabricated number" rule
 every other real source here follows.
 
+An eleventh script, `fetch_folkhalsodata_equity.py`, backs a new tab —
+Jämlikhet (equity) — showing the same underlying survey question as
+`distress` (severe anxiety, worry or dread), but broken down by
+education, income quintile, and country of birth instead of region. Same
+agency/host as `fetch_folkhalsodata_hlv.py` (Folkhälsomyndigheten's
+Folkhälsodata), three sibling PxWeb tables in the same table family
+(`hlv1psyfutb.px`/`hlv1psybeko.px`/`hlv1psycfod.px`), each trading the
+region dimension for its own breakdown. **National figures only** — none
+of the three tables carries a region dimension at all. Crude (not
+age-standardised) adult ages, and NOT the same age floor across all
+three — 25+ for education, 16+ for income and country of birth (verify
+against each table's own metadata before assuming these line up; see
+that script's docstring for the exact Ålder ids). The caveat worth
+repeating in the UI, not just here: of the 18 calendar years on offer
+(2004-2024), only three — **2021, 2022, and 2024** — actually have
+published data for this survey question on these breakdown tables; every
+other year comes back as PxWeb's missing-value sentinel. Not part of the
+`IND` shape the other indicators use, same precedent as the Context
+tab's Kolada layers above.
+
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
 That was Kurvan's original label, matching HLV's own category "Nedsatt
@@ -234,6 +254,7 @@ python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, sin
 python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
 python fetch_hbsc.py                   # HBSC "felt low", ~5 seconds, 2 requests
 python fetch_scb_population.py         # population denominator, ~15 seconds, 5 requests
+python fetch_folkhalsodata_equity.py   # equity (education/income/birth-country), ~10 seconds, 3 requests
 python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
 

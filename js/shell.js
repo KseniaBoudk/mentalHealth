@@ -25,13 +25,14 @@ const MARK=`<svg class="mark" viewBox="0 0 44 34" aria-hidden="true">
 // reads in js/views.js).
 const VIEW_STATE_KEYS = {
   laget: ["ind", "age", "sex", "year", "region", "std"],
-  over_tid: ["ind", "region", "age", "sex", "std"],
-  karta: ["ind", "mapYear", "cmpOn", "cmpInd", "region"],
+  over_tid: ["ind", "region", "age", "sex", "std", "psychType", "medType"],
+  karta: ["ind", "mapYear", "cmpOn", "cmpInd", "region", "psychType", "medType"],
   behov: ["region"],
   sjukskrivning: ["region"],
   kon: [],
   alder: [],
   sammanhang: ["ctxInd", "region"],
+  jamlikhet: [],
   vantetider: ["region"],
   hbsc: ["region", "hbscAge", "hbscSex"],
   metod: [],
@@ -41,9 +42,10 @@ const VIEW_STATE_KEYS = {
 const SECTIONS = Object.keys(VIEW_STATE_KEYS);
 const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBehov,
   sjukskrivning:viewSjukskrivning,kon:viewKon,alder:viewAlder,sammanhang:viewSammanhang,
+  jamlikhet:viewJamlikhet,
   vantetider:viewVantetider,hbsc:viewHbsc,metod:viewMetod,regioner:viewRegioner,policy_news:viewPolicyNews};
 
-// The 10 real-data sources (js/data/*.js), lazy-loaded by loadRealSourcesLazily()
+// The 11 real-data sources (js/data/*.js), lazy-loaded by loadRealSourcesLazily()
 // near the bottom of this file — declared here, not there, purely so its
 // .length is available for realSourcesPending below BEFORE the very first
 // render() runs (loadRealSourcesLazily() itself is still only ever CALLED
@@ -52,6 +54,7 @@ const REAL_SOURCES=[
   {file:"js/data/real_mh.js",         rebuild:()=>{REAL=rebuildREAL();}},
   {file:"js/data/real_psych.js",      rebuild:()=>{REAL_PSYCH=rebuildREAL_PSYCH();}},
   {file:"js/data/real_hlv.js",        rebuild:()=>{REAL_HLV=rebuildREAL_HLV();}},
+  {file:"js/data/real_equity.js",     rebuild:()=>{REAL_EQUITY=rebuildREAL_EQUITY();}},
   {file:"js/data/real_lakemedel.js",  rebuild:()=>{REAL_ANTIDEP=rebuildREAL_ANTIDEP();}},
   {file:"js/data/real_fk.js",         rebuild:()=>{REAL_FK=rebuildREAL_FK();}},
   {file:"js/data/real_context.js",    rebuild:()=>{CONTEXT=rebuildCONTEXT();}},
@@ -60,7 +63,7 @@ const REAL_SOURCES=[
   {file:"js/data/real_pop.js",        rebuild:()=>{REAL_POP=rebuildREAL_POP();NATIONAL_AGE_WEIGHTS=rebuildNATIONAL_AGE_WEIGHTS();}},
   {file:"js/data/real_bup_facilities.js", rebuild:()=>{BUP_FACILITIES=rebuildBUP_FACILITIES();}},
 ];
-// How many of the 10 are still in flight — render()'s #synth banner shows a
+// How many of the 11 are still in flight — render()'s #synth banner shows a
 // "still loading" sub-line while this is above 0 (see t.loadingRemaining,
 // js/lang.js). Starts at the full count so it's accurate on the very first
 // paint, before loadRealSourcesLazily() has even run once.
@@ -558,8 +561,23 @@ function wire(){
   // pattern again. viewOverTid() itself already renders a "selected
   // region" card from whichever region this lands on, the same way a map
   // click already updates every other tab's own side panel.
+  // dotPlot() is a generic "value + CI per row" chart, also reused by
+  // viewJamlikhet() for education/income/birth-country categories, whose
+  // r.code is a category key ("primary", "q1", ...), not a region code.
+  // Only wire up region-select for rows whose code IS a real region
+  // (matches a REGIONS entry, or "SE") — both to avoid corrupting S.region
+  // into a value RBY has no entry for (which would crash viewRegioner and
+  // any other tab's unguarded RBY[S.region] lookup on the next render),
+  // and so a non-region row's onclick is left UNSET, letting it fall
+  // through to the generic click-to-pin card the [data-tip] loop below
+  // wires up for exactly this case (see that loop's own comment: marks
+  // "that don't already have their own click handler" get the pin-card
+  // instead) — the same thing line-chart points/histogram bars already
+  // get, rather than being an inert click.
   document.querySelectorAll(".dotrow").forEach(b=>{
-    const pick=()=>{hideTip();S.region=b.dataset.region;render();};
+    const rc=b.dataset.region;
+    if(rc!=="SE"&&!RBY[rc])return;
+    const pick=()=>{hideTip();S.region=rc;render();};
     b.onclick=pick;
     b.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}};
   });
