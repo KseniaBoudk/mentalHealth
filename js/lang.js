@@ -23,6 +23,9 @@ sv:{
   // specifically (see viewVantetider) — distinct from suppLbl, which is
   // about a whole withheld count next to an otherwise-published rate.
   vantetiderNoData:name=>`${name}: ingen siffra denna månad — för få avslutade besök för att publiceras.`,
+  // Manual-export freshness (data.js BUP_WAIT.fetched / .validUntil / .stale).
+  vantetiderFetched:d=>`Hämtad ur källan för hand ${d}.`,
+  vantetiderStale:(f,v)=>`Kan vara inaktuell. Denna tabell hämtades för hand ur Socialstyrelsens väntetidsdatabas ${f} och bedöms aktuell till ${v}; källans rullande fönster har sannolikt rört sig sedan dess. Gör en ny export för att uppdatera.`,
   // BUP_FACILITIES (data.js) — the real clinic-count stat and clinic
   // directory list added to viewVantetider()'s sidebar, alongside the
   // wait-time stat above. See ../BUPS/README.md for the source.
@@ -296,6 +299,8 @@ en:{
   vantetiderCaveat:"A rolling twelve-month window, not a multi-year trend — the source only keeps the most recent period. Updated by hand, not automatically, so figures can lag. The median covers only completed first visits — a low value can mean short waits, or just that the easiest cases have finished so far.",
   vantetiderInd:"Waiting time to first visit",
   vantetiderNoData:name=>`${name}: no figure this month — too few completed visits to publish.`,
+  vantetiderFetched:d=>`Exported from the source by hand on ${d}.`,
+  vantetiderStale:(f,v)=>`May be out of date. This table was exported by hand from Socialstyrelsen's waiting-times database on ${f} and judged current until ${v}; the source's rolling window has likely moved since. Re-export to refresh.`,
   vantetiderClinicsInd:"BUP clinics",
   vantetiderClinicsSentence:n=>n===1?"1 BUP clinic listed in this county.":`${n} BUP clinics listed in this county.`,
   vantetiderClinicsListH:"Clinics in this county",

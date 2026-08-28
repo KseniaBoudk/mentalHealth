@@ -126,6 +126,44 @@ pipeline/fetch_folkhalsodata_hlv.py
     this category was chosen over the dashboard's original one (the
     original stopped being published after 2018).
 
+pipeline/fetch_folkhalsodata_hlv_psych.py
+    Downloads five MORE HLV self-reported categories from the same host —
+    suicidal thoughts, suicide attempts, low psychological wellbeing, and
+    sleep problems (region grain, pooled windows) plus loneliness (national
+    grain, 2024 only). Writes data/processed/folkhalsodata_hlv_psych.json
+    and folkhalsodata_hlv_psych_age.json. NOT read by js/data.js yet — the
+    data is staged in js/data/real_hlv_psych{,_age}.js but no view shows it.
+
+pipeline/fetch_forsakringskassan_diagnos.py
+    Downloads ongoing sickness-benefit cases for the whole psychiatric
+    chapter F00-F99 (not only F43) by county from Försäkringskassan's
+    statistikdatabas API. Writes data/processed/forsakringskassan_diagnos.json.
+    Staged in js/data/real_fk_diagnos.js, not yet shown.
+
+pipeline/fetch_forsakringskassan_aktivitetsersattning.py
+    Downloads aktivitetsersättning (disability benefit, ages 19-29)
+    recipient counts, psychiatric-diagnosis share and monthly disbursement
+    by county from the same API. Writes
+    data/processed/forsakringskassan_aktivitetsersattning.json. Staged in
+    js/data/real_fk_ae.js, not yet shown.
+
+pipeline/fetch_vardenisiffror_psykiatri.py
+    Downloads the "Psykiatrin i siffror" measure set (SKR data surfaced on
+    Vården i siffror) from that site's public JSON API — region-grain annual
+    psychiatry visits, beds, occupancy, length of stay, compulsory-care
+    share and agency-staff cost ratio. Writes
+    data/processed/vardenisiffror_psykiatri.json. Staged in
+    js/data/real_vis_psykiatri.js, not yet shown. Does NOT include absolute
+    staff headcount or cost per region (PDF-only in the SKR reports).
+
+pipeline/fetch_socialstyrelsen_personal.py
+    Scrapes licensed psychiatry STAFF headcount by region, profession and
+    year from sdb.socialstyrelsen.se/if_per/ (a legacy form with no API but,
+    unusually, no __VIEWSTATE/token either). Slow — one request per
+    profession/region/year/age-band. Writes
+    data/processed/socialstyrelsen_personal.json. Staged in
+    js/data/real_personal.js, not yet shown.
+
 pipeline/fetch_forsakringskassan.py
     Downloads the share of ongoing sickness-benefit cases with a
     stress-reaction (F43) diagnosis, by county, from Försäkringskassan's

@@ -676,7 +676,17 @@ function rebuildBUP_WAIT() {
   const months = Object.entries(idx["00"] || {})
     .flatMap(([y, byM]) => Object.keys(byM).map(m => [+y, +m]))
     .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-  return { active, idx, months, generatedAt: active ? REAL_BUP_WAIT.generated_at : null };
+  // Manual source (convert_vantetider_bup.py): each row carries `fetched`
+  // (the export date) and `valid_until` (export month + a grace period).
+  // Past valid_until the figure may no longer reflect the source's rolling
+  // window — the UI greys it out and says so rather than pretending it's
+  // current. `stale` is computed once here so every caller checks the same
+  // thing the same way.
+  const fetched = active ? (rows[0].fetched || null) : null;
+  const validUntil = active ? (rows[0].valid_until || null) : null;
+  const stale = !!(validUntil && new Date().toISOString().slice(0, 10) > validUntil);
+  return { active, idx, months, fetched, validUntil, stale,
+           generatedAt: active ? REAL_BUP_WAIT.generated_at : null };
 }
 let BUP_WAIT = rebuildBUP_WAIT();
 function bupWaitCell(regionCode, year, month) {

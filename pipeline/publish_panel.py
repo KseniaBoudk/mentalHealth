@@ -35,7 +35,11 @@ DATA_DICTIONARY = {
     "sex": {"description": "Sex (T=Total, M=Men, K=Women)", "unit": "char", "source": "Registers", "years": "All", "suppression_rule": "None"},
     "value": {"description": "Statistical value (rate/share/days/density)", "unit": "Various", "source": "Government open data", "years": "Varies", "suppression_rule": "Withheld if count < 10"},
     "count": {"description": "Absolute case count where published", "unit": "integer", "source": "Registers", "years": "Varies", "suppression_rule": "null if < 10"},
-    "suppressed": {"description": "Disclosure suppression flag", "unit": "boolean", "source": "Socialstyrelsen", "years": "All", "suppression_rule": "true if suppressed"}
+    "suppressed": {"description": "Disclosure suppression flag", "unit": "boolean", "source": "Socialstyrelsen", "years": "All", "suppression_rule": "true if suppressed"},
+    "fetched": {"description": "Date the underlying data was pulled/exported (manual sources carry the hand-export date)", "unit": "YYYY-MM-DD", "source": "Fetcher/converter", "years": "Where the source carries it", "suppression_rule": "None"},
+    "valid_until": {"description": "Date past which a manual-export source may no longer be current (the site greys the figure then)", "unit": "YYYY-MM-DD", "source": "convert_vantetider_bup.py", "years": "Manual sources only", "suppression_rule": "None"},
+    "series_status": {"description": "live | closed | snapshot — a 'closed' series ended at end_year and is historical, not stale", "unit": "string", "source": "Fetcher", "years": "Where the source carries it", "suppression_rule": "None"},
+    "end_year": {"description": "Final year of a closed series", "unit": "YYYY", "source": "Fetcher", "years": "closed series only", "suppression_rule": "None"}
 }
 
 def load_county_names():
@@ -49,10 +53,19 @@ def load_county_names():
     return names
 
 def mk_row(indicator=None, county_code="00", year=None, window=None, month=None,
-           age_group=None, sex=None, value=None, count=None, suppressed=False):
+           age_group=None, sex=None, value=None, count=None, suppressed=False,
+           fetched=None, valid_until=None, series_status=None, end_year=None):
     return {"indicator": indicator, "county_code": county_code, "year": year,
             "window": window, "month": month, "age_group": age_group, "sex": sex,
-            "value": value, "count": count, "suppressed": suppressed}
+            "value": value, "count": count, "suppressed": suppressed,
+            "fetched": fetched, "valid_until": valid_until,
+            "series_status": series_status, "end_year": end_year}
+
+def _prov(r):
+    """Row-level provenance some sources carry (see COLLABORATION.md) — passed
+    straight through to the panel so the export states its own age."""
+    return dict(fetched=r.get("fetched"), valid_until=r.get("valid_until"),
+                series_status=r.get("series_status"), end_year=r.get("end_year"))
 
 def _load(filename):
     path = os.path.join(PROCESSED_DIR, filename)
@@ -84,9 +97,12 @@ def map_lakemedel_rows(filename="socialstyrelsen_lakemedel.json"):
     return map_psych_rows(filename)  # identical shape (region, county_code, indicator, year, age_group, sex, value, count)
 
 def map_vantetider_rows(filename="vantetider_bup.json"):
+    # convert_vantetider_bup.py now also tags rows with care_area/phase (folded
+    # into `indicator` already) and carries fetched/valid_until — a MANUAL
+    # source, see COLLABORATION.md's freshness section.
     return [mk_row(indicator=r.get("indicator"), county_code=r.get("county_code", "00"),
                     year=r.get("year"), month=r.get("month"), sex=r.get("sex"),
-                    value=r.get("value"))
+                    value=r.get("value"), **_prov(r))
             for r in _load(filename)]
 
 def map_hbsc_rows(filename="hbsc.json"):
@@ -126,6 +142,55 @@ def map_hlv_rows(filename="folkhalsodata_hlv.json"):
                     value=r.get("value"), count=r.get("n"))
             for r in _load(filename)]
 
+def map_hlv_psych_rows(filename="folkhalsodata_hlv_psych.json"):
+    # Five more HLV categories at region grain (see fetch_folkhalsodata_hlv_psych.py):
+    # same window/midpoint shape as map_hlv_rows, plus series_status/end_year
+    # (low_wellbeing_pct is a CLOSED series ending 2018) and `fetched`.
+    return [mk_row(indicator=r.get("indicator"), county_code=r.get("county_code", "00"),
+                    year=r.get("midpoint_year"), window=r.get("window"), sex=r.get("sex"),
+                    value=r.get("value"), count=r.get("n"), **_prov(r))
+            for r in _load(filename)]
+
+def map_hlv_psych_age_rows(filename="folkhalsodata_hlv_psych_age.json"):
+    # National-only, annual, coarse own age bands (incl. loneliness, 2024 only).
+    return [mk_row(indicator=r.get("indicator"), county_code="00",
+                    year=r.get("year"), age_group=r.get("age_label"), sex=r.get("sex"),
+                    value=r.get("value"), count=r.get("n"), **_prov(r))
+            for r in _load(filename)]
+
+def map_fk_diagnos_rows(filename="forsakringskassan_diagnos.json"):
+    # Whole F00-F99 chapter (+ all-diagnoses total), same shape as map_f43_rows.
+    # `months` (partial-year flag) has no schema home and is dropped.
+    return [mk_row(indicator=r.get("indicator"), county_code=r.get("county_code", "00"),
+                    year=r.get("year"), sex=r.get("sex"), value=r.get("value"),
+                    count=r.get("count"))
+            for r in _load(filename)]
+
+def map_fk_ae_rows(filename="forsakringskassan_aktivitetsersattning.json"):
+    # Aktivitetsersättning: `recipients` is the headline number (-> value AND
+    # count); `share_pct` and `belopp_1000kr` have no schema home and are
+    # dropped. `snapshot_month` -> month.
+    return [mk_row(indicator=r.get("indicator"), county_code=r.get("county_code", "00"),
+                    year=r.get("year"), month=r.get("snapshot_month"), sex=r.get("sex"),
+                    value=r.get("recipients"), count=r.get("recipients"))
+            for r in _load(filename)]
+
+def map_vardenisiffror_rows(filename="vardenisiffror_psykiatri.json"):
+    # "Psykiatrin i siffror" via Vården i siffror. `measure` is the human name;
+    # ci_lo/ci_hi/numerator/denominator have no schema home and are dropped
+    # (same schema-neutral choice as map_hlv_rows).
+    return [mk_row(indicator=r.get("measure"), county_code=r.get("county_code", "00"),
+                    year=r.get("year"), value=r.get("value"), **_prov(r))
+            for r in _load(filename)]
+
+def map_personal_rows(filename="socialstyrelsen_personal.json"):
+    # Licensed psychiatry staff headcount (scraped, see fetch_socialstyrelsen_personal.py).
+    # `headcount` -> value AND count; `profession_label` is the human name.
+    return [mk_row(indicator=r.get("profession_label"), county_code=r.get("county_code", "00"),
+                    year=r.get("year"), sex=r.get("sex"),
+                    value=r.get("headcount"), count=r.get("headcount"), **_prov(r))
+            for r in _load(filename)]
+
 def map_population_rows(filename="scb_population.json"):
     # Not a mental-health indicator -- it's the age-standardisation
     # denominator (see CLAUDE.md). Written but deliberately NOT registered in
@@ -149,6 +214,12 @@ SOURCES = [
     map_f43_rows,
     map_kolada_rows,
     map_hlv_rows,
+    map_hlv_psych_rows,
+    map_hlv_psych_age_rows,
+    map_fk_diagnos_rows,
+    map_fk_ae_rows,
+    map_vardenisiffror_rows,
+    map_personal_rows,
 ]
 
 def collect_rows():
@@ -172,7 +243,7 @@ def main():
         json.dump({"dataset": "Kurvan Swedish Mental Health Panel", "dictionary": DATA_DICTIONARY, "rows": all_rows}, f, ensure_ascii=False, indent=2)
     print(f"Wrote JSON panel: {json_path} ({len(all_rows)} rows)")
 
-    fieldnames = ["indicator", "county_code", "county_name", "year", "window", "month", "age_group", "sex", "value", "count", "suppressed"]
+    fieldnames = ["indicator", "county_code", "county_name", "year", "window", "month", "age_group", "sex", "value", "count", "suppressed", "fetched", "valid_until", "series_status", "end_year"]
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

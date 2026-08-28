@@ -113,6 +113,103 @@ docstring for exactly how). A missing population year simply means that
 year can't be standardised, same "no data, not a fabricated number" rule
 every other real source here follows.
 
+## More data, staged in the pipeline but not yet shown (2026-08-27)
+
+Four more sources were added to `build_kurvan_data.py` and compile to their
+own `js/data/real_*.js` files, but **nothing in `js/data.js` reads them yet**
+— no reader function, no `lang.js` strings, no view. They are on disk in
+final form; surfacing them in the UI is a separate later pass. Each one's
+`js/data/real_*.js` sits unused (and not even listed in `js/shell.js`'s
+`REAL_SOURCES`, so it isn't lazy-loaded) until that pass happens.
+
+- **`fetch_folkhalsodata_hlv_psych.py`** — five more HLV self-reported
+  categories beyond the `distress` one `fetch_folkhalsodata_hlv.py` already
+  does: suicidal thoughts, suicide attempts, low psychological wellbeing,
+  and sleep problems (broad/mild/severe). Same PxWeb host, same
+  `dPsykhals/` folder. Writes **two** files: `folkhalsodata_hlv_psych.json`
+  (region grain, pooled windows, from `hlv1psyxreg.px`) and
+  `folkhalsodata_hlv_psych_age.json` (national grain, annual, coarse age
+  bands, from `hlv1psyaald.px` — the only table that carries **loneliness**,
+  and only for 2024 so far). ~15 s, 2 requests.
+  - **Fails loud, doesn't warn** — `assert_expected_coverage()` raises
+    `SystemExit` (writing nothing) if a category expected to still be
+    published comes back thin/stale, or if a category recorded as *closed*
+    unexpectedly gains new data. Same principle as
+    `fetch_socialstyrelsen_lakemedel.py`'s ATC trap check.
+  - **`low_wellbeing_pct` is published as a CLOSED series.** It was Kurvan's
+    original `distress` label and Folkhälsomyndigheten stopped publishing it
+    regionally after the 2015-2018 window (see the next section). Every row
+    carries `series_status:"closed"` and `end_year:2018` so the UI can show
+    it as a finished historical series, not stale "real" data. `loneliness_*`
+    rows carry `series_status:"snapshot"`.
+  - Every row carries `fetched` (the run date) so a figure can show its own
+    age inline rather than in a footnote.
+- **`fetch_forsakringskassan_diagnos.py`** — ongoing sickness-benefit cases
+  for the whole psychiatric chapter **F00-F99** (not only F43 like
+  `fetch_forsakringskassan.py`), plus the all-diagnoses total it's a share
+  of. `sjp-pagaende-sjukfall-diagnos` dataset, a sibling of the F43 table
+  and identical in shape. County grain, all sexes, annual-from-monthly,
+  2005-present, no age split. ~6 s, batched one request per year.
+- **`fetch_forsakringskassan_aktivitetsersattning.py`** —
+  **aktivitetsersättning** (disability benefit for 19-29-year-olds; ~80 %
+  of recipients have a psychiatric diagnosis) December-snapshot recipient
+  counts, F00-F99 share, and monthly `belopp` (1000s SEK), county grain, all
+  sexes, annual back to 2003. `sa-bestand-diagnos` dataset, `delforman=A`.
+  ~9 s, batched by year. Some small county/sex/chapter cells come back
+  `rojd: true` (suppressed) and are dropped.
+
+### The four without a plain API — resolved / partly resolved (2026-08-28)
+
+Two of the four now have working fetchers; the other two are as far as they go
+without a manual export.
+
+- **Adult-psychiatry waiting times + BUP treatment / assessment goals** —
+  `convert_vantetider_bup.py` was **generalised** to take them. It now
+  auto-discovers extra CSVs in `data/raw/` (`vantetider_bup_assessment_export.csv`,
+  `vantetider_bup_treatment_export.csv`, `vantetider_vuxenpsyk_forstabesok_export.csv`)
+  and merges them, tagging each row with `care_area` + `phase`. The manual
+  export procedure for each is in that script's docstring. Still needs a
+  human to do the browser export (the source's selection UI is 600+ nameless
+  client-side checkboxes) — but the moment the CSVs are dropped in, the
+  converter and the rest of the pipeline handle them. Every row also now
+  carries `fetched` + `valid_until`; past `valid_until` the Väntetider tab
+  greys its charts and says the figure may be out of date
+  (`js/data.js` `BUP_WAIT.stale`, `js/views.js` `viewVantetider`).
+- **Socialstyrelsen licensed / employed health-care staff** — **BUILT**:
+  `fetch_socialstyrelsen_personal.py`. `sdb.socialstyrelsen.se/if_per/` turned
+  out NOT to be standard WebForms — no `__VIEWSTATE`, no `__EVENTVALIDATION`,
+  no token, a plain `<form method="post" action="resultat.aspx">` — so it is
+  scriptable from a bare session. The catch: only **one value per dimension
+  per request** works (every multi-select attempt 500s — the form's JS builds
+  a correlated hidden-field cluster the server cross-validates), and the age
+  dimension has no all-ages row, so the script loops
+  profession × region × year × 10 age-bands and sums. That makes it SLOW
+  (~9 000 requests / ~40 min at the widest; the committed defaults are
+  trimmed to 6 psychiatry professions × 22 regions × 3 years). County-grain
+  **headcount** of employed licensed psychologists / psychotherapists /
+  counsellors / psychiatrists / child-&-adolescent psychiatrists / psychiatric
+  specialist nurses. `per 100 000` is deliberately not fetched (it's a
+  per-age-band rate with no all-ages row — can't be summed). A
+  magnitude trap-check (`assert_sane`) fails the run if the recipe drifts.
+- **`vardenisiffror.se` / "Psykiatrin i siffror"** — **BUILT**:
+  `fetch_vardenisiffror_psykiatri.py`. Vården i siffror has a fully public
+  JSON API at `https://api.vardenisiffror.se/webapi/` (empty `x-bvo-ticket`
+  accepted), and one of its information sources is literally
+  "Psykiatrin i siffror" — 18 region-grain annual measures: outpatient
+  visits per capita, share of residents seen, inpatient beds per capita and
+  occupancy, mean length of stay, LPT (compulsory-care) share, and
+  "hyrkostnader" (agency-staff cost as a % of own-staff cost), adult and
+  child/adolescent. **Not** in it: absolute staff headcount/FTE, absolute
+  cost (kr) per region.
+- **SKR "Psykiatrin i siffror" (the PDF reports)** — **still skipped**. VUP /
+  BUP / RPV annual PDFs on skr.se, no API, no Excel appendix (the
+  accessibility-adapted PDFs *do* have a text layer, so a `pdfplumber`/
+  `camelot` converter is feasible but bespoke per report family and needs
+  every extracted number verified). The two figures the API route can't give
+  — **absolute staffing headcount/FTE and absolute cost per region** — live
+  only here. A future `convert_skr_psykiatrin_i_siffror.py` is the only
+  route to them.
+
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 
 That was Kurvan's original label, matching HLV's own category "Nedsatt
@@ -234,8 +331,19 @@ python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, sin
 python fetch_kolada_context.py         # context layers, ~5 seconds, 2 requests
 python fetch_hbsc.py                   # HBSC "felt low", ~5 seconds, 2 requests
 python fetch_scb_population.py         # population denominator, ~15 seconds, 5 requests
+python fetch_folkhalsodata_hlv_psych.py            # HLV suicidal thoughts/attempts, low wellbeing, sleep, loneliness, ~15 seconds, 2 requests
+python fetch_forsakringskassan_diagnos.py          # sickness absence, whole F00-F99 chapter, ~6 seconds, 22 requests
+python fetch_forsakringskassan_aktivitetsersattning.py  # aktivitetsersättning recipients by diagnosis, ~9 seconds, 24 requests
+python fetch_vardenisiffror_psykiatri.py           # "Psykiatrin i siffror" via Vården i siffror API — visits/beds/LST/hyrkostnad, ~10 seconds, 3 requests
+python fetch_socialstyrelsen_personal.py           # licensed psychiatry STAFF headcount by region — SLOW, ~10-40 min, thousands of requests (scrapes if_per)
 python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
+
+> **Careful on a partial checkout:** `build_kurvan_data.py` rewrites *every*
+> `../js/data/real_*.js`, and a source whose `data/processed/*.json` is
+> missing on this machine is rewritten to an empty `rows` list. The
+> committed files hold real data — run every fetcher (or `git checkout --
+> js/data/` the ones you didn't refetch) before committing.
 
 Then reopen `../kurvan.html`. `../js/data/*.js` is checked in with whatever
 was fetched last, so the prototype works without Python on a fresh
