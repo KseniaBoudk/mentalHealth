@@ -72,8 +72,9 @@ region/age/sex, not a mental-health measure — the denominator behind real
 age-standardisation, `standardRate()` in `js/data.js`, available for
 `psych`/`antidep`/`suicide`: the three real indicators with full nine-band
 age coverage) — into `data/processed/*.json`. Psychiatric care and medication
-are each split into real sub-type series (six diagnosis types, five ATC
-medication classes — `PSYCH_TYPES`/`MED_TYPES` in `js/data.js`,
+are each split into real sub-type series (78 individual ICD-10 diagnosis
+codes grouped under their 11 real ICD-10 blocks, five ATC medication
+classes — `PSYCH_TYPES`/`PSYCH_BLOCKS`/`MED_TYPES` in `js/data.js`,
 `S.psychType`/`S.medType`, a type picker on Över tid/Karta) rather than one
 combined number each; `js/data.js` sums the real sub-types into an "all"
 pseudo-type for every other chart that references psych/antidep as a

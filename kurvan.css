@@ -215,10 +215,10 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
 /* --- instrument legend --- */
 .legend{
   display:flex;gap:22px;flex-wrap:wrap;align-items:baseline;
-  padding:10px 0 22px;font-size:11.5px;color:var(--ink-2)
+  padding:10px 0 22px;font-size:var(--fs-5);color:var(--ink-2)
 }
 .legend .li{display:flex;gap:7px;align-items:baseline}
-.legend .dot{width:9px;height:9px;border-radius:50%;flex:none;position:relative;top:.5px}
+.legend .dot{width:12px;height:12px;border-radius:50%;flex:none;position:relative;top:.5px}
 .legend b{font-weight:700}
 
 /* --- line-chart legend: which line is which, off the plot itself ---
@@ -239,7 +239,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
    display:flex made every row stretch to match (flex's own default
    align-items:stretch), spreading each swatch and its label to opposite
    ends of a mostly-empty row instead of sitting next to each other. */
-.line-legend{display:flex;flex-direction:column;gap:8px;width:fit-content;max-width:100%;margin-top:10px;padding:2px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.line-legend{display:flex;flex-direction:column;gap:8px;width:fit-content;max-width:100%;margin-top:10px;padding:2px;font-size:var(--fs-6);font-weight:600;color:var(--ink-2)}
 .line-legend .li{display:flex;gap:10px;align-items:center;white-space:nowrap;line-height:1}
 /* Explicit width/height, not left to the svg's own width/height attributes:
    the bare `svg{width:100%;height:auto}` reset above (this file's very
@@ -254,7 +254,7 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
    nudge (the fix .legend .dot, a plain span never touched by the global
    svg rule, actually needs) ever closed the gap. Pinning the real size
    here is what makes align-items:center on .li above work as intended. */
-.line-legend .ln{flex:none;display:block;width:28px;height:12px}
+.line-legend .ln{flex:none;display:block;width:32px;height:14px}
 
 /* --- cards --- */
 .card{background:var(--surface);border:1px solid var(--hair);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
@@ -312,6 +312,14 @@ section[id^="sec-"]+section[id^="sec-"]{margin-top:52px;padding-top:44px;border-
    `.f select option`) so it also covers .mapcmphead's compare-mode select. */
 select option{background:var(--surface);color:var(--ink)}
 select option:disabled{color:var(--ink-3)}
+/* optgroup (the psychiatric-care type picker's 11 ICD-10 block headers,
+   js/views.js's typeOptions()) needs this same treatment separately from
+   plain <option> above — Chromium does NOT extend an <option> rule to an
+   <optgroup>'s own label line, so without this the group headers stayed on
+   native system colours (a near-white bar) even once every <option> around
+   them was already themed, landing as a jarring light stripe inside an
+   otherwise dark popup. */
+select optgroup{background:var(--surface);color:var(--ink-3);font-weight:700;font-style:normal}
 .seg{margin-left:auto;display:flex;border:1.5px solid var(--violet);border-radius:999px;overflow:hidden}
 .seg button{background:none;border:0;font-size:11px;font-weight:650;color:var(--violet);padding:7px 12px;cursor:pointer}
 .seg button.on{background:var(--violet);color:var(--surface)}
@@ -345,8 +353,8 @@ select option:disabled{color:var(--ink-3)}
 .rstat.i-reg{border-top-color:var(--violet)}
 .rstat.i-mort{border-top-color:var(--oxblood)}
 .rstat.i-fk{border-top-color:var(--amber)}
-.rk{display:flex;align-items:center;gap:7px;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
-.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.rk{display:flex;align-items:center;gap:7px;font-size:var(--fs-3);letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.dot{width:11px;height:11px;border-radius:50%;flex:none}
 .rv{font-family:var(--mono);font-size:26px;margin-top:9px;letter-spacing:-.025em}
 .rci{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-top:3px}
 .rvs{font-size:11.5px;color:var(--ink-2);margin-top:10px;line-height:1.45}
@@ -469,11 +477,11 @@ select option:disabled{color:var(--ink-3)}
    adjacent mid-tones stay visually distinct. */
 .tier-legend{margin-top:14px}
 .tier-rows{display:flex;flex-direction:column;gap:6px}
-.tier-row{display:flex;align-items:center;gap:9px;font-size:11px}
-.tier-chip{width:18px;height:18px;border-radius:3px;flex:none;border:1px solid var(--hair)}
+.tier-row{display:flex;align-items:center;gap:9px;font-size:var(--fs-5)}
+.tier-chip{width:20px;height:20px;border-radius:3px;flex:none;border:1px solid var(--hair)}
 .tier-label{color:var(--ink-2);font-weight:650;width:4.2em;flex:none}
 .tier-range{color:var(--ink-3)}
-.gradient-note{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:9.5px;color:var(--ink-3)}
+.gradient-note{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px;font-size:var(--fs-3);color:var(--ink-3)}
 .trendarrow{font-size:.34px;font-weight:800;text-anchor:middle;dominant-baseline:central;
   paint-order:stroke;stroke:var(--surface);stroke-width:.08px;stroke-linejoin:round;pointer-events:none}
 .trendarrow.with{fill:var(--teal)}

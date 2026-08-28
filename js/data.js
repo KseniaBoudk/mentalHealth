@@ -331,26 +331,53 @@ let REAL = rebuildREAL();
    register's own true "all ages" figure (age band "0-85+") is used
    directly for totals rather than reconstructed from the nine bands.
 
-   Split into six diagnosis-type series (PSYCH_TYPES below) instead of one
-   combined "all psychiatric care" number — the source already breaks it
-   down this way (see fetch_socialstyrelsen_psych.py's docstring for the
-   six ids/labels and two labelling caveats). REAL_PSYCH.idx/idxAll are
-   keyed by type FIRST, county second — every existing caller that never
-   asks for a type (viewRegioner, viewKon, viewMetod, viewLaget, viewAlder,
-   ...) transparently gets `"all"`, a synthesised pseudo-type summing the
-   six real ones — see rebuildREAL_PSYCH()'s own addToAll() for why simple
-   summation is exact here (not an approximation the way pooling different
-   AGE bands needs population-recovery for): the population denominator is
-   the SAME across diagnosis types for one county/age/sex/year cell, so
-   summing real per-type rates already gives the correct combined rate.
-   Only viewOverTid()/viewKarta() (js/views.js) — the two views with an
-   actual type selector — ever pass a specific type through.
+   Split into 78 individual 3-character ICD-10 diagnosis codes (PSYCH_TYPES
+   below) instead of one combined "all psychiatric care" number — the
+   source's `diagnos` dimension goes down to this level natively (each
+   code's own `grupp` field names its parent chapter/block, confirmed live
+   against the API; see fetch_socialstyrelsen_psych.py's docstring). Every
+   code carries a PSYCH_CODE_BLOCK entry naming which of the 11 real ICD-10
+   blocks (PSYCH_BLOCKS) it belongs to — used only to group the type picker
+   (js/views.js) into `<optgroup>`s by block, not to change how a value is
+   looked up: REAL_PSYCH.idx/idxAll are still keyed by the flat code FIRST,
+   county second, exactly as they were with 6 coarser types. This replaces
+   the older 6-block version (each block WAS the type, and two of those six
+   were already known to be mislabeled — "eating disorders" was really the
+   broader F50-F59 chapter, "ADHD" the broader F90-F98 one) — moot now that
+   every type is a single, precisely-named code rather than an approximate
+   block-wide label. Every existing caller that never asks for a type
+   (viewRegioner, viewKon, viewMetod, viewLaget, viewAlder, ...)
+   transparently gets `"all"`, a synthesised pseudo-type summing every real
+   code — see rebuildREAL_PSYCH()'s own addToAll() for why simple summation
+   is exact here (not an approximation the way pooling different AGE bands
+   needs population-recovery for): the population denominator is the SAME
+   across diagnosis codes for one county/age/sex/year cell, so summing real
+   per-code rates already gives the correct combined rate — unchanged by
+   going from 6 addends to 78. Only viewOverTid()/viewKarta() (js/views.js)
+   — the two views with an actual type selector — ever pass a specific
+   code through.
 
    REAL_PSYCH_MH's rows are compact tuples, not objects — see
    build_kurvan_data.py's "COMPACT TUPLE ROWS" docstring section and
    rebuildREAL_PSYCH()'s own comment below for the decode.
    ===================================================================== */
-const PSYCH_TYPES = ["substance_use", "psychosis", "depression_mood", "anxiety_stress", "eating_disorders", "adhd_childhood"];
+// The 78 codes, sorted the same way encode_type_age_rows() (build_kurvan_
+// data.py) derives `types` from the fetched data itself — kept in that
+// same order here purely so a diff against the compiled file's own
+// `types` array is easy to eyeball, not because anything depends on it.
+const PSYCH_TYPES = ["F00","F01","F02","F03","F04","F05","F06","F07","F09","F10","F11","F12","F13","F14","F15","F16","F17","F18","F19","F20","F21","F22","F23","F24","F25","F28","F29","F30","F31","F32","F33","F34","F38","F39","F40","F41","F42","F43","F44","F45","F48","F50","F51","F52","F53","F54","F55","F59","F60","F61","F62","F63","F64","F65","F66","F68","F69","F70","F71","F72","F73","F78","F79","F80","F81","F82","F83","F84","F88","F89","F90","F91","F92","F93","F94","F95","F98","F99"];
+// The 11 real ICD-10 blocks (Socialstyrelsen's `diagnos` dimension, parent
+// "05" = the whole F00-F99 chapter) each code above belongs to — id order
+// matches the chapter's own numbering (block "01" = F00-F09, ... "11" =
+// F99), not fetch order. Labels live in js/lang.js's psychBlocks (this is
+// data-shape, not UI copy, so only the ids live here — see CLAUDE.md's "no
+// UI string outside js/lang.js" rule).
+const PSYCH_BLOCKS = ["b0501","b0502","b0503","b0504","b0505","b0506","b0507","b0508","b0509","b0510","b0511"];
+// code -> its one parent block id, generated from the same live API check
+// that produced PSYCH_TYPES/PSYCH_BLOCKS above (Socialstyrelsen's own
+// `grupp` field on each code) — not hand-derived from the codes' number
+// ranges, so it can't silently drift from what the source actually says.
+const PSYCH_CODE_BLOCK = {F00:"b0501",F01:"b0501",F02:"b0501",F03:"b0501",F04:"b0501",F05:"b0501",F06:"b0501",F07:"b0501",F09:"b0501",F10:"b0502",F11:"b0502",F12:"b0502",F13:"b0502",F14:"b0502",F15:"b0502",F16:"b0502",F17:"b0502",F18:"b0502",F19:"b0502",F20:"b0503",F21:"b0503",F22:"b0503",F23:"b0503",F24:"b0503",F25:"b0503",F28:"b0503",F29:"b0503",F30:"b0504",F31:"b0504",F32:"b0504",F33:"b0504",F34:"b0504",F38:"b0504",F39:"b0504",F40:"b0505",F41:"b0505",F42:"b0505",F43:"b0505",F44:"b0505",F45:"b0505",F48:"b0505",F50:"b0506",F51:"b0506",F52:"b0506",F53:"b0506",F54:"b0506",F55:"b0506",F59:"b0506",F60:"b0507",F61:"b0507",F62:"b0507",F63:"b0507",F64:"b0507",F65:"b0507",F66:"b0507",F68:"b0507",F69:"b0507",F70:"b0508",F71:"b0508",F72:"b0508",F73:"b0508",F78:"b0508",F79:"b0508",F80:"b0509",F81:"b0509",F82:"b0509",F83:"b0509",F84:"b0509",F88:"b0509",F89:"b0509",F90:"b0510",F91:"b0510",F92:"b0510",F93:"b0510",F94:"b0510",F95:"b0510",F98:"b0510",F99:"b0511"};
 // See rebuildREAL()'s comment above — same lazy-rebuild pattern, callable
 // again once js/data/real_psych.js lands.
 function rebuildREAL_PSYCH() {
@@ -376,7 +403,7 @@ function rebuildREAL_PSYCH() {
   // bucket in the same pass, via a variable-depth `path` (4 keys for idx:
   // county/ageIdx/sex/year; 3 for idxAll: county/sex/year) — one function
   // for both shapes rather than writing the nested-loop version twice.
-  // Summed raw, not rounded per-add (fmt() rounds for display) — six tiny
+  // Summed raw, not rounded per-add (fmt() rounds for display) — many tiny
   // per-add roundings would drift further from the true sum than one
   // display-time rounding does.
   const addToAll = (bucket, type, path, value, count) => {
@@ -515,7 +542,7 @@ function realCellFK() { return REAL_FK.active ? null : undefined; }
    read here exactly like psych's real "all ages" row.
 
    Split into five ATC-class series (MED_TYPES below) the same way psych
-   split into six diagnosis types — same idx[type|"all"][...] shape, same
+   splits into individual diagnosis codes — same idx[type|"all"][...] shape, same
    addToAll() summing trick for the synthesised "all" pseudo-type (still
    IND.antidep's own indicator key — "antidep" never became a type name,
    it's the Kurvan indicator that this whole REAL_ANTIDEP block backs).
@@ -910,52 +937,162 @@ function standardRate(k, regionCode, year, sex, type) {
   };
 }
 
-/* Data-vintage manifest — compiled from pipeline/manifest.json by
-   build_kurvan_data.py into REAL_MANIFEST (currently dormant — no fetcher
-   populates it yet).
-   getManifestRows() returns one entry per data source (real + the one
-   synthetic-only source, antidep) for the Metod view. */
-const DATA_MANIFEST = (() => {
-  const sources = (typeof REAL_MANIFEST !== "undefined" && Array.isArray(REAL_MANIFEST.sources))
-    ? REAL_MANIFEST.sources : [];
-  const builtAt = typeof REAL_MANIFEST !== "undefined" ? REAL_MANIFEST.built_at : null;
-  return { sources, builtAt };
-})();
+/* =====================================================================
+   1k. EQUITY — the same self-reported severe anxiety/worry/dread question
+   as REAL_HLV (1d above), from js/data/real_equity.js's REAL_EQUITY_MH
+   (fetch_folkhalsodata_equity.py), split instead by education level,
+   income quintile, or country of birth. Deliberately NOT shaped like IND/
+   REAL_* — same reasoning as CONTEXT/BUP_WAIT/HBSC above:
 
+     - NATIONAL ONLY — these three PxWeb tables have no region dimension
+       at all (fetch_folkhalsodata_equity.py's docstring), unlike REAL_HLV
+       which is county-grain. Backs its own "Jämlikhet" tab, not
+       Karta/Regioner's region pickers.
+     - Own category keys per breakdown (e.g. "primary"/"secondary"/
+       "post_secondary" for education, "q1".."q5" for income, "sweden"/
+       "other_nordic"/"other_europe"/"other_world" for birth country) —
+       NOT Kurvan's nine AGES bands, and no age dimension is exposed here
+       at all (each source row is already one fixed, crude adult age
+       range — see the fetch script's own docstring on why).
+     - Real data only for 2021/2022/2024 — sparser than REAL_HLV's own
+       15-window coverage of the same category on the region table; see
+       the fetch script's docstring for why this isn't "more data
+       available, just not fetched yet".
+   ===================================================================== */
+const EQUITY_BREAKDOWNS = ["education", "income", "birth_country"];
+// See rebuildREAL()'s comment above — same lazy-rebuild pattern.
+function rebuildREAL_EQUITY() {
+  const rows = (typeof REAL_EQUITY_MH !== "undefined" && Array.isArray(REAL_EQUITY_MH.rows)) ? REAL_EQUITY_MH.rows : [];
+  const active = rows.length > 0;
+  const idx = {};        // idx[breakdown][category][sex][year] = {value,ci_lo,ci_hi,n,label}
+  const categories = {}; // categories[breakdown] = [category, ...] in first-seen order
+  const years = new Set();
+  for (const row of rows) {
+    const byBreakdown = idx[row.breakdown] || (idx[row.breakdown] = {});
+    const byCategory = byBreakdown[row.category] || (byBreakdown[row.category] = {});
+    const bySex = byCategory[row.sex] || (byCategory[row.sex] = {});
+    bySex[row.year] = { value: row.value, ci_lo: row.ci_lo, ci_hi: row.ci_hi, n: row.n };
+    const list = categories[row.breakdown] || (categories[row.breakdown] = []);
+    if (!list.includes(row.category)) list.push(row.category);
+    years.add(row.year);
+  }
+  return { active, idx, categories, years: [...years].sort((a, b) => a - b),
+           generatedAt: active ? REAL_EQUITY_MH.generated_at : null };
+}
+let REAL_EQUITY = rebuildREAL_EQUITY();
+// Returns undefined (source not loaded yet) or null (loaded, but this
+// exact breakdown/category/sex/year combination genuinely has no
+// published row — most year values for this category, see docstring
+// above) or {value,ci_lo,ci_hi,n} — same contract as every real* function
+// above.
+function equityCell(breakdown, category, sex, year) {
+  if (!REAL_EQUITY.active) return undefined;
+  const byBreakdown = REAL_EQUITY.idx[breakdown];
+  const v = byBreakdown && byBreakdown[category] && byBreakdown[category][sex] && byBreakdown[category][sex][year];
+  return v || null;
+}
+
+/* Data-vintage manifest for the Metod view's "all sources" table.
+   REAL_MANIFEST/pipeline/manifest.json was the original plan (see git
+   history) but manifest.py was never actually written — it's an empty
+   file, nothing ever assigns a REAL_MANIFEST global, and this function
+   used to silently return just one hand-appended row (antidep) no matter
+   how many of the 11 real sources were actually active. Rebuilt here to
+   read every source's own live {active, generatedAt} state directly
+   instead (every js/data/*.js source already exposes exactly that, per
+   this file's own module docstring) — one row per indicator/source, kept
+   in sync automatically rather than needing a second data pipeline to
+   maintain in parallel with the real one. */
 function getManifestRows() {
-  const rows = [];
-  (DATA_MANIFEST.sources || []).forEach(s => {
-    rows.push({
-      key: s.key,
-      source: s.source,
-      fetcher: s.fetcher,
-      indicators: s.indicators,
-      time_period: s.time_period,
-      records_count: s.records_count,
-      grain: s.grain,
-      fetched_at: s.fetched_at,
-      active: s.active,
-      isSynthOnly: false
-    });
+  // The six IND-shaped indicators already carry their own source register
+  // (IND[k].reg/regEn), coverage window (IND[k].years) and age/sex split
+  // flags — reused here rather than re-typed, so this table can't drift
+  // out of sync with the "Indicator & Limit" table built from the same
+  // IND object just below in viewMetod(). Only each one's fetcher script
+  // name and which REAL_* object actually backs it aren't on IND itself.
+  const FETCHER = {
+    distress: "fetch_folkhalsodata_hlv.py", psych: "fetch_socialstyrelsen_psych.py",
+    selfharm: "fetch_socialstyrelsen_mh.py", suicide: "fetch_socialstyrelsen_mh.py",
+    sjukfranvaro: "fetch_forsakringskassan.py", antidep: "fetch_socialstyrelsen_lakemedel.py",
+  };
+  const REAL_OBJ = {
+    distress: REAL_HLV, psych: REAL_PSYCH, selfharm: REAL, suicide: REAL,
+    sjukfranvaro: REAL_FK, antidep: REAL_ANTIDEP,
+  };
+  const rows = Object.keys(IND).map(k => {
+    const active = isRealActive(k);
+    return {
+      key: k,
+      source: IND[k][S.lang === "sv" ? "reg" : "regEn"],
+      fetcher: FETCHER[k],
+      indicators: [k],
+      time_period: IND[k].years,
+      records_count: null,
+      grain: IND[k].ageSplit ? "Region × Ålder × Kön" : "Region × Kön",
+      fetched_at: active ? REAL_OBJ[k].generatedAt : null,
+      active,
+      isSynthOnly: !active
+    };
   });
-  // Hand-appended, not read from REAL_MANIFEST (see this function's own
-  // sources loop above): antidep's own row, reflecting whichever mode is
-  // actually active right now rather than a hardcoded "always synthetic" —
-  // it stopped being fetcher-less once fetch_socialstyrelsen_lakemedel.py
-  // shipped (see REAL_ANTIDEP's docstring above).
+
+  // The six sources with no IND entry at all — own tabs, deliberately not
+  // IND-shaped (see CONTEXT/BUP_WAIT/BUP_FACILITIES/HBSC/REAL_POP/
+  // REAL_EQUITY's own module docstrings above for why each). None of
+  // these has a synthetic fallback to begin with (a context/equity/etc.
+  // reading with no real data just shows "no data", never a fabricated
+  // stand-in) — isSynthOnly is always false here for that reason, unlike
+  // the IND rows above; if one is ever inactive it'll fall through to the
+  // "still synthetic" status chip below for lack of a fourth chip state,
+  // which is a shortcoming of that chip, not of this table. Passing a
+  // plain label string (not an IND key) into `indicators` is safe:
+  // viewMetod()'s `t.ind[k]||k` lookup just displays the string itself
+  // for any key that isn't a real IND entry.
   rows.push({
-    key: "antidep",
-    source: "Socialstyrelsen Statistikdatabasen (Läkemedelsregistret, ATC N06A)",
-    fetcher: "fetch_socialstyrelsen_lakemedel.py",
-    indicators: ["antidep"],
-    time_period: REAL_ANTIDEP.active
-      ? `${REAL_ANTIDEP.years[0]}–${REAL_ANTIDEP.years[REAL_ANTIDEP.years.length - 1]}`
-      : "2006–2024",
-    records_count: null,
-    grain: "Region × Ålder × Kön",
-    fetched_at: REAL_ANTIDEP.active ? REAL_ANTIDEP.generatedAt : null,
-    active: REAL_ANTIDEP.active,
-    isSynthOnly: !REAL_ANTIDEP.active
+    key: "context", source: "Kolada", fetcher: "fetch_kolada_context.py",
+    indicators: [t.ctxInd.pop_density, t.ctxInd.education_low_pct],
+    time_period: "2023", records_count: null, grain: "Region (kommunmedelvärde)",
+    fetched_at: CONTEXT.active ? CONTEXT.generatedAt : null,
+    active: CONTEXT.active, isSynthOnly: false
+  });
+  rows.push({
+    key: "hbsc", source: "Folkhälsomyndigheten (Skolbarns hälsovanor / HBSC)",
+    fetcher: "fetch_hbsc.py", indicators: [t.tabs.hbsc],
+    time_period: "2021–2022", records_count: null,
+    grain: "Region × Ålder (11/13/15) × Kön",
+    fetched_at: HBSC.active ? HBSC.generatedAt : null,
+    active: HBSC.active, isSynthOnly: false
+  });
+  rows.push({
+    key: "vantetider", source: "Socialstyrelsen (väntetider BUP, manuell CSV-export)",
+    fetcher: "convert_vantetider_bup.py", indicators: [t.tabs.vantetider],
+    time_period: S.lang === "sv" ? "Rullande ~12 månader" : "Rolling ~12 months",
+    records_count: null, grain: "Region × Månad",
+    fetched_at: BUP_WAIT.active ? BUP_WAIT.generatedAt : null,
+    active: BUP_WAIT.active, isSynthOnly: false
+  });
+  rows.push({
+    key: "bup_facilities", source: "Socialstyrelsen (BUP-mottagningar, se ../BUPS/)",
+    fetcher: "fetch_bup_facilities.py",
+    indicators: [S.lang === "sv" ? "BUP-mottagningar (lista)" : "BUP clinics (directory)"],
+    time_period: S.lang === "sv" ? "Ögonblicksbild" : "Snapshot",
+    records_count: null, grain: "Region (klinikadresser)",
+    fetched_at: BUP_FACILITIES.active ? BUP_FACILITIES.generatedAt : null,
+    active: BUP_FACILITIES.active, isSynthOnly: false
+  });
+  rows.push({
+    key: "pop", source: "SCB (BE0101A, befolkning)", fetcher: "fetch_scb_population.py",
+    indicators: [S.lang === "sv" ? "Befolkning (nämnare för åldersstandardisering)" : "Population (age-standardisation denominator)"],
+    time_period: "2006–2024", records_count: null, grain: "Region × Ålder × Kön",
+    fetched_at: REAL_POP.active ? REAL_POP.generatedAt : null,
+    active: REAL_POP.active, isSynthOnly: false
+  });
+  rows.push({
+    key: "equity", source: "Folkhälsomyndigheten Folkhälsodata (utbildning/inkomst/födelseland)",
+    fetcher: "fetch_folkhalsodata_equity.py", indicators: [t.tabs.jamlikhet],
+    time_period: "2021, 2022, 2024", records_count: null,
+    grain: "Riket (ingen regionindelning)",
+    fetched_at: REAL_EQUITY.active ? REAL_EQUITY.generatedAt : null,
+    active: REAL_EQUITY.active, isSynthOnly: false
   });
   return rows;
 }
@@ -1037,7 +1174,7 @@ function realRowToCell(row) {
     suppressed: false, real: true,
   };
 }
-// type: one of PSYCH_TYPES, or "all" (default — the six real types summed,
+// type: one of PSYCH_TYPES, or "all" (default — every real code summed,
 // see rebuildREAL_PSYCH()). Only viewOverTid()/viewKarta() (js/views.js)
 // ever pass a specific type; every other caller gets "all" for free.
 function realCellPsych(regionCode, year, ageIdx, sex, type) {

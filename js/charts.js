@@ -42,6 +42,33 @@ function axisTicks(min,max,n){
   return out;
 }
 
+// Same "nice step" idea as axisTicks() above, but for a calendar-year x-axis
+// specifically, and EVENLY spaced end to end — axisTicks()'s own candidate
+// steps include 2.5x, which on a year axis would land ticks on fractional
+// years (2007.5); years only ever take whole-number steps, and this
+// project's own "at least every 5 years" rule caps the target step at 5
+// rather than growing to 10/20+ on a long series. An earlier version of
+// this pinned every tick to a "nice" multiple of the step (2005, 2010, ...)
+// and then forced the series' true first/last year in alongside whatever
+// that grid produced — correct at the edges, but uneven in between (e.g.
+// 1999-2024 came out 1999/2005/2010/2015/2020/2024: gaps of 6/5/5/5/4, not
+// visually even). This instead picks how many ticks to show from the ideal
+// step, then divides the ACTUAL span by (count-1) and places every tick at
+// an exact fraction of it, rounded to the nearest year — always hits the
+// true first and last year exactly (i=0 and i=count-1), and every gap in
+// between is either that same rounded step or one year off it, never a
+// full year more like the old approach could produce at an edge.
+function yearTicks(min,max,n=4){
+  if(min===max)return[min];
+  const span=max-min;
+  const idealStep=[1,2,5].find(s=>s>=span/n)||5;
+  const count=Math.max(2,Math.round(span/idealStep)+1);
+  const step=span/(count-1);
+  const out=[];
+  for(let i=0;i<count;i++)out.push(Math.round(min+i*step));
+  return[...new Set(out)];
+}
+
 function dotPlot(rows, opts){
   const W=430,rowH=13,top=18,H=top+rows.length*rowH+34,L=118,R=W-16;
   const col=opts.color||"var(--violet)";
@@ -111,6 +138,15 @@ function lineChart(series,opts){
   axisTicks(y0,y1,3).forEach(v=>{
     s+=`<line x1="${L}" y1="${Y(v).toFixed(1)}" x2="${R}" y2="${Y(v).toFixed(1)}" stroke="var(--hair-soft)" stroke-width="1"/>`;
     s+=`<text x="${L-6}" y="${(Y(v)+3).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="8.5" fill="var(--ink-3)">${fmt(v,v%1?1:0)}</text>`;});
+  // A faint vertical guide line under each x-axis label (drawn here, before
+  // the data lines below, so it sits behind the curve rather than over it)
+  // — same treatment/colour the y-axis gridlines above already use. Without
+  // this, opts.xlabels below is just floating text with nothing marking
+  // exactly where that year falls against the plotted line; this is that
+  // pointer.
+  (opts.xlabels||[]).forEach(l=>{
+    const lx=X(l[0]).toFixed(1);
+    s+=`<line x1="${lx}" y1="${Tp}" x2="${lx}" y2="${B}" stroke="var(--hair-soft)" stroke-width="1"/>`;});
   if(opts.unit)s+=`<text x="${L}" y="${Tp-6}" text-anchor="start" font-family="var(--sans)" font-size="8.5" fill="var(--ink-3)">${esc(opts.unit)}</text>`;
   if(opts.band&&opts.band.length){
     const up=opts.band.map(p=>`${X(p[0]).toFixed(1)},${Y(p[2]).toFixed(1)}`).join(" L");

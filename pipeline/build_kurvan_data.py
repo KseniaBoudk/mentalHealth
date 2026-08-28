@@ -32,16 +32,17 @@ a value that arrives after the page has already painted.
 Reads:  ../data/processed/socialstyrelsen_mh.json         (fetch_socialstyrelsen_mh.py)
         ../data/processed/socialstyrelsen_psych.json      (fetch_socialstyrelsen_psych.py)
         ../data/processed/socialstyrelsen_lakemedel.json  (fetch_socialstyrelsen_lakemedel.py)
+        ../data/processed/folkhalsodata_equity.json  (fetch_folkhalsodata_equity.py)
         ../data/processed/vantetider_bup.json  (convert_vantetider_bup.py — MANUAL source,
                                                  see that script's own docstring)
         ../data/processed/hbsc.json             (fetch_hbsc.py)
         ../data/processed/scb_population.json   (fetch_scb_population.py)
         ../data/processed/bup_facilities.json   (../BUPS/fetch_bup_facilities.py)
-Writes: ../js/data/real_mh.js, real_psych.js, real_hlv.js, real_lakemedel.js,
-        real_fk.js, real_context.js, real_bup.js, real_hbsc.js, real_pop.js,
-        real_bup_facilities.js
-        (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_BUP_WAIT,
-         REAL_HBSC_MH, REAL_POP_MH, ... — one const per file)
+Writes: ../js/data/real_mh.js, real_psych.js, real_hlv.js, real_equity.js,
+        real_lakemedel.js, real_fk.js, real_context.js, real_bup.js,
+        real_hbsc.js, real_pop.js, real_bup_facilities.js
+        (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_EQUITY_MH,
+         REAL_BUP_WAIT, REAL_HBSC_MH, REAL_POP_MH, ... — one const per file)
 
 Run:  python prototype/pipeline/build_kurvan_data.py
 
@@ -54,13 +55,15 @@ psych stays synthetic, or vice versa.
 ===============================================================================
 COMPACT TUPLE ROWS FOR REAL_PSYCH_MH/REAL_LAKEMEDEL_MH — READ BEFORE "FIXING"
 ===============================================================================
-These are the two sources with a real diagnosis/medication-type split (six
-groups, five groups — see fetch_socialstyrelsen_psych.py/
+These are the two sources with a real diagnosis/medication-type split (78
+ICD-10 codes, five ATC classes — see fetch_socialstyrelsen_psych.py/
 fetch_socialstyrelsen_lakemedel.py's own docstrings), and it shows: at one
 row per region/age-band/sex/year/type, the plain-object-per-row shape every
-other source here still uses put them at 8.6MB/7.8MB — repeating seven full
-key names, and a long spelled-out `indicator` string like
-"psych_substance_use_per_100k", on every single one of ~66,000 rows apiece.
+other source here still uses put them at 8.6MB/7.8MB even at psych's old
+six-group granularity — repeating seven full key names, and a long
+spelled-out `indicator` string like "psych_substance_use_per_100k", on
+every single one of ~66,000 rows apiece. Now more rows still (78 groups,
+not 6), so this compaction matters more than ever, not less.
 
 encode_type_age_rows() rewrites just these two sources' rows into
 `[county_code, type_idx, year, age_idx, sex, value, count]` tuples, with
@@ -100,13 +103,15 @@ SOURCES = [
         "out": "real_psych.js",
         "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, diagnoserislutenoppenvard, F00-F99)",
         "note": "Real, region-grain rates for specialist psychiatric care, all nine of\n"
-                "   Kurvan's age bands and all three sexes, annual, split into six\n"
-                "   diagnosis-type series plus a synthesised \"all\" total. Fetched by\n"
+                "   Kurvan's age bands and all three sexes, annual, split into 78\n"
+                "   individual 3-character ICD-10 codes (grouped under their 11 real\n"
+                "   ICD-10 blocks in the UI — see js/lang.js's psychBlocks/js/data.js's\n"
+                "   PSYCH_CODE_BLOCK) plus a synthesised \"all\" total. Fetched by\n"
                 "   fetch_socialstyrelsen_psych.py. Rows are compact tuples, not objects —\n"
                 "   see this module's own docstring (\"COMPACT TUPLE ROWS\").",
-        # indicator strings look like "psych_substance_use_per_100k" —
-        # strip this prefix/suffix to recover the short type name
-        # ("substance_use") that becomes an idx[type] key in js/data.js.
+        # indicator strings look like "psych_F32_per_100k" — strip this
+        # prefix/suffix to recover the short type name ("F32") that becomes
+        # an idx[type] key in js/data.js.
         "compact_types": {"prefix": "psych_", "suffix": "_per_100k"},
     },
     {
@@ -120,6 +125,19 @@ SOURCES = [
                 "   survey windows. Fetched by fetch_folkhalsodata_hlv.py — read that\n"
                 "   script's docstring before assuming any other HLV category behaves the\n"
                 "   same way; several stopped being published years ago.",
+    },
+    {
+        "var": "REAL_EQUITY_MH",
+        "file": "folkhalsodata_equity.json",
+        "out": "real_equity.js",
+        "source": "Folkhälsomyndigheten Folkhälsodata (Nationella folkhälsoenkäten / HLV, "
+                  "\"Svår ängslan, oro eller ångest\" — by education, income, birth country)",
+        "note": "Real, NATIONAL-grain (no region breakdown on these tables) shares for the\n"
+                "   same self-reported severe anxiety/worry/dread question as REAL_HLV_MH,\n"
+                "   split instead by education level, income quintile, or country of birth.\n"
+                "   Real data only for 2021/2022/2024 (see fetch_folkhalsodata_equity.py's\n"
+                "   docstring — this category's coverage on these three tables is sparser\n"
+                "   than on the region table). Fetched by fetch_folkhalsodata_equity.py.",
     },
     {
         "var": "REAL_LAKEMEDEL_MH",

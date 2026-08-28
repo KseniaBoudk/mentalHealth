@@ -17,14 +17,19 @@ This folder now pulls real numbers for **all five of those**:
   `js/data.js`).
 - **Specialist psychiatric care** — `fetch_socialstyrelsen_psych.py`, same API,
   dataset `diagnoserislutenoppenvard`, diagnosis chapter F00-F99 — split into
-  **six diagnosis-type series** (DIAGNOS_GROUPS: substance use, psychosis,
-  depression/mood, anxiety/stress, eating disorders, ADHD/childhood-onset)
-  rather than fetched as one combined number; `js/data.js` sums them back
-  into an "all" total for every chart that doesn't ask for a specific type.
-  County grain, all nine of Kurvan's age bands, all three sexes, annual. The
-  best fit of the five — see that script's docstring for the live-verified
-  dataset/dimension ids, including the six diagnosis-type ids and two
-  labelling caveats.
+  **78 individual 3-character ICD-10 codes** (DIAGNOS_CODES) rather than
+  fetched as one combined number or as the 11 broader blocks one level up;
+  `js/data.js` sums all 78 back into an "all" total for every chart that
+  doesn't ask for a specific code, and groups them under their 11 real
+  ICD-10 blocks (DIAGNOS_BLOCKS/CODE_TO_BLOCK) as `<optgroup>` headers in
+  the type picker. County grain, all nine of Kurvan's age bands, all three
+  sexes, annual. The best fit of the five — see that script's docstring for
+  the live-verified dataset/dimension ids and the code→block structure.
+  This retired the two labelling caveats an earlier 6-block version of this
+  script carried (a block fetched under a narrower name than its true
+  ICD-10 scope, e.g. "eating disorders" really being the broader F50-F59
+  chapter) — moot now that every fetched value is a single, precisely-named
+  code.
 - **Severe anxiety, worry or dread** (backs Kurvan's `distress` indicator) —
   `fetch_folkhalsodata_hlv.py`, Folkhälsomyndigheten's Folkhälsodata (a
   *different* agency and a different PxWeb instance from the three above —
@@ -204,6 +209,10 @@ short version of what each hands back:
   wider bands using the same population-recovery trick the suicide windowing
   above already uses.
 - Annual, 2008 onward. No window, no disclosure floor on this dataset.
+- Fetched at the individual 3-character ICD-10 code level (78 codes), not
+  the 11 broader blocks one level up — `js/data.js` groups the 78 under
+  their blocks for the UI picker and sums them into the "all" total; see
+  that script's own docstring for the live code→block verification.
 
 **Severe anxiety / distress** (`fetch_folkhalsodata_hlv.py`), the odd one out:
 - Different agency (FoHM, not Socialstyrelsen), different PxWeb instance,
@@ -247,7 +256,7 @@ synthetic. See `fakeCell()` and `fakeTotal()`'s docstrings in `js/data.js`.
 ```
 pip install -r requirements.txt
 python fetch_socialstyrelsen_mh.py     # self-harm + suicide, ~2 minutes
-python fetch_socialstyrelsen_psych.py  # psychiatric care, ~4-5 minutes, ~240 requests (6 diagnosis types)
+python fetch_socialstyrelsen_psych.py  # psychiatric care, ~1 hour, ~2,964 requests (78 ICD-10 codes)
 python fetch_folkhalsodata_hlv.py      # severe anxiety, ~15 seconds, 1 request
 python fetch_socialstyrelsen_lakemedel.py  # medication, ~4-5 minutes, ~180 requests (5 ATC classes)
 python fetch_forsakringskassan.py      # sickness absence (F43), ~2 seconds, single request

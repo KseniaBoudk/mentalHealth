@@ -25,6 +25,23 @@ const unitLabel=(k)=>{
   return sc===100?"%":sc===1000?(S.lang==="sv"?"per 1 000":"per 1,000"):(S.lang==="sv"?"per 100 000":"per 100,000");
 };
 
+// Psychiatric care's 78 codes render as one <optgroup> per ICD-10 block
+// (PSYCH_CODE_BLOCK, js/data.js) so the picker reads as 11 short lists
+// grouped under a chapter name instead of one flat 78-long list — MED_TYPES
+// (antidep's 5 ATC classes) has no such grouping and stays a plain flat
+// list, shared by the same call sites via the k==="psych" branch. Shared
+// here rather than duplicated at both call sites (Över tid's and Karta's
+// type pickers build identical markup).
+const typeOptions=(k,type)=>{
+  if(k!=="psych")return MED_TYPES.map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("");
+  return PSYCH_BLOCKS.map(b=>{
+    const codes=PSYCH_TYPES.filter(ty=>PSYCH_CODE_BLOCK[ty]===b);
+    if(!codes.length)return"";
+    return `<optgroup label="${esc(t.psychBlocks[b])}">${codes.map(ty=>
+      `<option value="${ty}"${ty===type?" selected":""}>${esc(ty)} — ${esc(t.psychMedTypes[ty])}</option>`).join("")}</optgroup>`;
+  }).join("");
+};
+
 // "95% KI"/"95% CI" was typed out with its own inline language ternary at
 // every one of the ~9 spots a card shows a confidence interval — one
 // shared pair here instead, so a wording change only ever needs to happen
@@ -100,7 +117,7 @@ const lineLegend=series=>{
   const labelled=series.filter(se=>se.label);
   if(!labelled.length)return "";
   return `<div class="line-legend">${labelled.map(se=>
-    `<span class="li"><svg class="ln" width="28" height="12" aria-hidden="true"><line x1="1" y1="6" x2="27" y2="6" stroke="${se.color}" stroke-width="${se.w||2.3}"${se.dash?` stroke-dasharray="${se.dash}"`:""} stroke-linecap="round"/></svg>${esc(se.label)}</span>`).join("")}</div>`;
+    `<span class="li"><svg class="ln" width="32" height="14" aria-hidden="true"><line x1="1" y1="7" x2="31" y2="7" stroke="${se.color}" stroke-width="${se.w||2.3}"${se.dash?` stroke-dasharray="${se.dash}"`:""} stroke-linecap="round"/></svg>${esc(se.label)}</span>`).join("")}</div>`;
 };
 
 // Five swatches, shared by every chorMap() card — matches the map's own
@@ -353,7 +370,7 @@ function viewOverTid(){
       ${Object.keys(IND).map(x=>`<option value="${x}"${x===k?" selected":""}>${esc(t.ind[x])}</option>`).join("")}</select></div>
     ${hasType?`<div class="f"><label>${esc(t.lblType)}</label><select id="c-type">
       <option value="all"${type==="all"?" selected":""}>${esc(t.typeAll)}</option>
-      ${(k==="psych"?PSYCH_TYPES:MED_TYPES).map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("")}</select></div>`:""}
+      ${typeOptions(k,type)}</select></div>`:""}
     <div class="f"><label>${esc(t.lblAge)}</label><select id="c-age">
       <option value="-1"${S.age===-1?" selected":""}>${esc(t.allAges)}</option>
       ${AGES.map((a,i)=>ageAvailable(k,i)?`<option value="${i}"${i===S.age?" selected":""}>${a}</option>`:"").join("")}</select></div>
@@ -403,7 +420,7 @@ function viewOverTid(){
         <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(R[1])} · <span class="tnum">${years[0]}–${years[years.length-1]}</span></div></div>
         <div class="card-b">${lineChart([{pts:ts,color:col,w:2.4,dot:true}],
           {aria:"Time series for the selected region with national events marked",
-           marks,xlabels:[[years[0],String(years[0])],[Math.round((years[0]+years[years.length-1])/2),String(Math.round((years[0]+years[years.length-1])/2))],[years[years.length-1],String(years[years.length-1])]],h:185,unit:unitLabel(k)})}</div>
+           marks,xlabels:yearTicks(years[0],years[years.length-1]).map(y=>[y,String(y)]),h:185,unit:unitLabel(k)})}</div>
       </div>
     </div>
   </div>
@@ -668,7 +685,7 @@ function viewKarta(){
       ${Object.keys(IND).map(x=>`<option value="${x}"${x===k?" selected":""}>${esc(t.ind[x])}</option>`).join("")}</select></div>
     ${hasType?`<div class="f"><label>${esc(t.lblType)}</label><select id="c-maptype">
       <option value="all"${type==="all"?" selected":""}>${esc(t.typeAll)}</option>
-      ${(k==="psych"?PSYCH_TYPES:MED_TYPES).map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("")}</select></div>`:""}
+      ${typeOptions(k,type)}</select></div>`:""}
     <div class="seg"${!stdCapable(k)?` title="${esc(t.stdDisabledTip)}"`:""}>
       <button data-std="0" class="${S.std?"":"on"}"${!stdCapable(k)?" disabled":""}>${esc(t.crude)}</button>
       <button data-std="1" class="${S.std?"on":""}"${!stdCapable(k)?" disabled":""}>${esc(t.std)}</button>
@@ -988,7 +1005,7 @@ function viewSjukskrivning(){
     <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(t.natLine)} · <span class="tnum">${years[0]}–${years[years.length-1]}</span></div></div>
     <div class="card-b">${lineChart(sexSeries,
       {aria:"Sickness absence trend, women and men",
-       xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])+(latestPartial?`\n${t.partialTag}`:"")]],
+       xlabels:yearTicks(years[0],years[years.length-1]).map(y=>[y,String(y)+(y===years[years.length-1]&&latestPartial?`\n${t.partialTag}`:"")]),
        marks:eventMarks(k,years),h:200,unit:unitLabel(k)})}
       ${lineLegend(sexSeries)}</div>
     ${srcStrip(k,latestPartial?t.partialYearNote(latest,nat.months):undefined)}
@@ -1040,7 +1057,7 @@ function viewKon(){
       <div class="card-b">
         ${lineChart(sexSeries,
           {aria:t.ind[k]+", women and men over time",
-           xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+           xlabels:yearTicks(years[0],years[years.length-1]).map(y=>[y,String(y)]),
            marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
         ${lineLegend(sexSeries)}
         <div class="rstats" style="grid-template-columns:1fr 1fr;margin-top:14px">
@@ -1084,7 +1101,7 @@ function viewKon(){
         <h4>${esc(label)}</h4><div class="u">${esc(t.ind.psych)} · 15–24</div>
         ${lineChart([{pts:pts(sex),color:pcol,w:2.2,dot:true}],
           {aria:t.ind.psych+" ages 15-24, "+label,
-           xlabels:[[pyears[0],String(pyears[0])],[pyears[pyears.length-1],String(pyears[pyears.length-1])]],
+           xlabels:yearTicks(pyears[0],pyears[pyears.length-1]).map(y=>[y,String(y)]),
            marks:eventMarks("psych",pyears),h:150,unit:unitLabel("psych")})}
         <div class="rv tnum" style="font-size:19px;margin-top:6px;color:${pcol}">${fmt(pNow?pNow.value:null,1,unitLabel("psych"))}</div>
         <div class="rci tnum">${ciRange(pNow?pNow.lo:null,pNow?pNow.hi:null)}</div>
@@ -1134,7 +1151,7 @@ function viewAlder(){
     <div class="card-b">
       ${lineChart(ageSeries,
         {aria:t.ind[k]+", children, adults and elderly over time",
-         xlabels:[[years[0],String(years[0])],[years[years.length-1],String(years[years.length-1])]],
+         xlabels:yearTicks(years[0],years[years.length-1]).map(y=>[y,String(y)]),
          marks:eventMarks(k,years),h:180,unit:unitLabel(k)})}
       ${lineLegend(ageSeries)}
       <div class="rstats" style="grid-template-columns:1fr 1fr 1fr;margin-top:14px">
@@ -1196,6 +1213,48 @@ function viewSammanhang(){
         </div>
       </div>
     </div>
+  </div>`;
+}
+
+// Jämlikhet (equity) — the same self-reported "Svår ängslan, oro eller
+// ångest" question as the `distress` indicator, broken down by education
+// level, income quintile, or country of birth instead of region. Own
+// dedicated view, same "not IND-shaped" precedent as viewSammanhang above
+// (own REAL_EQUITY source, own category keys, no age/sex picker — see
+// REAL_EQUITY's own docstring in js/data.js for the full "why"). No
+// synthetic fallback exists for this data (same as HBSC/CONTEXT/BUP_WAIT),
+// so this tab shows viewComing() rather than a fabricated placeholder
+// until fetch_folkhalsodata_equity.py has actually been run.
+function viewJamlikhet(){
+  if(!REAL_EQUITY.active)return viewComing();
+  const charts=EQUITY_BREAKDOWNS.map(bd=>{
+    const cats=(REAL_EQUITY.categories[bd]||[]).filter(c=>c!=="total");
+    // The latest year with a published "total" row for THIS breakdown —
+    // coverage is sparse (2021/2022/2024 only, see REAL_EQUITY's
+    // docstring), so this is computed per breakdown rather than assumed
+    // shared, even though in practice all three currently line up.
+    const years=REAL_EQUITY.years.filter(y=>equityCell(bd,"total","T",y));
+    const yr=years.length?years[years.length-1]:null;
+    const natCell=yr?equityCell(bd,"total","T",yr):null;
+    const rows=cats.map(c=>{
+      const cell=yr?equityCell(bd,c,"T",yr):null;
+      return cell&&{code:c,name:t.equityCat[bd][c]||c,value:cell.value,
+        lo:cell.ci_lo!=null?cell.ci_lo:cell.value,hi:cell.ci_hi!=null?cell.ci_hi:cell.value};
+    }).filter(Boolean);
+    return{bd,yr,natCell,rows};
+  });
+  return `
+  <div class="hero">
+    <p>${esc(t.equityLead)}</p>
+  </div>
+  <div class="note mt-fig"><div class="l">${esc(t.equityNoteL)}</div><p>${esc(t.equityNoteB)}</p></div>
+  <div class="grid-ex mt-fig">
+    ${charts.map(c=>`
+    <div class="card">
+      <div class="card-h"><h3>${esc(t.equityBd[c.bd])}</h3><div class="u">${esc(t.ind.distress)} (${esc(unitLabel("distress"))}) · ${esc(t.natLine)} · ${c.yr||"–"}</div></div>
+      <div class="card-b">${c.rows.length?dotPlot(c.rows,{nat:c.natCell?c.natCell.value:null,color:INST_COLOR.survey,aria:`Distress by ${c.bd}`,unit:unitLabel("distress")}):""}</div>
+      <div class="src">${esc(t.equitySrc)}</div>
+    </div>`).join("")}
   </div>`;
 }
 
