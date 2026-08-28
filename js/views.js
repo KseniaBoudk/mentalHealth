@@ -684,15 +684,25 @@ function viewKarta(){
 
   const R=[S.region,regionName(S.region)];
   const NO_DATA={value:null,lo:null,hi:null,suppressed:false};
-  const mine={};
-  const latest = REAL.active ? REAL.latestYear : 2024;    // see viewRegioner for why
-  ["distress","antidep","suicide"].forEach(x=>{ mine[x]=total(x,S.region,latest,"T",false)||NO_DATA; });
+  // Each of the three fixed stat cards below is looked up at ITS OWN latest
+  // valid year, not one shared year. Was `REAL.latestYear` (self-harm/
+  // suicide's) for all three — fine for suicide, and antidep runs a year
+  // or two ahead so it happened to hit real rows, but the HLV survey
+  // behind `distress` stops ~2 years earlier, so that card asked for a
+  // year HLV has nothing for and rendered "—". viewRegioner already picks
+  // per-indicator this way (validYears(k)'s last entry).
+  const mine={},mineYr={};
+  ["distress","antidep","suicide"].forEach(x=>{
+    const yrs=validYears(x);
+    mineYr[x]=yrs[yrs.length-1];
+    mine[x]=total(x,S.region,mineYr[x],"T",false)||NO_DATA;
+  });
 
   const stat=(key,label,color)=>`
     <div class="rstat i-${key==="distress"?"survey":key==="antidep"?"reg":"mort"}">
       <div class="rk" style="color:${color}"><span class="dot" style="background:${color}"></span>${esc(label)}</div>
       <div class="rv tnum">${fmt(mine[key].value,1,unitLabel(key))}</div>
-      <div class="rci tnum">${esc(unitLabel(key))} · ${ciRange(mine[key].lo,mine[key].hi)}</div>
+      <div class="rci tnum">${esc(unitLabel(key))} · ${ciRange(mine[key].lo,mine[key].hi)} · ${key==="suicide"?esc(t.winLbl(mineYr[key])):mineYr[key]}</div>
       <div class="rvs">${esc(t.statSentence[key](fmt(mine[key].value,1)))}</div>
     </div>`;
 
