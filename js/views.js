@@ -1219,23 +1219,37 @@ function viewVantetider(){
     color:col,dash:"5 3",w:1.9,label:R[1]};
   const trendSeries=[natSeries,mineSeries];
 
+  // Manual source: show the hand-export date next to the figures, and when
+  // the export is past its valid_until (data.js BUP_WAIT.stale) grey the
+  // charts and say the numbers may have moved on. See convert_vantetider_bup.py.
+  const stale=BUP_WAIT.stale;
+  const staleBanner=stale
+    ? `<div class="note mt-fig" style="border-left-color:var(--warn,#b26b00)"><div class="l">⚠</div><p>${esc(t.vantetiderStale(BUP_WAIT.fetched||"?",BUP_WAIT.validUntil||"?"))}</p></div>`
+    : "";
+  // Fetch date shown in each card's subtitle (next to the figure), not only
+  // in the source footnote below it.
+  const fetchedTag=BUP_WAIT.fetched?` · ${esc(t.vantetiderFetched(BUP_WAIT.fetched))}`:"";
+  const fetchedLine=BUP_WAIT.fetched?`<br>${esc(t.vantetiderFetched(BUP_WAIT.fetched))}`:"";
+  const dim=stale?' style="opacity:.5"':"";
+
   return `
   <div class="hero">
     <p>${esc(t.vantetiderLead)}</p>
   </div>
   <div class="note mt-fig"><div class="l">${esc(t.vantetiderNoteL)}</div><p>${esc(t.vantetiderCaveat)}</p></div>
-  <div class="card mt-fig">
-    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(monthLabel(months[0]))}–${esc(monthLabel(latest))}</div></div>
+  ${staleBanner}
+  <div class="card mt-fig"${dim}>
+    <div class="card-h"><h3>${esc(t.timeTitle)}</h3><div class="u">${esc(monthLabel(months[0]))}–${esc(monthLabel(latest))}${fetchedTag}</div></div>
     <div class="card-b">${lineChart(trendSeries,
       {aria:"BUP waiting time trend, national and selected region",
        xlabels:[[0,monthLabel(months[0])],[months.length-1,monthLabel(latest)]],
        h:200,unit,xFmt:i=>monthLabel(months[i])})}
       ${lineLegend(trendSeries)}</div>
-    <div class="src">${esc(t.causalNote)}<br>Socialstyrelsen (väntetider barn- och ungdomspsykiatrin).</div>
+    <div class="src">${esc(t.causalNote)}<br>Socialstyrelsen (väntetider barn- och ungdomspsykiatrin).${fetchedLine}</div>
   </div>
   <div class="grid-ex mt-fig">
-    <div class="card">
-      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.vantetiderInd)} (${esc(unit)}) · ${esc(monthLabel(latest))}</div></div>
+    <div class="card"${dim}>
+      <div class="card-h"><h3>${esc(t.mapTitle)}</h3><div class="u">${esc(t.vantetiderInd)} (${esc(unit)}) · ${esc(monthLabel(latest))}${fetchedTag}</div></div>
       <div class="card-b">
         ${mapZoomWrap(chorMap(rows,{color:col,nat,unit,aria:"Map of Sweden's 21 regions for BUP first-visit waiting time, click a region to see its figures"}),"vantetider")}
         ${mapLegend(rows,col,unit,nat)}

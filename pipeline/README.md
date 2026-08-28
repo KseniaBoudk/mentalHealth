@@ -133,10 +133,20 @@ final form; surfacing them in the UI is a separate later pass. Each one's
   (region grain, pooled windows, from `hlv1psyxreg.px`) and
   `folkhalsodata_hlv_psych_age.json` (national grain, annual, coarse age
   bands, from `hlv1psyaald.px` — the only table that carries **loneliness**,
-  and only for 2024 so far). `low_wellbeing_pct` stopped being published
-  after the 2015-2018 window (same story as the original `distress` label —
-  see the next section); it's fetched anyway because it was explicitly
-  asked for. ~15 s, 2 requests.
+  and only for 2024 so far). ~15 s, 2 requests.
+  - **Fails loud, doesn't warn** — `assert_expected_coverage()` raises
+    `SystemExit` (writing nothing) if a category expected to still be
+    published comes back thin/stale, or if a category recorded as *closed*
+    unexpectedly gains new data. Same principle as
+    `fetch_socialstyrelsen_lakemedel.py`'s ATC trap check.
+  - **`low_wellbeing_pct` is published as a CLOSED series.** It was Kurvan's
+    original `distress` label and Folkhälsomyndigheten stopped publishing it
+    regionally after the 2015-2018 window (see the next section). Every row
+    carries `series_status:"closed"` and `end_year:2018` so the UI can show
+    it as a finished historical series, not stale "real" data. `loneliness_*`
+    rows carry `series_status:"snapshot"`.
+  - Every row carries `fetched` (the run date) so a figure can show its own
+    age inline rather than in a footnote.
 - **`fetch_forsakringskassan_diagnos.py`** — ongoing sickness-benefit cases
   for the whole psychiatric chapter **F00-F99** (not only F43 like
   `fetch_forsakringskassan.py`), plus the all-diagnoses total it's a share
@@ -151,34 +161,49 @@ final form; surfacing them in the UI is a separate later pass. Each one's
   ~9 s, batched by year. Some small county/sex/chapter cells come back
   `rojd: true` (suppressed) and are dropped.
 
-### Asked for, but no queryable source — deferred, not built
+### The four without a plain API — status after a second look (2026-08-28)
 
-- **SKR "Psykiatrin i siffror"** (patients, visits, staffing, cost per
-  region, per year, for VUP / BUP / RPV). Published only as annual PDF
-  reports with Excel appendices on uppdragpsykiskhalsa.se — there is no API
-  and no bulk data file. A future `convert_skr_psykiatrin_i_siffror.py`
-  would be a MANUAL-species converter like `convert_vantetider_bup.py`:
-  download the Excel appendix by hand, parse it (would add `openpyxl` to
-  `requirements.txt`). Not built here. (`vardenisiffror.se` has an API and
-  carries a few psychiatry access/activity measures — worth a look as a
-  partial automated substitute for some of this.)
-- **Adult-psychiatry waiting times** and **BUP treatment / assessment
-  goals** (as opposed to BUP first visit, which `convert_vantetider_bup.py`
-  already covers). Socialstyrelsen's Väntetidsdatabasen has no API and no
-  developer data file (checked 2026-08-27 against
-  `socialstyrelsen.se/statistik-och-data/statistik/for-utvecklare/` — only
-  ekonomiskt bistånd, dödsorsaker, graviditeter, yttre orsaker and läkemedel
-  are offered as bulk CSV; väntetider and personnel are not). Both are the
-  same ASP.NET WebForms database `convert_vantetider_bup.py`'s docstring
-  describes; getting the extra phases out means repeating that manual export
-  with more *Phase* / *Status* boxes ticked. Documented there, not
-  automated.
-- **Socialstyrelsen licensed / employed health-care staff** (per region and
-  profession). Lives in `sdb.socialstyrelsen.se/if_per/` and
-  `/if_utfleg/` — both WebForms, no JSON API (the `sdb.socialstyrelsen.se
-  /api/v1/` statistics API that `fetch_socialstyrelsen_*.py` use lists 15
-  datasets, none of them personnel). Same manual-export situation as the
-  väntetider sources above; deferred.
+- **Adult-psychiatry waiting times + BUP treatment / assessment goals** —
+  `convert_vantetider_bup.py` was **generalised** to take them. It now
+  auto-discovers extra CSVs in `data/raw/` (`vantetider_bup_assessment_export.csv`,
+  `vantetider_bup_treatment_export.csv`, `vantetider_vuxenpsyk_forstabesok_export.csv`)
+  and merges them, tagging each row with `care_area` + `phase`. The manual
+  export procedure for each is in that script's docstring. Still needs a
+  human to do the browser export (the source's selection UI is 600+ nameless
+  client-side checkboxes) — but the moment the CSVs are dropped in, the
+  converter and the rest of the pipeline handle them. Every row also now
+  carries `fetched` + `valid_until`; past `valid_until` the Väntetider tab
+  greys its charts and says the figure may be out of date
+  (`js/data.js` `BUP_WAIT.stale`, `js/views.js` `viewVantetider`).
+- **Socialstyrelsen licensed / employed health-care staff** —
+  `sdb.socialstyrelsen.se/if_per/val.aspx` was inspected: it is NOT standard
+  WebForms — **no `__VIEWSTATE`, no `__EVENTVALIDATION`, no anti-forgery or
+  single-use token**, just a plain `<form method="post" action="resultat.aspx">`.
+  So it IS scriptable (unlike the BUP database, which has session-tied
+  postback tokens). The blocker is only that the ~624 selection checkboxes
+  have no `name` and their value codes are assembled into hidden `vYRKE` /
+  `vOMR_RLK` / `vAR` / `vKON` fields by `val.js`. **One browser Network
+  capture of a submitted `resultat.aspx` POST** (DevTools → "copy as cURL")
+  is enough to write a re-runnable fetcher. Left for that capture (or a
+  manual CSV export) — not marked impossible.
+- **`vardenisiffror.se`** — HAS a public JSON API:
+  `https://api.vardenisiffror.se/webapi/` (e.g. `/api/health/check` returns
+  200 unauthenticated; `/api/measurements/measurementswithmetadata` is a
+  reachable POST endpoint, empty `x-bvo-ticket` accepted). A fetcher is
+  feasible; it needs the POST body schema for a measure query pinned down
+  from one Network capture of the site loading a psychiatry measure. It
+  carries access/activity/tillgänglighet measures — **NOT** the SKR
+  staffing-headcount or cost-per-region breakdown, which is only in the
+  "Psykiatrin i siffror" reports.
+- **SKR "Psykiatrin i siffror"** — **skipped for now** (per instruction:
+  parsing numbers out of PDFs isn't worth it without an AI extraction step).
+  Published only as annual PDF reports (VUP / BUP / RPV) with Excel
+  appendices on uppdragpsykiskhalsa.se — no API, no bulk file. The
+  staffing-per-region and cost-per-region figures asked for are **missing
+  and have no substitute**: `vardenisiffror.se` does not carry them, and
+  Socialstyrelsen's staff database is headcount-by-profession, not the same
+  cut. A future `convert_skr_psykiatrin_i_siffror.py` parsing the Excel
+  appendices (would add `openpyxl`) is the only route.
 
 ## Why `distress` doesn't say "poor mental wellbeing" any more
 

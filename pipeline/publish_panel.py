@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """Publish Kurvan's master data panel as CSV and JSON with an embedded data dictionary."""
-import json, os, re, csv
+import json, os, re, csv, glob
 
 HERE = os.path.dirname(__file__)
-REAL_JS_PATH = os.path.join(HERE, "..", "js", "real_mh_data.js")
+# Pipeline moved from one js/real_mh_data.js to one file per source under
+# js/data/ (see build_kurvan_data.py's module docstring). Read them all.
+REAL_JS_GLOB = os.path.join(HERE, "..", "js", "data", "real_*.js")
 OUT_DIR = os.path.join(HERE, "..", "data", "published")
 KOMMUNER_CSV = os.path.join(HERE, "kommuner.csv")
 
@@ -18,8 +20,15 @@ DATA_DICTIONARY = {
     "sex": {"description": "Sex (T=Total, M=Men, K=Women)", "unit": "char", "source": "Registers", "years": "All", "suppression_rule": "None"},
     "value": {"description": "Statistical value (rate/share/days/density)", "unit": "Various", "source": "Government open data", "years": "Varies", "suppression_rule": "Withheld if count < 10"},
     "count": {"description": "Absolute case count where published", "unit": "integer", "source": "Registers", "years": "Varies", "suppression_rule": "null if < 10"},
-    "suppressed": {"description": "Disclosure suppression flag", "unit": "boolean", "source": "Socialstyrelsen", "years": "All", "suppression_rule": "true if suppressed"}
+    "suppressed": {"description": "Disclosure suppression flag", "unit": "boolean", "source": "Socialstyrelsen", "years": "All", "suppression_rule": "true if suppressed"},
+    "generated_at": {"description": "When this source's js/data/real_*.js was compiled", "unit": "ISO datetime", "source": "build_kurvan_data.py", "years": "All", "suppression_rule": "None"},
+    "fetched": {"description": "Date the underlying data was pulled/exported (manual sources carry the hand-export date)", "unit": "YYYY-MM-DD", "source": "Fetcher/converter", "years": "All", "suppression_rule": "None"},
+    "valid_until": {"description": "Date past which a manual-export source may no longer be current (site greys the figure)", "unit": "YYYY-MM-DD", "source": "convert_vantetider_bup.py", "years": "Manual sources only", "suppression_rule": "None"},
+    "series_status": {"description": "live | closed | snapshot — 'closed' series ended at end_year and are historical, not stale", "unit": "string", "source": "Fetcher", "years": "Varies", "suppression_rule": "None"},
+    "end_year": {"description": "Final year of a closed series", "unit": "YYYY", "source": "Fetcher", "years": "closed series only", "suppression_rule": "None"}
 }
+# Row fields to pass straight through to the panel if present on a source row.
+PASSTHROUGH = ["fetched", "valid_until", "series_status", "end_year"]
 
 def load_county_names():
     names = {"00": "Sverige"}
@@ -34,59 +43,64 @@ def load_county_names():
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     county_names = load_county_names()
-    
-    if not os.path.exists(REAL_JS_PATH):
-        print(f"Error: {REAL_JS_PATH} not found.")
-        return
-        
-    with open(REAL_JS_PATH, encoding="utf-8") as f:
-        content = f.read()
 
-    matches = re.finditer(r'const\s+(REAL_\w+)\s*=\s*', content)
-    extracted = {}
-    for m in matches:
-        var_name = m.group(1)
-        start_idx = m.end()
-        brace_count, in_string, escape, end_idx = 0, False, False, start_idx
-        for i in range(start_idx, len(content)):
-            char = content[i]
-            if escape:
-                escape = False
-                continue
-            if char == '\\':
-                escape = True
-                continue
-            if char == '"':
-                in_string = not in_string
-                continue
-            if not in_string:
-                if char == '{': brace_count += 1
-                elif char == '}': brace_count -= 1
-                elif char == ';' and brace_count == 0:
-                    end_idx = i
-                    break
-        try:
-            extracted[var_name] = json.loads(content[start_idx:end_idx].strip())
-        except Exception as e:
-            print(f"Error parsing {var_name}: {e}")
+    files = sorted(glob.glob(REAL_JS_GLOB))
+    if not files:
+        print(f"Error: no files match {REAL_JS_GLOB}. Run build_kurvan_data.py first.")
+        return
 
     all_rows = []
-    for var_name, payload in extracted.items():
-        for r in payload.get("rows", []):
-            code = r.get("county_code", "00")
-            all_rows.append({
-                "indicator": r.get("indicator"),
+    for path in files:
+        with open(path, encoding="utf-8") as f:
+            content = f.read()
+        m = re.search(r'const\s+(\w+)\s*=\s*', content)
+        if not m:
+            continue
+        var_name = m.group(1)
+        try:
+            payload = json.loads(content[m.end():].rstrip().rstrip(";").strip())
+        except Exception as e:
+            print(f"Error parsing {os.path.basename(path)} ({var_name}): {e}")
+            continue
+
+        gen = payload.get("generated_at")
+        rows = payload.get("rows", [])
+        # Two row shapes: plain objects, or the compact tuples used by
+        # real_mh.js / real_psych.js / real_lakemedel.js (see
+        # build_kurvan_data.py). Decode the tuples back with the payload's
+        # own "types"/"ages"/"indicators" side tables.
+        types = payload.get("types"); ages = payload.get("ages"); inds = payload.get("indicators")
+        for r in rows:
+            if isinstance(r, dict):
+                d = r
+            elif inds is not None:            # encode_mh_rows(): [cc, ind_idx, midyr, age_idx, sex, value, count, suppressed]
+                d = {"county_code": r[0], "indicator": inds[r[1]], "year": r[2],
+                     "age_group": ages[r[3]], "sex": r[4], "value": r[5],
+                     "count": r[6], "suppressed": r[7] if len(r) > 7 else False}
+            elif types is not None:           # encode_type_age_rows(): [cc, type_idx, year, age_idx, sex, value, count]
+                d = {"county_code": r[0], "indicator": types[r[1]], "year": r[2],
+                     "age_group": ages[r[3]], "sex": r[4], "value": r[5], "count": r[6]}
+            else:
+                continue
+            code = d.get("county_code", "00")
+            row = {
+                "indicator": d.get("indicator"),
                 "county_code": code,
                 "county_name": county_names.get(code, "Sverige"),
-                "year": r.get("year"),
-                "window": r.get("window"),
-                "month": r.get("month"),
-                "age_group": r.get("age_group"),
-                "sex": r.get("sex"),
-                "value": r.get("value"),
-                "count": r.get("count"),
-                "suppressed": r.get("suppressed", False)
-            })
+                "year": d.get("year"),
+                "window": d.get("window"),
+                "month": d.get("month"),
+                "age_group": d.get("age_group"),
+                "sex": d.get("sex"),
+                "value": d.get("value"),
+                "count": d.get("count"),
+                "suppressed": d.get("suppressed", False),
+                "generated_at": gen,
+            }
+            for k in PASSTHROUGH:
+                if d.get(k) is not None:
+                    row[k] = d[k]
+            all_rows.append(row)
 
     json_path = os.path.join(OUT_DIR, "kurvan_panel.json")
     csv_path = os.path.join(OUT_DIR, "kurvan_panel.csv")
@@ -95,7 +109,7 @@ def main():
         json.dump({"dataset": "Kurvan Swedish Mental Health Panel", "dictionary": DATA_DICTIONARY, "rows": all_rows}, f, ensure_ascii=False, indent=2)
     print(f"Wrote JSON panel: {json_path} ({len(all_rows)} rows)")
     
-    fieldnames = ["indicator", "county_code", "county_name", "year", "window", "month", "age_group", "sex", "value", "count", "suppressed"]
+    fieldnames = ["indicator", "county_code", "county_name", "year", "window", "month", "age_group", "sex", "value", "count", "suppressed", "generated_at", "fetched", "valid_until", "series_status", "end_year"]
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
