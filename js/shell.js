@@ -52,6 +52,8 @@ const VIEW_FN={laget:viewLaget,over_tid:viewOverTid,karta:viewKarta,behov:viewBe
 // after that first render, unchanged — see that function's own comment).
 const REAL_SOURCES=[
   {file:"js/data/real_mh.js",         rebuild:()=>{REAL=rebuildREAL();}},
+  // real_psych.js is just the F00-F99 chapter ("all"); the 78 codes are
+  // real_psych_codes.js, loaded on demand (loadPsychCodes(), below).
   {file:"js/data/real_psych.js",      rebuild:()=>{REAL_PSYCH=rebuildREAL_PSYCH();}},
   {file:"js/data/real_hlv.js",        rebuild:()=>{REAL_HLV=rebuildREAL_HLV();}},
   {file:"js/data/real_equity.js",     rebuild:()=>{REAL_EQUITY=rebuildREAL_EQUITY();}},
@@ -68,6 +70,30 @@ const REAL_SOURCES=[
 // js/lang.js). Starts at the full count so it's accurate on the very first
 // paint, before loadRealSourcesLazily() has even run once.
 let realSourcesPending=REAL_SOURCES.length;
+
+// kurvan.html's cache-busting query string (e.g. "?v=38"), read off this
+// <script> tag while it's still document.currentScript (true during
+// shell.js's synchronous top-level run — this line and the callers below
+// all execute then). Shared by loadRealSourcesLazily() and loadPsychCodes().
+const REAL_QS=(document.currentScript&&document.currentScript.src.split("?")[1])||"";
+
+// real_psych_codes.js (the 78 3-character-code series, js/data.js's 1c) is
+// NOT in REAL_SOURCES — it's ~14 MB, and most sessions never open the
+// diagnosis picker. loadPsychCodes() pulls it the first time the picker is
+// on the page (S.ind==="psych") or a code is already the pick (a
+// ?psychType=F32 link), then re-runs rebuildREAL_PSYCH() to merge the codes
+// in and re-renders. "All types" works before then, off the eager
+// real_psych.js chapter file.
+let psychCodesState="idle";   // idle | loading | loaded | error
+function loadPsychCodes(){
+  if(psychCodesState!=="idle")return;
+  psychCodesState="loading";
+  const s=document.createElement("script");
+  s.src=REAL_QS?`js/data/real_psych_codes.js?${REAL_QS}`:"js/data/real_psych_codes.js";
+  s.onload=()=>{psychCodesState="loaded";REAL_PSYCH=rebuildREAL_PSYCH();clearMemoCaches();render();};
+  s.onerror=()=>{psychCodesState="error";console.warn("[kurvan] real_psych_codes.js failed to load — individual diagnosis codes stay unavailable (\"All types\" still works).");};
+  document.head.appendChild(s);
+}
 
 // viewCache's key is built purely from S.* fields (VIEW_STATE_KEYS) plus
 // lang/theme — it has no way to notice that the underlying REAL_X data a
@@ -492,6 +518,10 @@ function wire(){
   const pickType=v=>{if(S.ind==="psych")S.psychType=v;else if(S.ind==="antidep")S.medType=v;};
   bind("c-type",pickType);
   bind("c-maptype",pickType);
+  // The 78 codes are in a separate on-demand file (js/data.js 1c). Pull it
+  // once the picker is on the page (S.ind==="psych") or a code is already
+  // the pick (a ?psychType=F32 link). loadPsychCodes() is idempotent.
+  if(S.ind==="psych"||(S.psychType&&S.psychType!=="all"))loadPsychCodes();
   bind("c-cmpind",v=>S.cmpInd=v);
   bind("c-ctxind",v=>S.ctxInd=v);
   bind("c-hbscage",v=>S.hbscAge=v);
@@ -1168,16 +1198,11 @@ render();
 // function has even run once) is what drives the #synth banner's "still
 // loading" sub-line while any of these nine are still in flight.
 function loadRealSourcesLazily(){
-  // Reuses kurvan.html's own cache-busting query string (e.g. "?v=38") off
-  // this very <script> tag rather than hardcoding it a second time here —
-  // stays correct automatically whenever that version marker is bumped.
-  // document.currentScript is only valid during this script's own
-  // synchronous run, which is exactly where this executes (called at
-  // load time, not from inside a later callback).
-  const qs=(document.currentScript&&document.currentScript.src.split("?")[1])||"";
+  // REAL_QS (top of file) is kurvan.html's cache-busting query string,
+  // reused here so it stays correct whenever that version marker is bumped.
   REAL_SOURCES.forEach(src=>{
     const s=document.createElement("script");
-    s.src=qs?`${src.file}?${qs}`:src.file;
+    s.src=REAL_QS?`${src.file}?${REAL_QS}`:src.file;
     s.onload=()=>{src.rebuild();clearMemoCaches();realSourcesPending--;render();};
     s.onerror=()=>{console.warn(`[kurvan] failed to load ${src.file} — its indicator(s) stay on the synthetic generator.`);clearMemoCaches();realSourcesPending--;render();};
     document.head.appendChild(s);

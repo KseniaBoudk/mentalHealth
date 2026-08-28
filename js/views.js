@@ -34,12 +34,18 @@ const unitLabel=(k)=>{
 // type pickers build identical markup).
 const typeOptions=(k,type)=>{
   if(k!=="psych")return MED_TYPES.map(ty=>`<option value="${ty}"${ty===type?" selected":""}>${esc(t.psychMedTypes[ty])}</option>`).join("");
-  return PSYCH_BLOCKS.map(b=>{
+  let h=PSYCH_BLOCKS.map(b=>{
     const codes=PSYCH_TYPES.filter(ty=>PSYCH_CODE_BLOCK[ty]===b);
     if(!codes.length)return"";
     return `<optgroup label="${esc(t.psychBlocks[b])}">${codes.map(ty=>
       `<option value="${ty}"${ty===type?" selected":""}>${esc(ty)} — ${esc(t.psychMedTypes[ty])}</option>`).join("")}</optgroup>`;
   }).join("");
+  // The per-code data is real_psych_codes.js, loaded on demand (js/shell.js
+  // loadPsychCodes). The options are static so they render straight away;
+  // this trailing note just says the numbers behind them are still coming.
+  if(typeof psychCodesState!=="undefined"&&(psychCodesState==="idle"||psychCodesState==="loading"))
+    h+=`<option disabled>${esc(t.psychCodesLoading)}</option>`;
+  return h;
 };
 
 // "95% KI"/"95% CI" was typed out with its own inline language ternary at

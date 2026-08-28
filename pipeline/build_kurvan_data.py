@@ -38,11 +38,13 @@ Reads:  ../data/processed/socialstyrelsen_mh.json         (fetch_socialstyrelsen
         ../data/processed/hbsc.json             (fetch_hbsc.py)
         ../data/processed/scb_population.json   (fetch_scb_population.py)
         ../data/processed/bup_facilities.json   (../BUPS/fetch_bup_facilities.py)
-Writes: ../js/data/real_mh.js, real_psych.js, real_hlv.js, real_equity.js,
-        real_lakemedel.js, real_fk.js, real_context.js, real_bup.js,
-        real_hbsc.js, real_pop.js, real_bup_facilities.js
-        (REAL_MH, REAL_PSYCH_MH, REAL_LAKEMEDEL_MH, REAL_EQUITY_MH,
-         REAL_BUP_WAIT, REAL_HBSC_MH, REAL_POP_MH, ... — one const per file)
+Writes: ../js/data/real_mh.js, real_psych.js, real_psych_codes.js,
+        real_hlv.js, real_equity.js, real_lakemedel.js, real_fk.js,
+        real_context.js, real_bup.js, real_hbsc.js, real_pop.js,
+        real_bup_facilities.js
+        (REAL_MH, REAL_PSYCH_MH, REAL_PSYCH_CODES, REAL_LAKEMEDEL_MH,
+         REAL_EQUITY_MH, REAL_BUP_WAIT, REAL_HBSC_MH, REAL_POP_MH, ...
+         — one const per file)
 
 Run:  python prototype/pipeline/build_kurvan_data.py
 
@@ -103,15 +105,30 @@ SOURCES = [
         "out": "real_psych.js",
         "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, diagnoserislutenoppenvard, F00-F99)",
         "note": "Real, region-grain rates for specialist psychiatric care, all nine of\n"
-                "   Kurvan's age bands and all three sexes, annual, split into 78\n"
-                "   individual 3-character ICD-10 codes (grouped under their 11 real\n"
-                "   ICD-10 blocks in the UI — see js/lang.js's psychBlocks/js/data.js's\n"
-                "   PSYCH_CODE_BLOCK) plus a synthesised \"all\" total. Fetched by\n"
-                "   fetch_socialstyrelsen_psych.py. Rows are compact tuples, not objects —\n"
-                "   see this module's own docstring (\"COMPACT TUPLE ROWS\").",
+                "   Kurvan's age bands and all three sexes, annual. ONLY the F00-F99\n"
+                "   chapter here (diagnos=05 -> js/data.js reads it straight as \"all\").\n"
+                "   The 78 individual 3-character codes are a SEPARATE file\n"
+                "   (real_psych_codes.js, below) that js/data.js loads on demand.\n"
+                "   Fetched by fetch_socialstyrelsen_psych.py. Compact tuples — see\n"
+                "   this module's docstring (\"COMPACT TUPLE ROWS\").",
+        # indicator "psych_05_per_100k" -> type key "05" (js/data.js maps
+        # that to "all"). Same prefix/suffix as the codes file below.
+        "compact_types": {"prefix": "psych_", "suffix": "_per_100k"},
+    },
+    {
+        "var": "REAL_PSYCH_CODES",
+        "file": "socialstyrelsen_psych_codes.json",
+        "out": "real_psych_codes.js",
+        "source": "Socialstyrelsen Statistikdatabasen (Patientregistret, diagnoserislutenoppenvard, 3-char F-codes)",
+        "note": "The 78 individual 3-character ICD-10 code series for specialist\n"
+                "   psychiatric care (F32, F41, F43, ...), grouped under their 11 real\n"
+                "   blocks in the UI (js/lang.js's psychBlocks / js/data.js's\n"
+                "   PSYCH_CODE_BLOCK). ~14 MB, so js/shell.js's loadPsychCodes() pulls\n"
+                "   this ON DEMAND — only when the type picker is in play — rather than\n"
+                "   in the eager lazy batch. Same compact-tuple shape as real_psych.js.",
         # indicator strings look like "psych_F32_per_100k" — strip this
-        # prefix/suffix to recover the short type name ("F32") that becomes
-        # an idx[type] key in js/data.js.
+        # prefix/suffix to recover the code ("F32") that becomes an idx[type]
+        # key in js/data.js.
         "compact_types": {"prefix": "psych_", "suffix": "_per_100k"},
     },
     {

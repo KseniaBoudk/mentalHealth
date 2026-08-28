@@ -339,25 +339,28 @@ let REAL = rebuildREAL();
    code carries a PSYCH_CODE_BLOCK entry naming which of the 11 real ICD-10
    blocks (PSYCH_BLOCKS) it belongs to — used only to group the type picker
    (js/views.js) into `<optgroup>`s by block, not to change how a value is
-   looked up: REAL_PSYCH.idx/idxAll are still keyed by the flat code FIRST,
-   county second, exactly as they were with 6 coarser types. This replaces
-   the older 6-block version (each block WAS the type, and two of those six
-   were already known to be mislabeled — "eating disorders" was really the
-   broader F50-F59 chapter, "ADHD" the broader F90-F98 one) — moot now that
-   every type is a single, precisely-named code rather than an approximate
-   block-wide label. Every existing caller that never asks for a type
-   (viewRegioner, viewKon, viewMetod, viewLaget, viewAlder, ...)
-   transparently gets `"all"`, a synthesised pseudo-type summing every real
-   code — see rebuildREAL_PSYCH()'s own addToAll() for why simple summation
-   is exact here (not an approximation the way pooling different AGE bands
-   needs population-recovery for): the population denominator is the SAME
-   across diagnosis codes for one county/age/sex/year cell, so summing real
-   per-code rates already gives the correct combined rate — unchanged by
-   going from 6 addends to 78. Only viewOverTid()/viewKarta() (js/views.js)
-   — the two views with an actual type selector — ever pass a specific
-   code through.
+   looked up: REAL_PSYCH.idx/idxAll are keyed by the flat code FIRST,
+   county second, exactly as they were with 6 coarser types.
 
-   REAL_PSYCH_MH's rows are compact tuples, not objects — see
+   TWO files, because the 78-code data is ~14 MB and most sessions never
+   open the type picker:
+     - js/data/real_psych.js       REAL_PSYCH_MH     one series, diagnos
+       "05" = the whole F00-F99 chapter -> stored straight under "all"
+       (the register's OWN real total, not a sum of the 78 codes — which
+       would double-count a patient carried under more than one code).
+       In the eager lazy batch (js/shell.js REAL_SOURCES), ~350 KB.
+     - js/data/real_psych_codes.js REAL_PSYCH_CODES  the 78 code series.
+       Loaded ON DEMAND (js/shell.js loadPsychCodes()) the first time the
+       picker is in play. rebuildREAL_PSYCH() reads whichever of the two
+       globals exist and merges.
+
+   Every caller that never asks for a type (viewRegioner, viewKon,
+   viewMetod, viewLaget, viewAlder, ...) transparently gets `"all"` — the
+   chapter row, available from the eager file alone. Only viewOverTid()/
+   viewKarta() (js/views.js) ever pass a specific code through, and those
+   need real_psych_codes.js.
+
+   Both files' rows are compact tuples, not objects — see
    build_kurvan_data.py's "COMPACT TUPLE ROWS" docstring section and
    rebuildREAL_PSYCH()'s own comment below for the decode.
    ===================================================================== */
@@ -378,65 +381,55 @@ const PSYCH_BLOCKS = ["b0501","b0502","b0503","b0504","b0505","b0506","b0507","b
 // `grupp` field on each code) — not hand-derived from the codes' number
 // ranges, so it can't silently drift from what the source actually says.
 const PSYCH_CODE_BLOCK = {F00:"b0501",F01:"b0501",F02:"b0501",F03:"b0501",F04:"b0501",F05:"b0501",F06:"b0501",F07:"b0501",F09:"b0501",F10:"b0502",F11:"b0502",F12:"b0502",F13:"b0502",F14:"b0502",F15:"b0502",F16:"b0502",F17:"b0502",F18:"b0502",F19:"b0502",F20:"b0503",F21:"b0503",F22:"b0503",F23:"b0503",F24:"b0503",F25:"b0503",F28:"b0503",F29:"b0503",F30:"b0504",F31:"b0504",F32:"b0504",F33:"b0504",F34:"b0504",F38:"b0504",F39:"b0504",F40:"b0505",F41:"b0505",F42:"b0505",F43:"b0505",F44:"b0505",F45:"b0505",F48:"b0505",F50:"b0506",F51:"b0506",F52:"b0506",F53:"b0506",F54:"b0506",F55:"b0506",F59:"b0506",F60:"b0507",F61:"b0507",F62:"b0507",F63:"b0507",F64:"b0507",F65:"b0507",F66:"b0507",F68:"b0507",F69:"b0507",F70:"b0508",F71:"b0508",F72:"b0508",F73:"b0508",F78:"b0508",F79:"b0508",F80:"b0509",F81:"b0509",F82:"b0509",F83:"b0509",F84:"b0509",F88:"b0509",F89:"b0509",F90:"b0510",F91:"b0510",F92:"b0510",F93:"b0510",F94:"b0510",F95:"b0510",F98:"b0510",F99:"b0511"};
-// See rebuildREAL()'s comment above — same lazy-rebuild pattern, callable
-// again once js/data/real_psych.js lands.
+// See rebuildREAL()'s comment above — same lazy-rebuild pattern. Reads the
+// eager REAL_PSYCH_MH (the "05" chapter series -> "all") and, once
+// loadPsychCodes() (js/shell.js) has pulled it, REAL_PSYCH_CODES (the 78
+// code series). Called again by that loader's onload to merge the codes in.
 function rebuildREAL_PSYCH() {
-  const rows = (typeof REAL_PSYCH_MH !== "undefined" && Array.isArray(REAL_PSYCH_MH.rows)) ? REAL_PSYCH_MH.rows : [];
-  const active = rows.length > 0;
-  // types/ages: the two small dictionaries build_kurvan_data.py's
-  // encode_type_age_rows() emits alongside `rows` (see that function's own
-  // comment) — each row below is `[county_code, type_idx, year, age_idx,
-  // sex, value, count]`, a positional tuple rather than a named-key object,
-  // decoded back into the same shape this loop always worked with by
-  // indexing into these two arrays. Cuts real_psych.js roughly 4x (was
-  // repeating seven full key names, and a spelled-out "psych_x_per_100k"
-  // string, on every one of ~68,000 rows) with no change to anything past
-  // the decode step below — idx/idxAll and every reader of them are
-  // unchanged.
-  const types = active ? REAL_PSYCH_MH.types : [];
-  const ages = active ? REAL_PSYCH_MH.ages : [];
+  const chapter  = (typeof REAL_PSYCH_MH    !== "undefined") ? REAL_PSYCH_MH    : null;
+  const codeSrc  = (typeof REAL_PSYCH_CODES !== "undefined") ? REAL_PSYCH_CODES : null;
+  const active = !!(chapter && Array.isArray(chapter.rows) && chapter.rows.length);
   const ageIdxOf = {}; AGES.forEach((a, i) => { ageIdxOf[a] = i; });
 
-  const idx = {};     // idx[type|"all"][county][ageIdx][sex][year] = {value,count}
-  const idxAll = {};  // idxAll[type|"all"][county][sex][year] = {value,count} -- the register's own "0-85+"
-  // Adds one row into both its own real type's bucket AND the "all"
-  // bucket in the same pass, via a variable-depth `path` (4 keys for idx:
-  // county/ageIdx/sex/year; 3 for idxAll: county/sex/year) — one function
-  // for both shapes rather than writing the nested-loop version twice.
-  // Summed raw, not rounded per-add (fmt() rounds for display) — many tiny
-  // per-add roundings would drift further from the true sum than one
-  // display-time rounding does.
-  const addToAll = (bucket, type, path, value, count) => {
-    for (const key of ["all", type]) {
-      let node = bucket[key] || (bucket[key] = {});
-      for (let i = 0; i < path.length - 1; i++) node = node[path[i]] || (node[path[i]] = {});
-      const leafKey = path[path.length - 1];
-      const cur = node[leafKey];
-      if (!cur) node[leafKey] = { value, count };
-      else {
-        cur.value += value;
-        cur.count = (cur.count != null && count != null) ? cur.count + count : null;
-      }
+  const idx = {};     // idx[code|"all"][county][ageIdx][sex][year] = {value,count}
+  const idxAll = {};  // idxAll[code|"all"][county][sex][year] = {value,count} -- the register's own "0-85+"
+  // Places one row into its own type's bucket (variable-depth path: 4 keys
+  // for idx, 3 for idxAll). No "all" accumulation — "all" IS a real series
+  // ("05", the F00-F99 chapter, in the eager file), not a sum of codes.
+  const put = (bucket, type, path, value, count) => {
+    let node = bucket[type] || (bucket[type] = {});
+    for (let i = 0; i < path.length - 1; i++) node = node[path[i]] || (node[path[i]] = {});
+    const leafKey = path[path.length - 1], cur = node[leafKey];
+    if (!cur) node[leafKey] = { value, count };
+    else { cur.value += value; cur.count = (cur.count != null && count != null) ? cur.count + count : null; }
+  };
+  // Decode one compact-tuple source (row: [county, typeIdx, year, ageIdx,
+  // sex, value, count]; typeIdx/ageIdx index that source's own types/ages
+  // arrays — see build_kurvan_data.py's encode_type_age_rows()). The
+  // chapter file's lone type "05" is stored straight under "all".
+  const decode = (s) => {
+    if (!s || !Array.isArray(s.rows)) return;
+    const types = s.types || [], ages = s.ages || [];
+    for (const row of s.rows) {
+      const [county, typeIdx, year, ageIdx, sex, value, count] = row;
+      const t0 = types[typeIdx];
+      if (!t0) continue;
+      const type = t0 === "05" ? "all" : t0;
+      const ageGroup = ages[ageIdx];
+      if (ageGroup === "0-85+") { put(idxAll, type, [county, sex, year], value, count); continue; }
+      const ai = ageIdxOf[ageGroup];
+      if (ai === undefined) continue;
+      put(idx, type, [county, ai, sex, year], value, count);
     }
   };
+  decode(chapter);
+  decode(codeSrc);
 
-  for (const row of rows) {
-    const [county, typeIdx, year, ageIdx, sex, value, count] = row;
-    const type = types[typeIdx];
-    if (!type) continue;
-    const ageGroup = ages[ageIdx];
-    if (ageGroup === "0-85+") {
-      addToAll(idxAll, type, [county, sex, year], value, count);
-      continue;
-    }
-    const ai = ageIdxOf[ageGroup];
-    if (ai === undefined) continue;
-    addToAll(idx, type, [county, ai, sex, year], value, count);
-  }
-
-  const years = new Set(rows.filter(r => ages[r[3]] === "0-85+").map(r => r[2]));
+  const anchor = idxAll["all"] || {};
+  const years = new Set();
+  for (const c in anchor) for (const s in anchor[c]) for (const yr in anchor[c][s]) years.add(+yr);
   return { active, idx, idxAll, years: [...years].sort((a, b) => a - b),
-           generatedAt: active ? REAL_PSYCH_MH.generated_at : null };
+           generatedAt: active ? chapter.generated_at : null };
 }
 let REAL_PSYCH = rebuildREAL_PSYCH();
 
@@ -1184,9 +1177,11 @@ function realRowToCell(row) {
     suppressed: false, real: true,
   };
 }
-// type: one of PSYCH_TYPES, or "all" (default — every real code summed,
-// see rebuildREAL_PSYCH()). Only viewOverTid()/viewKarta() (js/views.js)
-// ever pass a specific type; every other caller gets "all" for free.
+// type: one of PSYCH_TYPES, or "all" (default — the real F00-F99 chapter
+// row, see rebuildREAL_PSYCH()). A code returns null until
+// real_psych_codes.js has loaded (js/shell.js loadPsychCodes); "all"
+// works from the eager file alone. Only viewOverTid()/viewKarta()
+// (js/views.js) ever pass a specific type; every other caller gets "all".
 function realCellPsych(regionCode, year, ageIdx, sex, type) {
   if (!REAL_PSYCH.active) return undefined;
   type = type || "all";

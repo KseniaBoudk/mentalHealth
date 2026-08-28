@@ -291,6 +291,8 @@ sv:{
     b0510:"10 – Beteendestörningar och emotionella störningar med debut vanligen under barndom och ungdomstid",
     b0511:"11 – Ospecificerad psykisk störning",
   },
+  // Visas i typväljaren medan real_psych_codes.js hämtas (js/shell.js).
+  psychCodesLoading:"Laddar diagnoskoder…",
   crude:"Ojusterat",std:"Åldersstandardiserat",
   // Shown only when real data is active AND stdCapable(k) is false
   // (js/data.js) — psych/antidep are real-active and DO standardise once
@@ -622,6 +624,8 @@ en:{
     b0510:"10 – Behavioural and emotional disorders with onset usually occurring in childhood and adolescence",
     b0511:"11 – Unspecified mental disorder",
   },
+  // Shown in the type picker while real_psych_codes.js is loading (js/shell.js).
+  psychCodesLoading:"Loading diagnosis codes…",
   crude:"Crude",std:"Age-standardised",
   stdDisabledTip:"Real figures don't cover enough age bands to be age-standardised.",
   stdAgeOnlyTip:"Age-standardisation only applies to “All ages” — pick that to see the effect.",

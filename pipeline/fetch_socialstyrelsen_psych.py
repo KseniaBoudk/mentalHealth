@@ -106,7 +106,10 @@ under 15 minutes. Left as one-code-per-request for now, matching the
 simpler loop the 6-block version already used and had proven correct;
 batching is a real, available speedup for later, not implemented here.
 
-Output: ../data/processed/socialstyrelsen_psych.json
+Output: ../data/processed/socialstyrelsen_psych.json        (diagnos=05, the
+        F00-F99 chapter only -> js/data/real_psych.js, Kurvan's eager batch)
+        ../data/processed/socialstyrelsen_psych_codes.json  (the 78 codes ->
+        js/data/real_psych_codes.js, loaded on demand — see js/data.js 1c)
 Run:    python prototype/pipeline/fetch_socialstyrelsen_psych.py
 """
 import json
@@ -431,41 +434,55 @@ def load_county_names():
     return names
 
 
+def fetch_series(diagnos, label):
+    """Fetch one `diagnos` value (a code, or "05" for the whole chapter) and
+    turn it into processed records: the register's own 0-85+ row plus the
+    nine pooled Kurvan age bands."""
+    print(f"  --- {label} ---")
+    all_ages_raw = fetch_all_ages(diagnos, label)
+    band_raw = fetch_age_bands(diagnos, label)
+    return all_ages_raw, band_raw
+
+
 def main():
-    print("[socialstyrelsen-psych] region-grain specialist psychiatric care, "
-          f"by diagnosis code ({len(DIAGNOS_CODES)} ICD-10 codes, {len(DIAGNOS_BLOCKS)} blocks)")
+    print("[socialstyrelsen-psych] region-grain specialist psychiatric care — "
+          f"F00-F99 chapter + {len(DIAGNOS_CODES)} ICD-10 codes, {len(DIAGNOS_BLOCKS)} blocks")
     assert_diagnos_filters()
     county_names = load_county_names()
 
     all_ages_raw_by_group = {}
     band_raw_by_group = {}
-    records = []
+
+    # chapter: diagnos=05 -> js/data.js reads this straight as "all" (the
+    # register's own total, not a sum of the 78 codes).
+    aa, bb = fetch_series("05", "05 (F00-F99 chapter)")
+    all_ages_raw_by_group["05"] = aa
+    band_raw_by_group["05"] = bb
+    chapter = (all_ages_records(aa, county_names, "psych_05_per_100k")
+               + pool(bb, county_names, "psych_05_per_100k"))
+
+    # the 78 individual codes -> their own file, loaded on demand.
+    code_recs = []
     for code in DIAGNOS_CODES:
         indicator = f"psych_{code}_per_100k"
-        label = code
-        print(f"  --- {label} ---")
-        print(f"  fetching 'all ages' (0-85+)...")
-        all_ages_raw = fetch_all_ages(code, label)
-        print("  fetching 5-year age bands (for Kurvan's nine wider bands)...")
-        band_raw = fetch_age_bands(code, label)
-        all_ages_raw_by_group[code] = all_ages_raw
-        band_raw_by_group[code] = band_raw
-        records += all_ages_records(all_ages_raw, county_names, indicator)
-        records += pool(band_raw, county_names, indicator)
+        aa, bb = fetch_series(code, code)
+        all_ages_raw_by_group[code] = aa
+        band_raw_by_group[code] = bb
+        code_recs += all_ages_records(aa, county_names, indicator)
+        code_recs += pool(bb, county_names, indicator)
 
     with open(os.path.join(RAW_DIR, "socialstyrelsen_psych_raw.json"), "w", encoding="utf-8") as f:
         json.dump({"all_ages": all_ages_raw_by_group, "age_bands": band_raw_by_group}, f, ensure_ascii=False, indent=1)
 
-    out_path = os.path.join(PROCESSED_DIR, "socialstyrelsen_psych.json")
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(records, f, ensure_ascii=False, indent=1)
+    chapter_path = os.path.join(PROCESSED_DIR, "socialstyrelsen_psych.json")
+    with open(chapter_path, "w", encoding="utf-8") as f:
+        json.dump(chapter, f, ensure_ascii=False, indent=1)
+    codes_path = os.path.join(PROCESSED_DIR, "socialstyrelsen_psych_codes.json")
+    with open(codes_path, "w", encoding="utf-8") as f:
+        json.dump(code_recs, f, ensure_ascii=False, indent=1)
 
-    by_indicator = {}
-    for r in records:
-        by_indicator[r["indicator"]] = by_indicator.get(r["indicator"], 0) + 1
-    print(f"\n[socialstyrelsen-psych] wrote {out_path}  ({len(records)} records total)")
-    for ind, n in sorted(by_indicator.items()):
-        print(f"    {ind}: {n} rows")
+    print(f"\n[socialstyrelsen-psych] wrote {chapter_path}  ({len(chapter)} rows: F00-F99 chapter)")
+    print(f"[socialstyrelsen-psych] wrote {codes_path}  ({len(code_recs)} rows across {len(DIAGNOS_CODES)} codes)")
     print("[socialstyrelsen-psych] now run:  python prototype/pipeline/build_kurvan_data.py")
 
 
