@@ -366,14 +366,26 @@ python fetch_forsakringskassan_diagnos.py          # sickness absence, whole F00
 python fetch_forsakringskassan_aktivitetsersattning.py  # aktivitetsersättning recipients by diagnosis, ~9 seconds, 24 requests
 python fetch_vardenisiffror_psykiatri.py           # "Psykiatrin i siffror" via Vården i siffror API — visits/beds/LST/hyrkostnad, ~10 seconds, 3 requests
 python fetch_socialstyrelsen_personal.py           # licensed psychiatry STAFF headcount by region — SLOW, ~10-40 min, thousands of requests (scrapes if_per)
+
+# Two more sources have no plain fetcher in this list:
+#  - BUP waiting times: convert_vantetider_bup.py — NOT an API script. A
+#    human first exports a CSV from the source (see its docstring); the
+#    converter then turns that CSV into data/processed/vantetider_bup.json.
+#  - BUP clinic list: ../BUPS/fetch_bup_facilities.py (outside pipeline/)
+#    writes data/processed/bup_facilities.json.
+# Both are already committed as real data; only re-run when refreshing them.
+
 python build_kurvan_data.py            # writes ../js/data/*.js (one file per source)
 ```
 
-> **Careful on a partial checkout:** `build_kurvan_data.py` rewrites *every*
-> `../js/data/real_*.js`, and a source whose `data/processed/*.json` is
-> missing on this machine is rewritten to an empty `rows` list. The
-> committed files hold real data — run every fetcher (or `git checkout --
-> js/data/` the ones you didn't refetch) before committing.
+`build_kurvan_data.py` rewrites `../js/data/real_*.js` only for sources
+whose `data/processed/*.json` is present. A source with **no** processed
+file is **left untouched** if a compiled `real_*.js` is already committed
+(it prints `KEPT ...`); a genuine fresh clone with no compiled file gets an
+empty `rows` stub. So a partial run — refetch one source, rebuild — no
+longer reverts the others to synthetic, and `data/processed/` being
+gitignored is no longer a trap. To deliberately push a source back to
+synthetic, delete its `../js/data/real_*.js` and rebuild.
 
 Then reopen `../kurvan.html`. `../js/data/*.js` is checked in with whatever
 was fetched last, so the prototype works without Python on a fresh

@@ -3,8 +3,8 @@
 Current state, the one operational trap to know about, and what the next
 owner should do first.
 
-> Written at handoff. All commit SHAs and branch names below were current
-> as of `master` = `f32b8d6`.
+> Written at handoff. `master` = `fe8e50e` (the on-demand psych split is
+> merged); `pipeline-stub-guard` is the one branch still to merge.
 
 ## At a glance
 
@@ -13,14 +13,14 @@ owner should do first.
 | **Project** | Single-page Swedish mental-health data dashboard. Vanilla JS + hand-rolled SVG, **no build step** — open `kurvan.html` in a browser. Offline Python data pipeline in `pipeline/`. |
 | **Repo** | <https://github.com/KseniaBoudk/mentalHealth> |
 | **Docs in repo** | `CLAUDE.md` (architecture), `FILES.txt` (per-file walkthrough), `pipeline/README.md` + `pipeline/COLLABORATION.md` |
-| **Master at** | `f32b8d6` — "Fix the map going blank for a type/region cell with no real data" |
+| **Master at** | `fe8e50e` — psych 78-code on-demand split + this doc. One branch left to merge: `pipeline-stub-guard`. |
 
 ---
 
 ## 01 · What changed in the last session
 
-One feature branch, ready to merge: **`psych-codes-ondemand`** (from current
-`master`, one commit `20d32db`, pushed).
+**`psych-codes-ondemand`** — merged into `master` (`20d32db` + `fe8e50e`).
+Makes the 78-code psychiatric-care picker actually work, cheaply.
 
 Master already had "psychiatric care by 78 ICD-10 codes, grouped by block"
 (commit `09b3740`) — but its `real_psych.js` still held the old 6-category
@@ -55,9 +55,10 @@ master's own chart changes. Worth revisiting later if wanted; commits
 
 | Branch | State | Action |
 |---|---|---|
-| `psych-codes-ondemand` | **Ready** — fast-forwards onto master, zero conflicts. PR not yet opened. | Browser-check (see §4), then merge. PR: <https://github.com/KseniaBoudk/mentalHealth/pull/new/psych-codes-ondemand> |
-| `additional-f-codes` | **Obsolete** — parallel reimplementation, pushed to origin. | Delete: `git branch -D additional-f-codes` and `git push origin --delete additional-f-codes` |
-| `master` | **Current** — `f32b8d6` | — |
+| `psych-codes-ondemand` | **Merged into `master`** (`fe8e50e`) — the on-demand split + `KURVAN_HANDOFF.md`. | Delete local + origin. |
+| `pipeline-stub-guard` | The Karta year fix + the `build_kurvan_data.py` keep-behaviour + these doc updates. Fast-forwards onto `master`. | Merge, then delete. |
+| `fix-karta-region-card-year` | Folded into `pipeline-stub-guard` (cherry-picked). | Delete local + origin — don't merge separately. |
+| `additional-f-codes` | **Obsolete** — parallel reimplementation of the psych feature, pushed to origin. | Delete: `git branch -D additional-f-codes` and `git push origin --delete additional-f-codes`. Its chart-clarity tweaks (axis titles, "per 100,000 *inhabitants*", distinct `%` labels — commits `d49bfb8` / `7781784`) are worth revisiting later; they were not ported because they collide with master's own chart changes. |
 | *~20 other origin branches* | **Stale** old feature branches (mobile-view, code-optimisation, visual-theme-changes, …) | Prune per team preference — none block anything. |
 
 ---
@@ -70,57 +71,44 @@ Two stages:
   Folkhälsomyndigheten, Försäkringskassan, SCB, Kolada), write
   `data/processed/*.json`. These are **gitignored** — large, and
   regenerable.
-- **`pipeline/build_kurvan_data.py`** — reads *every* `data/processed/*.json`
-  and compiles each into a `js/data/real_*.js` file. Those **are
-  committed** — they're what the browser loads.
+- **`pipeline/build_kurvan_data.py`** — for each source with a present
+  `data/processed/*.json`, compiles it into a `js/data/real_*.js` file
+  (committed — what the browser loads). A source with **no** processed
+  file is **left untouched** if a compiled `real_*.js` is already
+  committed (prints `KEPT ...`); only a genuine fresh clone with no
+  compiled file at all gets an empty `"rows":[]` stub.
 
-> ### ⚠ The trap
+> ### The old trap — now defused
 >
-> If `build_kurvan_data.py` runs and an input JSON is *missing*, it does
-> **not** error — it writes an **empty** `real_X.js` (`"rows":[]`), and
-> `js/data.js` silently falls back to the synthetic generator for that
-> indicator. Great for a fresh clone; a quiet data-loss risk if you run a
-> full build with a *partial* `data/processed/` and commit the result.
->
-> `data/processed/` is gitignored, so **git cannot warn you** that it's
-> incomplete.
+> Until `pipeline-stub-guard`, `build_kurvan_data.py` rewrote *every*
+> `real_*.js` unconditionally, stubbing any whose input JSON was missing.
+> Since `data/processed/` is gitignored, a partial run (refetch one
+> source, rebuild) would silently revert every *other* committed real
+> file to synthetic, and git couldn't warn you. That's fixed: missing
+> input → the committed file is kept as-is.
 
-On the machine this handoff was written from, `data/processed/` is
-**partial** — a bare `python pipeline/build_kurvan_data.py` there would
-blank these committed files:
+To deliberately push a source back to synthetic: delete its
+`js/data/real_*.js` and rebuild — the build then recreates it as a stub.
 
-| Blanks | What's lost | Re-fetch with |
-|---|---|---|
-| `real_hlv.js` | "severe anxiety" (distress) indicator | `fetch_folkhalsodata_hlv.py` |
-| `real_lakemedel.js` | antidepressants / all medication | `fetch_socialstyrelsen_lakemedel.py` |
-| `real_fk.js` | F43 sickness absence | `fetch_forsakringskassan.py` |
-| `real_pop.js` | age-standardisation (psych/antidep/suicide) | `fetch_scb_population.py` |
-| `real_context.js` | Sammanhang tab | `fetch_kolada_context.py` |
-| `real_hbsc.js` | HBSC tab | `fetch_hbsc.py` |
-| `real_bup_facilities.js` | BUP clinic list | `../BUPS/fetch_bup_facilities.py` |
-| `real_equity.js` | equity / jämlikhet pipeline | `fetch_folkhalsodata_equity.py` |
+### Full data rebuild
 
-The branch itself is **clean**: after generating the two psych files,
-every other `js/data/*.js` was reverted to master, so the diff is only
-`real_psych.js` + `real_psych_codes.js`. And `master`'s committed data
-files are all correct. The trap only bites someone who runs a full build
-with partial inputs and commits it.
-
-### Safe way to regenerate data
-
-- Run **all** the `fetch_*.py` first (repopulate `data/processed/` fully),
-  then `build_kurvan_data.py`. Some fetches are slow — psych ≈ 1 h, staff
-  headcount ≈ 10–40 min, self-harm/suicide ≈ 2 min.
-- Or, after any partial build: `git checkout -- js/data/` for every file
-  you didn't mean to touch.
-- Or simply don't run a full build on a machine with incomplete
-  `data/processed/`.
+- The complete ordered command list is in `pipeline/README.md` → "Running
+  it" (all fetchers + `build_kurvan_data.py`, with timing estimates —
+  psych ≈ 1 h is the slow one).
+- Two sources have no plain fetcher in that list: **`convert_vantetider_bup.py`**
+  (BUP waiting times — needs a human CSV export first, see its docstring)
+  and **`../BUPS/fetch_bup_facilities.py`** (BUP clinic list, outside
+  `pipeline/`). Both are committed as real data; re-run only to refresh.
+- A **partial** rebuild is now safe: refetch one source, run
+  `build_kurvan_data.py`, and only that source's `real_*.js` changes.
 
 ---
 
 ## 04 · Verified vs. not verified
 
-**✓ Checked** — `python -m py_compile` on both pipeline scripts; brace
+**✓ Checked** — `python -m py_compile` on the pipeline scripts (and a live
+run of `build_kurvan_data.py` confirming it now keeps inputless files);
+brace
 balance on the changed JS; and a **Python simulation of
 `rebuildREAL_PSYCH`** against the two generated files: `"all"` resolves
 from the chapter file alone, all 78 codes resolve after the codes file
@@ -132,19 +120,21 @@ wiring is **unconfirmed live**: the `loadPsychCodes()` trigger in
 `wire()`, the re-render when the codes file lands, and the "Loading
 diagnosis codes…" placeholder option.
 
-**First thing to do:** open `kurvan.html` → *Över tid* tab → set indicator
-to *Psykiatrisk specialistvård* → open the *Typ* picker → pick a specific
-code (e.g. `F32`) → confirm the charts fill in (after a brief pause the
-first time). Repeat on the *Karta* tab. Then it's safe to merge.
+**Do this after merging:** open `kurvan.html` → *Över tid* tab → set
+indicator to *Psykiatrisk specialistvård* → open the *Typ* picker → pick a
+specific code (e.g. `F32`) → confirm the charts fill in (after a brief
+pause the first time). Repeat on the *Karta* tab. On the *Karta* tab, also
+click a region and confirm the *Svår ängslan* line shows a number, not `—`
+(the fix for that is in `pipeline-stub-guard`).
 
 ---
 
 ## 05 · Next steps
 
-- Browser-check (§4) and **merge `psych-codes-ondemand`**.
-- **Delete `additional-f-codes`** (local + origin).
-- Repopulate `data/processed/` fully on whatever machine becomes the
-  pipeline machine, so a future build doesn't blank anything.
+- Merge `pipeline-stub-guard` into `master`, then browser-check (§4).
+- Delete the merged/obsolete branches: `psych-codes-ondemand`,
+  `fix-karta-region-card-year`, `pipeline-stub-guard` (after merge),
+  `additional-f-codes` — local and origin.
 - *Optional:* port the chart-clarity tweaks (axis titles, "per 100,000
   inhabitants", distinct `%` labels) off `additional-f-codes` onto master —
   genuinely useful, needs manual reconciliation with master's chart-tick /
@@ -152,9 +142,10 @@ first time). Repeat on the *Karta* tab. Then it's safe to merge.
 - *Optional:* `fetch_socialstyrelsen_psych.py` fetches the 78 codes one
   request each (~1 h). Its docstring describes batching via comma-joined
   `diagnos=` as an available speedup.
-- The committed `real_psych_codes.js` was built from psych data already
-  fetched on the machine — it's real and current as of that fetch. Re-run
-  the fetcher whenever you want it refreshed.
+- The committed `real_psych.js` / `real_psych_codes.js` were built from
+  psych data already fetched on the machine — real, current as of that
+  fetch. Re-run the fetcher whenever you want them refreshed; the build
+  now leaves the other sources alone (§3).
 
 ---
 
