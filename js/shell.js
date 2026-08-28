@@ -334,6 +334,15 @@ function render(){
           <div><div class="word">${esc(t.word)}</div><div class="sub">${esc(t.sub)}</div></div>
         </div>
         <div class="tools">
+          <!-- Same lockup as the sibling Swedish Child Health Observatory
+               (barnhalsovard.se): logo linking straight to UHE's own page on
+               uu.se, not a Kurvan-hosted page, since Kurvan is UHE's dashboard,
+               not the other way round. img/uhe_logo.png is a static asset (not
+               in js/data/*.js) — it never changes shape mid-session like the
+               real-data sources do, so it needs none of their lazy-load wiring. -->
+          <a class="uhe-badge" href="https://www.uu.se/en/department/public-health-and-caring-sciences/research/uppsala-health-economics" target="_blank" rel="noopener noreferrer" title="Uppsala Health Economics (UHE)">
+            <img src="img/uhe_logo.png" alt="Uppsala Health Economics" width="121" height="75">
+          </a>
           <button id="b-copylink">${esc(t.copyLink)}</button>
           <button id="b-theme">${esc(S.theme==="light"?t.themeD:t.themeL)}</button>
           <button id="b-lang">${esc(t.langBtn)}</button>

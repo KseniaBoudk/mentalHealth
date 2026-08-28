@@ -146,6 +146,16 @@ header.top{width:100%;box-sizing:border-box;background:var(--surface);border-bot
 .tools{margin-left:auto;display:flex;gap:10px;align-items:center}
 .tools button{background:none;border:1.5px solid var(--ink);border-radius:999px;font-size:var(--fs-4);font-weight:650;color:var(--ink);cursor:pointer;padding:6px var(--sp-5)}
 .tools button:hover,.tools button:focus-visible{background:var(--ink);color:var(--paper)}
+/* UHE's mark is set in near-black text on a transparent PNG — legible on
+   .surface in light mode but not against dark mode's near-black --surface,
+   so it gets its own fixed white chip rather than inheriting the theme
+   (the sibling Observatory site does the same for the same reason). Sized
+   a step above the pill buttons beside it (36px vs. their ~25px) so the
+   wordmark's own subtitle line is actually readable, not the taller
+   .mark/.word lockup on the other side of the masthead. */
+.uhe-badge{display:flex;align-items:center;padding-right:14px;margin-right:4px;border-right:1.5px solid var(--hair)}
+.uhe-badge img{display:block;height:36px;width:auto;background:#fff;border-radius:6px;padding:4px 7px}
+.uhe-badge:hover,.uhe-badge:focus-visible{opacity:.8}
 .stamp{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);margin-top:14px}
 
 main{padding:32px 0 10px}
