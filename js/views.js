@@ -645,9 +645,20 @@ function viewKarta(){
       if(natDelta==null||Math.abs(natDelta)<1e-9)return{arrow,rel:null};
       return{arrow,rel:(d>0)===(natDelta>0)?"with":"against"};
     };
+    // total() returns undefined when there's no data source at all for
+    // this indicator (skip the region below — nothing to draw), or null
+    // when a real source IS loaded but genuinely has nothing for this
+    // exact region/year/type (e.g. one of PSYCH_TYPES' 78 codes with no
+    // real rows behind it yet, or a real code too rare for a small region
+    // to publish) — that region still needs its own row, with value:null,
+    // so chorMap() draws its real "no data" tile instead of the region
+    // silently vanishing from the map the way `c&&{...}` used to make it
+    // (Boolean(null) is false, so .filter(Boolean) dropped it entirely).
     const rows=REGIONS.map(r=>{
       const c=total(indK,r[0],yrVal,"T",S.std,ty);
-      return c&&{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi,supp:c.suppressed,trend:c.suppressed?null:trendOf(r[0],c)};
+      if(c===undefined)return null;
+      if(c===null)return{code:r[0],name:r[1],value:null,lo:null,hi:null,supp:false,trend:null};
+      return{code:r[0],name:r[1],value:c.value,lo:c.lo,hi:c.hi,supp:c.suppressed,trend:c.suppressed?null:trendOf(r[0],c)};
     }).filter(Boolean);
     return{rows,nat,priorYr};
   };
